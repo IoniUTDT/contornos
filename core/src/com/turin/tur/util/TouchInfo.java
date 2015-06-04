@@ -9,6 +9,8 @@ public class TouchInfo {
 	public Boolean saved = false; 
 	public String actionToDo = "nothing";
 	public Boolean actionProcess = false;
+	public int elementTouch = -1; // negative value mean nothing
+	public String elementTouchType = "nothing"; 
 	public float absolutTime;
 	public float relativeTime;
 	

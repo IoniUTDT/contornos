@@ -1,10 +1,8 @@
 package com.turin.tur.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.turin.tur.util.Constants;
 
@@ -30,9 +28,6 @@ public class WorldRenderer implements Disposable {
 	
 	public void render () { 
 		renderTestObjects();
-		if ((Boolean) worldController.touchInfo.get("UnproyectPendiente")) {
-			processTouch ();
-		}
 	}
 
 	private void renderTestObjects() {
@@ -60,19 +55,4 @@ public class WorldRenderer implements Disposable {
 		batch.dispose();
 	}
 	
-	private void processTouch () {
-		if (!(worldController.touchInfo.get("ToquePantalla") == null)){
-			if (worldController.touchInfo.get("ToquePantalla").getClass().equals(Vector3.class)) {
-				Vector3 touchScreen = (Vector3) worldController.touchInfo.get("ToquePantalla");
-				Vector3 touchGame = camera.unproject(touchScreen); 
-				worldController.touchInfo.put("ToqueJuego", touchGame);
-				worldController.touchInfo.put("UnproyectPendiente", false);
-				worldController.touchInfo.put("ToquePendiente", true);
-			} else {
-				Gdx.app.debug(TAG, "Error! se intenta desproyectar una coordenada que no es un vector");
-			}
-		} else {
-			Gdx.app.debug(TAG, "Error! se intenta desproyectar una coordenada null");
-		}
-	}
 }
