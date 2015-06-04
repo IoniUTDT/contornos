@@ -1,0 +1,138 @@
+
+cajas.pack.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Imagen0
+  rotate: false
+  xy: 2, 504
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+Imagen1
+  rotate: false
+  xy: 2, 2
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+Imagen2
+  rotate: false
+  xy: 504, 504
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+Imagen3
+  rotate: false
+  xy: 504, 2
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+
+cajas.pack2.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Imagen4
+  rotate: false
+  xy: 2, 504
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+Imagen5
+  rotate: false
+  xy: 2, 2
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+TemplateTransparente
+  rotate: false
+  xy: 504, 884
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente0
+  rotate: false
+  xy: 504, 762
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente1
+  rotate: false
+  xy: 626, 884
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente10
+  rotate: false
+  xy: 626, 518
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente2
+  rotate: false
+  xy: 504, 640
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente3
+  rotate: false
+  xy: 626, 762
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente4
+  rotate: false
+  xy: 748, 884
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente5
+  rotate: false
+  xy: 504, 518
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente6
+  rotate: false
+  xy: 626, 640
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente7
+  rotate: false
+  xy: 748, 762
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente8
+  rotate: false
+  xy: 870, 884
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+TemplateTransparente9
+  rotate: false
+  xy: 504, 396
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
