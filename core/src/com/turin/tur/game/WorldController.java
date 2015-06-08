@@ -151,16 +151,14 @@ public class WorldController implements InputProcessor  {
     	touchData.actionToDo = "Detect overlap";
     	// procesa la info del toque en funcion de otros elementos del juego
     	procesarToque(touchData);
-    	// se fija si hubo un cambio de seleccion
+    	// recupera la ultima seleccion y la actual
     	int lastSelection;
     	try {
     		lastSelection = touchSecuence.peek().elementTouch;
 		} catch (Exception e) {
 			lastSelection = -1; // Esto sucede cuando se busca el elemento anterior y todavia no se toco nunca la pantalla
 		} 
-    	if (touchData.elementTouch != lastSelection) { // Indica que cambio la seleccion
-    		updateSelection (lastSelection,touchData.elementTouch);
-    	}
+		updateSelection (lastSelection,touchData.elementTouch);
     	// agrega el toque a la secuencia de toques acumulados
     	touchSecuence.add(touchData);
     	return false;
