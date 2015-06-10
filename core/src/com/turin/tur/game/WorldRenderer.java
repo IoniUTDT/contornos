@@ -50,7 +50,7 @@ public class WorldRenderer implements Disposable {
 			sprite.setOriginCenter();
 			sprite.draw(batch);
 		}
-		worldController.objetoDePrueba.render(batch);
+		//worldController.objetoDePrueba.render(batch);
 		batch.end();
 	}
 	

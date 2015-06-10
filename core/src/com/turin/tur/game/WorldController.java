@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.game.objects.ExperimentalObject;
+import com.turin.tur.game.objects.ImageBoxContainer;
 import com.turin.tur.game.objects.SoundBoxContainer;
 import com.turin.tur.util.CameraHelper;
 import com.turin.tur.util.Constants;
@@ -31,7 +32,8 @@ public class WorldController implements InputProcessor  {
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	private Boolean animacionCompletada = false;
 	public LevelInfo levelInfo;
-	public SoundBoxContainer objetoDePrueba;
+	//public SoundBoxContainer objetoDePrueba;
+	public ImageBoxContainer objetoDePrueba;
 	public ExperimentalObject objetoDePruebaExperimental;
 	
 	public WorldController () {
@@ -47,7 +49,7 @@ public class WorldController implements InputProcessor  {
 		initAudioObjects();
 		initContenidosObjects();
 		initLevel();
-		pruebas();
+		//pruebas();
 	}
 	
 	private void pruebas() {
@@ -57,8 +59,10 @@ public class WorldController implements InputProcessor  {
 		int Id = 0;
 		
 		objetoDePruebaExperimental = new ExperimentalObject (spritePrueba,sonidoPrueba,Id);
-		objetoDePrueba = new SoundBoxContainer(objetoDePruebaExperimental);
+		//objetoDePrueba = new SoundBoxContainer(objetoDePruebaExperimental);
+		objetoDePrueba = new ImageBoxContainer(objetoDePruebaExperimental);
 		objetoDePrueba.Select();
+		
 	}
 
 	private void initLevel() {
@@ -124,7 +128,7 @@ public class WorldController implements InputProcessor  {
 		}
 		cameraHelper.update(deltaTime);
 		time = time + deltaTime;
-		objetoDePrueba.update(deltaTime);
+		//objetoDePrueba.update(deltaTime);
 	}
 
 	
