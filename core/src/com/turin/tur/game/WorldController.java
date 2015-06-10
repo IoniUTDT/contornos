@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.util.CameraHelper;
 import com.turin.tur.util.Constants;
+import com.turin.tur.util.LevelInfo;
 import com.turin.tur.util.TouchInfo;
 
 
@@ -27,7 +28,7 @@ public class WorldController implements InputProcessor  {
 	private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	private Boolean animacionCompletada = false;
-	
+	public LevelInfo levelInfo;
 	
 	public WorldController () {
 		init();
@@ -41,8 +42,13 @@ public class WorldController implements InputProcessor  {
 		initContornosObjects();
 		initAudioObjects();
 		initContenidosObjects();
+		initLevel();
 	}
 	
+	private void initLevel() {
+		levelInfo = new LevelInfo();
+	}
+
 	private void initContornosObjects() {
 		// Create new array for sprites of contornos
 		animacionContorno = new Sprite[Constants.NUMERO_ELEMENTOS];

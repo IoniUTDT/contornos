@@ -18,6 +18,11 @@ public class Constants {
 	public static final float[][] posiciones_elementos_centros = {{-1,1},{0,1},{1,1},{-1,-1},{0,-1},{1,-1}};
 	// Nota! Ahora las dos variables no estan relacionadas
 	public static final float[][] posiciones_elementos_vertice = {{-1.5f-LADO_CUADROS/2,-1-LADO_CUADROS/2},{0-LADO_CUADROS/2,-1-LADO_CUADROS/2},{1.5f-LADO_CUADROS/2,-1-LADO_CUADROS/2},{-1.5f-LADO_CUADROS/2,1-LADO_CUADROS/2},{0-LADO_CUADROS/2,1-LADO_CUADROS/2},{1.5f-LADO_CUADROS/2,1-LADO_CUADROS/2}};
-	
+
+	// GUI Width
+	public static final float VIEWPORT_GUI_WIDTH = 800.0f;
+	// GUI Height
+	public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
+
 
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -17,6 +18,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public static final String TAG = Assets.class.getName();
 	public static final Assets instance = new Assets();
+	public AssetFonts fonts;
 	
 	private AssetManager assetManager;
 	// singleton: prevent instantiation from other classes
@@ -49,11 +51,13 @@ public class Assets implements Disposable, AssetErrorListener {
 		// create game resource objects
 		cuadrado = new Cuadrado(atlas,"TemplateTransparente");
 		contenido = new Contenido(atlas,"Imagen");
+		fonts = new AssetFonts();
 	}
 
 	@Override
 	public void dispose () {
 		assetManager.dispose();
+		fonts.defaultFont.dispose();
 	}
 	
 	
@@ -98,5 +102,17 @@ public class Assets implements Disposable, AssetErrorListener {
 			}
 		}
 	}
+	
+	public class AssetFonts {
+		public final BitmapFont defaultFont;
+		public AssetFonts () {
+			// create font using Libgdx's 15px bitmap font
+			defaultFont = new BitmapFont(
+					Gdx.files.internal("images/verdana.fnt"), true);
+			// enable linear texture filtering for smooth fonts
+			defaultFont.getRegion().getTexture().setFilter(
+					TextureFilter.Linear, TextureFilter.Linear);
+			}
+		}
 	
 }
