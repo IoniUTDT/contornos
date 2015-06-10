@@ -7,10 +7,10 @@ public class TouchInfo {
 	public Vector3 coordScreen = new Vector3();
 	public Vector3 coordGame = new Vector3();
 	public Boolean saved = false; 
-	public String actionToDo = "nothing";
+	public String actionToDo = Constants.Touch.ToDo.NOTHING;
 	public Boolean actionProcess = false;
 	public int elementTouch = -1; // negative value mean nothing
-	public String elementTouchType = "nothing"; 
+	public String elementTouchType = Constants.Touch.Type.NOTHING; 
 	public float absolutTime;
 	public float relativeTime;
 	

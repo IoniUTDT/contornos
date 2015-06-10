@@ -50,6 +50,7 @@ public class WorldRenderer implements Disposable {
 			sprite.setOriginCenter();
 			sprite.draw(batch);
 		}
+		worldController.objetoDePrueba.render(batch);
 		batch.end();
 	}
 	
@@ -57,7 +58,12 @@ public class WorldRenderer implements Disposable {
 		float x = Constants.VIEWPORT_GUI_WIDTH/2 - 100; //DISENO
 		float y = 30; //DISENO
 		Assets.instance.fonts.defaultFont.draw(batch, worldController.levelInfo.levelTitle, x, y, 200, 1, true); //DISENO NOTA: la alineacion es una constante al parecer el 1 es centrado, el 0 izq y el 3 der
-		
+	}
+	
+	private void renderGUILastTouchInfo (SpriteBatch batch) {
+		if (worldController.touchSecuence.size != 0) {
+			//if worldController.touchSecuence.peek().elementTouchType = 
+		}
 	}
 	
 	private void renderGuiFpsCounter (SpriteBatch batch) {

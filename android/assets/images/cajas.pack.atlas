@@ -4,30 +4,37 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+Animacion
+  rotate: false
+  xy: 2, 2
+  size: 17, 12
+  orig: 17, 12
+  offset: 0, 0
+  index: -1
 Imagen0
   rotate: false
-  xy: 2, 504
+  xy: 2, 518
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
 Imagen1
   rotate: false
-  xy: 2, 2
+  xy: 2, 16
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
 Imagen2
   rotate: false
-  xy: 504, 504
+  xy: 504, 518
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
   index: -1
 Imagen3
   rotate: false
-  xy: 504, 2
+  xy: 504, 16
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
@@ -50,6 +57,13 @@ Imagen5
   xy: 2, 2
   size: 500, 500
   orig: 500, 500
+  offset: 0, 0
+  index: -1
+LogoAudio
+  rotate: false
+  xy: 748, 660
+  size: 100, 100
+  orig: 100, 100
   offset: 0, 0
   index: -1
 TemplateTransparente

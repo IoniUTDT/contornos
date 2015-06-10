@@ -24,5 +24,33 @@ public class Constants {
 	// GUI Height
 	public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
 
+	
+	// Constantes relacionadas con las cajas
+	public class Box {
+		public static final float TAMANO = 1; //tamaño de la caja
+		public static final float DURACION_REPRODUCCION_PREDETERMINADA = 5; // medida en segundos
+		public static final float TAMANO_CONTORNO_X = 0.2f;
+		public static final float TAMANO_CONTORNO_Y = 0.02f;
+	}
+	
+	// Constantes para los touch
+	public class Touch {
+	
+		public class Type {
+			public static final String NOTHING = "nothing";
+			public static final String IMAGE = "image";
+		}
+		
+		public class ToDo {
+			public static final String NOTHING = "nothing";
+			public static final String DETECTOVERLAP = "detectOverlap";
+		}
+	}
+	
 
+	// Contantes de nombres de regiones para imagenes
+	public class Imagenes {
+		public static final String LOGOAUDIO = "LogoAudio";
+		public static final String ANIMACION = "Animacion";
+	}
 }

@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.turin.tur.game.objects.ExperimentalObject;
+import com.turin.tur.game.objects.SoundBoxContainer;
 import com.turin.tur.util.CameraHelper;
 import com.turin.tur.util.Constants;
 import com.turin.tur.util.LevelInfo;
@@ -29,6 +31,8 @@ public class WorldController implements InputProcessor  {
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	private Boolean animacionCompletada = false;
 	public LevelInfo levelInfo;
+	public SoundBoxContainer objetoDePrueba;
+	public ExperimentalObject objetoDePruebaExperimental;
 	
 	public WorldController () {
 		init();
@@ -43,8 +47,20 @@ public class WorldController implements InputProcessor  {
 		initAudioObjects();
 		initContenidosObjects();
 		initLevel();
+		pruebas();
 	}
 	
+	private void pruebas() {
+		Sound sonidoPrueba =Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(0)+".wav"));
+		Array<TextureRegion> regions = Assets.instance.contenido.contenido_serie;
+		Sprite spritePrueba = new Sprite(regions.get(0));
+		int Id = 0;
+		
+		objetoDePruebaExperimental = new ExperimentalObject (spritePrueba,sonidoPrueba,Id);
+		objetoDePrueba = new SoundBoxContainer(objetoDePruebaExperimental);
+		objetoDePrueba.Select();
+	}
+
 	private void initLevel() {
 		levelInfo = new LevelInfo();
 	}
@@ -108,6 +124,7 @@ public class WorldController implements InputProcessor  {
 		}
 		cameraHelper.update(deltaTime);
 		time = time + deltaTime;
+		objetoDePrueba.update(deltaTime);
 	}
 
 	
@@ -145,18 +162,16 @@ public class WorldController implements InputProcessor  {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
     	
     	// Crea un evento de toque
-    	TouchInfo touchData = new TouchInfo(time,time_selected);
+    	TouchInfo touch = new TouchInfo(time,time_selected);
 
     	// calcula el toque en pantalla
-    	Vector3 touchScreen = new Vector3();
-    	touchScreen.set(screenX, screenY, 0);
-   		touchData.coordScreen = touchScreen;
+   		touch.coordScreen = new Vector3 (screenX, screenY, 0);
    		// calcula el toque en el juego 
-    	Vector3 touchGame = camera.unproject(touchScreen);
-    	touchData.coordGame = touchGame;
-    	touchData.actionToDo = "Detect overlap";
+   		touch.coordGame = camera.unproject(touch.coordScreen);
+   		// determina que accion es la siguiente
+    	touch.actionToDo = Constants.Touch.ToDo.DETECTOVERLAP;
     	// procesa la info del toque en funcion de otros elementos del juego
-    	procesarToque(touchData);
+    	procesarToque(touch);
     	// recupera la ultima seleccion y la actual
     	int lastSelection;
     	try {
@@ -164,9 +179,10 @@ public class WorldController implements InputProcessor  {
 		} catch (Exception e) {
 			lastSelection = -1; // Esto sucede cuando se busca el elemento anterior y todavia no se toco nunca la pantalla
 		} 
-		updateSelection (lastSelection,touchData.elementTouch);
+    	// actualiza la seleccion 
+		updateSelection (lastSelection,touch.elementTouch);
     	// agrega el toque a la secuencia de toques acumulados
-    	touchSecuence.add(touchData);
+    	touchSecuence.add(touch);
     	return false;
     }
 
@@ -191,17 +207,18 @@ public class WorldController implements InputProcessor  {
     }
     
     private void procesarToque (TouchInfo touchData) {
-    	// Setea la imagen seleccionada en sin seleccion
-    	int seleccion = -1;
-    	for (int i = 0; i < contenidos.length; i++) { // itera sobre todos los contenidos (que son las imagenes de los dibujos)
-			if (contenidos[i].getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
-				Gdx.app.debug(TAG, "Ha tocado la imagen" + i);
-				seleccion = i;
+    	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
+	    	int seleccion = -1; // Sin seleccion
+	    	for (int i = 0; i < contenidos.length; i++) { // itera sobre todos los contenidos (que son las imagenes de los dibujos)
+				if (contenidos[i].getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
+					Gdx.app.debug(TAG, "Ha tocado la imagen" + i);
+					seleccion = i;
+				}
 			}
-		}
-    	touchData.elementTouch=seleccion;
-    	touchData.elementTouchType="ContentImage";
-    	touchData.actionToDo="nothing";
+	    	touchData.elementTouch=seleccion;
+	    	touchData.elementTouchType= Constants.Touch.Type.IMAGE;
+	    	touchData.actionToDo = Constants.Touch.ToDo.NOTHING;
+    	}
     }
     
     private void updateSelection (int lastSelection, int selection) {
@@ -215,7 +232,7 @@ public class WorldController implements InputProcessor  {
     		Id_sonido = sonidos[selection].play();
     	}
     	imageSelected = selection;
-    	animacionCompletada=false;
+    	animacionCompletada=false; // Esto dice que se active la animacion. Mejorar para que sea mas elegante. 
     	// 
     }
 }

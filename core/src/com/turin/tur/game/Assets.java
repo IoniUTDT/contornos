@@ -18,15 +18,19 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public static final String TAG = Assets.class.getName();
 	public static final Assets instance = new Assets();
-	public AssetFonts fonts;
+	
 	
 	private AssetManager assetManager;
 	// singleton: prevent instantiation from other classes
 	private Assets () {}
 	
+	
+	// Variables creadas
 	public Cuadrado cuadrado;
 	public Contenido contenido;
-		
+	public Imagenes imagenes;	
+	public AssetFonts fonts;
+	
 	public void init (AssetManager assetManager) {
 		this.assetManager = assetManager;
 		// set asset manager error handler
@@ -52,6 +56,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		cuadrado = new Cuadrado(atlas,"TemplateTransparente");
 		contenido = new Contenido(atlas,"Imagen");
 		fonts = new AssetFonts();
+		imagenes = new Imagenes(atlas); 
 	}
 
 	@Override
@@ -115,4 +120,14 @@ public class Assets implements Disposable, AssetErrorListener {
 			}
 		}
 	
+	public class Imagenes {
+		
+		public AtlasRegion logoAudio;
+		public AtlasRegion animacionContorno;
+		
+		public Imagenes (TextureAtlas atlas) {
+			logoAudio = atlas.findRegion(Constants.Imagenes.LOGOAUDIO);
+			animacionContorno = atlas.findRegion(Constants.Imagenes.ANIMACION);
+		}
+	}
 }
