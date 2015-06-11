@@ -21,20 +21,21 @@ public class WorldController implements InputProcessor  {
 
 	public OrthographicCamera camera;
 	public static final String TAG = WorldController.class.getName();
-	public Sprite[] animacionContorno;
-	public Sound[] sonidos;
-	public Sprite[] contenidos;
+	//public Sprite[] animacionContorno;
+	//public Sound[] sonidos;
+	//public Sprite[] contenidos;
 	private long Id_sonido; //variable que guarda el Id de los sonidos activos 
-	private int imageSelected = -1; // Numero negativo significa que no hay nada seleccionado
+	//private int imageSelected = -1; // Numero negativo significa que no hay nada seleccionado
 	public CameraHelper cameraHelper;
 	private float time = 0;
 	private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
-	private Boolean animacionCompletada = false;
+	//private Boolean animacionCompletada = false;
 	public LevelInfo levelInfo;
 	//public SoundBoxContainer objetoDePrueba;
 	public ImageBoxContainer objetoDePrueba;
 	public ExperimentalObject objetoDePruebaExperimental;
+	public Array<ImageBoxContainer> trialElements = new Array<ImageBoxContainer>();
 	
 	public WorldController () {
 		init();
@@ -45,13 +46,15 @@ public class WorldController implements InputProcessor  {
 		camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH,
 				Constants.VIEWPORT_HEIGHT);
 		cameraHelper = new CameraHelper();
-		initContornosObjects();
-		initAudioObjects();
-		initContenidosObjects();
+		//initContornosObjects();
+		//initAudioObjects();
+		//initContenidosObjects();
 		initLevel();
 		//pruebas();
+		initTrialElements();
 	}
 	
+	/*
 	private void pruebas() {
 		Sound sonidoPrueba =Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(0)+".wav"));
 		Array<TextureRegion> regions = Assets.instance.contenido.contenido_serie;
@@ -64,11 +67,35 @@ public class WorldController implements InputProcessor  {
 		objetoDePrueba.Select();
 		
 	}
+	*/
 
 	private void initLevel() {
 		levelInfo = new LevelInfo();
 	}
 
+	private void initTrialElements (){
+		
+		// Crea el array de imagenes
+		Array<TextureRegion> regions = Assets.instance.contenido.contenido_serie;
+		// Crea el array de sonidos
+		Sound[] sonidos = new Sound[Constants.NUMERO_ELEMENTOS];
+		for (int i = 0; i < sonidos.length; i++) {
+			Sound sonido = Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(i)+".wav"));
+			sonidos[i] = sonido;
+		}	
+		// Crea el array de objetos experimentales
+		Array<ExperimentalObject> objetosExperimentales = new Array<ExperimentalObject>();
+		for (int i = 0; i < sonidos.length; i++) {
+			objetosExperimentales.add(new ExperimentalObject(new Sprite(regions.get(i)),sonidos[i],i));
+		}
+		for (int i=0; i < Constants.NUMERO_ELEMENTOS; i++) {
+			trialElements.add(new ImageBoxContainer (objetosExperimentales.get(i)));
+			trialElements.get(i).SetPosition(Constants.posiciones_elementos_centros[i][0],Constants.posiciones_elementos_centros[i][1]);
+		}
+		//trialElements.get(5).Select();
+	}
+	
+	/*
 	private void initContornosObjects() {
 		// Create new array for sprites of contornos
 		animacionContorno = new Sprite[Constants.NUMERO_ELEMENTOS];
@@ -121,10 +148,17 @@ public class WorldController implements InputProcessor  {
 			contenidos[i] = spr;
 		}
 	}
-
+ 	*/
+	
 	public void update (float deltaTime) {
+		/*
 		if ((imageSelected != -1) && !animacionCompletada) { 
 			updateAnimacionContornos(deltaTime);
+		}
+		*/
+		
+		for (int i=0; i < Constants.NUMERO_ELEMENTOS; i++) {
+			trialElements.get(i).update(deltaTime);
 		}
 		cameraHelper.update(deltaTime);
 		time = time + deltaTime;
@@ -132,6 +166,7 @@ public class WorldController implements InputProcessor  {
 	}
 
 	
+	/*
 	private void updateAnimacionContornos(float deltaTime) {
 		float factor_velocidad = 2f; // Nota, para que quede bien tomando 10 imagenes el factor debe ser 10/numero de segundos del audio 
 		time_selected = time_selected + deltaTime;
@@ -146,6 +181,7 @@ public class WorldController implements InputProcessor  {
 			animacionContorno[imageSelected].setRegion(Assets.instance.cuadrado.cuadrado);
 		}
 	}
+	*/
 	
 	@Override
 	public boolean keyUp (int keycode) {
@@ -213,32 +249,32 @@ public class WorldController implements InputProcessor  {
     private void procesarToque (TouchInfo touchData) {
     	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
 	    	int seleccion = -1; // Sin seleccion
-	    	for (int i = 0; i < contenidos.length; i++) { // itera sobre todos los contenidos (que son las imagenes de los dibujos)
-				if (contenidos[i].getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
+	    	
+	    	for (int i = 0; i < trialElements.size; i++) { // itera sobre todos los contenidos (que son las imagenes de los dibujos)
+				if (trialElements.get(i).spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 					Gdx.app.debug(TAG, "Ha tocado la imagen" + i);
 					seleccion = i;
 				}
 			}
+			
 	    	touchData.elementTouch=seleccion;
 	    	touchData.elementTouchType= Constants.Touch.Type.IMAGE;
 	    	touchData.actionToDo = Constants.Touch.ToDo.NOTHING;
     	}
     }
     
+
     private void updateSelection (int lastSelection, int selection) {
     	// restaura todo como si no hubiera seleccion
     	if (lastSelection != -1) {
-    		sonidos[lastSelection].stop();
-    		animacionContorno[lastSelection].setRegion(Assets.instance.cuadrado.cuadrado);
+    		trialElements.get(lastSelection).unSelect();
     	}
     	time_selected = 0;
     	if (selection != -1) {
-    		Id_sonido = sonidos[selection].play();
+    		trialElements.get(selection).Select();
     	}
-    	imageSelected = selection;
-    	animacionCompletada=false; // Esto dice que se active la animacion. Mejorar para que sea mas elegante. 
-    	// 
     }
+
 }
 	
 	
