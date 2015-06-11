@@ -48,15 +48,6 @@ public class WorldRenderer implements Disposable {
 			worldController.trialElements.get(i).render(batch);
 		}
 		
-		/*for(Sprite sprite : worldController.animacionContorno) {
-			sprite.draw(batch);
-		}
-		for(Sprite sprite : worldController.contenidos) {
-			sprite.setOriginCenter();
-			sprite.draw(batch);
-		}
-		*/
-		//worldController.objetoDePrueba.render(batch);
 		batch.end();
 	}
 	
