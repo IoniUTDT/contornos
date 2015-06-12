@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import com.turin.tur.game.objects.ImageBoxContainer;
+import com.turin.tur.game.objects.ImageBox;
 import com.turin.tur.util.Constants;
 
 public class WorldRenderer implements Disposable {
@@ -44,8 +44,8 @@ public class WorldRenderer implements Disposable {
 		worldController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		for (int i=0; i < Constants.NUMERO_ELEMENTOS; i++) {
-			worldController.trialElements.get(i).render(batch);
+		for (int i=0; i < worldController.levelInfo.trialElements.size; i++) {
+			worldController.levelInfo.trialElements.get(i).render(batch);
 		}
 		
 		batch.end();

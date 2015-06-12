@@ -1,16 +1,16 @@
 package com.turin.tur.game.objects;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.turin.tur.game.Assets;
 import com.turin.tur.util.Constants;
 
-public class BoxContainer {
+public abstract class BoxContainer {
 
 	public ExperimentalObject contenido;
 	public Boolean isSelected;
+	public Boolean drawAnimation;
 	public float avanceReproduccion;
 	public float duracionReproduccion;
 	public Vector2 posicionCenter;
@@ -20,6 +20,7 @@ public class BoxContainer {
 	public BoxContainer (ExperimentalObject contenido) {
 		this.contenido = contenido;
 		this.isSelected = false;
+		this.drawAnimation = false;
 		this.spr = new Sprite (Assets.instance.imagenes.logoAudio);
 		this.sprAnimacion = new Sprite (Assets.instance.imagenes.animacionContorno);
 		this.avanceReproduccion = 0;
@@ -32,27 +33,12 @@ public class BoxContainer {
 		this.posicionCenter.y = yCenter;
 	}
 	
-	public void Select () {
-		this.isSelected = true;
-		Sound sonido = this.contenido.sonido;
-		sonido.play();
-	}
+	public abstract void Select ();
 	
-	public void unSelect () {
-		this.isSelected = false;
-		this.contenido.sonido.stop();
-		avanceReproduccion = 0; //reset the advance point of sound
-	}
+	public abstract void unSelect ();
 	
-	public void update(float deltaTime) {
-		if (isSelected) {
-			avanceReproduccion = avanceReproduccion + deltaTime;
-			if (avanceReproduccion > duracionReproduccion) {
-				unSelect();
-			}
-		}
-	}
-
+	public abstract void update(float deltaTime);
+	
 	public void render(SpriteBatch batch) {
 		float x;
 		float y;
@@ -70,7 +56,7 @@ public class BoxContainer {
 		sprAnimacion.setPosition(x + xShift, y);
 		// Draws
 		spr.draw(batch);
-		if (isSelected) {
+		if (drawAnimation) {
 			sprAnimacion.draw(batch);
 		}
 	}

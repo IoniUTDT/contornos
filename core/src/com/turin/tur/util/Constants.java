@@ -22,13 +22,26 @@ public class Constants {
 	// GUI Height
 	public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
 
+
+	// Constantes relacionadas con el diseno de experimentos
+	
+	public class Diseno {
+		public static final String MODO_ENTRENAMIENTO ="entrenamiento";
+		public static final String MODO_SELECCION_IMAGEN ="seleccionImagen";
+		
+		public static final String MODO_ACTIVO = MODO_SELECCION_IMAGEN;
+	}
 	
 	// Constantes relacionadas con las cajas
 	public class Box {
 		public static final float TAMANO = 1; //tamaño de la caja
+		public static final float TAMANO_ESTIMULO = 2; //tamaño de la caja
 		public static final float DURACION_REPRODUCCION_PREDETERMINADA = 5; // medida en segundos
 		public static final float TAMANO_CONTORNO_X = 0.2f;
 		public static final float TAMANO_CONTORNO_Y = 0.02f;
+		public static final float SHIFT_MODO_SELECCIONAR = 1.5f;
+		public static final float SHIFT_ESTIMULO_MODO_SELECCIONAR = -2.5f;
+		public static final float DELAY_ESTIMULO_MODO_SELECCIONAR = 2f;
 	}
 	
 	// Constantes para los touch
@@ -50,5 +63,6 @@ public class Constants {
 	public class Imagenes {
 		public static final String LOGOAUDIO = "LogoAudio";
 		public static final String ANIMACION = "Animacion";
+		public static final String STIMULILOGO = "stimuliLogo";
 	}
 }

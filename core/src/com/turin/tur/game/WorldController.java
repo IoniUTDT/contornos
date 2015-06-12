@@ -2,15 +2,9 @@ package com.turin.tur.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.turin.tur.game.objects.ExperimentalObject;
-import com.turin.tur.game.objects.ImageBoxContainer;
-import com.turin.tur.game.objects.SoundBoxContainer;
 import com.turin.tur.util.CameraHelper;
 import com.turin.tur.util.Constants;
 import com.turin.tur.util.LevelInfo;
@@ -21,13 +15,11 @@ public class WorldController implements InputProcessor  {
 
 	public OrthographicCamera camera;
 	public static final String TAG = WorldController.class.getName();
-	private long Id_sonido; //variable que guarda el Id de los sonidos activos 
 	public CameraHelper cameraHelper;
 	private float time = 0;
 	private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	public LevelInfo levelInfo;
-	public Array<ImageBoxContainer> trialElements = new Array<ImageBoxContainer>();
 	
 	public WorldController () {
 		init();
@@ -39,7 +31,6 @@ public class WorldController implements InputProcessor  {
 				Constants.VIEWPORT_HEIGHT);
 		cameraHelper = new CameraHelper();
 		initLevel();
-		initTrialElements();
 	}
 	
 
@@ -47,32 +38,10 @@ public class WorldController implements InputProcessor  {
 		levelInfo = new LevelInfo();
 	}
 
-	private void initTrialElements (){
-		
-		// Crea el array de imagenes
-		Array<TextureRegion> regions = Assets.instance.contenido.contenido_serie;
-		// Crea el array de sonidos
-		Sound[] sonidos = new Sound[Constants.NUMERO_ELEMENTOS];
-		for (int i = 0; i < sonidos.length; i++) {
-			Sound sonido = Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(i)+".wav"));
-			sonidos[i] = sonido;
-		}	
-		// Crea el array de objetos experimentales
-		Array<ExperimentalObject> objetosExperimentales = new Array<ExperimentalObject>();
-		for (int i = 0; i < sonidos.length; i++) {
-			objetosExperimentales.add(new ExperimentalObject(new Sprite(regions.get(i)),sonidos[i],i));
-		}
-		for (int i=0; i < Constants.NUMERO_ELEMENTOS; i++) {
-			trialElements.add(new ImageBoxContainer (objetosExperimentales.get(i)));
-			trialElements.get(i).SetPosition(Constants.posiciones_elementos_centros[i][0],Constants.posiciones_elementos_centros[i][1]);
-		}
-	}
-	
-
 	public void update (float deltaTime) {
 
-		for (int i=0; i < Constants.NUMERO_ELEMENTOS; i++) {
-			trialElements.get(i).update(deltaTime);
+		for (int i=0; i < levelInfo.trialElements.size; i++) {
+			levelInfo.trialElements.get(i).update(deltaTime);
 		}
 		cameraHelper.update(deltaTime);
 		time = time + deltaTime;
@@ -146,8 +115,8 @@ public class WorldController implements InputProcessor  {
     	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
 	    	int seleccion = -1; // Sin seleccion
 	    	
-	    	for (int i = 0; i < trialElements.size; i++) { // itera sobre todos los contenidos (que son las imagenes de los dibujos)
-				if (trialElements.get(i).spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
+	    	for (int i = 0; i < levelInfo.trialElements.size; i++) { // itera sobre todos los contenidos (que son las imagenes de los dibujos)
+				if (levelInfo.trialElements.get(i).spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 					Gdx.app.debug(TAG, "Ha tocado la imagen" + i);
 					seleccion = i;
 				}
@@ -163,11 +132,11 @@ public class WorldController implements InputProcessor  {
     private void updateSelection (int lastSelection, int selection) {
     	// restaura todo como si no hubiera seleccion
     	if (lastSelection != -1) {
-    		trialElements.get(lastSelection).unSelect();
+    		levelInfo.trialElements.get(lastSelection).unSelect();
     	}
     	time_selected = 0;
     	if (selection != -1) {
-    		trialElements.get(selection).Select();
+    		levelInfo.trialElements.get(selection).Select();
     	}
     }
 

@@ -124,10 +124,12 @@ public class Assets implements Disposable, AssetErrorListener {
 		
 		public AtlasRegion logoAudio;
 		public AtlasRegion animacionContorno;
+		public AtlasRegion stimuliLogo;
 		
 		public Imagenes (TextureAtlas atlas) {
 			logoAudio = atlas.findRegion(Constants.Imagenes.LOGOAUDIO);
 			animacionContorno = atlas.findRegion(Constants.Imagenes.ANIMACION);
+			stimuliLogo = atlas.findRegion(Constants.Imagenes.STIMULILOGO);
 		}
 	}
 }
