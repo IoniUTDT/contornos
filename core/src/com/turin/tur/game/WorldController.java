@@ -45,15 +45,22 @@ public class WorldController implements InputProcessor  {
 	public void update (float deltaTime) {
 
 		// Actualiza elementos del trial
-		for (ImageBox element : levelInfo.imageTrialElements) {
-			element.update(deltaTime);
+		if (levelInfo.imageTrialElements != null) {
+			for (ImageBox element : levelInfo.imageTrialElements) {
+				element.update(deltaTime);
+			}
 		}
-		for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
-			element.update(deltaTime);
+		if (levelInfo.optionsTrialElements != null) {
+			for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
+				element.update(deltaTime);
+			}
 		}
 		if (levelInfo.stimuliTrialElement != null) {
 			levelInfo.stimuliTrialElement.update(deltaTime);
 		}
+		
+		// actualiza el nivel
+		levelInfo.Update(deltaTime);
 		
 		// actualiza cosas generales
 		cameraHelper.update(deltaTime);
@@ -115,28 +122,33 @@ public class WorldController implements InputProcessor  {
     }
     
     private void procesarToque (TouchInfo touchData) {
+    	boolean acierto = false;
     	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
 	    	boolean elementoSeleccionado = false; // Sin seleccion
 	    	if (touchSecuence.size > 0) {
 	    		touchData.lastTouch = touchSecuence.peek().thisTouch;
 	    	}
 	    	
-	    	// se fija si se toco alguna imagen de entrenamiento 
-			for (ImageBox element : levelInfo.imageTrialElements) {
-				if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
-					Gdx.app.debug(TAG, "Ha tocado la imagen de entrenamiento " + element.contenido.Id);
-					cargarTouch (element,touchData);
-					elementoSeleccionado = true;
+	    	// se fija si se toco alguna imagen de entrenamiento
+	    	if (levelInfo.imageTrialElements != null) {
+				for (ImageBox element : levelInfo.imageTrialElements) {
+					if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
+						Gdx.app.debug(TAG, "Ha tocado la imagen de entrenamiento " + element.contenido.Id);
+						cargarTouch (element,touchData);
+						elementoSeleccionado = true;
+					}
 				}
-			}
-	    	// se fija si se toco alguna imagen de test 
-			for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
-				if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
-					Gdx.app.debug(TAG, "Ha tocado la imagen de seleccion " + element.contenido.Id);
-					cargarTouch (element,touchData);
-					elementoSeleccionado = true;
+	    	}
+	    	// se fija si se toco alguna imagen de test
+	    	if (levelInfo.optionsTrialElements != null) {
+				for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
+					if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
+						Gdx.app.debug(TAG, "Ha tocado la imagen de seleccion " + element.contenido.Id);
+						cargarTouch (element,touchData);
+						elementoSeleccionado = true;
+					}
 				}
-			}
+	    	}
 			
 			// Actua si no se toco nada
 			if (!elementoSeleccionado) {
@@ -153,11 +165,15 @@ public class WorldController implements InputProcessor  {
 			if (touchData.elementTouched) {
 				if (touchData.thisTouch.getClass() == ImageSelectableBox.class) {
 					ImageSelectableBox elemento = (ImageSelectableBox) touchData.thisTouch; 
-					elemento.itsTrue(levelInfo.stimuliTrialElement.contenido);
+					acierto = elemento.itsTrue(levelInfo.stimuliTrialElement.contenido);
 				}
 				touchData.thisTouch.select();
 			}
 	    	
+    	}
+    	if (acierto) {
+    		levelInfo.autoRestart = true;
+    		levelInfo.restartTime = levelInfo.levelTime + 1;
     	}
     }
     

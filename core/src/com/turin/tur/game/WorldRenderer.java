@@ -46,11 +46,15 @@ public class WorldRenderer implements Disposable {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
-		for (ImageBox element : worldController.levelInfo.imageTrialElements) {
-			element.render(batch);
+		if ( worldController.levelInfo.imageTrialElements != null) { 
+			for (ImageBox element : worldController.levelInfo.imageTrialElements) {
+				element.render(batch);
+			}
 		}
-		for (ImageSelectableBox element : worldController.levelInfo.optionsTrialElements) {
-			element.render(batch);
+		if (worldController.levelInfo.optionsTrialElements!=null){
+			for (ImageSelectableBox element : worldController.levelInfo.optionsTrialElements) {
+				element.render(batch);
+			}
 		}
 		if (worldController.levelInfo.stimuliTrialElement != null) {
 			worldController.levelInfo.stimuliTrialElement.render(batch);

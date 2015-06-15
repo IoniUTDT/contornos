@@ -85,6 +85,7 @@ public class ImageSelectableBox extends BoxContainer{
 			y = posicionCenter.y + Constants.Box.TAMANO/2;
 			usedSprite.setPosition(x, y);
 			usedSprite.draw(batch);
+			// 
 		}
 	}
 
