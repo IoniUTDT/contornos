@@ -55,8 +55,6 @@ public class PlayableBox extends BoxContainer{
 		float y = posicionCenter.y - Constants.Box.TAMANO/2 - Constants.Box.TAMANO_CONTORNO_Y;
 		float xShift = Constants.Box.TAMANO * avanceReproduccion / duracionReproduccion;
 		sprAnimacion.setPosition(x + xShift, y);
-		// Draws
-		spr.draw(batch);
 		if (drawAnimation) {
 			sprAnimacion.draw(batch);
 		}

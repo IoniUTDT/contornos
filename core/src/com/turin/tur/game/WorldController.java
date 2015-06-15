@@ -5,6 +5,10 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.turin.tur.game.objects.BoxContainer;
+import com.turin.tur.game.objects.ImageBox;
+import com.turin.tur.game.objects.ImageSelectableBox;
+import com.turin.tur.game.objects.StimuliBox;
 import com.turin.tur.util.CameraHelper;
 import com.turin.tur.util.Constants;
 import com.turin.tur.util.LevelInfo;
@@ -40,9 +44,18 @@ public class WorldController implements InputProcessor  {
 
 	public void update (float deltaTime) {
 
-		for (int i=0; i < levelInfo.trialElements.size; i++) {
-			levelInfo.trialElements.get(i).update(deltaTime);
+		// Actualiza elementos del trial
+		for (ImageBox element : levelInfo.imageTrialElements) {
+			element.update(deltaTime);
 		}
+		for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
+			element.update(deltaTime);
+		}
+		if (levelInfo.stimuliTrialElement != null) {
+			levelInfo.stimuliTrialElement.update(deltaTime);
+		}
+		
+		// actualiza cosas generales
 		cameraHelper.update(deltaTime);
 		time = time + deltaTime;
 
@@ -68,7 +81,6 @@ public class WorldController implements InputProcessor  {
     	
     	// Crea un evento de toque
     	TouchInfo touch = new TouchInfo(time,time_selected);
-
     	// calcula el toque en pantalla
    		touch.coordScreen = new Vector3 (screenX, screenY, 0);
    		// calcula el toque en el juego 
@@ -77,15 +89,6 @@ public class WorldController implements InputProcessor  {
     	touch.actionToDo = Constants.Touch.ToDo.DETECTOVERLAP;
     	// procesa la info del toque en funcion de otros elementos del juego
     	procesarToque(touch);
-    	// recupera la ultima seleccion y la actual
-    	int lastSelection;
-    	try {
-    		lastSelection = touchSecuence.peek().elementTouch;
-		} catch (Exception e) {
-			lastSelection = -1; // Esto sucede cuando se busca el elemento anterior y todavia no se toco nunca la pantalla
-		} 
-    	// actualiza la seleccion 
-		updateSelection (lastSelection,touch.elementTouch);
     	// agrega el toque a la secuencia de toques acumulados
     	touchSecuence.add(touch);
     	return false;
@@ -113,32 +116,61 @@ public class WorldController implements InputProcessor  {
     
     private void procesarToque (TouchInfo touchData) {
     	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
-	    	int seleccion = -1; // Sin seleccion
+	    	boolean elementoSeleccionado = false; // Sin seleccion
+	    	if (touchSecuence.size > 0) {
+	    		touchData.lastTouch = touchSecuence.peek().thisTouch;
+	    	}
 	    	
-	    	for (int i = 0; i < levelInfo.trialElements.size; i++) { // itera sobre todos los contenidos (que son las imagenes de los dibujos)
-				if (levelInfo.trialElements.get(i).spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
-					Gdx.app.debug(TAG, "Ha tocado la imagen" + i);
-					seleccion = i;
+	    	// se fija si se toco alguna imagen de entrenamiento 
+			for (ImageBox element : levelInfo.imageTrialElements) {
+				if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
+					Gdx.app.debug(TAG, "Ha tocado la imagen de entrenamiento " + element.contenido.Id);
+					cargarTouch (element,touchData);
+					elementoSeleccionado = true;
+				}
+			}
+	    	// se fija si se toco alguna imagen de test 
+			for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
+				if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
+					Gdx.app.debug(TAG, "Ha tocado la imagen de seleccion " + element.contenido.Id);
+					cargarTouch (element,touchData);
+					elementoSeleccionado = true;
 				}
 			}
 			
-	    	touchData.elementTouch=seleccion;
-	    	touchData.elementTouchType= Constants.Touch.Type.IMAGE;
-	    	touchData.actionToDo = Constants.Touch.ToDo.NOTHING;
+			// Actua si no se toco nada
+			if (!elementoSeleccionado) {
+				Gdx.app.debug(TAG, "No se ha tocado ninguna imagen ");
+				touchData.elementTouched=false;
+				touchData.elementTouchType = Constants.Touch.Type.NOTHING;
+				touchData.actionToDo = Constants.Touch.ToDo.NOTHING;
+			}
+	    	
+			// genera los eventos correspondientes al toque
+			if (touchData.lastTouch != null) {
+				touchData.lastTouch.unSelect();
+			}
+			if (touchData.elementTouched) {
+				if (touchData.thisTouch.getClass() == ImageSelectableBox.class) {
+					ImageSelectableBox elemento = (ImageSelectableBox) touchData.thisTouch; 
+					elemento.itsTrue(levelInfo.stimuliTrialElement.contenido);
+				}
+				touchData.thisTouch.select();
+			}
+	    	
     	}
     }
     
-
-    private void updateSelection (int lastSelection, int selection) {
-    	// restaura todo como si no hubiera seleccion
-    	if (lastSelection != -1) {
-    		levelInfo.trialElements.get(lastSelection).unSelect();
-    	}
-    	time_selected = 0;
-    	if (selection != -1) {
-    		levelInfo.trialElements.get(selection).select();
-    	}
+    private void cargarTouch (BoxContainer element, TouchInfo thisTouch) {
+		// carga la info en el touch
+		thisTouch.elementTouched=true;
+		thisTouch.thisTouch = element;
+		thisTouch.experimentalObjectTouch = element.contenido;
+		thisTouch.elementTouchType = Constants.Touch.Type.IMAGE;
+		thisTouch.actionToDo = Constants.Touch.ToDo.NOTHING;
+		
     }
+
 
 }
 	

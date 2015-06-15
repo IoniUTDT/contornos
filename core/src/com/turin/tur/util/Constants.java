@@ -41,6 +41,8 @@ public class Constants {
 		public static final float SHIFT_MODO_SELECCIONAR = 1.5f;
 		public static final float SHIFT_ESTIMULO_MODO_SELECCIONAR = -2.5f;
 		public static final float DELAY_ESTIMULO_MODO_SELECCIONAR = 2f;
+		public static final float ANIMATION_ANSWER_TIME = 1f;
+		public static final float SELECT_BOX_ANCHO_RTA = 0.1f;
 	}
 	
 	// Constantes para los touch

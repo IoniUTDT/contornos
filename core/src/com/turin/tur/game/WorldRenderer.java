@@ -3,10 +3,11 @@ package com.turin.tur.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.turin.tur.game.objects.ImageBox;
+import com.turin.tur.game.objects.ImageSelectableBox;
+import com.turin.tur.game.objects.StimuliBox;
 import com.turin.tur.util.Constants;
 
 public class WorldRenderer implements Disposable {
@@ -44,8 +45,15 @@ public class WorldRenderer implements Disposable {
 		worldController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		for (int i=0; i < worldController.levelInfo.trialElements.size; i++) {
-			worldController.levelInfo.trialElements.get(i).render(batch);
+		
+		for (ImageBox element : worldController.levelInfo.imageTrialElements) {
+			element.render(batch);
+		}
+		for (ImageSelectableBox element : worldController.levelInfo.optionsTrialElements) {
+			element.render(batch);
+		}
+		if (worldController.levelInfo.stimuliTrialElement != null) {
+			worldController.levelInfo.stimuliTrialElement.render(batch);
 		}
 		
 		batch.end();
@@ -55,12 +63,6 @@ public class WorldRenderer implements Disposable {
 		float x = Constants.VIEWPORT_GUI_WIDTH/2 - 100; //DISENO
 		float y = 30; //DISENO
 		Assets.instance.fonts.defaultFont.draw(batch, worldController.levelInfo.levelTitle, x, y, 200, 1, true); //DISENO NOTA: la alineacion es una constante al parecer el 1 es centrado, el 0 izq y el 3 der
-	}
-	
-	private void renderGUILastTouchInfo (SpriteBatch batch) {
-		if (worldController.touchSecuence.size != 0) {
-			//if worldController.touchSecuence.peek().elementTouchType = 
-		}
 	}
 	
 	private void renderGuiFpsCounter (SpriteBatch batch) {

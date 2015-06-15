@@ -1,6 +1,8 @@
 package com.turin.tur.util;
 
 import com.badlogic.gdx.math.Vector3;
+import com.turin.tur.game.objects.BoxContainer;
+import com.turin.tur.game.objects.ExperimentalObject;
 
 public class TouchInfo {
 
@@ -9,10 +11,13 @@ public class TouchInfo {
 	public Boolean saved = false; 
 	public String actionToDo = Constants.Touch.ToDo.NOTHING;
 	public Boolean actionProcess = false;
-	public int elementTouch = -1; // negative value mean nothing
+	public ExperimentalObject experimentalObjectTouch;
 	public String elementTouchType = Constants.Touch.Type.NOTHING; 
 	public float absolutTime;
 	public float relativeTime;
+	public boolean elementTouched = false;
+	public BoxContainer thisTouch;
+	public BoxContainer lastTouch;
 	
 	public TouchInfo (float absolutTime, float relativeTime) {
 		this.absolutTime = absolutTime;
