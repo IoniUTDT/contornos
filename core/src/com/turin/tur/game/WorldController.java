@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Array;
 import com.turin.tur.game.objects.BoxContainer;
 import com.turin.tur.game.objects.ImageBox;
 import com.turin.tur.game.objects.ImageSelectableBox;
-import com.turin.tur.game.objects.StimuliBox;
 import com.turin.tur.util.CameraHelper;
 import com.turin.tur.util.Constants;
 import com.turin.tur.util.LevelInfo;

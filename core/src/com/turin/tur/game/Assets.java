@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -30,6 +31,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public Contenido contenido;
 	public Imagenes imagenes;	
 	public AssetFonts fonts;
+	public Audios audios;
 	
 	public void init (AssetManager assetManager) {
 		this.assetManager = assetManager;
@@ -57,6 +59,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		contenido = new Contenido(atlas,"Imagen");
 		fonts = new AssetFonts();
 		imagenes = new Imagenes(atlas); 
+		audios = new Audios();
 	}
 
 	@Override
@@ -130,6 +133,18 @@ public class Assets implements Disposable, AssetErrorListener {
 			logoAudio = atlas.findRegion(Constants.Imagenes.LOGOAUDIO);
 			animacionContorno = atlas.findRegion(Constants.Imagenes.ANIMACION);
 			stimuliLogo = atlas.findRegion(Constants.Imagenes.STIMULILOGO);
+		}
+	}
+	
+	public class Audios {
+		public final Array<Sound> serieAudios;
+		
+		public Audios(){
+			serieAudios = new Array<Sound>();
+			for (int i = 0; i < 6; i++) {
+				Sound sonido = Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(i)+".wav"));
+				serieAudios.add(sonido);
+			}
 		}
 	}
 }

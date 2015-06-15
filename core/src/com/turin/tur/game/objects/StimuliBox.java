@@ -19,7 +19,7 @@ public class StimuliBox extends PlayableBox{
 
 	@Override 
 	public void update(float deltaTime) {
-		if (wait == true) {
+		if ((wait == true) & (avanceReproduccion >0.1)) {
 			sonido.play();
 			wait = false;
 		}

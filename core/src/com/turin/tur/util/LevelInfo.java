@@ -1,6 +1,7 @@
 package com.turin.tur.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -44,15 +45,11 @@ public class LevelInfo {
 			// Crea el array de imagenes
 			Array<TextureRegion> regions = Assets.instance.contenido.contenido_serie;
 			// Crea el array de sonidos
-			Sound[] sonidos = new Sound[Constants.NUMERO_ELEMENTOS];
-			for (int i = 0; i < sonidos.length; i++) {
-				Sound sonido = Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(i)+".wav"));
-				sonidos[i] = sonido;
-			}	
+			Array<Sound> sonidos=Assets.instance.audios.serieAudios;
 			// Crea el array de objetos experimentales
 			Array<ExperimentalObject> objetosExperimentales = new Array<ExperimentalObject>();
-			for (int i = 0; i < sonidos.length; i++) {
-				objetosExperimentales.add(new ExperimentalObject(new Sprite(regions.get(i)),sonidos[i],i));
+			for (int i = 0; i < sonidos.size; i++) {
+				objetosExperimentales.add(new ExperimentalObject(new Sprite(regions.get(i)),sonidos.get(i),i));
 			}
 			// Crea el array de los elementos en la pantalla
 			imageTrialElements = new Array<ImageBox>();
@@ -68,15 +65,12 @@ public class LevelInfo {
 			// Crea el array de imagenes
 			Array<TextureRegion> regions = Assets.instance.contenido.contenido_serie;
 			// Crea el array de sonidos
-			Sound[] sonidos = new Sound[Constants.NUMERO_ELEMENTOS];
-			for (int i = 0; i < sonidos.length; i++) {
-				Sound sonido = Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(i)+".wav"));
-				sonidos[i] = sonido;
-			}	
+			Array<Sound> sonidos=Assets.instance.audios.serieAudios;
+			
 			// Crea el array de objetos experimentales
 			Array<ExperimentalObject> objetosExperimentales = new Array<ExperimentalObject>();
-			for (int i = 0; i < sonidos.length; i++) {
-				objetosExperimentales.add(new ExperimentalObject(new Sprite(regions.get(i)),sonidos[i],i));
+			for (int i = 0; i < sonidos.size; i++) {
+				objetosExperimentales.add(new ExperimentalObject(new Sprite(regions.get(i)),sonidos.get(i),i));
 			}
 			// Crea el array de imagenes seleccionables
 			optionsTrialElements = new Array<ImageSelectableBox>();
