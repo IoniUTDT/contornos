@@ -136,7 +136,7 @@ public class WorldController implements InputProcessor  {
     	}
     	time_selected = 0;
     	if (selection != -1) {
-    		levelInfo.trialElements.get(selection).Select();
+    		levelInfo.trialElements.get(selection).select();
     	}
     }
 

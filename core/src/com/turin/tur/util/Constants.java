@@ -28,7 +28,7 @@ public class Constants {
 	public class Diseno {
 		public static final String MODO_ENTRENAMIENTO ="entrenamiento";
 		public static final String MODO_SELECCION_IMAGEN ="seleccionImagen";
-		public static final String MODO_ACTIVO = MODO_ENTRENAMIENTO;
+		public static final String MODO_ACTIVO = MODO_SELECCION_IMAGEN;
 	}
 	
 	// Constantes relacionadas con las cajas

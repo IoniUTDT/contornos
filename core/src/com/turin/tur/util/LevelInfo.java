@@ -10,7 +10,7 @@ import com.turin.tur.game.WorldController;
 import com.turin.tur.game.objects.BoxContainer;
 import com.turin.tur.game.objects.ExperimentalObject;
 import com.turin.tur.game.objects.ImageBox;
-import com.turin.tur.game.objects.SelectBox;
+import com.turin.tur.game.objects.PlayableBox;
 import com.turin.tur.game.objects.StimuliBox;
 import com.badlogic.gdx.math.MathUtils; 
 
@@ -67,7 +67,7 @@ public class LevelInfo {
 				objetosExperimentales.add(new ExperimentalObject(new Sprite(regions.get(i)),sonidos[i],i));
 			}
 			for (int i=0; i < Constants.NUMERO_ELEMENTOS; i++) {
-				trialElements.add(new SelectBox (objetosExperimentales.get(i)));
+				trialElements.add(new ImageBox (objetosExperimentales.get(i)));
 				trialElements.get(i).SetPosition(Constants.posiciones_elementos_centros[i][0]+xShift,Constants.posiciones_elementos_centros[i][1]);
 			}
 			// Crea el elemento estimulo con un random de la serie

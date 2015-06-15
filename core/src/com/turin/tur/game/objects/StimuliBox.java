@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.turin.tur.game.Assets;
 import com.turin.tur.util.Constants;
 
-public class StimuliBox extends BoxContainer{
+public class StimuliBox extends PlayableBox{
 
 	public StimuliBox(ExperimentalObject contenido) {
 		super(contenido);
 		this.spr = new Sprite (Assets.instance.imagenes.stimuliLogo);
-		this.Select();
+		this.select();
 	}
 
 	@Override 
@@ -21,12 +21,12 @@ public class StimuliBox extends BoxContainer{
 		}
 		if (avanceReproduccion > duracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
 			avanceReproduccion = 0; //reset the advance point of sound
-			this.Select();
+			this.select();
 		}		
 	}
 
 	@Override
-	public void Select() {
+	public void select() {
 		this.drawAnimation = true;
 		Sound sonido = this.contenido.sonido;
 		sonido.play();
