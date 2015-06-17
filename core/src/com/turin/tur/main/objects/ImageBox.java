@@ -1,4 +1,4 @@
-package com.turin.tur.game.objects;
+package com.turin.tur.main.objects;
 
 public class ImageBox extends PlayableBox{
 

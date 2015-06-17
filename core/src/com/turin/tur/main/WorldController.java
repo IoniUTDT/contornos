@@ -1,17 +1,17 @@
-package com.turin.tur.game;
+package com.turin.tur.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.turin.tur.game.objects.BoxContainer;
-import com.turin.tur.game.objects.ImageBox;
-import com.turin.tur.game.objects.ImageSelectableBox;
-import com.turin.tur.util.CameraHelper;
-import com.turin.tur.util.Constants;
-import com.turin.tur.util.LevelInfo;
-import com.turin.tur.util.TouchInfo;
+import com.turin.tur.main.objects.BoxContainer;
+import com.turin.tur.main.objects.ImageBox;
+import com.turin.tur.main.objects.ImageSelectableBox;
+import com.turin.tur.main.util.CameraHelper;
+import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.TouchInfo;
+import com.turin.tur.main.util.TrialInfo;
 
 
 public class WorldController implements InputProcessor  {
@@ -22,7 +22,7 @@ public class WorldController implements InputProcessor  {
 	private float time = 0;
 	private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
-	public LevelInfo levelInfo;
+	public TrialInfo levelInfo;
 	
 	public WorldController () {
 		init();
@@ -38,7 +38,7 @@ public class WorldController implements InputProcessor  {
 	
 
 	private void initLevel() {
-		levelInfo = new LevelInfo();
+		levelInfo = new TrialInfo();
 	}
 
 	public void update (float deltaTime) {

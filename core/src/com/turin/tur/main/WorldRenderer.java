@@ -1,17 +1,17 @@
-package com.turin.tur.game;
+package com.turin.tur.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import com.turin.tur.game.objects.ImageBox;
-import com.turin.tur.game.objects.ImageSelectableBox;
-import com.turin.tur.game.objects.StimuliBox;
-import com.turin.tur.util.Constants;
+import com.turin.tur.main.objects.ImageBox;
+import com.turin.tur.main.objects.ImageSelectableBox;
+import com.turin.tur.main.util.Constants;
 
 public class WorldRenderer implements Disposable {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = WorldRenderer.class.getName();
 	public OrthographicCamera camera;
 	private SpriteBatch batch;

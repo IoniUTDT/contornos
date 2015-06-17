@@ -1,4 +1,4 @@
-package com.turin.tur.game;
+package com.turin.tur.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.turin.tur.util.Constants;
+import com.turin.tur.main.util.Constants;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
@@ -70,7 +70,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	
 	@Override
-	public void error(AssetDescriptor asset, Throwable throwable) {
+	public void error(@SuppressWarnings("rawtypes") AssetDescriptor asset, Throwable throwable) {
 		Gdx.app.error(TAG, "Couldn't load asset '" +
 				asset.fileName + "'", (Exception)throwable);
 	}

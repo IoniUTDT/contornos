@@ -1,23 +1,22 @@
-package com.turin.tur.util;
+package com.turin.tur.main.util;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.turin.tur.game.Assets;
-import com.turin.tur.game.objects.ExperimentalObject;
-import com.turin.tur.game.objects.ImageBox;
-import com.turin.tur.game.objects.ImageSelectableBox;
-import com.turin.tur.game.objects.StimuliBox;
+import com.turin.tur.main.Assets;
+import com.turin.tur.main.objects.ExperimentalObject;
+import com.turin.tur.main.objects.ImageBox;
+import com.turin.tur.main.objects.ImageSelectableBox;
+import com.turin.tur.main.objects.StimuliBox;
 import com.badlogic.gdx.math.MathUtils; 
 
 
 
-public class LevelInfo {
+public class TrialInfo {
 
-	public static final String TAG = LevelInfo.class.getName();
+	public static final String TAG = TrialInfo.class.getName();
 	public String levelTitle = "";
 	public String levelMode = "";
 	public Array<ImageBox> imageTrialElements;
@@ -27,7 +26,7 @@ public class LevelInfo {
 	public float levelTime;
 	public float restartTime;
 	
-	public LevelInfo () {
+	public TrialInfo () {
 		initLevel();
 	}
 	

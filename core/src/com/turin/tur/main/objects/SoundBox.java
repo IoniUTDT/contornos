@@ -1,7 +1,7 @@
-package com.turin.tur.game.objects;
+package com.turin.tur.main.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.turin.tur.game.Assets;
+import com.turin.tur.main.Assets;
 
 public class SoundBox extends PlayableBox{
 

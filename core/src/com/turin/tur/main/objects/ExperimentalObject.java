@@ -1,4 +1,4 @@
-package com.turin.tur.game.objects;
+package com.turin.tur.main.objects;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;

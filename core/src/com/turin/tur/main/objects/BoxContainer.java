@@ -1,9 +1,9 @@
-package com.turin.tur.game.objects;
+package com.turin.tur.main.objects;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.turin.tur.util.Constants;
+import com.turin.tur.main.util.Constants;
 
 public abstract class BoxContainer {
 

@@ -1,4 +1,4 @@
-package com.turin.tur.util;
+package com.turin.tur.main.util;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class CameraHelper {
 	
+	@SuppressWarnings("unused")
 	private static final String TAG = CameraHelper.class.getName();
 	private final float MAX_ZOOM_IN = 0.25f;
 	private final float MAX_ZOOM_OUT = 10.0f;

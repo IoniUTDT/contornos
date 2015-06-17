@@ -1,4 +1,4 @@
-package com.turin.tur.util;
+package com.turin.tur.main.util;
 
 public class Constants {
 
@@ -66,4 +66,14 @@ public class Constants {
 		public static final String ANIMACION = "Animacion";
 		public static final String STIMULILOGO = "stimuliLogo";
 	}
+	
+	// Constantes relacionadas a archivos con informacion
+	public class Files {
+		public static final String USERDATA = "UserData.txt";
+	}
 }
+
+
+
+
+

@@ -1,11 +1,11 @@
-package com.turin.tur.game.objects;
+package com.turin.tur.main.objects;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.turin.tur.util.Constants;
+import com.turin.tur.main.util.Constants;
 
 public class ImageSelectableBox extends BoxContainer{
 

@@ -4,13 +4,14 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.turin.tur.game.WorldController;
-import com.turin.tur.game.WorldRenderer;
 import com.badlogic.gdx.assets.AssetManager;
-import com.turin.tur.game.Assets;
+import com.turin.tur.main.Assets;
+import com.turin.tur.main.WorldController;
+import com.turin.tur.main.WorldRenderer;
 
 public class ContornosMain implements ApplicationListener {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = ContornosMain.class.getName();
 
 	private WorldController worldController;

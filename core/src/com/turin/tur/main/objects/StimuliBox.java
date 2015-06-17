@@ -1,9 +1,9 @@
-package com.turin.tur.game.objects;
+package com.turin.tur.main.objects;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.turin.tur.game.Assets;
-import com.turin.tur.util.Constants;
+import com.turin.tur.main.Assets;
+import com.turin.tur.main.util.Constants;
 
 public class StimuliBox extends PlayableBox{
 
