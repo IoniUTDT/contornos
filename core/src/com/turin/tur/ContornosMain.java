@@ -1,27 +1,30 @@
 package com.turin.tur;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.assets.AssetManager;
 import com.turin.tur.main.Assets;
-import com.turin.tur.main.WorldController;
-import com.turin.tur.main.WorldRenderer;
+import com.turin.tur.main.screens.MenuScreen;
 
-public class ContornosMain implements ApplicationListener {
+public class ContornosMain extends Game {
 
-	@SuppressWarnings("unused")
+	
 	private static final String TAG = ContornosMain.class.getName();
 
-	private WorldController worldController;
-
-	private WorldRenderer worldRenderer;
-
-	private boolean paused;
-
-	@Override 
-	public void create () { 
+	@Override
+	public void create () {
+		// Set Libgdx log level
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		// Load assets
+		Assets.instance.init(new AssetManager());
+		// Start game at menu screen
+		setScreen(new MenuScreen(this));
+	}
+	
+	/*
+	
+	public void createOLD () { 
 		// Set Libgdx log level to DEBUG
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		// Load assets
@@ -71,4 +74,6 @@ public class ContornosMain implements ApplicationListener {
 		worldRenderer.dispose();
 		Assets.instance.dispose();
 	}
+	
+	*/
 }

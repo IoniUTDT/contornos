@@ -1,6 +1,8 @@
 package com.turin.tur.main;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.objects.BoxContainer;
 import com.turin.tur.main.objects.ImageBox;
 import com.turin.tur.main.objects.ImageSelectableBox;
+import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.TouchInfo;
@@ -24,7 +27,11 @@ public class WorldController implements InputProcessor  {
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	public TrialInfo levelInfo;
 	
-	public WorldController () {
+	private Game game;
+	
+	
+	public WorldController (Game game) {
+		this.game = game;
 		init();
 	}
 	
@@ -69,6 +76,11 @@ public class WorldController implements InputProcessor  {
 
 	@Override
 	public boolean keyUp (int keycode) {
+		
+		// Back to Menu
+		if (keycode == Keys.ESCAPE || keycode == Keys.BACK) {
+			backToMenu();
+		}
 		return false;
 	}
 	
@@ -186,7 +198,11 @@ public class WorldController implements InputProcessor  {
 		
     }
 
-
+    private void backToMenu () {
+    	// switch to menu screen
+    	game.setScreen(new MenuScreen(game));
+    }
+    
 }
 	
 	
