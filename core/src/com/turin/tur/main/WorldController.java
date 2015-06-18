@@ -25,7 +25,7 @@ public class WorldController implements InputProcessor  {
 	private float time = 0;
 	private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
-	public TrialInfo levelInfo;
+	public TrialInfo trialInfo;
 	
 	private Game game;
 	
@@ -45,28 +45,28 @@ public class WorldController implements InputProcessor  {
 	
 
 	private void initLevel() {
-		levelInfo = new TrialInfo();
+		trialInfo = new TrialInfo();
 	}
 
 	public void update (float deltaTime) {
 
 		// Actualiza elementos del trial
-		if (levelInfo.imageTrialElements != null) {
-			for (ImageBox element : levelInfo.imageTrialElements) {
+		if (trialInfo.imageTrialElements != null) {
+			for (ImageBox element : trialInfo.imageTrialElements) {
 				element.update(deltaTime);
 			}
 		}
-		if (levelInfo.optionsTrialElements != null) {
-			for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
+		if (trialInfo.optionsTrialElements != null) {
+			for (ImageSelectableBox element : trialInfo.optionsTrialElements) {
 				element.update(deltaTime);
 			}
 		}
-		if (levelInfo.stimuliTrialElement != null) {
-			levelInfo.stimuliTrialElement.update(deltaTime);
+		if (trialInfo.stimuliTrialElement != null) {
+			trialInfo.stimuliTrialElement.update(deltaTime);
 		}
 		
 		// actualiza el nivel
-		levelInfo.Update(deltaTime);
+		trialInfo.Update(deltaTime);
 		
 		// actualiza cosas generales
 		cameraHelper.update(deltaTime);
@@ -141,8 +141,8 @@ public class WorldController implements InputProcessor  {
 	    	}
 	    	
 	    	// se fija si se toco alguna imagen de entrenamiento
-	    	if (levelInfo.imageTrialElements != null) {
-				for (ImageBox element : levelInfo.imageTrialElements) {
+	    	if (trialInfo.imageTrialElements != null) {
+				for (ImageBox element : trialInfo.imageTrialElements) {
 					if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
 						Gdx.app.debug(TAG, "Ha tocado la imagen de entrenamiento " + element.contenido.Id);
 						cargarTouch (element,touchData);
@@ -151,8 +151,8 @@ public class WorldController implements InputProcessor  {
 				}
 	    	}
 	    	// se fija si se toco alguna imagen de test
-	    	if (levelInfo.optionsTrialElements != null) {
-				for (ImageSelectableBox element : levelInfo.optionsTrialElements) {
+	    	if (trialInfo.optionsTrialElements != null) {
+				for (ImageSelectableBox element : trialInfo.optionsTrialElements) {
 					if (element.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)) {
 						Gdx.app.debug(TAG, "Ha tocado la imagen de seleccion " + element.contenido.Id);
 						cargarTouch (element,touchData);
@@ -176,15 +176,16 @@ public class WorldController implements InputProcessor  {
 			if (touchData.elementTouched) {
 				if (touchData.thisTouch.getClass() == ImageSelectableBox.class) {
 					ImageSelectableBox elemento = (ImageSelectableBox) touchData.thisTouch; 
-					acierto = elemento.itsTrue(levelInfo.stimuliTrialElement.contenido);
+					acierto = elemento.itsTrue(trialInfo.stimuliTrialElement.contenido);
 				}
 				touchData.thisTouch.select();
 			}
 	    	
     	}
     	if (acierto) {
-    		levelInfo.autoRestart = true;
-    		levelInfo.restartTime = levelInfo.levelTime + 1;
+    		stopSound();
+    		trialInfo.autoRestart = true;
+    		trialInfo.restartTime = trialInfo.levelTime + 1;
     	}
     }
     
@@ -200,9 +201,22 @@ public class WorldController implements InputProcessor  {
 
     private void backToMenu () {
     	// switch to menu screen
+    	stopSound();
     	game.setScreen(new MenuScreen(game));
     }
-    
+ 
+    public void stopSound () {
+    	if (trialInfo.imageTrialElements != null) {
+    		for (ImageBox element: trialInfo.imageTrialElements) {
+    			element.contenido.sonido.stop();
+    		}
+    	}
+    	if (trialInfo.optionsTrialElements != null) {
+    		for (ImageSelectableBox element: trialInfo.optionsTrialElements) {
+    			element.contenido.sonido.stop();
+    		}
+    	}
+    }
 }
 	
 	

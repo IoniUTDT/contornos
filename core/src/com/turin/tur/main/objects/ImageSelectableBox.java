@@ -85,7 +85,33 @@ public class ImageSelectableBox extends BoxContainer{
 			y = posicionCenter.y + Constants.Box.TAMANO/2;
 			usedSprite.setPosition(x, y);
 			usedSprite.draw(batch);
-			// 
+			// dibuja los bordes
+			// verticales
+			usedSprite.setSize(Constants.Box.SELECT_BOX_ANCHO_RTA,Constants.Box.TAMANO);
+			//izq
+			x = posicionCenter.x - Constants.Box.TAMANO/2 -Constants.Box.SELECT_BOX_ANCHO_RTA;
+			y = posicionCenter.y - Constants.Box.TAMANO/2;
+			usedSprite.setPosition(x, y);
+			usedSprite.draw(batch);
+			//der
+			x = posicionCenter.x + Constants.Box.TAMANO/2;
+			y = posicionCenter.y - Constants.Box.TAMANO/2;
+			usedSprite.setPosition(x, y);
+			usedSprite.draw(batch);
+			// horizontal
+			usedSprite.setSize(Constants.Box.TAMANO,Constants.Box.SELECT_BOX_ANCHO_RTA);
+			// arriba
+			x = posicionCenter.x - Constants.Box.TAMANO/2;
+			y = posicionCenter.y - Constants.Box.TAMANO/2 - Constants.Box.SELECT_BOX_ANCHO_RTA;
+			usedSprite.setPosition(x, y);
+			usedSprite.draw(batch);
+			// abajo
+			x = posicionCenter.x - Constants.Box.TAMANO/2;
+			y = posicionCenter.y + Constants.Box.TAMANO/2;
+			usedSprite.setPosition(x, y);
+			usedSprite.draw(batch);
+						
+			
 		}
 	}
 

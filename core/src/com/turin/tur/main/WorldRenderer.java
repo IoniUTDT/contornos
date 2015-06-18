@@ -46,18 +46,18 @@ public class WorldRenderer implements Disposable {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
-		if ( worldController.levelInfo.imageTrialElements != null) { 
-			for (ImageBox element : worldController.levelInfo.imageTrialElements) {
+		if ( worldController.trialInfo.imageTrialElements != null) { 
+			for (ImageBox element : worldController.trialInfo.imageTrialElements) {
 				element.render(batch);
 			}
 		}
-		if (worldController.levelInfo.optionsTrialElements!=null){
-			for (ImageSelectableBox element : worldController.levelInfo.optionsTrialElements) {
+		if (worldController.trialInfo.optionsTrialElements!=null){
+			for (ImageSelectableBox element : worldController.trialInfo.optionsTrialElements) {
 				element.render(batch);
 			}
 		}
-		if (worldController.levelInfo.stimuliTrialElement != null) {
-			worldController.levelInfo.stimuliTrialElement.render(batch);
+		if (worldController.trialInfo.stimuliTrialElement != null) {
+			worldController.trialInfo.stimuliTrialElement.render(batch);
 		}
 		
 		batch.end();
@@ -66,7 +66,7 @@ public class WorldRenderer implements Disposable {
 	private void renderGuiLevelInfo (SpriteBatch batch) {
 		float x = Constants.VIEWPORT_GUI_WIDTH/2 - 100; //DISENO
 		float y = 30; //DISENO
-		Assets.instance.fonts.defaultFont.draw(batch, worldController.levelInfo.levelTitle, x, y, 200, 1, true); //DISENO NOTA: la alineacion es una constante al parecer el 1 es centrado, el 0 izq y el 3 der
+		Assets.instance.fonts.defaultFont.draw(batch, worldController.trialInfo.levelTitle, x, y, 200, 1, true); //DISENO NOTA: la alineacion es una constante al parecer el 1 es centrado, el 0 izq y el 3 der
 	}
 	
 	private void renderGuiFpsCounter (SpriteBatch batch) {
