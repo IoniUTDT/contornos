@@ -11,16 +11,12 @@ public class Constants {
 	// Archivo con imagenes del juego
 	public static final String TEXTURE_ATLAS_OBJECTS =
 			"images/cajas.pack.atlas";
-	public static final String TEXTURE_ATLAS_UI =
-			"images/cajas-ui.pack.atlas";
 	public static final String TEXTURE_ATLAS_LIBGDX_UI =
 			"images/uiskin.atlas";
 	// Location of description file for skins
 	public static final String SKIN_LIBGDX_UI =
-			"images/uiskin.json";
-	public static final String SKIN_CANYONBUNNY_UI =
-			"images/contornos-ui.json";
-	
+			"test/uiskin.json";
+
 	// Conjunto de configuraciones
 	public static final int NUMERO_ELEMENTOS = 6;
 	public static final float LADO_CUADROS = 1;
@@ -31,13 +27,18 @@ public class Constants {
 	// GUI Height
 	public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
 
+	public static final String PREFERENCES = "prefFile.txt";
+
+	public static final String CONFIGURACION = "confFile.txt";
+
+
 
 	// Constantes relacionadas con el diseno de experimentos
 	
 	public class Diseno {
 		public static final String MODO_ENTRENAMIENTO ="entrenamiento";
 		public static final String MODO_SELECCION_IMAGEN ="seleccionImagen";
-		public static final String MODO_ACTIVO = MODO_SELECCION_IMAGEN;
+		public static final String MODO_ACTIVO = "modoActivo";
 	}
 	
 	// Constantes relacionadas con las cajas

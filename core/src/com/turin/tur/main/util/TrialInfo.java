@@ -31,10 +31,11 @@ public class TrialInfo {
 	}
 	
 	public void initLevel() {
+		GameConf.instance.load();
 		autoRestart=false;
 		levelTime=0;
 		restartTime=0;
-		levelMode = Constants.Diseno.MODO_ACTIVO;
+		levelMode = GameConf.instance.modo;
 		LoadExperimentalSetup();
 		SetTexts();
 	}
