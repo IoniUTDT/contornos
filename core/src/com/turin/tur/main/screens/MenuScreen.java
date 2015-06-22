@@ -3,7 +3,6 @@ package com.turin.tur.main.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -65,7 +64,7 @@ public class MenuScreen extends AbstractGameScreen {
 	    buttonTrain.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
-            	GameConf.instance.modo = Constants.Diseno.MODO_ENTRENAMIENTO;
+            	GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO;
             	GameConf.instance.save();
             	game.setScreen(new GameScreen(game));
             }
@@ -75,7 +74,7 @@ public class MenuScreen extends AbstractGameScreen {
 	    buttonTest.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
-            	GameConf.instance.modo = Constants.Diseno.MODO_SELECCION_IMAGEN;
+            	GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
             	GameConf.instance.save();
             	game.setScreen(new GameScreen(game));
             }

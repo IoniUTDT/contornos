@@ -35,10 +35,35 @@ public class Constants {
 
 	// Constantes relacionadas con el diseno de experimentos
 	
-	public class Diseno {
-		public static final String MODO_ENTRENAMIENTO ="entrenamiento";
-		public static final String MODO_SELECCION_IMAGEN ="seleccionImagen";
-		public static final String MODO_ACTIVO = "modoActivo";
+	public static class Diseno {
+		public enum TIPOdeTRIAL {ENTRENAMIENTO,TESTENTRENAMIENTO,TEST}
+
+		public static final float[][] DISTR_BILINEALx6 = {{-1.5f,1},{0,1},{1.5f,1},{-1.5f,-1},{0,-1},{1.5f,-1}};
+		public static final float[][] DISTR_BILINEALx4 = {{-1,1},{1,1},{-1,-1},{-1,1}};
+		public static final float[][] DISTR_BILINEALx2 = {{0,1},{0,-1}};
+		public static final float[][] DISTR_LINEALx3 = {{-1.5f,0},{0,0},{+1.5f,0}};
+		public static final float[][] DISTR_LINEALx2 = {{-1.5f,0},{+1.5f,0}};
+
+		public enum DISTRIBUCIONESenPANTALLA {
+			LINEALx3(DISTR_LINEALx3),
+			LINEALx2(DISTR_LINEALx2),
+			BILINEALx6(DISTR_BILINEALx6),
+			BILINEALx4(DISTR_BILINEALx4),
+			BILINEALx2(DISTR_BILINEALx2);
+			
+			private float[][] distribucion;
+			DISTRIBUCIONESenPANTALLA (final float[][] distribucion) {
+				this.distribucion=distribucion;
+			}
+			
+			public float X (int i){
+				return this.distribucion[i][0];
+			}
+			public float Y (int i){
+				return this.distribucion[i][1];
+			}
+		}
+	
 	}
 	
 	// Constantes relacionadas con las cajas

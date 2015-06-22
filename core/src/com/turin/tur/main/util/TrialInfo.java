@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.Assets;
-import com.turin.tur.main.objects.ExperimentalObject;
+import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.objects.ImageBox;
 import com.turin.tur.main.objects.ImageSelectableBox;
 import com.turin.tur.main.objects.StimuliBox;
+import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 import com.badlogic.gdx.math.MathUtils; 
 
 
@@ -18,7 +19,7 @@ public class TrialInfo {
 
 	public static final String TAG = TrialInfo.class.getName();
 	public String levelTitle = "";
-	public String levelMode = "";
+	public TIPOdeTRIAL levelMode;
 	public Array<ImageBox> imageTrialElements;
 	public Array<ImageSelectableBox> optionsTrialElements; 
 	public StimuliBox stimuliTrialElement;
@@ -41,7 +42,7 @@ public class TrialInfo {
 	}
 	private void LoadExperimentalSetup() {
 		
-		if (levelMode == Constants.Diseno.MODO_ENTRENAMIENTO) {
+		if (levelMode == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
 			// Crea el array de imagenes
 			Array<TextureRegion> regions = Assets.instance.contenido.contenido_serie;
 			// Crea el array de sonidos
@@ -59,7 +60,7 @@ public class TrialInfo {
 			}
 		}
 		
-		if (levelMode == Constants.Diseno.MODO_SELECCION_IMAGEN) {
+		if (levelMode == Constants.Diseno.TIPOdeTRIAL.TEST) {
 			// Crea un shift para hacer lugar a lo que hay que mostrar
 			float xShift = Constants.Box.SHIFT_MODO_SELECCIONAR;
 			// Crea el array de imagenes
@@ -87,10 +88,10 @@ public class TrialInfo {
 	}
 
 	private void SetTexts () {
-		if (levelMode == Constants.Diseno.MODO_ENTRENAMIENTO) {
+		if (levelMode == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
 			levelTitle = "A entrenar!";
 		}
-		if (levelMode == Constants.Diseno.MODO_SELECCION_IMAGEN) {
+		if (levelMode == Constants.Diseno.TIPOdeTRIAL.TEST) {
 			levelTitle = "A ver ahora...";
 		} 
 	}

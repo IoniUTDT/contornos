@@ -3,6 +3,7 @@ package com.turin.tur.main.objects;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.util.Constants;
 
 public abstract class BoxContainer {

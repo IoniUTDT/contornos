@@ -2,12 +2,14 @@ package com.turin.tur.main.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
 public class GameConf {
 	
 	public static final String TAG = GameConf.class.getName();
 	public static final GameConf instance = new GameConf();
-	public String modo;
+	public TIPOdeTRIAL modo;
+	public String modoString;
 	private Preferences prefs;
 	// singleton: prevent instantiation from other classes
 	private GameConf () {
@@ -15,11 +17,13 @@ public class GameConf {
 	}
 
 	public void load () { 
-		modo = prefs.getString(Constants.Diseno.MODO_ACTIVO, Constants.Diseno.MODO_ENTRENAMIENTO);
+		modoString = prefs.getString(Constants.Diseno.TIPOdeTRIAL.class.getName(), Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO.toString());
+		modo = TIPOdeTRIAL.valueOf(modoString);
 	}
 
 	public void save () { 
-		prefs.putString(Constants.Diseno.MODO_ACTIVO, modo);
+		modoString = modo.toString();
+		prefs.putString(Constants.Diseno.TIPOdeTRIAL.class.getName(), modoString);
 		prefs.flush();
 	}
 }

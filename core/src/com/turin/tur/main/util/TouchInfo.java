@@ -1,8 +1,8 @@
 package com.turin.tur.main.util;
 
 import com.badlogic.gdx.math.Vector3;
+import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.objects.BoxContainer;
-import com.turin.tur.main.objects.ExperimentalObject;
 
 public class TouchInfo {
 

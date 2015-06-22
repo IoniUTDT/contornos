@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.util.Constants;
 
 public class ImageSelectableBox extends BoxContainer{

@@ -4,6 +4,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.turin.tur.main.Assets;
+import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.util.Constants;
 
 public class PlayableBox extends BoxContainer{
