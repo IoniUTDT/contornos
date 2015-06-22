@@ -2,6 +2,9 @@ package com.turin.tur.main.util;
 
 public class Constants {
 
+	// Version of game; Es importante porque dentro de una version (notada por la parte entera) se respeta compatibilidad de todos los identificadores. al cambiar la version no se cargan los datos viejo ni las estructuras viejas
+	public static final float VERSION = 1.1f; 
+	
 	// Visible game world is 5 meters wide
 	public static final float VIEWPORT_WIDTH = 5.0f;
 	
@@ -11,6 +14,9 @@ public class Constants {
 	// Archivo con imagenes del juego
 	public static final String TEXTURE_ATLAS_OBJECTS =
 			"images/cajas.pack.atlas";
+	public static final String TEXTURE_ATLAS_IMAGES_EXP =
+			"images/imagesexp.pack.atlas";
+	
 	public static final String TEXTURE_ATLAS_LIBGDX_UI =
 			"images/uiskin.atlas";
 	// Location of description file for skins
@@ -38,18 +44,12 @@ public class Constants {
 	public static class Diseno {
 		public enum TIPOdeTRIAL {ENTRENAMIENTO,TESTENTRENAMIENTO,TEST}
 
-		public static final float[][] DISTR_BILINEALx6 = {{-1.5f,1},{0,1},{1.5f,1},{-1.5f,-1},{0,-1},{1.5f,-1}};
-		public static final float[][] DISTR_BILINEALx4 = {{-1,1},{1,1},{-1,-1},{-1,1}};
-		public static final float[][] DISTR_BILINEALx2 = {{0,1},{0,-1}};
-		public static final float[][] DISTR_LINEALx3 = {{-1.5f,0},{0,0},{+1.5f,0}};
-		public static final float[][] DISTR_LINEALx2 = {{-1.5f,0},{+1.5f,0}};
-
 		public enum DISTRIBUCIONESenPANTALLA {
-			LINEALx3(DISTR_LINEALx3),
-			LINEALx2(DISTR_LINEALx2),
-			BILINEALx6(DISTR_BILINEALx6),
-			BILINEALx4(DISTR_BILINEALx4),
-			BILINEALx2(DISTR_BILINEALx2);
+			LINEALx3(new float[][] {{-1.5f,0},{0,0},{+1.5f,0}}),
+			LINEALx2(new float[][] {{-1.5f,0},{+1.5f,0}}),
+			BILINEALx6(new float[][] {{-1.5f,1},{0,1},{1.5f,1},{-1.5f,-1},{0,-1},{1.5f,-1}}),
+			BILINEALx4(new float[][] {{-1,1},{1,1},{-1,-1},{-1,1}}),
+			BILINEALx2(new float[][] {{-1.5f,0},{+1.5f,0}});
 			
 			private float[][] distribucion;
 			DISTRIBUCIONESenPANTALLA (final float[][] distribucion) {

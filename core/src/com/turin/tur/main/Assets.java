@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.util.Constants;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -146,5 +147,12 @@ public class Assets implements Disposable, AssetErrorListener {
 				serieAudios.add(sonido);
 			}
 		}
+	}
+	
+	public class OnDemand {
+		
+		public Array<ExperimentalObject> OnDemandExpObjects = new Array<ExperimentalObject>();
+		
+		
 	}
 }

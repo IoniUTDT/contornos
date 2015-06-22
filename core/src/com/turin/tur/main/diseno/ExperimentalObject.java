@@ -17,5 +17,11 @@ public class ExperimentalObject {
 		this.sonido = sonido;
 		this.Id = Id;
 	}
-	
+
+	/*
+	public ExperimentalObject (int Id){ // Esto carga la info desde archivo
+		this.Id = Id;
+		
+	}
+	*/
 }

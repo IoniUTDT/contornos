@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.turin.tur.main.Assets;
+import com.turin.tur.main.ImagesAsset;
 import com.turin.tur.main.screens.MenuScreen;
 
 public class ContornosMain extends Game {
@@ -18,6 +19,7 @@ public class ContornosMain extends Game {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		// Load assets
 		Assets.instance.init(new AssetManager());
+		ImagesAsset.instance.init(new AssetManager());
 		// Start game at menu screen
 		setScreen(new MenuScreen(this));
 	}

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.turin.tur.main.Assets;
+import com.turin.tur.main.ImagesAsset;
 
 public abstract class AbstractGameScreen implements Screen {
 	
@@ -21,9 +22,11 @@ public abstract class AbstractGameScreen implements Screen {
 	
 	public void resume () {
 		Assets.instance.init(new AssetManager());
+		ImagesAsset.instance.init(new AssetManager());
 	}
 	
 	public void dispose () {
 		Assets.instance.dispose();
+		ImagesAsset.instance.dispose();
 	}
 }

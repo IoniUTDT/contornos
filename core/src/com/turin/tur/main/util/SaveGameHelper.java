@@ -1,5 +1,35 @@
 package com.turin.tur.main.util;
 
+import com.badlogic.gdx.utils.Array;
+import com.turin.tur.main.diseno.ExperimentalObject;
+import com.turin.tur.main.diseno.Level;
+import com.turin.tur.main.diseno.User;
+import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
+import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
+
+
+public class SaveGameHelper {
+	
+	public static class JsonTrial {
+		public int Id; // Id q identifica al trial
+		public String title; // Titulo optativo q describe al trial
+		public TIPOdeTRIAL modo; // Tipo de trial
+		public int[] elementosId; // Lista de objetos del trial.
+		public ExperimentalObject rtaCorrecta; // Respuesta correcta en caso de que sea test.
+		public boolean rtaRandom; // Determina si se elije una rta random 
+		public DISTRIBUCIONESenPANTALLA distribucion; // guarda las posiciones de los elementos a mostrar
+	}
+	
+	
+}
+
+
+
+
+
+
+
+
 /*
 import java.util.ArrayList;
 
