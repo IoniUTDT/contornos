@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Disposable;
@@ -23,6 +24,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	public final String TAG = ImagesAsset.class.getName();
 	public static final ImagesAsset instance = new ImagesAsset();
 	public int version;
+	private TextureAtlas atlas;
 	
 	private AssetManager assetManager;
 	// singleton: prevent instantiation from other classes
@@ -50,7 +52,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 			Gdx.app.debug(TAG, "asset: " + a);
 		}
 		
-		TextureAtlas atlas = assetManager.get("images/experimentalsource/"+version+"/images.pack.atlas");
+		this.atlas = assetManager.get("images/experimentalsource/"+version+"/images.pack.atlas");
 		// enable texture filtering for pixel smoothing
 		for (Texture t : atlas.getTextures()) {
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -71,8 +73,8 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	}
 	
 	
-	public AtlasRegion Imagen(int Id, TextureAtlas atlas){
-		return atlas.findRegion("Imagen"+Id);
+	public Sprite Imagen(int Id){
+		return new Sprite(this.atlas.findRegion("Imagen"+Id));
 	}
 
 	public Sound Sonido(int Id){
@@ -102,7 +104,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		writeFile("experimentalsource/"+this.version+"/"+Id+".meta", json.toJson(metaData));
 	}
 	
-	public JsonMetaData loadMetaData(int Id) {
+	private JsonMetaData loadMetaData(int Id) {
 		String save = readFile("experimentalsource/"+this.version+"/"+Id+".meta");
 		if (!save.isEmpty()) {
 			Json json = new Json();
@@ -127,7 +129,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	}
 
 
-	public static void writeFile(String fileName, String s) {
+	private static void writeFile(String fileName, String s) {
 		FileHandle file = Gdx.files.local(fileName);
 		// escribe encriptado
 		//file.writeString(com.badlogic.gdx.utils.Base64Coder.encodeString(s), false);
