@@ -1,8 +1,11 @@
 package com.turin.tur.desktop;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
 import com.turin.tur.ContornosMain;
+import com.turin.tur.main.ImagesAsset;
 import com.turin.tur.main.util.Constants;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;

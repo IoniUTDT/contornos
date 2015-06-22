@@ -20,9 +20,9 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class ImagesAsset implements Disposable, AssetErrorListener {
 	
-	public static final String TAG = ImagesAsset.class.getName();
+	public final String TAG = ImagesAsset.class.getName();
 	public static final ImagesAsset instance = new ImagesAsset();
-	public static int version;
+	public int version;
 	
 	private AssetManager assetManager;
 	// singleton: prevent instantiation from other classes
@@ -35,7 +35,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		int version_temp = MathUtils.roundPositive(Constants.VERSION);
 		int temp;
 		if (version_temp>Constants.VERSION) {temp=-1;} else {temp=0;} 
-		version = version_temp + temp;
+		this.version = version_temp + temp;
 		this.assetManager = assetManager;
 		// set asset manager error handler
 		assetManager.setErrorListener(this);
@@ -79,6 +79,13 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		return Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"+version+"/sound"+Id+".wav"));
 	}
 
+	// devuelve la info de la metadata
+	public JsonMetaData MetaInfo (int Id) {
+		
+		Gdx.app.log(TAG, "Cargando info");
+		return loadMetaData(Id);
+		
+	}
 	public static class JsonMetaData {
 		public int Id;
 		public String name;
@@ -92,18 +99,40 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		metaData.comments="Esto despues se guarda automaticamente";
 		
 		Json json = new Json();
-		writeFile("experimentalsource/"+"Id"+".meta", json.toJson(metaData));
+		writeFile("experimentalsource/"+this.version+"/"+Id+".meta", json.toJson(metaData));
 	}
 	
-	public JsonMetaData MetaInfo (int Id) {
-		
+	public JsonMetaData loadMetaData(int Id) {
+		String save = readFile("experimentalsource/"+this.version+"/"+Id+".meta");
+		if (!save.isEmpty()) {
+			Json json = new Json();
+			JsonMetaData metaData = json.fromJson(JsonMetaData.class, save);
+			return metaData;
+		}
+		Gdx.app.error(TAG, "No se a podido encontrar la info del objeto experimental " +Id);
 		return null;
-		
 	}
 	
+	private String readFile(String fileName) {
+		FileHandle file = Gdx.files.local(fileName);
+		if (file != null && file.exists()) {
+			String s = file.readString();
+			if (!s.isEmpty()) {
+				return s;
+				// return com.badlogic.gdx.utils.Base64Coder.decodeString(s); // Esto es para desencriptarlo
+			}
+		}
+		Gdx.app.error(TAG, "No se a podido encontrar la info del objeto experimental");
+		return "";
+	}
+
+
 	public static void writeFile(String fileName, String s) {
 		FileHandle file = Gdx.files.local(fileName);
-		file.writeString(com.badlogic.gdx.utils.Base64Coder.encodeString(s), false);
+		// escribe encriptado
+		//file.writeString(com.badlogic.gdx.utils.Base64Coder.encodeString(s), false);
+		// escribe sin encriptar
+		file.writeString(s, false);
 	}
 	
 	
