@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.objects.BoxContainer;
 import com.turin.tur.main.objects.ImageBox;
 import com.turin.tur.main.objects.ImageSelectableBox;
@@ -26,6 +27,7 @@ public class WorldController implements InputProcessor  {
 	private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	public TrialInfo trialInfo;
+	public Trial trial;
 	
 	private Game game;
 	
@@ -46,6 +48,7 @@ public class WorldController implements InputProcessor  {
 
 	private void initLevel() {
 		trialInfo = new TrialInfo();
+		trial = new Trial(1); //SEGUIR ACA
 	}
 
 	public void update (float deltaTime) {

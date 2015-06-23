@@ -1,5 +1,7 @@
 package com.turin.tur.main.util;
 
+import com.badlogic.gdx.math.MathUtils;
+
 public class Constants {
 
 	// Version of game; Es importante porque dentro de una version (notada por la parte entera) se respeta compatibilidad de todos los identificadores. al cambiar la version no se cargan los datos viejo ni las estructuras viejas

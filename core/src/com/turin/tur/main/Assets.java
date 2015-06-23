@@ -148,11 +148,4 @@ public class Assets implements Disposable, AssetErrorListener {
 			}
 		}
 	}
-	
-	public class OnDemand {
-		
-		public Array<ExperimentalObject> OnDemandExpObjects = new Array<ExperimentalObject>();
-		
-		
-	}
 }

@@ -74,11 +74,11 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	
 	
 	public Sprite Imagen(int Id){
-		return new Sprite(this.atlas.findRegion("Imagen"+Id));
+		return new Sprite(this.atlas.findRegion(""+Id));
 	}
 
 	public Sound Sonido(int Id){
-		return Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"+version+"/sound"+Id+".wav"));
+		return Gdx.audio.newSound(Gdx.files.internal("images/experimentalsource/"+version+"/"+Id+".wav"));
 	}
 
 	// devuelve la info de la metadata
@@ -86,7 +86,6 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		
 		Gdx.app.log(TAG, "Cargando info");
 		return loadMetaData(Id);
-		
 	}
 	public static class JsonMetaData {
 		public int Id;
