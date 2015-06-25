@@ -48,7 +48,7 @@ public class LevelScreen extends AbstractGameScreen  {
 	@Override
 	public void show () {
 	    Gdx.app.debug(TAG, "Level");
-	    levelController = new TrialController(game, 1); // ACA esta puesto que cargue el nivel 1 para debug 
+	    levelController = new TrialController(game, 2); // ACA esta puesto que cargue el nivel 1 para debug 
 	    levelRenderer = new TrialRenderer(levelController);
 		Gdx.input.setCatchBackKey(true);
 	}

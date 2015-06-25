@@ -66,7 +66,7 @@ public class Constants {
 	
 		public enum TIPOdeCAJA {
 			
-			ENTRENAMIENTO(true,true,false,true),
+			ENTRENAMIENTO(true,false,false,true),
 			SELECCIONABLE(true,true,false,false),
 			PREGUNTA(false,false,true,false);
 			

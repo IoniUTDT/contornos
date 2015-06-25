@@ -124,14 +124,14 @@ public class TrialController implements InputProcessor  {
     	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
 	    	boolean elementoSeleccionado = false; // Sin seleccion
 	    	if (touchSecuence.size > 0) {
-	    		touchData.lastTouch = touchSecuence.peek().thisTouch;
+	    		touchData.lastTouchBox = touchSecuence.peek().thisTouchBox;
 	    	}
 	    	
 	    	// se fija si se toco alguna imagen
 	    	for (Box box : trial.boxes) {
 	    		if (box.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 	    			Gdx.app.debug(TAG, "Ha tocado la imagen " + box.contenido.Id);
-	    			cargarTouch (box,touchData);
+	    			cargarInfoDelTouch (box,touchData);
 					elementoSeleccionado = true;
 	    		}
 	    		
@@ -148,8 +148,9 @@ public class TrialController implements InputProcessor  {
 			// genera los eventos correspondientes al toque
 			
 			// anula la seleccion del evento previo
-			if (touchData.lastTouch != null) {
-				touchData.lastTouch.unSelect();
+			if (touchData.lastTouchBox != null) {
+				Gdx.app.debug(TAG, "Voy a deseleccionar!");
+				touchData.lastTouchBox.unSelect();
 			}
 			
 			// selecciona el elemento actual si hay elemento tocado
@@ -157,7 +158,13 @@ public class TrialController implements InputProcessor  {
 				touchData.thisTouchBox.select();
 				// revisa si se acerto a la respuesta o no. 
 				if (trial.modo == TIPOdeTRIAL.TEST) {
-					// if (touchData.experimentalObjectTouch.equals(elementoSeleccionado)) {}
+					if (trial.rtaCorrecta == touchData.thisTouchBox.contenido) { // Significa q se selecciono la opcion correcta
+						acierto = true;
+						touchData.thisTouchBox.answer=true;
+					} else {
+						acierto = false;
+						touchData.thisTouchBox.answer=false;
+					}
 				}
 			}
 	    	
@@ -173,7 +180,7 @@ public class TrialController implements InputProcessor  {
     	
     }
     
-    private void cargarTouch (Box box, TouchInfo thisTouch) {
+    private void cargarInfoDelTouch (Box box, TouchInfo thisTouch) {
 		// carga la info en el touch
 		thisTouch.elementTouched=true;
 		thisTouch.thisTouchBox = box;

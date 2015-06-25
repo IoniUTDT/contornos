@@ -41,8 +41,8 @@ public class Trial {
 	}
 
 	private void createElements() {
-		for (ExperimentalObject elemento : this.elementos) {
-			if (this.modo == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
+		if (this.modo == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
+			for (ExperimentalObject elemento : this.elementos) {
 				Box box = new Box(elemento,
 						Constants.Diseno.TIPOdeCAJA.ENTRENAMIENTO);
 				box.SetPosition(
@@ -51,6 +51,22 @@ public class Trial {
 				this.boxes.add(box);
 			}
 		}
+
+		if (this.modo == Constants.Diseno.TIPOdeTRIAL.TEST) {
+			for (ExperimentalObject elemento : this.elementos) {
+				Box box = new Box(elemento,
+						Constants.Diseno.TIPOdeCAJA.SELECCIONABLE);
+				box.SetPosition(
+						distribucion.X(this.elementos.indexOf(elemento, true))
+								+ Constants.Box.SHIFT_MODO_SELECCIONAR,
+						distribucion.Y(this.elementos.indexOf(elemento, true)));
+				this.boxes.add(box);
+			}
+			Box box = new Box(rtaCorrecta, Constants.Diseno.TIPOdeCAJA.PREGUNTA);
+			box.SetPosition(0+ Constants.Box.SHIFT_ESTIMULO_MODO_SELECCIONAR, 0);
+			this.boxes.add(box);
+		}
+
 	}
 
 	private void initTrial(int Id) {
@@ -67,12 +83,16 @@ public class Trial {
 		for (int elemento : this.elementosId) {
 			this.elementos.add(new ExperimentalObject(elemento));
 		}
-		this.rtaCorrecta = new ExperimentalObject(this.rtaCorrectaId);
+		// hace que la respuesta correcta sea una referencia al mismo item que
+		// ya esta en la lista
+		for (ExperimentalObject elemento : this.elementos) {
+			if (this.rtaCorrectaId == elemento.Id) {
+				this.rtaCorrecta = elemento;
+			}
+		}
 		// falta cargar el level y el usuario
 		Gdx.app.log(TAG, "Info del trial cargado");
 	}
-	
-	
 
 	// Seccion encargada de guardar y cargar info de trials
 
@@ -138,7 +158,7 @@ public class Trial {
 
 	public void update(float deltaTime) {
 		// Actualiza las boxes
-		for (Box box:boxes) {
+		for (Box box : boxes) {
 			box.update(deltaTime);
 		}
 	}

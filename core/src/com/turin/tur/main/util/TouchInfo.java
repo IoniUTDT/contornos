@@ -20,6 +20,7 @@ public class TouchInfo {
 	public BoxContainer lastTouch;
 	public String actionToDo;
 	public Box thisTouchBox;
+	public Box lastTouchBox;
 	
 	public TouchInfo (float absolutTime, float relativeTime) {
 		this.absolutTime = absolutTime;
