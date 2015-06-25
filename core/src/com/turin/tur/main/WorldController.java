@@ -48,7 +48,7 @@ public class WorldController implements InputProcessor  {
 
 	private void initLevel() {
 		trialInfo = new TrialInfo();
-		trial = new Trial(1); //SEGUIR ACA
+		//trial = new Trial(1); //SEGUIR ACA
 	}
 
 	public void update (float deltaTime) {

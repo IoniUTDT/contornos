@@ -5,12 +5,16 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.turin.tur.main.ImagesAsset;
+import com.turin.tur.main.objects.Box;
+import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
 public class Trial {
 	
  	public int Id; // Id q identifica al trial
+ 	
+ 	// Cosas que se cargan desde archivos
 	public String title; // Titulo optativo q describe al trial
 	public TIPOdeTRIAL modo; // Tipo de trial
 	public int[] elementosId; // Lista de objetos del trial.
@@ -18,12 +22,13 @@ public class Trial {
 	public boolean rtaRandom; // Determina si se elije una rta random 
 	public DISTRIBUCIONESenPANTALLA distribucion; // guarda las posiciones de los elementos a mostrar
 	
-	// objetos que se cargan en el load
+	// objetos que se cargan en el load o al inicializar
 	public Array<ExperimentalObject> elementos = new Array<ExperimentalObject>(); // Lista de objetos del trial. Carga solo los objetos experimentales, xq todo lo demas se configura en funcion del modo
 	public ExperimentalObject rtaCorrecta;
 	public Level levelActivo;
 	public User userActivo;
-	
+	public float levelTime=0;
+	private Array<Box> boxes = new Array<Box>();
 	
 	// constantes
 	public static final String TAG = Trial.class.getName();
@@ -31,6 +36,16 @@ public class Trial {
 	public Trial (int Id) {
 		this.Id = Id;
 		initTrial (Id);
+		createElements();
+	}
+
+	private void createElements() {
+		for (ExperimentalObject elemento : this.elementos) {
+			if (this.modo == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
+				this.boxes.add(new Box (elemento,Constants.Diseno.TIPOdeCAJA.ENTRENAMIENTO));
+			}
+			
+		}
 	}
 
 	private void initTrial(int Id) {
@@ -50,6 +65,14 @@ public class Trial {
 		this.rtaCorrecta = new ExperimentalObject(this.rtaCorrectaId);
 		// falta cargar el level y el usuario
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -93,7 +116,7 @@ public class Trial {
 	}
 	
 	private String readFile(String fileName) {
-		FileHandle file = Gdx.files.local(fileName);
+		FileHandle file = Gdx.files.internal(fileName);
 		if (file != null && file.exists()) {
 			String s = file.readString();
 			if (!s.isEmpty()) {

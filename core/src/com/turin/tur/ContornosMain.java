@@ -33,7 +33,7 @@ public class ContornosMain extends Game {
 		
 		// pruebas
 		Trial trial = new Trial(1);
-		trial.saveTrial(1);
+		//trial.saveTrial(1);
 		
 		// carga el mail menu
 		setScreen(new MenuScreen(this));

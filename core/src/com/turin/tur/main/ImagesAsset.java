@@ -8,7 +8,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.turin.tur.main.util.Constants;
@@ -42,7 +41,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		// set asset manager error handler
 		assetManager.setErrorListener(this);
 		// load texture atlas
-		assetManager.load("images/experimentalsource/"+version+"/images.pack.atlas",TextureAtlas.class);
+		assetManager.load("experimentalsource/"+version+"/images.pack.atlas",TextureAtlas.class);
 		
 		// start loading assets and wait until finished
 		assetManager.finishLoading();
@@ -52,7 +51,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 			Gdx.app.debug(TAG, "asset: " + a);
 		}
 		
-		this.atlas = assetManager.get("images/experimentalsource/"+version+"/images.pack.atlas");
+		this.atlas = assetManager.get("experimentalsource/"+version+"/images.pack.atlas");
 		// enable texture filtering for pixel smoothing
 		for (Texture t : atlas.getTextures()) {
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -78,7 +77,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	}
 
 	public Sound Sonido(int Id){
-		return Gdx.audio.newSound(Gdx.files.internal("images/experimentalsource/"+version+"/"+Id+".wav"));
+		return Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"+version+"/"+Id+".wav"));
 	}
 
 	// devuelve la info de la metadata
@@ -120,7 +119,6 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 			String s = file.readString();
 			if (!s.isEmpty()) {
 				return s;
-				// return com.badlogic.gdx.utils.Base64Coder.decodeString(s); // Esto es para desencriptarlo
 			}
 		}
 		Gdx.app.error(TAG, "No se a podido encontrar la info del objeto experimental");
@@ -130,9 +128,6 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 
 	private static void writeFile(String fileName, String s) {
 		FileHandle file = Gdx.files.local(fileName);
-		// escribe encriptado
-		//file.writeString(com.badlogic.gdx.utils.Base64Coder.encodeString(s), false);
-		// escribe sin encriptar
 		file.writeString(s, false);
 	}
 	

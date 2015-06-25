@@ -1,7 +1,5 @@
 package com.turin.tur.main.util;
 
-import com.badlogic.gdx.math.MathUtils;
-
 public class Constants {
 
 	// Version of game; Es importante porque dentro de una version (notada por la parte entera) se respeta compatibilidad de todos los identificadores. al cambiar la version no se cargan los datos viejo ni las estructuras viejas
@@ -44,7 +42,7 @@ public class Constants {
 	// Constantes relacionadas con el diseno de experimentos
 	
 	public static class Diseno {
-		public enum TIPOdeTRIAL {ENTRENAMIENTO,TESTENTRENAMIENTO,TEST}
+		public enum TIPOdeTRIAL {ENTRENAMIENTO,TEST}
 
 		public enum DISTRIBUCIONESenPANTALLA {
 			LINEALx3(new float[][] {{-1.5f,0},{0,0},{+1.5f,0}}),
@@ -53,7 +51,7 @@ public class Constants {
 			BILINEALx4(new float[][] {{-1,1},{1,1},{-1,-1},{-1,1}}),
 			BILINEALx2(new float[][] {{-1.5f,0},{+1.5f,0}});
 			
-			private float[][] distribucion;
+			public float[][] distribucion;
 			DISTRIBUCIONESenPANTALLA (final float[][] distribucion) {
 				this.distribucion=distribucion;
 			}
@@ -66,6 +64,24 @@ public class Constants {
 			}
 		}
 	
+		public enum TIPOdeCAJA {
+			
+			ENTRENAMIENTO(true,true,false,true),
+			SELECCIONABLE(true,true,false,false),
+			PREGUNTA(false,false,true,false);
+			
+			public boolean mostrarContenido; // Determina si se muestra el contenido o se muestra un signo de pregunta
+			public boolean seleccionable; // Determina si se puede seleccionar o no (por ej las preguntas de los trials de test no son seleccionables)
+			public boolean reproduccionAutomatica; // Determina si el sonido entra en loop o no (las de entranamiento no tienen loop de de test si)
+			public boolean reproducible; // Determina si se puede reproducir o no
+			
+			private TIPOdeCAJA(boolean mostrarContenido, boolean seleccionable, boolean reproduccionAutomatica, boolean reproducible) {
+				this.mostrarContenido = mostrarContenido;
+				this.seleccionable = seleccionable;
+				this.reproduccionAutomatica = reproduccionAutomatica;
+				this.reproducible = reproducible;
+			}
+		}
 	}
 	
 	// Constantes relacionadas con las cajas
