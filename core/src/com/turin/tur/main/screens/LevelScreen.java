@@ -16,11 +16,14 @@ public class LevelScreen extends AbstractGameScreen  {
 	private TrialController levelController;
 	private TrialRenderer levelRenderer;
 	
+	// Variables del trial
+	private int level;
 	
 	private boolean paused;
 	
-	public LevelScreen (Game game) {
+	public LevelScreen (Game game, int Id) {
 		super(game);
+		this.level=Id;
 	}
 
 	@Override
@@ -48,7 +51,7 @@ public class LevelScreen extends AbstractGameScreen  {
 	@Override
 	public void show () {
 	    Gdx.app.debug(TAG, "Level");
-	    levelController = new TrialController(game, 2); // ACA esta puesto que cargue el nivel 1 para debug 
+	    levelController = new TrialController(game, this.level); 
 	    levelRenderer = new TrialRenderer(levelController);
 		Gdx.input.setCatchBackKey(true);
 	}

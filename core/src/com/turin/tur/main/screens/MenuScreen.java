@@ -66,7 +66,7 @@ public class MenuScreen extends AbstractGameScreen {
             public void clicked(InputEvent event, float x, float y){      
             	GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO;
             	GameConf.instance.save();
-            	game.setScreen(new GameScreen(game));
+            	game.setScreen(new LevelScreen(game,1));
             }
         });
 
@@ -76,9 +76,10 @@ public class MenuScreen extends AbstractGameScreen {
 			public void clicked(InputEvent event, float x, float y) {
 				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
 				GameConf.instance.save();
-				game.setScreen(new LevelScreen(game));
+				game.setScreen(new LevelScreen(game,2));
 			}
 		});
+		
 		
 		TextButton buttonLevel = new TextButton("Nivel 1", skin, "default");
 		buttonTest.addListener(new ClickListener() {
@@ -86,7 +87,7 @@ public class MenuScreen extends AbstractGameScreen {
 			public void clicked(InputEvent event, float x, float y) {
 				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
 				GameConf.instance.save();
-				game.setScreen(new LevelScreen(game));
+				game.setScreen(new LevelScreen(game,2));
 			}
 		});
 
