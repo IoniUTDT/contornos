@@ -25,8 +25,8 @@ public class ExperimentalObject {
 	
 	public ExperimentalObject (int Id){ // Esto carga la info desde archivo
 		this.Id = Id;
-		this.imagen = ImagesAsset.instance.Imagen(Id);
-		this.sonido = ImagesAsset.instance.Sonido(Id);
+		this.imagen = ImagesAsset.instance.imagen(Id);
+		this.sonido = ImagesAsset.instance.sonido(Id);
 		this.descripcion = ImagesAsset.instance.MetaInfo(Id).comments;
 		this.name = ImagesAsset.instance.MetaInfo(Id).name;
 	}

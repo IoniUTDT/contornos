@@ -15,43 +15,47 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.math.MathUtils;
 
-
-
-
 public class ImagesAsset implements Disposable, AssetErrorListener {
-	
+
 	public final String TAG = ImagesAsset.class.getName();
 	public static final ImagesAsset instance = new ImagesAsset();
 	public int version;
 	private TextureAtlas atlas;
-	
+
 	private AssetManager assetManager;
+
 	// singleton: prevent instantiation from other classes
-	private ImagesAsset () {}
-	
-	
+	private ImagesAsset() {
+	}
+
 	// Variables creadas
-	
-	public void init (AssetManager assetManager) {
+
+	public void init(AssetManager assetManager) {
 		int version_temp = MathUtils.roundPositive(Constants.VERSION);
 		int temp;
-		if (version_temp>Constants.VERSION) {temp=-1;} else {temp=0;} 
+		if (version_temp > Constants.VERSION) {
+			temp = -1;
+		} else {
+			temp = 0;
+		}
 		this.version = version_temp + temp;
 		this.assetManager = assetManager;
 		// set asset manager error handler
 		assetManager.setErrorListener(this);
 		// load texture atlas
-		assetManager.load("experimentalsource/"+version+"/images.pack.atlas",TextureAtlas.class);
-		
+		assetManager.load("experimentalsource/" + version
+				+ "/images.pack.atlas", TextureAtlas.class);
+
 		// start loading assets and wait until finished
 		assetManager.finishLoading();
-		Gdx.app.debug(TAG, "# of assets loaded: "
-				+ assetManager.getAssetNames().size);
-		for (String a : assetManager.getAssetNames()){
+		Gdx.app.debug(TAG,
+				"# of assets loaded: " + assetManager.getAssetNames().size);
+		for (String a : assetManager.getAssetNames()) {
 			Gdx.app.debug(TAG, "asset: " + a);
 		}
-		
-		this.atlas = assetManager.get("experimentalsource/"+version+"/images.pack.atlas");
+
+		this.atlas = assetManager.get("experimentalsource/" + version
+				+ "/images.pack.atlas");
 		// enable texture filtering for pixel smoothing
 		for (Texture t : atlas.getTextures()) {
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -60,59 +64,62 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	}
 
 	@Override
-	public void dispose () {
+	public void dispose() {
 		assetManager.dispose();
 	}
-	
-	
+
 	@Override
-	public void error(@SuppressWarnings("rawtypes") AssetDescriptor asset, Throwable throwable) {
-		Gdx.app.error(TAG, "Couldn't load asset '" +
-				asset.fileName + "'", (Exception)throwable);
-	}
-	
-	
-	public Sprite Imagen(int Id){
-		return new Sprite(this.atlas.findRegion(""+Id));
+	public void error(@SuppressWarnings("rawtypes") AssetDescriptor asset,
+			Throwable throwable) {
+		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'",
+				(Exception) throwable);
 	}
 
-	public Sound Sonido(int Id){
-		return Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"+version+"/"+Id+".wav"));
+	public Sprite imagen(int Id) {
+		return new Sprite(this.atlas.findRegion("" + Id));
+	}
+
+	public Sound sonido(int Id) {
+		return Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"
+				+ version + "/" + Id + ".wav"));
 	}
 
 	// devuelve la info de la metadata
-	public JsonMetaData MetaInfo (int Id) {
-		
-		Gdx.app.log(TAG, "Cargando info");
+	public JsonMetaData MetaInfo(int Id) {
 		return loadMetaData(Id);
 	}
+
 	public static class JsonMetaData {
 		public int Id;
 		public String name;
 		public String comments;
 	}
-	
+
 	public void saveMetaData(int Id) {
 		JsonMetaData metaData = new JsonMetaData();
-		metaData.Id=Id;
-		metaData.name="Prueba";
-		metaData.comments="Esto despues se guarda automaticamente";
-		
+		metaData.Id = Id;
+		metaData.name = "Prueba";
+		metaData.comments = "Esto despues se guarda automaticamente";
+
 		Json json = new Json();
-		writeFile("experimentalsource/"+this.version+"/"+Id+".meta", json.toJson(metaData));
+		writeFile("experimentalsource/" + this.version + "/" + Id + ".meta",
+				json.toJson(metaData));
 	}
-	
+
 	private JsonMetaData loadMetaData(int Id) {
-		String save = readFile("experimentalsource/"+this.version+"/"+Id+".meta");
+		String save = readFile("experimentalsource/" + this.version + "/" + Id
+				+ ".meta");
 		if (!save.isEmpty()) {
 			Json json = new Json();
 			JsonMetaData metaData = json.fromJson(JsonMetaData.class, save);
 			return metaData;
 		}
-		Gdx.app.error(TAG, "No se a podido encontrar la info del objeto experimental " +Id);
+		Gdx.app.error(TAG,
+				"No se a podido encontrar la info del objeto experimental "
+						+ Id);
 		return null;
 	}
-	
+
 	private String readFile(String fileName) {
 		FileHandle file = Gdx.files.local(fileName);
 		if (file != null && file.exists()) {
@@ -121,17 +128,14 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 				return s;
 			}
 		}
-		Gdx.app.error(TAG, "No se a podido encontrar la info del objeto experimental");
+		Gdx.app.error(TAG,
+				"No se a podido encontrar la info del objeto experimental");
 		return "";
 	}
-
 
 	private static void writeFile(String fileName, String s) {
 		FileHandle file = Gdx.files.local(fileName);
 		file.writeString(s, false);
 	}
-	
-	
-	
 
 }
