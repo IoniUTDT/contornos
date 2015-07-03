@@ -64,8 +64,6 @@ public class MenuScreen extends AbstractGameScreen {
 	    buttonTrain.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
-            	GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO;
-            	GameConf.instance.save();
             	game.setScreen(new LevelScreen(game,1));
             }
         });
@@ -74,28 +72,26 @@ public class MenuScreen extends AbstractGameScreen {
 		buttonTest.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
-				GameConf.instance.save();
 				game.setScreen(new LevelScreen(game,2));
 			}
 		});
 		
 		
-		TextButton buttonLevel = new TextButton("Nivel 1", skin, "default");
-		buttonTest.addListener(new ClickListener() {
+		TextButton buttonLevel = new TextButton("Nivel 3", skin, "default");
+		buttonLevel.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
-				GameConf.instance.save();
-				game.setScreen(new LevelScreen(game,2));
+				game.setScreen(new LevelScreen(game,3));
 			}
 		});
 
+
+	    table.add(buttonLevel);
+	    table.row();
 	    table.add(buttonTrain);
 	    table.row();
 	    table.add(buttonTest);
-	    table.row();
-	    table.add(buttonLevel);
+
 	    
 	    Gdx.app.debug(TAG, "Menu cargado");
 
