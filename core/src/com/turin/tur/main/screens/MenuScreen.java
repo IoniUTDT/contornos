@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.turin.tur.main.util.Constants;
-import com.turin.tur.main.util.GameConf;
+
 
 
 public class MenuScreen extends AbstractGameScreen {
@@ -60,39 +60,27 @@ public class MenuScreen extends AbstractGameScreen {
 	    
 	    // Add widgets to the table here.
 	  
-	    TextButton buttonTrain = new TextButton("Entrenar", skin, "default");
-	    buttonTrain.addListener(new ClickListener(){
+	    TextButton buttonL1 = new TextButton("Nivel 1 (entrenamiento)", skin, "default");
+	    buttonL1.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
             	game.setScreen(new LevelScreen(game,1));
             }
         });
 
-		TextButton buttonTest = new TextButton("Probar", skin, "default");
-		buttonTest.addListener(new ClickListener() {
+		TextButton buttonL2 = new TextButton("Nivel 2 (Test)", skin, "default");
+		buttonL2.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				game.setScreen(new LevelScreen(game,2));
 			}
 		});
-		
-		
-		TextButton buttonLevel = new TextButton("Nivel 3", skin, "default");
-		buttonLevel.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new LevelScreen(game,3));
-			}
-		});
 
 
-	    table.add(buttonLevel);
+	    table.add(buttonL1);
 	    table.row();
-	    table.add(buttonTrain);
-	    table.row();
-	    table.add(buttonTest);
+	    table.add(buttonL2);
 
-	    
 	    Gdx.app.debug(TAG, "Menu cargado");
 
 	}

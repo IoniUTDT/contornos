@@ -122,12 +122,12 @@ public class Trial {
 
 		Json json = new Json();
 		writeFile("experimentalconfig/" + ImagesAsset.instance.version
-				+ "/level" + Id + ".meta", json.toJson(jsonLevel));
+				+ "/trial" + Id + ".meta", json.toJson(jsonLevel));
 	}
 
 	private JsonTrial loadTrial(int Id) {
 		String save = readFile("experimentalconfig/"
-				+ ImagesAsset.instance.version + "/level" + Id + ".meta");
+				+ ImagesAsset.instance.version + "/trial" + Id + ".meta");
 		if (!save.isEmpty()) {
 			Json json = new Json();
 			return json.fromJson(JsonTrial.class, save);

@@ -59,8 +59,8 @@ public class TrialRenderer implements Disposable {
 	}
 	
 	private void renderGuiFpsCounter (SpriteBatch batch) {
-		float x = cameraGUI.viewportWidth - 65;
-		float y = cameraGUI.viewportHeight - 15;
+		float x = cameraGUI.viewportWidth - 130;
+		float y = cameraGUI.viewportHeight - 30;
 		int fps = Gdx.graphics.getFramesPerSecond();
 		BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 		if (fps >= 45) {
