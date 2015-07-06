@@ -7,11 +7,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.turin.tur.main.objects.Box;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
-import com.turin.tur.main.util.TouchInfo;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
 public class LevelController implements InputProcessor {

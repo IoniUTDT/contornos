@@ -3,7 +3,7 @@ package com.turin.tur.main.diseno;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
-import com.turin.tur.main.ImagesAsset;
+import com.turin.tur.main.util.ImagesAsset;
 
 public class ExperimentalObject {
 

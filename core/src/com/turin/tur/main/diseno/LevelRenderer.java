@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import com.turin.tur.main.Assets;
-import com.turin.tur.main.objects.Box;
+import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 
 public class LevelRenderer implements Disposable {

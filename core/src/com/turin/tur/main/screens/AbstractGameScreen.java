@@ -3,8 +3,8 @@ package com.turin.tur.main.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.turin.tur.main.Assets;
-import com.turin.tur.main.ImagesAsset;
+import com.turin.tur.main.util.Assets;
+import com.turin.tur.main.util.ImagesAsset;
 
 public abstract class AbstractGameScreen implements Screen {
 	

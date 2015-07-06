@@ -1,4 +1,4 @@
-package com.turin.tur.main;
+package com.turin.tur.main.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.turin.tur.main.diseno.ExperimentalObject;
-import com.turin.tur.main.util.Constants;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 

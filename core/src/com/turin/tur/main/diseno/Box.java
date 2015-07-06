@@ -1,4 +1,4 @@
-package com.turin.tur.main.objects;
+package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -8,9 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.turin.tur.main.Assets;
-import com.turin.tur.main.diseno.ExperimentalObject;
-import com.turin.tur.main.diseno.Trial;
+import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeCAJA;
 

@@ -3,8 +3,8 @@ package com.turin.tur.main.diseno;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.turin.tur.main.ImagesAsset;
 import com.turin.tur.main.util.FileHelper;
+import com.turin.tur.main.util.ImagesAsset;
 
 public class Level {
 	

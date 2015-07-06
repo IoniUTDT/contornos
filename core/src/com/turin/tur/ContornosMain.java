@@ -4,10 +4,10 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.turin.tur.main.Assets;
-import com.turin.tur.main.ImagesAsset;
 import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.screens.MenuScreen;
+import com.turin.tur.main.util.Assets;
+import com.turin.tur.main.util.ImagesAsset;
 
 public class ContornosMain extends Game {
 
