@@ -2,6 +2,7 @@ package com.turin.tur.main.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,7 +18,8 @@ import com.turin.tur.main.util.Constants;
 public class MenuScreen extends AbstractGameScreen {
 	
 	private static final String TAG = MenuScreen.class.getName();
-
+	Preferences prefs = Gdx.app.getPreferences("User");
+	
     private Skin skin;
    
 
@@ -58,8 +60,27 @@ public class MenuScreen extends AbstractGameScreen {
 	    shapeRenderer = new ShapeRenderer();
 	    skin = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI));
 	    
-	    // Add widgets to the table here.
-	  
+	    // Load user info
+	    String User = prefs.getString("User", "NoName");
+	    boolean firstUser = false;
+	    if (User == "NoName") {firstUser=true;}
+	    
+	    String TextUser;
+	    if (firstUser) {TextUser="Crear usuario";
+	    } else {
+	    	TextUser = "Usuario: "+ User + ". Click para cambiar";
+	    }
+	    
+
+		// Add widgets to the table here.
+	    TextButton buttonUser = new TextButton(TextUser, skin, "default");
+	    buttonUser.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){      
+            	
+            }
+        });
+	    
 	    TextButton buttonL1 = new TextButton("Nivel 1 (entrenamiento)", skin, "default");
 	    buttonL1.addListener(new ClickListener(){
             @Override 
@@ -76,11 +97,16 @@ public class MenuScreen extends AbstractGameScreen {
 			}
 		});
 
-
+		
+		buttonL1.setVisible(true); 
+		//buttonL1.setColor(1, 0, 1, 0.1f);
+		
+		table.add(buttonUser);
+		table.row();
 	    table.add(buttonL1);
 	    table.row();
 	    table.add(buttonL2);
-
+	    
 	    Gdx.app.debug(TAG, "Menu cargado");
 
 	}
