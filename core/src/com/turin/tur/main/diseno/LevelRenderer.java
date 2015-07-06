@@ -9,21 +9,21 @@ import com.turin.tur.main.Assets;
 import com.turin.tur.main.objects.Box;
 import com.turin.tur.main.util.Constants;
 
-public class TrialRenderer implements Disposable {
+public class LevelRenderer implements Disposable {
 
 	private static final String TAG = TrialRenderer.class.getName();
 	public OrthographicCamera camera;
 	private SpriteBatch batch;
-	private TrialController trialController;
+	private LevelController levelController;
 	private OrthographicCamera cameraGUI;
-
-	public TrialRenderer (TrialController trialController) { 
-		this.trialController = trialController;
-		camera = trialController.camera;
+	
+	public LevelRenderer(LevelController levelController) {
+		this.levelController = levelController;
+		camera = levelController.camera;
 		init();
 	}
 
-	private void init () { 
+	private void init() {
 		batch = new SpriteBatch();
 		camera.position.set(0, 0, 0);
 		camera.update();
@@ -33,30 +33,25 @@ public class TrialRenderer implements Disposable {
 		cameraGUI.setToOrtho(true); // flip y-axis
 		cameraGUI.update();
 	}
-	
-	public void render () { 
+
+	public void render() {
 		renderBoxObjects();
 		renderGui(batch);
+		
 	}
 
-	private void renderBoxObjects() {
-		trialController.cameraHelper.applyTo(camera);
-		batch.setProjectionMatrix(camera.combined);
+	private void renderGui(SpriteBatch batch) {
+		batch.setProjectionMatrix(cameraGUI.combined);
 		batch.begin();
-		
-		for (Box box : trialController.trial.boxes) {
-			box.render(batch);
-		}
+		// draw collected gold coins icon + text
+		// (anchored to top left edge)
+		renderGuiLevelInfo(batch);
+		// draw FPS text (anchored to bottom right edge)
+		renderGuiFpsCounter(batch);
 		batch.end();
 	}
-	
-	private void renderGuiLevelInfo (SpriteBatch batch) {
-		float x = Constants.VIEWPORT_GUI_WIDTH/2 - 100; //DISENO
-		float y = 30; //DISENO
-		//Assets.instance.fonts.defaultFont.draw(batch, trialController.trial.levelTitle, x, y, 200, 1, true); //DISENO NOTA: la alineacion es una constante al parecer el 1 es centrado, el 0 izq y el 3 der
-	}
-	
-	private void renderGuiFpsCounter (SpriteBatch batch) {
+
+	private void renderGuiFpsCounter(SpriteBatch batch) {
 		float x = cameraGUI.viewportWidth - 130;
 		float y = cameraGUI.viewportHeight - 30;
 		int fps = Gdx.graphics.getFramesPerSecond();
@@ -73,28 +68,37 @@ public class TrialRenderer implements Disposable {
 		}
 		fpsFont.draw(batch, "FPS: " + fps, x, y);
 		fpsFont.setColor(1, 1, 1, 1); // white
+		
 	}
-	
-	private void renderGui (SpriteBatch batch) {
-		batch.setProjectionMatrix(cameraGUI.combined);
+
+	private void renderGuiLevelInfo(SpriteBatch batch) {
+		float x = Constants.VIEWPORT_GUI_WIDTH/2 - 100; //DISENO
+		float y = 30; //DISENO
+		//Assets.instance.fonts.defaultFont.draw(batch, trialController.trial.levelTitle, x, y, 200, 1, true); //DISENO NOTA: la alineacion es una constante al parecer el 1 es centrado, el 0 izq y el 3 der
+		
+	}
+
+	private void renderBoxObjects() {
+		levelController.cameraHelper.applyTo(camera);
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		// draw collected gold coins icon + text
-		// (anchored to top left edge)
-		renderGuiLevelInfo(batch);
-		// draw FPS text (anchored to bottom right edge)
-		renderGuiFpsCounter(batch);
+		
+		for (Box box : levelController.trialActive.boxes) {
+			box.render(batch);
+		}
 		batch.end();
+		
 	}
-	
-	public void resize (int width, int height) { 
+
+	public void resize(int width, int height) {
 		camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) *
 				width;
 		camera.update();
+		
 	}
-	
-	@Override 
-	public void dispose () { 
-		batch.dispose();
+
+	public void dispose() {
+		batch.dispose();	
 	}
-	
+
 }

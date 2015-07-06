@@ -3,10 +3,8 @@ package com.turin.tur.main.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.turin.tur.main.diseno.Level;
-import com.turin.tur.main.diseno.TrialController;
-import com.turin.tur.main.diseno.TrialRenderer;
-
+import com.turin.tur.main.diseno.LevelController;
+import com.turin.tur.main.diseno.LevelRenderer;
 
 public class LevelScreen extends AbstractGameScreen  {
 	
@@ -14,9 +12,8 @@ public class LevelScreen extends AbstractGameScreen  {
 	private static final String TAG = LevelScreen.class.getName();
 	
 	// Clases que se crean para manipular el contenido
-	private TrialController trialController;
-	private TrialRenderer trialRenderer;
-	private Level level;
+	private LevelController levelController;
+	private LevelRenderer levelRenderer;
 	
 	// Variables del level
 	private int levelNumber;
@@ -26,7 +23,6 @@ public class LevelScreen extends AbstractGameScreen  {
 	public LevelScreen (Game game, int Id) {
 		super(game);
 		this.levelNumber=Id;
-		this.level = new Level(this.levelNumber);
 	}
 
 	@Override
@@ -35,33 +31,33 @@ public class LevelScreen extends AbstractGameScreen  {
 		if (!paused) {
 			// Update game world by the time that has passed
 			// since last rendered frame.
-			level.update(deltaTime);
+			levelController.update(deltaTime);
 		}
 		// Sets the clear screen color to: Cornflower Blue
 		Gdx.gl.glClearColor(0x64 / 255.0f, 0x95 / 255.0f,0xed /
 				255.0f, 0xff / 255.0f);
 		// Clears the screen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		// Render game world to screen
-		level.render();
+		// Render level to screen
+		levelRenderer.render();
 	}
 	
 	@Override
 	public void resize (int width, int height) {
-		trialRenderer.resize(width, height);
+		levelRenderer.resize(width, height);
 	}
 
 	@Override
 	public void show () {
 	    Gdx.app.debug(TAG, "Level");
-	    trialController = new TrialController(game, this.level.IdTrial(1)); 
-	    trialRenderer = new TrialRenderer(trialController);
+	    levelController = new LevelController(game, this.levelNumber); 
+	    levelRenderer = new LevelRenderer(levelController);
 		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override
 	public void hide () {
-		//trialRenderer.dispose();
+		levelRenderer.dispose();
 		Gdx.input.setCatchBackKey(false);
 	}
 	

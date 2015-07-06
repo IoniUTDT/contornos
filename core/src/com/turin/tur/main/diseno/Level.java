@@ -1,6 +1,5 @@
 package com.turin.tur.main.diseno;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -15,20 +14,14 @@ public class Level {
 	
 	// Cosas que se cargan de archivo
 	public Array<Trial> secuenciaTrials = new Array<Trial>();
-	public int[] secuanciaTrailsId;
+	public int[] secuenciaTrailsId;
 	
 	// variable del nivel
 	public int activeTrialPosition;
-	// variables del trial activo
-	private TrialController trialController;
-	private TrialRenderer trialRenderer;
-	private Game game;
-
-	
 	
 	public Level(int level) {
 		this.activeTrialPosition=0;
-	    Gdx.app.debug(TAG, "Cargando informacion del nievl "+level);
+	    Gdx.app.debug(TAG, "Cargando informacion del nivel "+level);
 	    this.initlevel(level);
 	}
 	
@@ -41,29 +34,29 @@ public class Level {
 	
 	private void initlevel(int level) {
 		JsonLevel jsonLevel = loadLevel(level);
-		this.secuanciaTrailsId = jsonLevel.trials;
-		trialController = new TrialController(game, this.level.IdTrial(1)); 
-	    trialRenderer = new TrialRenderer(trialController);
+		this.secuenciaTrailsId = jsonLevel.trials;
+		this.setActiveTrialId (this.activeTrialPosition);
 	}
 
+	private void setActiveTrialId(int activeTrialPosition) {
+		if (activeTrialPosition < this.secuenciaTrailsId.length) {
+			this.activeTrialPosition = activeTrialPosition;
+		} else {
+			Gdx.app.error(TAG, "El nivel "+this.Id+" no posee un trial "+activeTrialPosition+". se ha resetado el nivel");
+		}
+			this.activeTrialPosition=0;
+	}
 
-	
-	
-	
-	
-	
-	
-	/*
 	public int IdTrial (int trialPosition){
 		int IdTrial;
-		if (trialPosition < this.secuanciaTrailsId.length) {
-			IdTrial = this.secuanciaTrailsId[trialPosition];
+		if (trialPosition < this.secuenciaTrailsId.length) {
+			IdTrial = this.secuenciaTrailsId[trialPosition];
 		} else {
 			Gdx.app.error(TAG,"El nivel "+this.Id+" no posee suficientes trial como para iniciarse en el trial numero "+trialPosition);
-			IdTrial = this.secuanciaTrailsId[0];
+			IdTrial = this.secuenciaTrailsId[0];
 		}
 		return IdTrial;
-	}*/
+	}
 
 	
 	
@@ -94,18 +87,5 @@ public class Level {
 		Json json = new Json();
 		FileHelper.writeFile("experimentalconfig/" + ImagesAsset.instance.version
 				+ "/level" + level + ".meta", json.toJson(jsonLevel));
-	}
-
-	
-	/*
-	 * Aca empiezan los metodos relacionados con la dinamica del nivel
-	 */
-	
-	public void update(float deltaTime) {
-		trialController.update(deltaTime);
-	}
-
-	public void render() {
-		trialRenderer.render();
-	}
+	}	
 }
