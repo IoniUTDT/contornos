@@ -11,7 +11,7 @@ import com.turin.tur.main.util.Constants;
 
 public class LevelRenderer implements Disposable {
 
-	private static final String TAG = TrialRenderer.class.getName();
+	private static final String TAG = LevelRenderer.class.getName();
 	public OrthographicCamera camera;
 	private SpriteBatch batch;
 	private LevelController levelController;

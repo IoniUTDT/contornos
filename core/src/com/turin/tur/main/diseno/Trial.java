@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Json;
 import com.turin.tur.main.ImagesAsset;
 import com.turin.tur.main.objects.Box;
 import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
@@ -121,39 +122,21 @@ public class Trial {
 		jsonLevel.distribucion = DISTRIBUCIONESenPANTALLA.BILINEALx6;
 
 		Json json = new Json();
-		writeFile("experimentalconfig/" + ImagesAsset.instance.version
+		FileHelper.writeFile("experimentalconfig/" + ImagesAsset.instance.version
 				+ "/trial" + Id + ".meta", json.toJson(jsonLevel));
 	}
 
 	private JsonTrial loadTrial(int Id) {
-		String save = readFile("experimentalconfig/"
-				+ ImagesAsset.instance.version + "/trial" + Id + ".meta");
-		if (!save.isEmpty()) {
+		String savedData = FileHelper.readFile("experimentalconfig/"+ ImagesAsset.instance.version + "/trial" + Id + ".meta");
+		
+		if (!savedData.isEmpty()) {
 			Json json = new Json();
-			return json.fromJson(JsonTrial.class, save);
+			return json.fromJson(JsonTrial.class, savedData);
 		}
 		Gdx.app.error(TAG,
 				"No se a podido encontrar la info del objeto experimental "
 						+ Id);
 		return null;
-	}
-
-	private String readFile(String fileName) {
-		FileHandle file = Gdx.files.internal(fileName);
-		if (file != null && file.exists()) {
-			String s = file.readString();
-			if (!s.isEmpty()) {
-				return s;
-			}
-		}
-		Gdx.app.error(TAG,
-				"No se a podido encontrar la info del objeto experimental");
-		return "";
-	}
-
-	private static void writeFile(String fileName, String s) {
-		FileHandle file = Gdx.files.local(fileName);
-		file.writeString(s, false);
 	}
 
 	public void update(float deltaTime) {

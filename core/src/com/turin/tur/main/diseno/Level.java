@@ -80,7 +80,7 @@ public class Level {
 		public int[] trials; // Lista de ids de los trial que incluye el nivel
 	}
 	
-	public void saveLavel(int level, int[] secuenciaTrials) {
+	public void saveLevel(int level, int[] secuenciaTrials) {
 		JsonLevel jsonLevel = new JsonLevel();
 		jsonLevel.Id=level;
 		jsonLevel.trials=secuenciaTrials;

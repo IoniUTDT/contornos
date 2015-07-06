@@ -17,7 +17,7 @@ import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 public class LevelController implements InputProcessor {
 
 	public OrthographicCamera camera;
-	public static final String TAG = TrialController.class.getName();
+	public static final String TAG = LevelController.class.getName();
 	public CameraHelper cameraHelper;
 	private float time = 0;
 	private float time_selected = 0;
@@ -70,7 +70,14 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void backToMenu() {
+		stopSound();
 		game.setScreen(new MenuScreen(game));
+	}
+
+	private void stopSound() {
+		for (Box box: this.trialActive.boxes) {
+			box.contenido.sonido.stop();
+		}
 	}
 
 	@Override
