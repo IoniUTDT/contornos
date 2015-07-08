@@ -20,13 +20,15 @@ public class MenuScreen extends AbstractGameScreen {
 	private static final String TAG = MenuScreen.class.getName();
 	Preferences prefs = Gdx.app.getPreferences("User");
 	
-    private Skin skin;
-   
-
-    private Stage stage;
-    private Table table;
     // For debug drawing
     private ShapeRenderer shapeRenderer;
+    
+    // Elementos graficos
+    private TextButton buttonUser;
+    private Skin skin;
+    private Stage stage;
+    private Table table;
+    
     
 	public MenuScreen (Game game) {
 		super(game);
@@ -73,10 +75,11 @@ public class MenuScreen extends AbstractGameScreen {
 	    
 
 		// Add widgets to the table here.
-	    TextButton buttonUser = new TextButton(TextUser, skin, "default");
+	    this.buttonUser = new TextButton(TextUser, skin, "default");
 	    buttonUser.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
+            	Gdx.app.debug(TAG, super.getClass().getName());
             	
             }
         });
@@ -111,6 +114,10 @@ public class MenuScreen extends AbstractGameScreen {
 
 	}
 
+	public void Prueba (){
+	    Gdx.app.debug(TAG, "Tuc Tuc");
+	}
+	
 	@Override
 	public void hide() {
 		stage.dispose();
