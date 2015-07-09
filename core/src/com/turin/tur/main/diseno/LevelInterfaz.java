@@ -10,15 +10,15 @@ import com.turin.tur.main.util.Assets;
 public class LevelInterfaz {
 	
 	private static final String TAG = LevelInterfaz.class.getName();
-	Array<Botones> botones = new Array<Botones>();
-	int lastLevel;
-	int activeLevel;
+	Array<Botones> botones = new Array<Botones>(); // conjunto de botones
+	Level levelInfo;   
+	int activeTrial; // Numero de trial que esta activo
 	
-	public LevelInterfaz (int numberOfTrial, int activeLevel){
-		lastLevel = numberOfTrial;
-		this.activeLevel = activeLevel;
-		if (this.activeLevel!=0) {botones.add(new BotonAnterior());}
-		if (this.activeLevel!=lastLevel) {botones.add(new BotonSiguiente());}
+	public LevelInterfaz (Level levelInfo, int activeTrial){
+		this.levelInfo = levelInfo;
+		this.activeTrial = activeTrial;
+		if (this.activeTrial!=0) {botones.add(new BotonAnterior());}
+		if (this.activeTrial!=this.levelInfo.secuenciaTrailsId.length-1) {botones.add(new BotonSiguiente());}
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -61,8 +61,8 @@ public class LevelInterfaz {
 		
 		public BotonSiguiente(){
 			this.imagen = new Sprite(Assets.instance.imagenes.arrowLevel);
-			this.setPosition(3, 0);
-			this.size=1f;
+			this.setPosition(2f, 0);
+			this.size=0.4f;
 		}
 
 		@Override
@@ -83,10 +83,11 @@ public class LevelInterfaz {
 	public class BotonAnterior extends Botones {
 
 		public BotonAnterior(){
-			imagen = new Sprite(Assets.instance.imagenes.stimuliLogo);
-			imagen.rotate(180);
-			setPosition (-3,0);
-			this.size=1f;
+			this.imagen = new Sprite(Assets.instance.imagenes.arrowLevel);
+			this.imagen.rotate90(true);
+			this.imagen.rotate90(true);
+			this.setPosition(-2f, 0);
+			this.size=0.4f;
 		}
 		@Override
 		public void toDo() {

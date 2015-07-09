@@ -15,28 +15,34 @@ import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
 public class LevelController implements InputProcessor {
 
-	public OrthographicCamera camera;
+	public OrthographicCamera camera; 
 	public static final String TAG = LevelController.class.getName();
 	public CameraHelper cameraHelper;
-	private float time = 0;
-	private float time_selected = 0;
+	//private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	public Trial trialActive;
 	public LevelInterfaz levelInterfaz;
 
-	Game game;
-	Level levelInfo;
+	private Game game;
+	private Level levelInfo; //Informacion del nivel cargado
+	
+	// Variables que manejan la dinamica de flujo de informacion en el control del nivel
+	public boolean nextTrialPending = false; // Genera la señal de que hay que cambiar de trial (para esperar a que finalicen cuestiones de animacion) 
+	public float timeInLevel = 0; // Tiempo general dentro del nivel.
+	public float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
 	
 	public LevelController(Game game, int levelNumber, int trialNumber) {
 		this.game = game;
 		this.levelInfo = new Level(levelNumber);
-		this.levelInterfaz = new LevelInterfaz(this.levelInfo.secuenciaTrailsId.length, trialNumber);
+		this.levelInterfaz = new LevelInterfaz(this.levelInfo, trialNumber);
 		this.initCamera();
 		this.initTrial();
 	}
 
 	private void initTrial() {
 		this.trialActive = new Trial (this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
+		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition);
+		this.timeInTrial=0;
 	}
 
 	private void initCamera() {
@@ -52,7 +58,37 @@ public class LevelController implements InputProcessor {
 				
 		// actualiza cosas generales
 		cameraHelper.update(deltaTime);
-		time = time + deltaTime;
+		timeInLevel = timeInLevel + deltaTime;
+		timeInTrial = timeInTrial + deltaTime;
+		
+		// Procesa cambios de trial si los hay pendientes
+		this.changeTrial();
+	}
+
+	private void changeTrial() {
+		if (this.nextTrialPending) {
+			boolean wait = false;
+			for (Box box :this.trialActive.boxes) {
+				if (box.answerActive) {wait=true;}
+			}
+			if (!wait) {
+				this.nextTrialPending=false;
+				this.goToNextTrial();
+			}
+		}
+		
+	}
+
+	private void goToNextTrial() {
+		this.exitTrial();
+		this.levelInfo.activeTrialPosition += 1;
+		this.initTrial();
+	}
+	
+	private void goToPreviousTrial() {
+		this.exitTrial();
+		this.levelInfo.activeTrialPosition -= 1;
+		this.initTrial();
 	}
 
 	@Override
@@ -90,7 +126,7 @@ public class LevelController implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// Crea un evento de toque
-    	TouchInfo touch = new TouchInfo(time,time_selected);
+    	TouchInfo touch = new TouchInfo(timeInLevel,timeInTrial);
     	// calcula el toque en pantalla
    		touch.coordScreen = new Vector3 (screenX, screenY, 0);
    		// calcula el toque en el juego 
@@ -157,26 +193,24 @@ public class LevelController implements InputProcessor {
 			for (Botones boton:this.levelInterfaz.botones) {
 				if (boton.imagen.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 					Gdx.app.debug(TAG, "Ha tocado el boton " + boton.getClass().getName());
-					this.exitTrial();
-					this.levelInfo.activeTrialPosition += 1;
-					this.initTrial();
+					
+					if (boton.getClass() == LevelInterfaz.BotonSiguiente.class){ this.goToNextTrial();}
+					if (boton.getClass() == LevelInterfaz.BotonAnterior.class){ this.goToPreviousTrial();}
+	
 				}
 			}
     	}
     	
     	if (acierto) {
-    		/*
-    		stop Sound();
-    		trialInfo.autoRestart = true;
-    		trialInfo.restartTime = trialInfo.levelTime + 1;
-    		*/
+    		this.nextTrialPending=true;
     	}
 		
 	}
 
+	
+
 	private void exitTrial() {
-		this.stopSound();
-		
+		this.stopSound();		
 	}
 
 	private void cargarInfoDelTouch(Box box, TouchInfo thisTouch) {

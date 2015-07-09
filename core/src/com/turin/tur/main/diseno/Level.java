@@ -13,7 +13,7 @@ public class Level {
 	public int Id;
 	
 	// Cosas que se cargan de archivo
-	public Array<Trial> secuenciaTrials = new Array<Trial>();
+	//public Array<Trial> secuenciaTrials = new Array<Trial>();
 	public int[] secuenciaTrailsId;
 	
 	// variable del nivel

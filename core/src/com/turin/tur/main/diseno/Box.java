@@ -19,8 +19,8 @@ public class Box {
 	public Vector2 posicionCenter;
 	public TIPOdeCAJA tipoDeCaja;
 	public Sprite spr;
-	private boolean answerActive;
-	private int answerAnimationAdvance;
+	public boolean answerActive;
+	private float answerAnimationAdvance;
 	private Sprite answerSprTrue;
 	private Sprite answerSprFalse;
 	public boolean answer;
@@ -146,7 +146,8 @@ public class Box {
 
 	public void update(float deltaTime) {
 		if ((answerActive) & (this.tipoDeCaja.seleccionable)) {
-			answerAnimationAdvance += deltaTime;
+			this.answerAnimationAdvance += deltaTime;
+			// Gdx.app.debug(TAG, "Tiempo de answer: " + deltaTime);
 			if (answerAnimationAdvance > Constants.Box.ANIMATION_ANSWER_TIME) {
 				this.answerActive = false;
 			}
