@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 
@@ -39,6 +40,14 @@ public class LevelRenderer implements Disposable {
 		
 	}
 
+	private void renderInterfaz(SpriteBatch batch) {
+		
+		 for (Botones boton:levelController.levelInterfaz.botones) {
+			boton.render(batch);
+		}
+		
+	}
+
 	private void renderGui(SpriteBatch batch) {
 		batch.setProjectionMatrix(cameraGUI.combined);
 		batch.begin();
@@ -47,6 +56,8 @@ public class LevelRenderer implements Disposable {
 		renderGuiLevelInfo(batch);
 		// draw FPS text (anchored to bottom right edge)
 		renderGuiFpsCounter(batch);
+		// dibuja los elementos de la intefaz
+		//renderInterfaz(batch);
 		batch.end();
 	}
 
@@ -85,6 +96,9 @@ public class LevelRenderer implements Disposable {
 		for (Box box : levelController.trialActive.boxes) {
 			box.render(batch);
 		}
+		
+		renderInterfaz(batch);
+		
 		batch.end();
 		
 	}

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
@@ -46,7 +47,7 @@ public class Box {
 		if (this.tipoDeCaja.mostrarContenido) {
 			this.spr = this.contenido.imagen;
 		} else {
-			this.spr = new Sprite(Assets.instance.imagenes.stimuliLogo);
+			this.spr = new Sprite(Assets.instance.imagenes.stimuliLogo);			
 		}
 		// inicializa las variables que manejan las respuestas
 		this.answerActive = false;

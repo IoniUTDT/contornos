@@ -50,7 +50,7 @@ public class LevelScreen extends AbstractGameScreen  {
 	@Override
 	public void show () {
 	    Gdx.app.debug(TAG, "Level");
-	    levelController = new LevelController(game, this.levelNumber); 
+	    levelController = new LevelController(game, this.levelNumber, 0); 
 	    levelRenderer = new LevelRenderer(levelController);
 		Gdx.input.setCatchBackKey(true);
 	}

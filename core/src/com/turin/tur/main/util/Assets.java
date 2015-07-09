@@ -27,11 +27,8 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	
 	// Variables creadas
-	public Cuadrado cuadrado;
-	public Contenido contenido;
 	public Imagenes imagenes;	
 	public AssetFonts fonts;
-	public Audios audios;
 	
 	public void init (AssetManager assetManager) {
 		this.assetManager = assetManager;
@@ -55,11 +52,8 @@ public class Assets implements Disposable, AssetErrorListener {
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
 		// create game resource objects
-		cuadrado = new Cuadrado(atlas,"TemplateTransparente");
-		contenido = new Contenido(atlas,"Imagen");
 		fonts = new AssetFonts();
 		imagenes = new Imagenes(atlas); 
-		audios = new Audios();
 	}
 
 	@Override
@@ -76,41 +70,6 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 	
 	
-	public class Cuadrado {
-		
-		public final AtlasRegion cuadrado;
-		public final Array<TextureRegion> cuadrado_serie;
-		
-		public Cuadrado (TextureAtlas atlas, String imagen) {
-			cuadrado = atlas.findRegion(imagen);
-			cuadrado_serie = new Array<TextureRegion>();
-			String nombre = imagen;
-			int i = 0;
-			while (atlas.findRegion(nombre) != null) {
-				cuadrado_serie.add(atlas.findRegion(nombre));
-				i++;
-				nombre = imagen + Integer.toString(i);
-			}
-		}
-	}
-	
-	public class Contenido {
-		
-		public final Array<TextureRegion> contenido_serie;
-
-		public Contenido (TextureAtlas atlas, String imagen) {
-			contenido_serie = new Array<TextureRegion>();
-			String nombre = imagen;
-			int i = 0;
-			nombre = imagen + Integer.toString(i);
-			while (atlas.findRegion(nombre) != null) {
-				contenido_serie.add(atlas.findRegion(nombre));
-				i++;
-				nombre = imagen + Integer.toString(i);
-			}
-		}
-	}
-	
 	public class AssetFonts {
 		public final BitmapFont defaultFont;
 		public AssetFonts () {
@@ -125,26 +84,13 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class Imagenes {
 		
-		public AtlasRegion logoAudio;
-		public AtlasRegion animacionContorno;
 		public AtlasRegion stimuliLogo;
+		public AtlasRegion arrowLevel;
 		
 		public Imagenes (TextureAtlas atlas) {
-			logoAudio = atlas.findRegion(Constants.Imagenes.LOGOAUDIO);
-			animacionContorno = atlas.findRegion(Constants.Imagenes.ANIMACION);
-			stimuliLogo = atlas.findRegion(Constants.Imagenes.STIMULILOGO);
+			stimuliLogo = atlas.findRegion("stimuliLogo");
+			arrowLevel = atlas.findRegion("arrow");
 		}
 	}
 	
-	public class Audios {
-		public final Array<Sound> serieAudios;
-		
-		public Audios(){
-			serieAudios = new Array<Sound>();
-			for (int i = 0; i < 6; i++) {
-				Sound sonido = Gdx.audio.newSound(Gdx.files.internal("sounds/sonido"+Integer.toString(i)+".wav"));
-				serieAudios.add(sonido);
-			}
-		}
-	}
 }

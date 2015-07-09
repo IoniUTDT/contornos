@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
@@ -21,13 +22,15 @@ public class LevelController implements InputProcessor {
 	private float time_selected = 0;
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	public Trial trialActive;
+	public LevelInterfaz levelInterfaz;
 
 	Game game;
 	Level levelInfo;
 	
-	public LevelController(Game game, int levelNumber) {
+	public LevelController(Game game, int levelNumber, int trialNumber) {
 		this.game = game;
 		this.levelInfo = new Level(levelNumber);
+		this.levelInterfaz = new LevelInterfaz(this.levelInfo.secuenciaTrailsId.length, trialNumber);
 		this.initCamera();
 		this.initTrial();
 	}
@@ -150,6 +153,15 @@ public class LevelController implements InputProcessor {
 				}
 			}
 	    	
+			// Se fija si se toco algun elemento de la interfaz del nivel
+			for (Botones boton:this.levelInterfaz.botones) {
+				if (boton.imagen.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
+					Gdx.app.debug(TAG, "Ha tocado el boton " + boton.getClass().getName());
+					this.exitTrial();
+					this.levelInfo.activeTrialPosition += 1;
+					this.initTrial();
+				}
+			}
     	}
     	
     	if (acierto) {
@@ -159,6 +171,11 @@ public class LevelController implements InputProcessor {
     		trialInfo.restartTime = trialInfo.levelTime + 1;
     		*/
     	}
+		
+	}
+
+	private void exitTrial() {
+		this.stopSound();
 		
 	}
 

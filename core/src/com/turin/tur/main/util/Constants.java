@@ -112,18 +112,6 @@ public class Constants {
 		}
 	}
 	
-
-	// Contantes de nombres de regiones para imagenes
-	public class Imagenes {
-		public static final String LOGOAUDIO = "LogoAudio";
-		public static final String ANIMACION = "Animacion";
-		public static final String STIMULILOGO = "stimuliLogo";
-	}
-	
-	// Constantes relacionadas a archivos con informacion
-	public class Files {
-		public static final String USERDATA = "UserData.txt";
-	}
 }
 
 

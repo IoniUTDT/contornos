@@ -1,0 +1,41 @@
+
+cajas-ui.pack.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background
+  rotate: false
+  xy: 2, 106
+  size: 715, 535
+  orig: 715, 535
+  offset: 0, 0
+  index: -1
+entrenar
+  rotate: false
+  xy: 2, 54
+  size: 250, 50
+  orig: 250, 50
+  offset: 0, 0
+  index: -1
+entrenar-click
+  rotate: false
+  xy: 719, 591
+  size: 250, 50
+  orig: 250, 50
+  offset: 0, 0
+  index: -1
+test
+  rotate: false
+  xy: 2, 2
+  size: 250, 50
+  orig: 250, 50
+  offset: 0, 0
+  index: -1
+test-click
+  rotate: false
+  xy: 254, 54
+  size: 250, 50
+  orig: 250, 50
+  offset: 0, 0
+  index: -1
