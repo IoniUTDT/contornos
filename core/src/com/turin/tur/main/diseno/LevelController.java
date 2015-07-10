@@ -34,14 +34,18 @@ public class LevelController implements InputProcessor {
 	public LevelController(Game game, int levelNumber, int trialNumber) {
 		this.game = game;
 		this.levelInfo = new Level(levelNumber);
-		this.levelInterfaz = new LevelInterfaz(this.levelInfo, trialNumber);
+		// Linea de prueba!
+		//int[] trials = {1,2,3};
+		//this.levelInfo.saveLevel(1, trials, "Hola!" );
+		// Fin prueba
+		// this.levelInterfaz = new LevelInterfaz(this.levelInfo, trialNumber);
 		this.initCamera();
 		this.initTrial();
 	}
 
 	private void initTrial() {
 		this.trialActive = new Trial (this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
-		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition);
+		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition, this.trialActive);
 		this.timeInTrial=0;
 	}
 

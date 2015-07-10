@@ -79,8 +79,9 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	}
 
 	public Sound sonido(int Id) {
-		return Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"
+		Sound sonido = Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"
 				+ version + "/" + Id + ".wav"));
+		return sonido;
 	}
 
 	// devuelve la info de la metadata

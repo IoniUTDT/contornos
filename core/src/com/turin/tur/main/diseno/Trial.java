@@ -52,7 +52,7 @@ public class Trial {
 			}
 		}
 
-		if (this.modo == Constants.Diseno.TIPOdeTRIAL.TEST) {
+		if (this.modo == Constants.Diseno.TIPOdeTRIAL.TESTCONTENIDO) {
 			for (ExperimentalObject elemento : this.elementos) {
 				Box box = new Box(elemento,
 						Constants.Diseno.TIPOdeCAJA.SELECCIONABLE);
@@ -62,7 +62,7 @@ public class Trial {
 						distribucion.Y(this.elementos.indexOf(elemento, true)));
 				this.boxes.add(box);
 			}
-			Box box = new Box(rtaCorrecta, Constants.Diseno.TIPOdeCAJA.PREGUNTA);
+			Box box = new Box(rtaCorrecta, Constants.Diseno.TIPOdeCAJA.ESTIMULO);
 			box.SetPosition(0+ Constants.Box.SHIFT_ESTIMULO_MODO_SELECCIONAR, 0);
 			this.boxes.add(box);
 		}
@@ -94,6 +94,14 @@ public class Trial {
 		Gdx.app.log(TAG, "Info del trial cargado");
 	}
 
+	
+	public void update(float deltaTime) {
+		// Actualiza las boxes
+		for (Box box : boxes) {
+			box.update(deltaTime);
+		}
+	}
+	
 	// Seccion encargada de guardar y cargar info de trials
 
 	// devuelve la info de la metadata
@@ -136,13 +144,6 @@ public class Trial {
 				"No se a podido encontrar la info del objeto experimental "
 						+ Id);
 		return null;
-	}
-
-	public void update(float deltaTime) {
-		// Actualiza las boxes
-		for (Box box : boxes) {
-			box.update(deltaTime);
-		}
 	}
 
 }

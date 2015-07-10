@@ -18,6 +18,7 @@ public class Level {
 	
 	// variable del nivel
 	public int activeTrialPosition;
+	public String levelTitle; 
 	
 	public Level(int level) {
 		this.activeTrialPosition=0;
@@ -35,6 +36,7 @@ public class Level {
 	private void initlevel(int level) {
 		JsonLevel jsonLevel = loadLevel(level);
 		this.secuenciaTrailsId = jsonLevel.trials;
+		this.levelTitle = jsonLevel.levelTitle;
 		this.setActiveTrialId (this.activeTrialPosition);
 	}
 
@@ -47,6 +49,7 @@ public class Level {
 			this.activeTrialPosition=0;
 	}
 
+	
 	public int IdTrial (int trialPosition){
 		int IdTrial;
 		if (trialPosition < this.secuenciaTrailsId.length) {
@@ -57,7 +60,7 @@ public class Level {
 		}
 		return IdTrial;
 	}
-
+	
 	
 	
 	/*
@@ -76,14 +79,16 @@ public class Level {
 
 
 	public static class JsonLevel {
+		public String levelTitle;
 		public int Id; // Id q identifica al level
 		public int[] trials; // Lista de ids de los trial que incluye el nivel
 	}
 	
-	public void saveLevel(int level, int[] secuenciaTrials) {
+	public void saveLevel(int level, int[] secuenciaTrials, String levelTitle) {
 		JsonLevel jsonLevel = new JsonLevel();
 		jsonLevel.Id=level;
 		jsonLevel.trials=secuenciaTrials;
+		jsonLevel.levelTitle=levelTitle;
 		Json json = new Json();
 		FileHelper.writeFile("experimentalconfig/" + ImagesAsset.instance.version
 				+ "/level" + level + ".meta", json.toJson(jsonLevel));

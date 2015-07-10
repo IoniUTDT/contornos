@@ -72,6 +72,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class AssetFonts {
 		public final BitmapFont defaultFont;
+		public final BitmapFont defaultSmallFont;
 		public AssetFonts () {
 			// create font using Libgdx's 15px bitmap font
 			defaultFont = new BitmapFont(
@@ -79,6 +80,12 @@ public class Assets implements Disposable, AssetErrorListener {
 			// enable linear texture filtering for smooth fonts
 			defaultFont.getRegion().getTexture().setFilter(
 					TextureFilter.Linear, TextureFilter.Linear);
+			// Fuente 15 px
+			defaultSmallFont = new BitmapFont(
+					Gdx.files.internal("images/verdana10.fnt"), true);
+			defaultSmallFont.getRegion().getTexture().setFilter(
+					TextureFilter.Linear, TextureFilter.Linear);
+			
 			}
 		}
 	

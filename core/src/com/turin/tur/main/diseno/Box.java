@@ -7,19 +7,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeCAJA;
 
 public class Box {
 
-	public ExperimentalObject contenido;
-	public Vector2 posicionCenter;
-	public TIPOdeCAJA tipoDeCaja;
-	public Sprite spr;
-	public boolean answerActive;
+	/*
+	 * La clase box es la que almacena la informacion visual, sonora, y espacial de que mostrar y donde en cada trial. Sirve como punto de interaccion basico del usuario con el programa 
+	 */
+	
+	// Variable generales que definen a la caja
+	public ExperimentalObject contenido; // Esta variable guarda toda la informacion del contenido de la caja usando una clase especialmente diseñada para eso
+	public Vector2 posicionCenter; // Esta es la posicion de la caja dada por las coordenadas de su centro. 
+	public TIPOdeCAJA tipoDeCaja; // Guarda el tipo de caja que se va a usar
+	public Sprite spr; // Guarda la imagen que se va a mostrar (se genera a partir del contenido de la caja)
+	
+	// Variables que hacen a la dinamica de la caja 
+	public boolean answerActive; // Determina si se esta mostrando 
 	private float answerAnimationAdvance;
 	private Sprite answerSprTrue;
 	private Sprite answerSprFalse;
@@ -166,6 +173,7 @@ public class Box {
 			if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
 				this.drawStimuli=true;
 				stimuliAvanceReproduccion = 0; //reset the advance point of sound
+				waitForLoadCompleted(this.contenido.sonido);
 				this.contenido.sonido.play();
 			}
 		}
@@ -180,6 +188,7 @@ public class Box {
 		if (this.tipoDeCaja.reproducible) {
 			this.runSound = true;
 			Sound sonido = this.contenido.sonido;
+			waitForLoadCompleted(this.contenido.sonido);
 			sonido.play();
 		}
 	}
@@ -263,4 +272,12 @@ public class Box {
 		answerUsedSprite.draw(batch);
 	}
 
+    private long waitForLoadCompleted(Sound sound) {
+        long id;
+        while ((id = sound.play(0)) == -1) {
+            long t = TimeUtils.nanoTime();
+            while (TimeUtils.nanoTime() - t < 100000000);
+        }
+        return id;
+    }
 }
