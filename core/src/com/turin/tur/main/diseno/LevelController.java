@@ -7,6 +7,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.turin.tur.main.diseno.Boxes.AnswerBox;
+import com.turin.tur.main.diseno.Boxes.Box;
+import com.turin.tur.main.diseno.Boxes.StimuliBox;
+import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
@@ -152,8 +156,9 @@ public class LevelController implements InputProcessor {
 	    		touchData.lastTouchBox = touchSecuence.peek().thisTouchBox;
 	    	}
 	    	
-	    	// se fija si se toco alguna imagen
+	    	// se fija si se toco alguna imagen seleccionable
 	    	for (Box box : this.trialActive.boxes) {
+	    		if ((box.getClass()==TrainingBox.class) || (box.getClass()==AnswerBox.class))
 	    		if (box.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 	    			Gdx.app.debug(TAG, "Ha tocado la imagen " + box.contenido.Id);
 	    			cargarInfoDelTouch (box,touchData);
@@ -183,7 +188,7 @@ public class LevelController implements InputProcessor {
 				touchData.thisTouchBox.select();
 				// revisa si se acerto a la respuesta o no. 
 				if (this.trialActive.modo == TIPOdeTRIAL.TEST) {
-					if (this.trialActive.rtaCorrecta == touchData.thisTouchBox.contenido) { // Significa q se selecciono la opcion correcta
+					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) { // Significa q se selecciono la opcion correcta
 						acierto = true;
 						touchData.thisTouchBox.answer=true;
 					} else {

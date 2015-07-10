@@ -46,14 +46,13 @@ public class Constants {
 	public static class Diseno {
 		
 		/*
-		 * Hay tres tipo de trial: Entrenamiento, TestContenido, TestCategoria
+		 * Hay dos tipo de trial: Entrenamiento, Test
 		 * 
 		 * En el primero de los casos se muestra un conjunto de estimulos experimentales y se los puede reproducir para escuchar como suenan. En principio el trial se supera cuando se tocaron todos los estimulos
-		 * En el caso del TestId se reproduce (sin mostrar) un estimulo auditivo, y el usuario debe seleccionar el estimulo visual correspondiente
-		 * En el caso de TestCategoria se reproduce un estimulo (no tiene porque ser previamente conocido) y el usuario debe seleccionar si pertenece o no a una categoria o a cual entre varias categorias pertenece
-		 * 
+		 * En el caso del Test, se muestra un estimulo especifico y el usuario debe elegir entre diferentes opciones, que pueden ser imagenes especificas o imagenes que representen una categoria
+		 *  
 		 */
-		public enum TIPOdeTRIAL {ENTRENAMIENTO,TESTCONTENIDO,TESTCATEGORIA}
+		public enum TIPOdeTRIAL {ENTRENAMIENTO,TEST}
 
 		public enum DISTRIBUCIONESenPANTALLA {
 			LINEALx3(new float[][] {{-1.5f,0},{0,0},{+1.5f,0}}),
@@ -78,28 +77,29 @@ public class Constants {
 		public enum TIPOdeCAJA {
 			
 			/*
-			 * Hay diferentes tipos de caja, las de entrenamiento, las seleccionables, las de estimulo, y las de categoria.
+			 * Hay diferentes tipos de caja, las de entrenamiento, las imagenes, las de estimulo, y las de categoria.
 			 * 
 			 * Las de entrenamiento sirven para entrenar a el usuario. Son cajas que muestran un contenido que tiene asociado un sonido. Cuando el usuario las selecciona deben reproducir el sonido correspondiente
-			 * Las seleccionables sirven para obtener una respuesta cuando se busca identificar un contenido especifico. Muestran su contenido, se pueden seleccionar, pero no reproducen nada
+			 * Las de imagenes sirven para obtener una respuesta cuando se busca identificar un contenido ya sea como una imagen especifica o una que represente una categoria. Muestran su contenido, se pueden seleccionar, pero no reproducen nada
 			 * Las de estimulo son las que sirven para generar un estimulo auditivo (no visual) que el usuario deba identificar ya sea en una categoria o buscando la imagen correspondiente. Estas cajas se reproducen solas y no son seleccionables
-			 * Las de categoria poseen una imagen (con el nombre de la categoria) que no tiene un sonido asociado. Sirven para ofrecer respuestas al usuario. Son seleccionables, pero no reproducen sonido.  
 			 * 
 			 */
 			
-			ENTRENAMIENTO(true,true,false,true),
-			SELECCIONABLE(true,true,false,false), 
-			ESTIMULO(false,false,true,true),   
-			CATEGORIA(true,true,false,false); 
+			ENTRENAMIENTO(true,true,false,false,true),
+			IMAGEN(true,true,true,false,false), 
+			ESTIMULO(false,false,false,true,true);   
 			
 			public boolean mostrarContenido; // Determina si se muestra el contenido o se muestra un signo de pregunta
 			public boolean seleccionable; // Determina si se puede seleccionar o no (por ej las preguntas de los trials de test no son seleccionables)
+			public boolean respondibles; // Determina si contienen una respuesta o no
 			public boolean reproduccionAutomatica; // Determina si el sonido entra en loop o no (las de entranamiento no tienen loop de de test si)
 			public boolean reproducible; // Determina si se puede reproducir o no
 			
-			private TIPOdeCAJA(boolean mostrarContenido, boolean seleccionable, boolean reproduccionAutomatica, boolean reproducible) {
+			
+			private TIPOdeCAJA(boolean mostrarContenido, boolean seleccionable, boolean respondibles, boolean reproduccionAutomatica, boolean reproducible) {
 				this.mostrarContenido = mostrarContenido;
 				this.seleccionable = seleccionable;
+				this.respondibles = respondibles;
 				this.reproduccionAutomatica = reproduccionAutomatica;
 				this.reproducible = reproducible;
 			}

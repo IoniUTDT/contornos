@@ -1,9 +1,12 @@
 package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.turin.tur.main.diseno.Boxes.AnswerBox;
+import com.turin.tur.main.diseno.Boxes.Box;
+import com.turin.tur.main.diseno.Boxes.StimuliBox;
+import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ImagesAsset;
@@ -30,7 +33,7 @@ public class Trial {
 	public User userActivo;
 	public float levelTime = 0;
 	public Array<Box> boxes = new Array<Box>();
-
+	
 	// constantes
 	public static final String TAG = Trial.class.getName();
 
@@ -43,8 +46,7 @@ public class Trial {
 	private void createElements() {
 		if (this.modo == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
 			for (ExperimentalObject elemento : this.elementos) {
-				Box box = new Box(elemento,
-						Constants.Diseno.TIPOdeCAJA.ENTRENAMIENTO);
+				TrainingBox box = new TrainingBox(elemento);
 				box.SetPosition(
 						distribucion.X(this.elementos.indexOf(elemento, true)),
 						distribucion.Y(this.elementos.indexOf(elemento, true)));
@@ -52,17 +54,16 @@ public class Trial {
 			}
 		}
 
-		if (this.modo == Constants.Diseno.TIPOdeTRIAL.TESTCONTENIDO) {
+		if (this.modo == Constants.Diseno.TIPOdeTRIAL.TEST) {
 			for (ExperimentalObject elemento : this.elementos) {
-				Box box = new Box(elemento,
-						Constants.Diseno.TIPOdeCAJA.SELECCIONABLE);
+				AnswerBox box = new AnswerBox(elemento);
 				box.SetPosition(
 						distribucion.X(this.elementos.indexOf(elemento, true))
 								+ Constants.Box.SHIFT_MODO_SELECCIONAR,
 						distribucion.Y(this.elementos.indexOf(elemento, true)));
 				this.boxes.add(box);
 			}
-			Box box = new Box(rtaCorrecta, Constants.Diseno.TIPOdeCAJA.ESTIMULO);
+			StimuliBox box = new StimuliBox(rtaCorrecta);
 			box.SetPosition(0+ Constants.Box.SHIFT_ESTIMULO_MODO_SELECCIONAR, 0);
 			this.boxes.add(box);
 		}
@@ -83,13 +84,16 @@ public class Trial {
 		for (int elemento : this.elementosId) {
 			this.elementos.add(new ExperimentalObject(elemento));
 		}
+		this.rtaCorrecta = new ExperimentalObject(this.rtaCorrectaId);
 		// hace que la respuesta correcta sea una referencia al mismo item que
 		// ya esta en la lista
+		/*
 		for (ExperimentalObject elemento : this.elementos) {
 			if (this.rtaCorrectaId == elemento.Id) {
 				this.rtaCorrecta = elemento;
 			}
 		}
+		*/
 		// falta cargar el level y el usuario
 		Gdx.app.log(TAG, "Info del trial cargado");
 	}

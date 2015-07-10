@@ -33,15 +33,6 @@ public class LevelInterfaz {
 		}
 	}
 		
-	
-
-	public class Texto {
-	
-		public BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
-		
-		
-	}
-	
 	public abstract class Botones {
 		public Sprite imagen; // Imagen del boton
 		public float tamano; // Tamano del boton
