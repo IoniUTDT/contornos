@@ -24,7 +24,6 @@ public class MenuScreen extends AbstractGameScreen {
     private ShapeRenderer shapeRenderer;
     
     // Elementos graficos
-    private TextButton buttonUser;
     private Skin skin;
     private Stage stage;
     private Table table;
@@ -62,6 +61,7 @@ public class MenuScreen extends AbstractGameScreen {
 	    shapeRenderer = new ShapeRenderer();
 	    skin = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI));
 	    
+	    /*
 	    // Load user info
 	    String User = prefs.getString("User", "NoName");
 	    boolean firstUser = false;
@@ -72,7 +72,7 @@ public class MenuScreen extends AbstractGameScreen {
 	    } else {
 	    	TextUser = "Usuario: "+ User + ". Click para cambiar";
 	    }
-	    
+	    */
 
 		// Add widgets to the table here.
 	    
@@ -81,6 +81,7 @@ public class MenuScreen extends AbstractGameScreen {
 	    buttonUser.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
+<<<<<<< HEAD
             	Gdx.app.debug(TAG, super.getClass().getName());
             }
         });
@@ -99,6 +100,11 @@ public class MenuScreen extends AbstractGameScreen {
 		buttonL2.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+<<<<<<< HEAD
+=======
+				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
+				GameConf.instance.save();
+>>>>>>> refs/remotes/origin/master
 				game.setScreen(new LevelScreen(game,2));
 			}
 		});
@@ -107,7 +113,13 @@ public class MenuScreen extends AbstractGameScreen {
 		TextButton buttonLevel = new TextButton("Nivel 1", skin, "default");
 		buttonTest.addListener(new ClickListener() {
 			@Override
+<<<<<<< HEAD
 			public void clicked(InputEvent event, float x, float y) {
+=======
+			public void clicked(InputEvent event, float x, float y) {
+				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
+				GameConf.instance.save();
+>>>>>>> refs/remotes/origin/master
 				game.setScreen(new LevelScreen(game,2));
 			}
 		});

@@ -17,15 +17,12 @@ public class LevelScreen extends AbstractGameScreen  {
 	
 	// Variables del level
 	private int levelNumber;
-	// Variables del trial
-	private int level;
 	
 	private boolean paused;
 	
 	public LevelScreen (Game game, int Id) {
 		super(game);
 		this.levelNumber=Id;
-		this.level=Id;
 	}
 
 	@Override
