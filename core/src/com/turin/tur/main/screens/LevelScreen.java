@@ -12,8 +12,8 @@ public class LevelScreen extends AbstractGameScreen  {
 	private static final String TAG = LevelScreen.class.getName();
 	
 	// Clases que se crean para manipular el contenido
-	private TrialController levelController;
-	private TrialRenderer levelRenderer;
+	private LevelController levelController;
+	private LevelRenderer levelRenderer;
 	
 	// Variables del level
 	private int levelNumber;
