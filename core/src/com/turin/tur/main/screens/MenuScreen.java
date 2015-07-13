@@ -75,16 +75,18 @@ public class MenuScreen extends AbstractGameScreen {
 	    
 
 		// Add widgets to the table here.
+	    
+	    /*
 	    this.buttonUser = new TextButton(TextUser, skin, "default");
 	    buttonUser.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
             	Gdx.app.debug(TAG, super.getClass().getName());
-            	
             }
         });
+	    */
 	    
-	    TextButton buttonL1 = new TextButton("Nivel 1 (entrenamiento)", skin, "default");
+	    TextButton buttonL1 = new TextButton("Nivel 1", skin, "default");
 	    buttonL1.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
@@ -92,6 +94,7 @@ public class MenuScreen extends AbstractGameScreen {
             }
         });
 
+	    /*
 		TextButton buttonL2 = new TextButton("Nivel 2 (Test)", skin, "default");
 		buttonL2.addListener(new ClickListener() {
 			@Override
@@ -99,16 +102,21 @@ public class MenuScreen extends AbstractGameScreen {
 				game.setScreen(new LevelScreen(game,2));
 			}
 		});
-
+		
+		
+		TextButton buttonLevel = new TextButton("Nivel 1", skin, "default");
+		buttonTest.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new LevelScreen(game,2));
+			}
+		});
+	     */
 		
 		buttonL1.setVisible(true); 
 		//buttonL1.setColor(1, 0, 1, 0.1f);
 		
-		table.add(buttonUser);
-		table.row();
-	    table.add(buttonL1);
-	    table.row();
-	    table.add(buttonL2);
+		table.add(buttonL1);
 	    
 	    Gdx.app.debug(TAG, "Menu cargado");
 

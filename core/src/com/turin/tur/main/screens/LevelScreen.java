@@ -12,17 +12,20 @@ public class LevelScreen extends AbstractGameScreen  {
 	private static final String TAG = LevelScreen.class.getName();
 	
 	// Clases que se crean para manipular el contenido
-	private LevelController levelController;
-	private LevelRenderer levelRenderer;
+	private TrialController levelController;
+	private TrialRenderer levelRenderer;
 	
 	// Variables del level
 	private int levelNumber;
+	// Variables del trial
+	private int level;
 	
 	private boolean paused;
 	
 	public LevelScreen (Game game, int Id) {
 		super(game);
 		this.levelNumber=Id;
+		this.level=Id;
 	}
 
 	@Override
