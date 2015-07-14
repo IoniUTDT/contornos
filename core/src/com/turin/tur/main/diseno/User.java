@@ -17,8 +17,8 @@ public class User {
 	public String name;
 	public long id;
 	public String comments;
-	public Array<Level> levelHistory = new Array<Level>();
-	public Array<Trial> trailHistory = new Array<Trial>();
+	public Array<Integer> levelHistory = new Array<Integer>();
+	public Array<Integer> trialHistory = new Array<Integer>();
 	public int lastLevelCompletedId;
 	
 	public void save() {
@@ -28,12 +28,8 @@ public class User {
 		jsonUser.name = this.name;
 		jsonUser.Id = this.id;
 		jsonUser.lastLevelCompletedId = this.lastLevelCompletedId;
-		for (Trial trial: this.trailHistory) {
-			jsonUser.trailHistoryId.add(trial.Id);
-		}
-		for (Level level: this.levelHistory) {
-			jsonUser.levelHistoryId.add(level.Id);
-		}
+		jsonUser.levelHistoryId = this.levelHistory;
+		jsonUser.trialHistoryId = this.trialHistory;
 		// Graba el json
 		jsonUser.save();
 	}
@@ -62,12 +58,8 @@ public class User {
 		user.name = jsonUser.name;
 		user.id = jsonUser.Id;
 		user.lastLevelCompletedId = jsonUser.lastLevelCompletedId;
-		for (int id: jsonUser.trailHistoryId) {
-			user.trailHistory.add(new Trial(id));
-		}
-		for (int id: jsonUser.levelHistoryId) {
-			user.levelHistory.add(new Level(id));
-		}
+		user.levelHistory = jsonUser.levelHistoryId;
+		user.trialHistory = jsonUser.trialHistoryId;
 		return user;
 	}
 	
@@ -81,7 +73,7 @@ public class User {
 		public long Id;
 		public String comments;
 		public Array<Integer> levelHistoryId = new Array<Integer>();
-		public Array<Integer> trailHistoryId = new Array<Integer>();
+		public Array<Integer> trialHistoryId = new Array<Integer>();
 		public int lastLevelCompletedId;
 		
 		public void save(){

@@ -19,6 +19,7 @@ public class TouchInfo {
 	public String actionToDo;
 	public Box thisTouchBox;
 	public Box lastTouchBox;
+	public int UserId;
 	
 	public TouchInfo (float absolutTime, float relativeTime) {
 		this.absolutTime = absolutTime;
