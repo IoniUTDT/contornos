@@ -2,9 +2,11 @@ package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ImagesAsset;
 
 
@@ -13,18 +15,23 @@ public class ExperimentalObject {
 	public final Sprite imagen;
 	public final Sound sonido;
 	public final int Id; 
-	public final String name;
-	public String descripcion = "Aca va opcionalmente una descripcion del objeto";
-	// public Array<String> categoria = new Array<String>(); // Aca va quizas mas que un array de string, un array de categorias
+	public String name;
+	public String comments = "Aca va opcionalmente una descripcion del objeto";
+	public Array<String> categoria = new Array<String>();
+	
+	// Constantes
+	private static final String TAG = ExperimentalObject.class.getName();
 	
 	
+	
+	/*
 	public ExperimentalObject (Sprite imagen, Sound sonido, int Id){
 		this.imagen = imagen;
 		this.sonido = sonido;
 		this.Id = Id;
 		this.name = "reemplazar";
 	}
- 
+ 	*/
 	
 	public ExperimentalObject (int Id){ // Esto carga la info desde archivo
 		this.Id = Id;
@@ -32,12 +39,68 @@ public class ExperimentalObject {
 		this.imagen = ImagesAsset.instance.imagen(Id);
 		this.sonido = ImagesAsset.instance.sonido(Id);
 		// Carga ma metadata
-		this.loadMetaData(Id);
-		this.descripcion = ImagesAsset.instance.MetaInfo(Id).comments;
-		this.name = ImagesAsset.instance.MetaInfo(Id).name;
+		this.loadMetaData();
+		//this.descripcion = ImagesAsset.instance.MetaInfo(Id).comments;
+		//this.name = ImagesAsset.instance.MetaInfo(Id).name;
 	}
 
 	
+	private void loadMetaData() {
+		JsonMetaData jsonMetaData = JsonMetaData.Load(this.Id);
+		this.comments = jsonMetaData.comments;
+		this.name = jsonMetaData.name;
+		this.categoria = jsonMetaData.categories;
+	}
+
+
+	public static class JsonMetaData {
+		public int Id;
+		public String name;
+		public String comments;
+		public Array<String> categories = new Array<String>();
+		
+		public static void createJsonMetaData (int Id, String name, String comments, Array<String> categories) {
+			Json json = new Json();
+			JsonMetaData jsonMetaData = new JsonMetaData();
+			jsonMetaData.Id = Id;
+			jsonMetaData.name = name;
+			jsonMetaData.comments = comments;
+			jsonMetaData.categories = categories;
+			FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta", json.toJson(jsonMetaData));			
+		} 
+		
+		public void save() {
+			Json json = new Json();
+			FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta", json.toJson(this));
+		}
+		
+		public static JsonMetaData Load(int Id) {
+			String savedData = FileHelper.readFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta");
+			if (!savedData.isEmpty()) {
+				Json json = new Json();
+				return json.fromJson(JsonMetaData.class, savedData);
+			} else { Gdx.app.error(TAG,"No se a podido encontrar la info del recurso experimental" + Id); }
+			return null;
+		}
+	}
+
+	/*
+	public static void SaveMetaData(int Id, String name, String comments, Array<String> categories) {
+		JsonMetaData metaData = new JsonMetaData();
+		metaData.Id = Id;
+		metaData.name = "Prueba";
+		metaData.comments = "Esto despues se guarda automaticamente";
+		metaData.categories = categories;
+
+		Json json = new Json();
+		FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta", json.toJson(metaData));
+	}
+	*/
+	
+	
+	
+	
+	/*
 	public JsonMetaData MetaInfo(int Id) {
 		return loadMetaData(Id);
 	}
@@ -74,22 +137,7 @@ public class ExperimentalObject {
 		FileHandle file = Gdx.files.local(fileName);
 		file.writeString(s, false);
 	}
+	*/
 
-	public static class JsonMetaData {
-		public int Id;
-		public String name;
-		public String comments;
-	}
-
-	public void saveMetaData(int Id) {
-		JsonMetaData metaData = new JsonMetaData();
-		metaData.Id = Id;
-		metaData.name = "Prueba";
-		metaData.comments = "Esto despues se guarda automaticamente";
-
-		Json json = new Json();
-		writeFile("experimentalsource/" + this.version + "/" + Id + ".meta",
-				json.toJson(metaData));
-	}
 
 }

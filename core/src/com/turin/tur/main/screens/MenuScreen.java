@@ -63,7 +63,7 @@ public class MenuScreen extends AbstractGameScreen {
 	    skin = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI));
 	    
 	    // Aca carga la info del usuario
-	    if (! Gdx.files.internal("experimentalconfig/userinfo.txt").exists()) {User.createUser();}
+	    if (! Gdx.files.internal("experimentalconfig/userinfo.txt").exists()) {User.CreateUser();}
 	    loadUser();
 
 	    TextButton buttonL1 = new TextButton("Nivel 1", skin, "default");
@@ -84,7 +84,7 @@ public class MenuScreen extends AbstractGameScreen {
 	}
 
 	private void loadUser() {		
-		user = User.load();
+		user = User.Load();
 	}
 	
 
