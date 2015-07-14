@@ -39,6 +39,12 @@ public class FileHelper {
 
 	public static void appendFile(String fileName, String s) {
 		FileHandle file = Gdx.files.local(fileName);
-		file.writeString(s, true);
+		file.writeString(s+"\r\n", true);
+	}
+
+	public static void writeLog(String fileName, String log) {
+		FileHandle file = Gdx.files.local(fileName);
+		file.writeString(log+"\r\n", true);
+		
 	}
 }

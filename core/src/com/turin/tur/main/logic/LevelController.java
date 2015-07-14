@@ -7,18 +7,13 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.turin.tur.main.diseno.Boxes;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.LevelInterfaz;
 import com.turin.tur.main.diseno.TouchInfo;
 import com.turin.tur.main.diseno.Trial;
-import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.Box;
-import com.turin.tur.main.diseno.Boxes.StimuliBox;
-import com.turin.tur.main.diseno.Boxes.TrainingBox;
-import com.turin.tur.main.diseno.LevelInterfaz.BotonAnterior;
-import com.turin.tur.main.diseno.LevelInterfaz.BotonSiguiente;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
+import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
@@ -34,10 +29,12 @@ public class LevelController implements InputProcessor {
 	
 	// Cosas relacionadas con los elementos del juego
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
+	public Array<TouchInfo> completeTouchSecuence = new Array<TouchInfo>();
 	public Trial trialActive;
 	public LevelInterfaz levelInterfaz;
 	private Game game;
 	private Level levelInfo; //Informacion del nivel cargado
+	public User user = User.Load();
 	
 	// Variables que manejan la dinamica de flujo de informacion en el control del nivel
 	public boolean nextTrialPending = false; // Genera la señal de que hay que cambiar de trial (para esperar a que finalicen cuestiones de animacion) 
@@ -153,11 +150,11 @@ public class LevelController implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// Crea un evento de toque
-    	TouchInfo touch = new TouchInfo(timeInLevel,timeInTrial);
+    	TouchInfo touch = new TouchInfo(timeInLevel,timeInTrial,levelInfo,trialActive,user);
     	// calcula el toque en pantalla
    		touch.coordScreen = new Vector3 (screenX, screenY, 0);
    		// calcula el toque en el juego 
-   		touch.coordGame = camera.unproject(touch.coordScreen);
+   		touch.coordGame = camera.unproject(touch.coordScreen.cpy()); // PREGUNTA: si no le pongo el copy, toma como el mismo vector y sobreescribe el coordScreen. RARO
    		// determina que accion es la siguiente
     	touch.actionToDo = Constants.Touch.ToDo.DETECTOVERLAP;
     	// procesa la info del toque en funcion de otros elementos del juego
@@ -169,7 +166,6 @@ public class LevelController implements InputProcessor {
 	
 
 	private void procesarToque(TouchInfo touchData) {
-		boolean acierto = false;
     	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
 	    	boolean elementoSeleccionado = false; // Sin seleccion
 	    	if (touchSecuence.size > 0) {
@@ -216,11 +212,9 @@ public class LevelController implements InputProcessor {
 				// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
 				if (this.trialActive.modo == TIPOdeTRIAL.TEST) {
 					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) { // Significa q se selecciono la opcion correcta
-						acierto = true;
 						touchData.thisTouchBox.answer=true;
-					} else {
-						acierto = false;
-						touchData.thisTouchBox.answer=false;
+						this.trialActive.stimuliBox.contenido.sonido.stop();
+			    		this.nextTrialPending=true;
 					}
 				}
 				// Activa el elemento tocado
@@ -237,18 +231,22 @@ public class LevelController implements InputProcessor {
 	
 				}
 			}
-    	}
-    	
-    	if (acierto) {
-    		this.nextTrialPending=true;
-    	}
-		
+    	}		
 	}
 
-	
 
 	private void exitTrial() {
+		saveTouches();
 		this.stopSound();		
+	}
+	
+
+	private void saveTouches() {
+		for (TouchInfo touch : touchSecuence) {
+			touch.logTouch(touch);
+		}
+		completeTouchSecuence.addAll(touchSecuence);
+		touchSecuence.clear();
 	}
 
 	private void cargarInfoDelTouch(Box box, TouchInfo thisTouch) {

@@ -58,6 +58,8 @@ public class Constants {
 
 	public static final String USERLOG = "logs/user.log";
 
+	public static final String TOUCHLOG = "logs/touchs.log";
+
 
 
 	// Constantes relacionadas con el diseno de experimentos
