@@ -2,7 +2,6 @@ package com.turin.tur.main.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,14 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.util.Constants;
-
 
 
 public class MenuScreen extends AbstractGameScreen {
 	
+	
 	private static final String TAG = MenuScreen.class.getName();
-	Preferences prefs = Gdx.app.getPreferences("User");
 	
     // For debug drawing
     private ShapeRenderer shapeRenderer;
@@ -28,6 +27,8 @@ public class MenuScreen extends AbstractGameScreen {
     private Stage stage;
     private Table table;
     
+    // Informacion general
+    User user;
     
 	public MenuScreen (Game game) {
 		super(game);
@@ -61,32 +62,10 @@ public class MenuScreen extends AbstractGameScreen {
 	    shapeRenderer = new ShapeRenderer();
 	    skin = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI));
 	    
-	    /*
-	    // Load user info
-	    String User = prefs.getString("User", "NoName");
-	    boolean firstUser = false;
-	    if (User == "NoName") {firstUser=true;}
-	    
-	    String TextUser;
-	    if (firstUser) {TextUser="Crear usuario";
-	    } else {
-	    	TextUser = "Usuario: "+ User + ". Click para cambiar";
-	    }
-	    */
+	    // Aca carga la info del usuario
+	    if (! Gdx.files.internal("experimentalconfig/userinfo.txt").exists()) {User.createUser();}
+	    loadUser();
 
-		// Add widgets to the table here.
-	    
-	    /*
-	    this.buttonUser = new TextButton(TextUser, skin, "default");
-	    buttonUser.addListener(new ClickListener(){
-            @Override 
-            public void clicked(InputEvent event, float x, float y){      
-<<<<<<< HEAD
-            	Gdx.app.debug(TAG, super.getClass().getName());
-            }
-        });
-	    */
-	    
 	    TextButton buttonL1 = new TextButton("Nivel 1", skin, "default");
 	    buttonL1.addListener(new ClickListener(){
             @Override 
@@ -94,36 +73,6 @@ public class MenuScreen extends AbstractGameScreen {
             	game.setScreen(new LevelScreen(game,1));
             }
         });
-
-	    /*
-		TextButton buttonL2 = new TextButton("Nivel 2 (Test)", skin, "default");
-		buttonL2.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-<<<<<<< HEAD
-=======
-				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
-				GameConf.instance.save();
->>>>>>> refs/remotes/origin/master
-				game.setScreen(new LevelScreen(game,2));
-			}
-		});
-		
-		
-		TextButton buttonLevel = new TextButton("Nivel 1", skin, "default");
-		buttonTest.addListener(new ClickListener() {
-			@Override
-<<<<<<< HEAD
-			public void clicked(InputEvent event, float x, float y) {
-=======
-			public void clicked(InputEvent event, float x, float y) {
-				GameConf.instance.modo = Constants.Diseno.TIPOdeTRIAL.TEST;
-				GameConf.instance.save();
->>>>>>> refs/remotes/origin/master
-				game.setScreen(new LevelScreen(game,2));
-			}
-		});
-	     */
 		
 		buttonL1.setVisible(true); 
 		//buttonL1.setColor(1, 0, 1, 0.1f);
@@ -133,6 +82,11 @@ public class MenuScreen extends AbstractGameScreen {
 	    Gdx.app.debug(TAG, "Menu cargado");
 
 	}
+
+	private void loadUser() {		
+		user = User.load();
+	}
+	
 
 	public void Prueba (){
 	    Gdx.app.debug(TAG, "Tuc Tuc");

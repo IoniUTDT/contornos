@@ -19,6 +19,18 @@ public class FileHelper {
 		Gdx.app.error(TAG,"Archivo: "+fileName+". No se lo ha encontrado o esta vacio");
 		return "";
 	}
+
+	public static String readLocalFile(String fileName) {
+		FileHandle file = Gdx.files.local(fileName);
+		if (file != null && file.exists()) {
+			String s = file.readString();
+			if (!s.isEmpty()) {
+				return s;
+			}
+		}
+		Gdx.app.error(TAG,"Archivo: "+fileName+". No se lo ha encontrado o esta vacio");
+		return "";
+	}
 	
 	public static void writeFile(String fileName, String s) {
 		FileHandle file = Gdx.files.local(fileName);
