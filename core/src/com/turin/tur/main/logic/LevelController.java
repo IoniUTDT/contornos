@@ -1,4 +1,4 @@
-package com.turin.tur.main.diseno;
+package com.turin.tur.main.logic;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -7,10 +7,17 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.turin.tur.main.diseno.Boxes;
+import com.turin.tur.main.diseno.Level;
+import com.turin.tur.main.diseno.LevelInterfaz;
+import com.turin.tur.main.diseno.TouchInfo;
+import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
+import com.turin.tur.main.diseno.LevelInterfaz.BotonAnterior;
+import com.turin.tur.main.diseno.LevelInterfaz.BotonSiguiente;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;

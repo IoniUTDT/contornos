@@ -1,8 +1,10 @@
-package com.turin.tur.main.diseno;
+package com.turin.tur.main.logic;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import com.turin.tur.main.diseno.Boxes;
+import com.turin.tur.main.diseno.LevelInterfaz;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.util.Constants;
