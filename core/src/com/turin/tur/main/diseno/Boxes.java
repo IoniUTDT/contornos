@@ -29,7 +29,10 @@ public abstract class Boxes {
 		public ExperimentalObject contenido; // Esta variable guarda toda la informacion del contenido de la caja usando una clase especialmente diseñada para eso
 		public Vector2 posicionCenter; // Esta es la posicion de la caja dada por las coordenadas de su centro. 
 		public Sprite spr; // Guarda la imagen que se va a mostrar (se genera a partir del contenido de la caja)
-	
+		
+		// Variables utiles para la dinamica del programa
+		public boolean alreadySelected;
+		
 		// Variables especificas de cada tipo pero que estan en la clase general porque se llaman desde afuera
 		public boolean answerActive = false; // Determina si se esta mostrando la respuesta o no
 		public boolean answer=false; // Resultado de la respuesta
@@ -131,6 +134,7 @@ public abstract class Boxes {
 		
 		public void select() {
 			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.Id);
+			this.alreadySelected = true;
 			this.runningSound = true;
 			this.soundAvanceReproduccion = 0;
 			Sound sonido = this.contenido.sonido;

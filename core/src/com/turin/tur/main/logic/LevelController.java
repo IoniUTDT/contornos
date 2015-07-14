@@ -22,18 +22,20 @@ import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
 public class LevelController implements InputProcessor {
 
+	// Cosas relacionadas con la interfaz grafica
 	public OrthographicCamera camera; 
 	public static final String TAG = LevelController.class.getName();
 	public CameraHelper cameraHelper;
-	//private float time_selected = 0;
+	
+	// Cosas relacionadas con los elementos del juego
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	public Trial trialActive;
 	public LevelInterfaz levelInterfaz;
-
 	private Game game;
 	private Level levelInfo; //Informacion del nivel cargado
 	
@@ -45,11 +47,6 @@ public class LevelController implements InputProcessor {
 	public LevelController(Game game, int levelNumber, int trialNumber) {
 		this.game = game;
 		this.levelInfo = new Level(levelNumber);
-		// Linea de prueba!
-		//int[] trials = {1,2,3};
-		//this.levelInfo.saveLevel(1, trials, "Hola!" );
-		// Fin prueba
-		// this.levelInterfaz = new LevelInterfaz(this.levelInfo, trialNumber);
 		this.initCamera();
 		this.initTrial();
 	}
@@ -58,6 +55,8 @@ public class LevelController implements InputProcessor {
 		this.trialActive = new Trial (this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
 		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition, this.trialActive);
 		this.timeInTrial=0;
+		String logText = TAG + ": Inicializado el trial " + this.trialActive.Id + ".\r\n";
+		FileHelper.appendFile(Constants.USERLOG, logText);
 	}
 
 	private void initCamera() {
@@ -88,10 +87,23 @@ public class LevelController implements InputProcessor {
 			}
 			if (!wait) {
 				this.nextTrialPending=false;
-				this.goToNextTrial();
+				if (isLastTrial()) {completeLevel();} else {goToNextTrial();}
 			}
 		}
 		
+	}
+
+	private void completeLevel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private boolean isLastTrial() {
+		if (levelInfo.activeTrialPosition + 1 == levelInfo.secuenciaTrailsId.length) {
+			Gdx.app.debug(TAG, "Ultimo trial del nivel");
+			return true;
+		}
+		return false;
 	}
 
 	private void goToNextTrial() {
@@ -154,6 +166,7 @@ public class LevelController implements InputProcessor {
     	touchSecuence.add(touch);
 		return false;
 	}
+	
 
 	private void procesarToque(TouchInfo touchData) {
 		boolean acierto = false;

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.FileHelper;
 
 
 public class MenuScreen extends AbstractGameScreen {
@@ -70,11 +71,12 @@ public class MenuScreen extends AbstractGameScreen {
 	    user = User.Load();
 	    
 	    // Boton que lleva al nivel 1
-	    buttonL1 = new TextButton("Nivel 1", skin, "default");
+	    buttonL1 = new TextButton("Next level: " + (user.lastLevelCompletedId + 1), skin, "default");
 	    buttonL1.addListener(new ClickListener(){
             @Override 
-            public void clicked(InputEvent event, float x, float y){      
-            	game.setScreen(new LevelScreen(game,1));
+            public void clicked(InputEvent event, float x, float y){
+            	goToLevelLog();
+            	game.setScreen(new LevelScreen(game,user.lastLevelCompletedId + 1));
             }
         });
 	    
@@ -100,6 +102,12 @@ public class MenuScreen extends AbstractGameScreen {
 	}
 
 
+	protected void goToLevelLog() {
+		String logText = TAG+": "+user.name+" goes to level " + (user.lastLevelCompletedId + 1)  + ".\r\n";
+		FileHelper.appendFile(Constants.USERLOG, logText);
+	}
+
+
 	@Override
 	public void hide() {
 		stage.dispose();
@@ -115,6 +123,8 @@ public class MenuScreen extends AbstractGameScreen {
 
 		@Override
 		public void input(String text) {
+			String logText = TAG+": "+user.name+" change name to " + text  + ".\r\n";
+			FileHelper.appendFile(Constants.USERLOG, logText);
 			user.name = text;
 			buttonUserName.setText(text);
 			user.save();

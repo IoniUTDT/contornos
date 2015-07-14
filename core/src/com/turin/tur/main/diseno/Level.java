@@ -14,11 +14,10 @@ public class Level {
 	public int Id;
 	
 	// Cosas que se cargan de archivo
-	//public Array<Trial> secuenciaTrials = new Array<Trial>();
 	public int[] secuenciaTrailsId;
 	
 	// variable del nivel
-	public int activeTrialPosition;
+	public int activeTrialPosition; // Posicion del trial activo
 	public String levelTitle; 
 	
 	public Level(int level) {

@@ -56,6 +56,8 @@ public class Constants {
 
 	public static final String USERFILE = "experimentalconfig/user.txt";
 
+	public static final String USERLOG = "logs/user.log";
+
 
 
 	// Constantes relacionadas con el diseno de experimentos

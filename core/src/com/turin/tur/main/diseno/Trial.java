@@ -33,6 +33,10 @@ public class Trial {
 	public float levelTime = 0;
 	public Array<Box> boxes = new Array<Box>();
 	
+	
+	// Variable que tiene que ver con el estado del trial
+	boolean trialCompleted = false;
+	
 	// constantes
 	public static final String TAG = Trial.class.getName();
 
@@ -93,6 +97,16 @@ public class Trial {
 		for (Box box : boxes) {
 			box.update(deltaTime);
 		}
+	}
+
+	
+	public boolean checkTrialCompleted (){ // Se encarga de ver si ya se completo trial o no
+		if (modo==TIPOdeTRIAL.ENTRENAMIENTO) {
+			boolean allCheck = true;
+			for (Box box: boxes) {if (box.alreadySelected==false) {allCheck=false;}}
+			if (allCheck) {trialCompleted=true;}
+		}
+		return trialCompleted;
 	}
 	
 	// Seccion encargada de guardar y cargar info de trials
