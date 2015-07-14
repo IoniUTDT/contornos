@@ -31,8 +31,10 @@ public class Trial {
 	public Level levelActivo;
 	public User userActivo;
 	public float levelTime = 0;
-	public Array<Box> boxes = new Array<Box>();
-	
+	public Array<TrainingBox> trainigBoxes = new Array<TrainingBox>();
+	public Array<AnswerBox> answerBoxes = new Array<AnswerBox>();
+	public StimuliBox stimuliBox;
+	public Array<Box> allBox = new Array<Box>();
 	
 	// Variable que tiene que ver con el estado del trial
 	boolean trialCompleted = false;
@@ -47,13 +49,14 @@ public class Trial {
 	}
 
 	private void createElements() {
+		// Crea las cajas segun corresponda a su tipo
 		if (this.modo == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
 			for (ExperimentalObject elemento : this.elementos) {
 				TrainingBox box = new TrainingBox(elemento);
 				box.SetPosition(
 						distribucion.X(this.elementos.indexOf(elemento, true)),
 						distribucion.Y(this.elementos.indexOf(elemento, true)));
-				this.boxes.add(box);
+				this.trainigBoxes.add(box);
 			}
 		}
 
@@ -64,13 +67,15 @@ public class Trial {
 						distribucion.X(this.elementos.indexOf(elemento, true))
 								+ Constants.Box.SHIFT_MODO_SELECCIONAR,
 						distribucion.Y(this.elementos.indexOf(elemento, true)));
-				this.boxes.add(box);
+				this.answerBoxes.add(box);
 			}
-			StimuliBox box = new StimuliBox(rtaCorrecta);
-			box.SetPosition(0+ Constants.Box.SHIFT_ESTIMULO_MODO_SELECCIONAR, 0);
-			this.boxes.add(box);
+			stimuliBox = new StimuliBox(rtaCorrecta);
+			stimuliBox.SetPosition(0+ Constants.Box.SHIFT_ESTIMULO_MODO_SELECCIONAR, 0);
+			allBox.add(stimuliBox);
 		}
-
+		// Junta todas las cajas en una unica lista para que funcionen los update, etc.
+		for (Box box:answerBoxes) {allBox.add(box);}
+		for (Box box:trainigBoxes) {allBox.add(box);}
 	}
 
 	private void initTrial(int Id) {
@@ -94,7 +99,7 @@ public class Trial {
 	
 	public void update(float deltaTime) {
 		// Actualiza las boxes
-		for (Box box : boxes) {
+		for (Box box : allBox) {
 			box.update(deltaTime);
 		}
 	}
@@ -103,7 +108,7 @@ public class Trial {
 	public boolean checkTrialCompleted (){ // Se encarga de ver si ya se completo trial o no
 		if (modo==TIPOdeTRIAL.ENTRENAMIENTO) {
 			boolean allCheck = true;
-			for (Box box: boxes) {if (box.alreadySelected==false) {allCheck=false;}}
+			for (AnswerBox box: answerBoxes) {if (box.alreadySelected==false) {allCheck=false;}}
 			if (allCheck) {trialCompleted=true;}
 		}
 		return trialCompleted;

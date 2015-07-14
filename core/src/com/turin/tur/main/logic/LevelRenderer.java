@@ -62,7 +62,7 @@ public class LevelRenderer implements Disposable {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
-		for (Box box : levelController.trialActive.boxes) {
+		for (Box box : levelController.trialActive.allBox) {
 			box.render(batch);
 		}
 		

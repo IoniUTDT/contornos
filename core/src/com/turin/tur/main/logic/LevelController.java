@@ -82,7 +82,7 @@ public class LevelController implements InputProcessor {
 	private void changeTrial() {
 		if (this.nextTrialPending) {
 			boolean wait = false;
-			for (Box box :this.trialActive.boxes) {
+			for (Box box :this.trialActive.answerBoxes) {
 				if (box.answerActive) {wait=true;}
 			}
 			if (!wait) {
@@ -139,7 +139,7 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void stopSound() {
-		for (Box box: this.trialActive.boxes) {
+		for (Box box: this.trialActive.allBox) {
 			box.contenido.sonido.stop();
 		}
 	}
@@ -176,16 +176,24 @@ public class LevelController implements InputProcessor {
 	    		touchData.lastTouchBox = touchSecuence.peek().thisTouchBox;
 	    	}
 	    	
-	    	// se fija si se toco alguna imagen seleccionable
-	    	for (Box box : this.trialActive.boxes) {
-	    		if ((box.getClass()==TrainingBox.class) || (box.getClass()==AnswerBox.class))
+	    	// se fija si se toco alguna imagen training
+	    	for (Box box : this.trialActive.trainigBoxes) {
 	    		if (box.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 	    			Gdx.app.debug(TAG, "Ha tocado la imagen " + box.contenido.Id);
 	    			cargarInfoDelTouch (box,touchData);
 					elementoSeleccionado = true;
 	    		}
-	    		
 	    	}
+
+	    	// se fija si se toco alguna imagen answer
+	    	for (Box box : this.trialActive.answerBoxes) {
+	    		if (box.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
+	    			Gdx.app.debug(TAG, "Ha tocado la imagen " + box.contenido.Id);
+	    			cargarInfoDelTouch (box,touchData);
+					elementoSeleccionado = true;
+	    		}
+	    	}
+
 	    	
 			// Actua si no se toco nada
 			if (!elementoSeleccionado) {
@@ -205,8 +213,7 @@ public class LevelController implements InputProcessor {
 			
 			// selecciona el elemento actual si hay elemento tocado
 			if (touchData.elementTouched) {
-				touchData.thisTouchBox.select();
-				// revisa si se acerto a la respuesta o no. 
+				// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
 				if (this.trialActive.modo == TIPOdeTRIAL.TEST) {
 					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) { // Significa q se selecciono la opcion correcta
 						acierto = true;
@@ -216,6 +223,8 @@ public class LevelController implements InputProcessor {
 						touchData.thisTouchBox.answer=false;
 					}
 				}
+				// Activa el elemento tocado
+				touchData.thisTouchBox.select();
 			}
 	    	
 			// Se fija si se toco algun elemento de la interfaz del nivel
