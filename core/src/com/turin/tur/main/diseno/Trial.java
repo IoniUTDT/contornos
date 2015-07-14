@@ -9,7 +9,6 @@ import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
-import com.turin.tur.main.util.ImagesAsset;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
@@ -73,7 +72,7 @@ public class Trial {
 	private void initTrial(int Id) {
 		Gdx.app.log(TAG, "Cargando info del trial");
 		// Carga la info en bruto
-		JsonTrial jsonLevel = loadTrial(Id);
+		JsonTrial jsonLevel = JsonTrial.LoadTrial(Id);
 		this.title = jsonLevel.title;
 		this.modo = jsonLevel.modo;
 		this.elementosId = jsonLevel.elementosId;
@@ -85,16 +84,6 @@ public class Trial {
 			this.elementos.add(new ExperimentalObject(elemento));
 		}
 		this.rtaCorrecta = new ExperimentalObject(this.rtaCorrectaId);
-		// hace que la respuesta correcta sea una referencia al mismo item que
-		// ya esta en la lista
-		/*
-		for (ExperimentalObject elemento : this.elementos) {
-			if (this.rtaCorrectaId == elemento.Id) {
-				this.rtaCorrecta = elemento;
-			}
-		}
-		*/
-		// falta cargar el level y el usuario
 		Gdx.app.log(TAG, "Info del trial cargado");
 	}
 
@@ -120,34 +109,31 @@ public class Trial {
 		public DISTRIBUCIONESenPANTALLA distribucion; // guarda las posiciones
 														// de los elementos a
 														// mostrar
-	}
+		public void save(int Id) {
+			JsonTrial jsonLevel = new JsonTrial();
+			jsonLevel.Id = 1;
+			jsonLevel.title = "nivel de prueba";
+			jsonLevel.modo = TIPOdeTRIAL.ENTRENAMIENTO;
+			jsonLevel.elementosId = new int[] { 1, 2, 3, 4, 5, 6 };
+			jsonLevel.rtaCorrectaId = 2;
+			jsonLevel.rtaRandom = false;
+			jsonLevel.distribucion = DISTRIBUCIONESenPANTALLA.BILINEALx6;
 
-	public void saveTrial(int Id) {
-		JsonTrial jsonLevel = new JsonTrial();
-		jsonLevel.Id = 1;
-		jsonLevel.title = "nivel de prueba";
-		jsonLevel.modo = TIPOdeTRIAL.ENTRENAMIENTO;
-		jsonLevel.elementosId = new int[] { 1, 2, 3, 4, 5, 6 };
-		jsonLevel.rtaCorrectaId = 2;
-		jsonLevel.rtaRandom = false;
-		jsonLevel.distribucion = DISTRIBUCIONESenPANTALLA.BILINEALx6;
-
-		Json json = new Json();
-		FileHelper.writeFile("experimentalconfig/" + ImagesAsset.instance.version
-				+ "/trial" + Id + ".meta", json.toJson(jsonLevel));
-	}
-
-	private JsonTrial loadTrial(int Id) {
-		String savedData = FileHelper.readFile("experimentalconfig/"+ ImagesAsset.instance.version + "/trial" + Id + ".meta");
-		
-		if (!savedData.isEmpty()) {
 			Json json = new Json();
-			return json.fromJson(JsonTrial.class, savedData);
+			FileHelper.writeFile("experimentalconfig/" + Constants.version() + "/trial" + Id + ".meta", json.toJson(jsonLevel));
 		}
-		Gdx.app.error(TAG,
-				"No se a podido encontrar la info del objeto experimental "
-						+ Id);
-		return null;
+		
+		private static JsonTrial LoadTrial(int Id) {
+			String savedData = FileHelper.readFile("experimentalconfig/"+  Constants.version() + "/trial" + Id + ".meta");
+			
+			if (!savedData.isEmpty()) {
+				Json json = new Json();
+				return json.fromJson(JsonTrial.class, savedData);
+			}
+			Gdx.app.error(TAG,
+					"No se a podido encontrar la info del objeto experimental "
+							+ Id);
+			return null;
+		}
 	}
-
 }

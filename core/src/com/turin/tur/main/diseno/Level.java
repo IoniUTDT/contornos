@@ -3,6 +3,7 @@ package com.turin.tur.main.diseno;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ImagesAsset;
 
@@ -68,7 +69,7 @@ public class Level {
 	 */
 	
 	private JsonLevel loadLevel(int level) {
-		String savedData = FileHelper.readFile("experimentalconfig/"+ ImagesAsset.instance.version + "/level" + level + ".meta");
+		String savedData = FileHelper.readFile("experimentalconfig/"+ Constants.version() + "/level" + level + ".meta");
 		if (!savedData.isEmpty()) {
 			Json json = new Json();
 			return json.fromJson(JsonLevel.class, savedData);
@@ -90,7 +91,6 @@ public class Level {
 		jsonLevel.trials=secuenciaTrials;
 		jsonLevel.levelTitle=levelTitle;
 		Json json = new Json();
-		FileHelper.writeFile("experimentalconfig/" + ImagesAsset.instance.version
-				+ "/level" + level + ".meta", json.toJson(jsonLevel));
+		FileHelper.writeFile("experimentalconfig/" + Constants.version()+ "/level" + level + ".meta", json.toJson(jsonLevel));
 	}	
 }

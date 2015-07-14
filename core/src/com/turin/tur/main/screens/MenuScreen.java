@@ -2,6 +2,7 @@ package com.turin.tur.main.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,6 +27,8 @@ public class MenuScreen extends AbstractGameScreen {
     private Skin skin;
     private Stage stage;
     private Table table;
+    TextButton buttonUserName;
+    TextButton buttonL1;
     
     // Informacion general
     User user;
@@ -63,35 +66,40 @@ public class MenuScreen extends AbstractGameScreen {
 	    skin = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI));
 	    
 	    // Aca carga la info del usuario
-	    if (! Gdx.files.internal("experimentalconfig/userinfo.txt").exists()) {User.CreateUser();}
-	    loadUser();
-
-	    TextButton buttonL1 = new TextButton("Nivel 1", skin, "default");
+	    if (! Gdx.files.local(Constants.USERFILE).exists()) {User.CreateUser(); Gdx.app.debug(TAG, "Creando nuevo usuario");}
+	    user = User.Load();
+	    
+	    // Boton que lleva al nivel 1
+	    buttonL1 = new TextButton("Nivel 1", skin, "default");
 	    buttonL1.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){      
             	game.setScreen(new LevelScreen(game,1));
             }
         });
-		
-		buttonL1.setVisible(true); 
-		//buttonL1.setColor(1, 0, 1, 0.1f);
-		
-		table.add(buttonL1);
 	    
+	    // Boton que carga el nombre del usuario y permite modificarlo
+	    buttonUserName = new TextButton(user.name, skin, "default");
+	    buttonUserName.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){      
+        		MyTextInputListener listener = new MyTextInputListener();
+        		Gdx.input.getTextInput(listener, "Ingrese un nombre de usuario",
+        				"", null);
+            }
+        });
+
+	    
+	    // Arma el menu
+		table.add(buttonUserName);
+		table.row();
+		table.add(buttonL1);
+		
 	    Gdx.app.debug(TAG, "Menu cargado");
 
 	}
 
-	private void loadUser() {		
-		user = User.Load();
-	}
-	
 
-	public void Prueba (){
-	    Gdx.app.debug(TAG, "Tuc Tuc");
-	}
-	
 	@Override
 	public void hide() {
 		stage.dispose();
@@ -103,4 +111,17 @@ public class MenuScreen extends AbstractGameScreen {
 		// TODO Auto-generated method stub
 	}
 
+	public class MyTextInputListener implements TextInputListener {
+
+		@Override
+		public void input(String text) {
+			user.name = text;
+			buttonUserName.setText(text);
+			user.save();
+		}
+
+		@Override
+		public void canceled() {	
+		}
+	}
 }

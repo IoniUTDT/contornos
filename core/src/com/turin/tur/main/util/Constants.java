@@ -54,6 +54,8 @@ public class Constants {
 
 	public static final String CONFIGURACION = "confFile.txt";
 
+	public static final String USERFILE = "experimentalconfig/user.txt";
+
 
 
 	// Constantes relacionadas con el diseno de experimentos

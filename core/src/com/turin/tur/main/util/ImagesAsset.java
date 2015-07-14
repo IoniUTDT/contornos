@@ -18,7 +18,6 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 
 	public final String TAG = ImagesAsset.class.getName();
 	public static final ImagesAsset instance = new ImagesAsset();
-	public int version;
 	private TextureAtlas atlas;
 
 	private AssetManager assetManager;
@@ -30,20 +29,11 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	// Variables creadas
 
 	public void init(AssetManager assetManager) {
-		int version_temp = MathUtils.roundPositive(Constants.VERSION);
-		int temp;
-		if (version_temp > Constants.VERSION) {
-			temp = -1;
-		} else {
-			temp = 0;
-		}
-		this.version = version_temp + temp;
 		this.assetManager = assetManager;
 		// set asset manager error handler
 		assetManager.setErrorListener(this);
 		// load texture atlas
-		assetManager.load("experimentalsource/" + version
-				+ "/images.pack.atlas", TextureAtlas.class);
+		assetManager.load("experimentalsource/" +  Constants.version() + "/images.pack.atlas", TextureAtlas.class);
 
 		// start loading assets and wait until finished
 		assetManager.finishLoading();
@@ -53,8 +43,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 			Gdx.app.debug(TAG, "asset: " + a);
 		}
 
-		this.atlas = assetManager.get("experimentalsource/" + version
-				+ "/images.pack.atlas");
+		this.atlas = assetManager.get("experimentalsource/" +  Constants.version() + "/images.pack.atlas");
 		// enable texture filtering for pixel smoothing
 		for (Texture t : atlas.getTextures()) {
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -80,7 +69,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 
 	public Sound sonido(int Id) {
 		Sound sonido = Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"
-				+ version + "/" + Id + ".wav"));
+				+  Constants.version() + "/" + Id + ".wav"));
 		return sonido;
 	}
 }

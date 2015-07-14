@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 
 
@@ -20,7 +21,7 @@ public class User {
 	public Array<Trial> trailHistory = new Array<Trial>();
 	public int lastLevelCompletedId;
 	
-	private void save() {
+	public void save() {
 		JsonUser jsonUser = new JsonUser();
 		// Tranfiere los datos del usuario al Json
 		jsonUser.comments = this.comments;
@@ -38,11 +39,6 @@ public class User {
 	}
 
 	static public void CreateUser() {
-		/*
-		MyTextInputListener listener = new MyTextInputListener();
-		Gdx.input.getTextInput(listener, "Ingrese un nombre de usuario",
-				"Unnamed", null);
-				*/
 		User user = LoadNewUser();
 		user.save();
 	}
@@ -90,11 +86,11 @@ public class User {
 		
 		public void save(){
 			Json json = new Json();
-			FileHelper.writeFile("experimentalconfig/user.meta", json.toJson(this));
+			FileHelper.writeFile(Constants.USERFILE, json.toJson(this));
 		}
 		
 		public static JsonUser load(){
-			String savedData = FileHelper.readLocalFile("experimentalconfig/user.meta");
+			String savedData = FileHelper.readLocalFile(Constants.USERFILE);
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
 				return json.fromJson(JsonUser.class, savedData);
@@ -102,24 +98,4 @@ public class User {
 			return null;
 		}
 	}
-
-
-
-	/*
-	public static class MyTextInputListener implements TextInputListener {
-		private String text;
-
-		@Override
-		public void input(String text) {
-			this.text = text;
-			Gdx.app.debug(TAG, "Hola!" + text);
-		}
-
-		@Override
-		public void canceled() {	
-			this.text = "Sin nombre";
-		}
-	}
-	*/
-
 }
