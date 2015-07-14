@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
-import com.turin.tur.main.util.ImagesAsset;
 
 
 
