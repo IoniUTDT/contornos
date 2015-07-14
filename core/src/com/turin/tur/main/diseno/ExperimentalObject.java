@@ -22,17 +22,6 @@ public class ExperimentalObject {
 	// Constantes
 	private static final String TAG = ExperimentalObject.class.getName();
 	
-	
-	
-	/*
-	public ExperimentalObject (Sprite imagen, Sound sonido, int Id){
-		this.imagen = imagen;
-		this.sonido = sonido;
-		this.Id = Id;
-		this.name = "reemplazar";
-	}
- 	*/
-	
 	public ExperimentalObject (int Id){ // Esto carga la info desde archivo
 		this.Id = Id;
 		// Crea los recursos graficos y sonoros
@@ -83,61 +72,4 @@ public class ExperimentalObject {
 			return null;
 		}
 	}
-
-	/*
-	public static void SaveMetaData(int Id, String name, String comments, Array<String> categories) {
-		JsonMetaData metaData = new JsonMetaData();
-		metaData.Id = Id;
-		metaData.name = "Prueba";
-		metaData.comments = "Esto despues se guarda automaticamente";
-		metaData.categories = categories;
-
-		Json json = new Json();
-		FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta", json.toJson(metaData));
-	}
-	*/
-	
-	
-	
-	
-	/*
-	public JsonMetaData MetaInfo(int Id) {
-		return loadMetaData(Id);
-	}
-
-	private JsonMetaData loadMetaData(int Id) {
-		String save = readFile("experimentalsource/" + this.version + "/" + Id
-				+ ".meta");
-		if (!save.isEmpty()) {
-			Json json = new Json();
-			JsonMetaData metaData = json.fromJson(JsonMetaData.class, save);
-			return metaData;
-		}
-		Gdx.app.error(TAG,
-				"No se a podido encontrar la info del objeto experimental "
-						+ Id);
-		return null;
-	}
-	
-	
-	private String readFile(String fileName) {
-		FileHandle file = Gdx.files.internal(fileName);
-		if (file != null && file.exists()) {
-			String s = file.readString();
-			if (!s.isEmpty()) {
-				return s;
-			}
-		}
-		Gdx.app.error(TAG,
-				"No se a podido encontrar la info del objeto experimental");
-		return "";
-	}
-
-	private static void writeFile(String fileName, String s) {
-		FileHandle file = Gdx.files.local(fileName);
-		file.writeString(s, false);
-	}
-	*/
-
-
 }
