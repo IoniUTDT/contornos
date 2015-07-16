@@ -167,6 +167,7 @@ public class Constants {
 			public static final int Reservados = 20;
 			public static final int sinDatos = 0;
 			public static final int textSiguiente = 1;
+			public static final int textNull = 0;
 		}
 	}
 }

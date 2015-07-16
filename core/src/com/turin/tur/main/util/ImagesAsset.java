@@ -64,9 +64,16 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	}
 
 	public Sprite imagen(int Id) {
-		return new Sprite(this.atlas.findRegion("" + Id));
+		// return new Sprite(this.atlas.findRegion("" + Id));
+		return new Sprite (new Texture(Gdx.files.internal("experimentalsource/"
+				+  Constants.version() + "/" + Id + ".png")));
 	}
 
+	public Texture imagenFromFile(int Id) {
+		return new Texture(Gdx.files.internal("experimentalsource/"
+				+  Constants.version() + "/" + Id + ".png"));
+	}
+	
 	public Sound sonido(int Id) {
 		Sound sonido = Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"
 				+  Constants.version() + "/" + Id + ".wav"));

@@ -46,7 +46,7 @@ public class ResourcesBuilder {
 			}
 		}
 
-		Boolean makeLevels = true;
+		Boolean makeLevels = false;
 		if (makeLevels) {
 			/*
 			 * Arma el nivel Tutorial
@@ -106,6 +106,14 @@ public class ResourcesBuilder {
 		textoSiguiente.name = "Boton siguiente";
 		textoSiguiente.texto= "Continuar";
 		objetos.add(textoSiguiente);
+		
+		Texto textoBlanco = new Texto();
+		textoBlanco.id=Constants.IDs.Resources.textNull;
+		textoBlanco.comments = "Equivale a no seleccionar nada";
+		textoBlanco.categories.add(Constants.Diseno.Categorias.TEXTO);
+		textoBlanco.name = "Null";
+		textoBlanco.texto= "";
+		objetos.add(textoBlanco);
 		
 		return objetos;
 	}
