@@ -48,14 +48,14 @@ public class ExperimentalObject {
 		public String comments;
 		public Array<String> categories = new Array<String>();
 		
-		public static void createJsonMetaData (int Id, String name, String comments, Array<String> categories) {
+		public static void createJsonMetaData (String path, int Id, String name, String comments, Array<String> categories) {
 			Json json = new Json();
 			JsonMetaData jsonMetaData = new JsonMetaData();
 			jsonMetaData.Id = Id;
 			jsonMetaData.name = name;
 			jsonMetaData.comments = comments;
 			jsonMetaData.categories = categories;
-			FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta", json.toJson(jsonMetaData));			
+			FileHelper.writeFile(path + Id + ".meta", json.toJson(jsonMetaData));			
 		} 
 		
 		public void save() {

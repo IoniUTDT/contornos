@@ -125,6 +125,10 @@ public class Constants {
 				this.reproducible = reproducible;
 			}
 		}
+		
+		public enum Categorias {
+			LINEA, TUTORIAL, ANGULO, AGUDO, GRAVE, RECTO, LINEASx2, PARALELAS, noPARALELAS, CUADRILATERO, CUADRADO, RECTANGULO, ROMBO 
+		}
 	}
 	
 	// Constantes relacionadas con las cajas

@@ -1,66 +1,23 @@
-Este archivo guarda la info de todo lo que va haciendo el usuario
-com.turin.tur.main.screens.MenuScreen:Turin goes to level 1
-Hola
-com.turin.tur.main.screens.MenuScreen: Turin goes to level 1.
-com.turin.tur.main.screens.MenuScreen: Turin change name to Turambar.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
+Este archivo guarda la info de todo lo que va haciendo el usuario.
+com.turin.tur.main.screens.MenuScreen: Unnamed goes to level 1.
+
 com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
+
 com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
+
 com.turin.tur.main.logic.LevelController: Inicializado el trial 3.
+
+com.turin.tur.main.screens.MenuScreen: Unnamed goes to level 1.
+
+com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
+
+com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
+
+com.turin.tur.main.logic.LevelController: Inicializado el trial 3.
+
 com.turin.tur.main.logic.LevelController: Inicializado el trial 4.
+
 com.turin.tur.main.logic.LevelController: Inicializado el trial 5.
+
 com.turin.tur.main.logic.LevelController: Inicializado el trial 6.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 3.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 4.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 3.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 4.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 5.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 6.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 3.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 3.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 4.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 5.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 6.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
-com.turin.tur.main.screens.MenuScreen: Turambar goes to level 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
-com.turin.tur.main.logic.LevelController: Inicializado el trial 2.
+

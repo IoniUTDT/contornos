@@ -1,12 +1,10 @@
 package com.turin.tur.desktop;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.files.FileHandle;
 import com.turin.tur.ContornosMain;
 import com.turin.tur.main.util.Constants;
-import com.turin.tur.main.util.ImagesAsset;
+import com.turin.tur.main.util.ResourcesBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
@@ -17,7 +15,7 @@ public class DesktopLauncher {
 	private static boolean rebuildAtlas = false;
 	private static boolean drawDebugOutline = false;
 	private static boolean rebuildAtlasSource = false;
-	
+		
 	public static void main (String[] arg) {
 		
 		
