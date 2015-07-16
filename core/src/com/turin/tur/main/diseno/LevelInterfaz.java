@@ -24,7 +24,7 @@ public class LevelInterfaz {
 		this.levelInfo = levelInfo;
 		this.trialNumber = trialNumber;
 		if (this.trialNumber!=0) {botones.add(new BotonAnterior());}
-		if (this.trialNumber!=this.levelInfo.secuenciaTrailsId.length-1) {botones.add(new BotonSiguiente());}
+		if (this.trialNumber!=this.levelInfo.secuenciaTrailsId.size-1) {botones.add(new BotonSiguiente());}
 	}
 	
 	public void render(SpriteBatch batch) {

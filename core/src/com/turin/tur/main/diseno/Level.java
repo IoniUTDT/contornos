@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
-import com.turin.tur.main.util.ImagesAsset;
 
 public class Level {
 	
@@ -14,7 +13,7 @@ public class Level {
 	public int Id;
 	
 	// Cosas que se cargan de archivo
-	public int[] secuenciaTrailsId;
+	public Array<Integer> secuenciaTrailsId = new Array<Integer>();
 	
 	// variable del nivel
 	public int activeTrialPosition; // Posicion del trial activo
@@ -41,7 +40,7 @@ public class Level {
 	}
 
 	private void setActiveTrialId(int activeTrialPosition) {
-		if (activeTrialPosition < this.secuenciaTrailsId.length) {
+		if (activeTrialPosition < this.secuenciaTrailsId.size) {
 			this.activeTrialPosition = activeTrialPosition;
 		} else {
 			Gdx.app.error(TAG, "El nivel "+this.Id+" no posee un trial "+activeTrialPosition+". se ha resetado el nivel");
@@ -52,11 +51,11 @@ public class Level {
 	
 	public int IdTrial (int trialPosition){
 		int IdTrial;
-		if (trialPosition < this.secuenciaTrailsId.length) {
-			IdTrial = this.secuenciaTrailsId[trialPosition];
+		if (trialPosition < this.secuenciaTrailsId.size) {
+			IdTrial = this.secuenciaTrailsId.get(trialPosition);
 		} else {
 			Gdx.app.error(TAG,"El nivel "+this.Id+" no posee suficientes trial como para iniciarse en el trial numero "+trialPosition);
-			IdTrial = this.secuenciaTrailsId[0];
+			IdTrial = this.secuenciaTrailsId.get(0);
 		}
 		return IdTrial;
 	}
@@ -81,10 +80,15 @@ public class Level {
 	public static class JsonLevel {
 		public String levelTitle;
 		public int Id; // Id q identifica al level
-		public int[] trials; // Lista de ids de los trial que incluye el nivel
+		public Array<Integer> trials = new Array<Integer>(); // Lista de ids de los trial que incluye el nivel
+		
+		public static void CreateLevel (JsonLevel jsonLevel, String path){
+			Json json = new Json();
+			FileHelper.writeFile(path+"level"+jsonLevel.Id+".meta", json.toJson(jsonLevel));
+		}
 	}
 	
-	public void saveLevel(int level, int[] secuenciaTrials, String levelTitle) {
+	public void saveLevel(int level, Array<Integer> secuenciaTrials, String levelTitle) {
 		JsonLevel jsonLevel = new JsonLevel();
 		jsonLevel.Id=level;
 		jsonLevel.trials=secuenciaTrials;

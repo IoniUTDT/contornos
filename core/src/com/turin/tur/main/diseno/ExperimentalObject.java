@@ -17,7 +17,7 @@ public class ExperimentalObject {
 	public final int Id; 
 	public String name;
 	public String comments = "Aca va opcionalmente una descripcion del objeto";
-	public Array<String> categoria = new Array<String>();
+	public Array<Constants.Diseno.Categorias> categoria = new Array<Constants.Diseno.Categorias>();
 	
 	// Constantes
 	private static final String TAG = ExperimentalObject.class.getName();
@@ -46,9 +46,9 @@ public class ExperimentalObject {
 		public int Id;
 		public String name;
 		public String comments;
-		public Array<String> categories = new Array<String>();
+		public Array<Constants.Diseno.Categorias> categories = new Array<Constants.Diseno.Categorias>();
 		
-		public static void createJsonMetaData (String path, int Id, String name, String comments, Array<String> categories) {
+		public static void CreateJsonMetaData (String path, int Id, String name, String comments, Array<Constants.Diseno.Categorias> categories) {
 			Json json = new Json();
 			JsonMetaData jsonMetaData = new JsonMetaData();
 			jsonMetaData.Id = Id;

@@ -18,6 +18,7 @@ public class Trial {
 
 	// Cosas que se cargan desde archivos
 	public String title; // Titulo optativo q describe al trial
+	public String caption; // Texto que se muestra debajo
 	public TIPOdeTRIAL modo; // Tipo de trial
 	public int[] elementosId; // Lista de objetos del trial.
 	public int rtaCorrectaId; // Respuesta correcta en caso de que sea test.
@@ -81,13 +82,14 @@ public class Trial {
 	private void initTrial(int Id) {
 		Gdx.app.log(TAG, "Cargando info del trial");
 		// Carga la info en bruto
-		JsonTrial jsonLevel = JsonTrial.LoadTrial(Id);
-		this.title = jsonLevel.title;
-		this.modo = jsonLevel.modo;
-		this.elementosId = jsonLevel.elementosId;
-		this.rtaCorrectaId = jsonLevel.rtaCorrectaId;
-		this.rtaRandom = jsonLevel.rtaRandom;
-		this.distribucion = jsonLevel.distribucion;
+		JsonTrial jsonTrial = JsonTrial.LoadTrial(Id);
+		this.caption = jsonTrial.caption;
+		this.title = jsonTrial.title;
+		this.modo = jsonTrial.modo;
+		this.elementosId = jsonTrial.elementosId;
+		this.rtaCorrectaId = jsonTrial.rtaCorrectaId;
+		this.rtaRandom = jsonTrial.rtaRandom;
+		this.distribucion = jsonTrial.distribucion;
 		// Carga la info a partir de los Ids
 		for (int elemento : this.elementosId) {
 			this.elementos.add(new ExperimentalObject(elemento));
@@ -119,6 +121,7 @@ public class Trial {
 	// devuelve la info de la metadata
 
 	public static class JsonTrial {
+		public String caption; // Texto que se muestra debajo
 		public int Id; // Id q identifica al trial
 		public String title; // Titulo optativo q describe al trial
 		public TIPOdeTRIAL modo; // Tipo de trial
@@ -128,18 +131,11 @@ public class Trial {
 		public DISTRIBUCIONESenPANTALLA distribucion; // guarda las posiciones
 														// de los elementos a
 														// mostrar
-		public void save(int Id) {
-			JsonTrial jsonLevel = new JsonTrial();
-			jsonLevel.Id = 1;
-			jsonLevel.title = "nivel de prueba";
-			jsonLevel.modo = TIPOdeTRIAL.ENTRENAMIENTO;
-			jsonLevel.elementosId = new int[] { 1, 2, 3, 4, 5, 6 };
-			jsonLevel.rtaCorrectaId = 2;
-			jsonLevel.rtaRandom = false;
-			jsonLevel.distribucion = DISTRIBUCIONESenPANTALLA.BILINEALx6;
+		
 
+		public static void CreateTrial (JsonTrial jsonTrial, String path) {
 			Json json = new Json();
-			FileHelper.writeFile("experimentalconfig/" + Constants.version() + "/trial" + Id + ".meta", json.toJson(jsonLevel));
+			FileHelper.writeFile(path+"trial"+jsonTrial.Id+".meta", json.toJson(jsonTrial));
 		}
 		
 		private static JsonTrial LoadTrial(int Id) {

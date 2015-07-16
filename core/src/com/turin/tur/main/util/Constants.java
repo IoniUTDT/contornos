@@ -80,7 +80,7 @@ public class Constants {
 			LINEALx2(new float[][] {{-1.5f,0},{+1.5f,0}}),
 			BILINEALx6(new float[][] {{-1.5f,1},{0,1},{1.5f,1},{-1.5f,-1},{0,-1},{1.5f,-1}}),
 			BILINEALx4(new float[][] {{-1,1},{1,1},{-1,-1},{1,-1}}),
-			BILINEALx2(new float[][] {{-1.5f,0},{+1.5f,0}});
+			BILINEALx2(new float[][] {{-1.5f,0},{+1.5f,0}}), LINEALx1(new float[][] {{0,0}});
 			
 			public float[][] distribucion;
 			DISTRIBUCIONESenPANTALLA (final float[][] distribucion) {
@@ -127,7 +127,7 @@ public class Constants {
 		}
 		
 		public enum Categorias {
-			LINEA, TUTORIAL, ANGULO, AGUDO, GRAVE, RECTO, LINEASx2, PARALELAS, noPARALELAS, CUADRILATERO, CUADRADO, RECTANGULO, ROMBO 
+			LINEA, TUTORIAL, ANGULO, AGUDO, GRAVE, RECTO, LINEASx2, PARALELAS, noPARALELAS, CUADRILATERO, CUADRADO, RECTANGULO, ROMBO, TEXTO 
 		}
 	}
 	
@@ -158,7 +158,17 @@ public class Constants {
 			public static final String DETECTOVERLAP = "detectOverlap";
 		}
 	}
+
+	// Constantes relacionadas a IDs de cosas fijas
 	
+	public class IDs {
+		
+		public class Resources {
+			public static final int Reservados = 20;
+			public static final int sinDatos = 0;
+			public static final int textSiguiente = 1;
+		}
+	}
 }
 
 

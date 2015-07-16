@@ -96,7 +96,7 @@ public class LevelController implements InputProcessor {
 	}
 
 	private boolean isLastTrial() {
-		if (levelInfo.activeTrialPosition + 1 == levelInfo.secuenciaTrailsId.length) {
+		if (levelInfo.activeTrialPosition + 1 == levelInfo.secuenciaTrailsId.size) {
 			Gdx.app.debug(TAG, "Ultimo trial del nivel");
 			return true;
 		}
