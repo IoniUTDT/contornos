@@ -217,7 +217,7 @@ public class ResourcesBuilder {
 			angulo = MathUtils.random(180f);
 			offset = MathUtils.random(10f,30f);
 			Imagen imagen = crearImagen();
-			// SEGUIR aca
+			
 			
 			
 			
