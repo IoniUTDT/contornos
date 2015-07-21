@@ -18,19 +18,22 @@ public class ExperimentalObject {
 	public String name;
 	public String comments = "Aca va opcionalmente una descripcion del objeto";
 	public Array<Constants.Diseno.Categorias> categoria = new Array<Constants.Diseno.Categorias>();
+	public boolean noSound;
 	
 	// Constantes
 	private static final String TAG = ExperimentalObject.class.getName();
 	
 	public ExperimentalObject (int Id){ // Esto carga la info desde archivo
 		this.Id = Id;
-		// Crea los recursos graficos y sonoros
-		this.imagen = ImagesAsset.instance.imagen(Id);
-		this.sonido = ImagesAsset.instance.sonido(Id);
 		// Carga ma metadata
 		this.loadMetaData();
-		//this.descripcion = ImagesAsset.instance.MetaInfo(Id).comments;
-		//this.name = ImagesAsset.instance.MetaInfo(Id).name;
+		// Crea los recursos graficos y sonoros
+		this.imagen = ImagesAsset.instance.imagen(Id);
+		if (!this.noSound) {
+			this.sonido = ImagesAsset.instance.sonido(Id);
+		} else  {
+			this.sonido=null;
+		}
 	}
 
 	
@@ -39,23 +42,20 @@ public class ExperimentalObject {
 		this.comments = jsonMetaData.comments;
 		this.name = jsonMetaData.name;
 		this.categoria = jsonMetaData.categories;
+		this.noSound =jsonMetaData.noSound ;
 	}
 
 
 	public static class JsonMetaData {
+		public boolean noSound;
 		public int Id;
 		public String name;
 		public String comments;
 		public Array<Constants.Diseno.Categorias> categories = new Array<Constants.Diseno.Categorias>();
 		
-		public static void CreateJsonMetaData (String path, int Id, String name, String comments, Array<Constants.Diseno.Categorias> categories) {
+		public static void CreateJsonMetaData (JsonMetaData jsonMetaData, String path) {
 			Json json = new Json();
-			JsonMetaData jsonMetaData = new JsonMetaData();
-			jsonMetaData.Id = Id;
-			jsonMetaData.name = name;
-			jsonMetaData.comments = comments;
-			jsonMetaData.categories = categories;
-			FileHelper.writeFile(path + Id + ".meta", json.toJson(jsonMetaData));			
+			FileHelper.writeFile(path + jsonMetaData.Id + ".meta", json.toJson(jsonMetaData));			
 		} 
 		
 		public void save() {

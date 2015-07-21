@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
@@ -70,8 +71,10 @@ public class MenuScreen extends AbstractGameScreen {
 	    if (! Gdx.files.local(Constants.USERFILE).exists()) {User.CreateUser(); Gdx.app.debug(TAG, "Creando nuevo usuario");}
 	    user = User.Load();
 	    
+	    Level nextLevel = new Level(user.lastLevelCompletedId + 1);
+	    
 	    // Boton que lleva al nivel 1
-	    buttonL1 = new TextButton("Next level: " + (user.lastLevelCompletedId + 1), skin, "default");
+	    buttonL1 = new TextButton("Next level: " + nextLevel.levelTitle, skin, "default");
 	    buttonL1.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){

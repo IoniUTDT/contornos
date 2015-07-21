@@ -31,10 +31,8 @@ public abstract class Boxes {
 		public Sprite spr; // Guarda la imagen que se va a mostrar (se genera a partir del contenido de la caja)
 		
 		// Variables utiles para la dinamica del programa
-		public boolean alreadySelected;
 		
 		// Variables especificas de cada tipo pero que estan en la clase general porque se llaman desde afuera
-		public boolean answerActive = false; // Determina si se esta mostrando la respuesta o no
 		public boolean answer=false; // Resultado de la respuesta
 		
 		public void render(SpriteBatch batch) {
@@ -69,6 +67,13 @@ public abstract class Boxes {
 	        return id;
 	    }
 
+		public void stopSound() {
+			if (!this.contenido.noSound){
+				this.contenido.sonido.stop();
+			}
+			
+		}
+
 	}
 	
 	public static class TrainingBox extends Box {
@@ -78,7 +83,8 @@ public abstract class Boxes {
 		private float soundAvanceReproduccion; //Avance la reproduccion
 		private float soundDuracionReproduccion; //Tiempo total establecido para el sonido (ojo que no es necesariamente el tiempo total del sonido, pero se trabaja con sonidos a priori de longitud fija 
 		private Sprite soundAnimationSpr; // imagen para mostrar la animacion de reproduccion del sonido 
-
+		public boolean alreadySelected;
+		
 		public TrainingBox (ExperimentalObject contenido) {
 			
 			// Carga cosas relacionadas al contenido
@@ -127,19 +133,23 @@ public abstract class Boxes {
 
 		public void unSelect() {
 			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.Id);
-			this.runningSound = false;
-			this.contenido.sonido.stop();
-			soundAvanceReproduccion = 0; //reset the advance point of sound animation
+			if (!this.contenido.noSound) {
+				this.runningSound = false;
+				this.contenido.sonido.stop();
+				soundAvanceReproduccion = 0; //reset the advance point of sound animation
+			}
 		}
 		
 		public void select() {
 			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.Id);
 			this.alreadySelected = true;
-			this.runningSound = true;
-			this.soundAvanceReproduccion = 0;
-			Sound sonido = this.contenido.sonido;
-			waitForLoadCompleted(this.contenido.sonido);
-			sonido.play();
+			if (!this.contenido.noSound) {
+				this.runningSound = true;
+				this.soundAvanceReproduccion = 0;
+				Sound sonido = this.contenido.sonido;
+				waitForLoadCompleted(this.contenido.sonido);
+				sonido.play();
+			}
 		}
 	}
 		
@@ -150,6 +160,7 @@ public abstract class Boxes {
 		private Sprite answerUsedSprite; // Imagen con que se muestra la respuesta 
 		private Sprite answerSprTrue; // Imagen para respuestas verdaderas
 		private Sprite answerSprFalse; // Imagen para respuestas falsas
+		public boolean answerActive;
 		
 		public AnswerBox (ExperimentalObject contenido){
 			// Carga cosas relacionadas al contenido
@@ -286,7 +297,6 @@ public abstract class Boxes {
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = new Sprite (Assets.instance.imagenes.stimuliLogo);
 		
-			// this.drawStimuli=false;
 			// inicializa el tiempo de modo q se resetee apenas empieza
 			this.stimuliAvanceReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR;
 			this.stimuliDuracionReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA;	
@@ -309,17 +319,18 @@ public abstract class Boxes {
 
 		
 		protected void update(float deltaTime) {
-			stimuliAvanceReproduccion = stimuliAvanceReproduccion + deltaTime;
-			if (stimuliAvanceReproduccion > stimuliDuracionReproduccion) {
-				this.drawStimuli=false;
+			if (!this.contenido.noSound) {
+				stimuliAvanceReproduccion = stimuliAvanceReproduccion + deltaTime;
+				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion) {
+					this.drawStimuli=false;
+				}
+				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
+					this.drawStimuli=true;
+					stimuliAvanceReproduccion = 0; //reset the advance point of sound
+					waitForLoadCompleted(this.contenido.sonido);
+					this.contenido.sonido.play();
+				}
 			}
-			if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
-				this.drawStimuli=true;
-				stimuliAvanceReproduccion = 0; //reset the advance point of sound
-				waitForLoadCompleted(this.contenido.sonido);
-				this.contenido.sonido.play();
-			}
-			
 		}
 
 		public void select() {} // No hace nada

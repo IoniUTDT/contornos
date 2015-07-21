@@ -38,7 +38,7 @@ public class Trial {
 	public Array<Box> allBox = new Array<Box>();
 	
 	// Variable que tiene que ver con el estado del trial
-	boolean trialCompleted = false;
+	public boolean trialCompleted = false;
 	
 	// constantes
 	public static final String TAG = Trial.class.getName();
@@ -110,7 +110,7 @@ public class Trial {
 	public boolean checkTrialCompleted (){ // Se encarga de ver si ya se completo trial o no
 		if (modo==TIPOdeTRIAL.ENTRENAMIENTO) {
 			boolean allCheck = true;
-			for (AnswerBox box: answerBoxes) {if (box.alreadySelected==false) {allCheck=false;}}
+			for (TrainingBox box: trainigBoxes) {if (box.alreadySelected==false) {allCheck=false;}}
 			if (allCheck) {trialCompleted=true;}
 		}
 		return trialCompleted;

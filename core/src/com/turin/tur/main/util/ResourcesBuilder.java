@@ -1,8 +1,10 @@
 package com.turin.tur.main.util;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.diseno.ExperimentalObject;
+import com.turin.tur.main.diseno.ExperimentalObject.JsonMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.util.Constants.Diseno.Categorias;
@@ -46,7 +48,7 @@ public class ResourcesBuilder {
 			}
 		}
 
-		Boolean makeLevels = false;
+		Boolean makeLevels = true;
 		if (makeLevels) {
 			/*
 			 * Arma el nivel Tutorial
@@ -63,7 +65,11 @@ public class ResourcesBuilder {
 					new int[] {Constants.IDs.Resources.textSiguiente}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
 			trialsTutorial.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4, 
 					new int[] {21,22,24,25}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
-
+			trialsTutorial.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+			trialsTutorial.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+					new int[] {44,52,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+			
 			for (JsonTrial jsonTrial: trialsTutorial) {
 				tutorial.trials.add(jsonTrial.Id);
 				JsonTrial.CreateTrial(jsonTrial,"/temp/resourcesbuid/");
@@ -183,7 +189,7 @@ public class ResourcesBuilder {
 		Array<Imagen> objetos = new Array<Imagen>();
 		for (int i = 1; i < cantidad + 1; i++) {
 			Imagen imagen = crearImagen();
-			imagen.parametros.addAll(ExtremosLinea.Linea(width / 2, height / 2,
+			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2,
 					angulo * i, largo));
 			imagen.name = "Linea " + i;
 			imagen.comments = "Linea generada por secuenciaLinesAngulo para tutorial";
@@ -194,24 +200,33 @@ public class ResourcesBuilder {
 		return objetos;
 	}
 
-	/*
-	 * Crea dos rectas, la primera de angulo arbitrario, y la segunda con el
-	 * mismo angulo y uno levemente corrido Las posiciones son arbitrarias, se
-	 * crea todo primero con las dos centradas (una hacia arriba y otra hacia
-	 * abajo) y despues separadas arbitrariamente
-	 */
-
-	/*
-	 * private static Array<Imagen> secuenciaDosRectasCentradas(){
-	 * 
-	 * float largo = 80; // Largo de los segmentos float[] angulos = {0, 10, 20,
-	 * 30, 45, 60, 90}; // angulos de la primer recta float[] desviaciones = {0,
-	 * 1, 5, 10, 20}; // Desviacion de la segunda recta respecto a la primera
-	 * float offset = 10;
-	 * 
-	 * }
-	 */
-
+	private static Array<Imagen> secuenciaDosRectasCentradasVerticalParalelas(){
+	
+		/*
+		 *  Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas  
+		 */
+		
+		int cantidad = 100;
+		float largo;
+		float angulo;
+		float offset;
+		
+		Array<Imagen> objetos = new Array<Imagen>();
+		for (int i=0; i<cantidad; i++) {
+			largo = MathUtils.random(50f,90f);
+			angulo = MathUtils.random(180f);
+			offset = MathUtils.random(10f,30f);
+			Imagen imagen = crearImagen();
+			// SEGUIR aca
+			
+			
+			
+		}
+		return objetos;
+		
+	}
+	  
+	 
 	public static class Imagen {
 		int id;
 		String name;
@@ -233,7 +248,7 @@ public class ResourcesBuilder {
 		float y1;
 		float y2;
 
-		public static Array<ExtremosLinea> Linea(float xCenter, float yCenter,
+		public static ExtremosLinea Linea(float xCenter, float yCenter,
 				float angle, float length) {
 			/*
 			 * Para encontrar el origen y el fin de la linea deseada utilizo las
@@ -242,7 +257,7 @@ public class ResourcesBuilder {
 			 * angulo 0 y otro 180) Luego los roto lo necesario y los traslado a
 			 * las coordenadas del centro
 			 */
-			Array<ExtremosLinea> lineas = new Array<ExtremosLinea>();
+			
 			Vector2 V1 = new Vector2(1, 1);
 			Vector2 V2 = new Vector2(1, 1);
 			V1.setLength(length / 2);
@@ -260,8 +275,7 @@ public class ResourcesBuilder {
 			p.y1 = V1.y;
 			p.x2 = V2.x;
 			p.y2 = V2.y;
-			lineas.add(p);
-			return lineas;
+			return p;
 		}
 
 		public static Array<ExtremosLinea> Angulo(float xVertice,
@@ -351,8 +365,13 @@ public class ResourcesBuilder {
 		}
 
 		private static void createMetadata(Imagen imagen) {
-			ExperimentalObject.JsonMetaData.CreateJsonMetaData(tempPath,
-					imagen.id, imagen.name, imagen.comments, imagen.categories);
+			JsonMetaData jsonMetaData = new JsonMetaData();
+			jsonMetaData.Id=imagen.id;
+			jsonMetaData.name=imagen.name;
+			jsonMetaData.comments=imagen.comments;
+			jsonMetaData.categories=imagen.categories;
+			jsonMetaData.noSound=false;
+			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData,tempPath);
 
 		}
 
@@ -369,8 +388,13 @@ public class ResourcesBuilder {
 		}
 		
 		private static void createMetadataText(Texto text) {
-			ExperimentalObject.JsonMetaData.CreateJsonMetaData(tempPath,
-					text.id, text.name, text.comments, text.categories);
+			JsonMetaData jsonMetaData = new JsonMetaData();
+			jsonMetaData.Id=text.id;
+			jsonMetaData.name=text.name;
+			jsonMetaData.comments=text.comments;
+			jsonMetaData.categories=text.categories;
+			jsonMetaData.noSound=true;
+			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData,tempPath);
 
 		}
 	}

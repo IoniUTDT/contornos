@@ -7,6 +7,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.turin.tur.main.diseno.Boxes.AnswerBox;
+import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.LevelInterfaz;
 import com.turin.tur.main.diseno.TouchInfo;
@@ -40,6 +42,7 @@ public class LevelController implements InputProcessor {
 	public boolean nextTrialPending = false; // Genera la señal de que hay que cambiar de trial (para esperar a que finalicen cuestiones de animacion) 
 	public float timeInLevel = 0; // Tiempo general dentro del nivel.
 	public float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
+	boolean elementoSeleccionado = false; // Sin seleccion
 	
 	public LevelController(Game game, int levelNumber, int trialNumber) {
 		this.game = game;
@@ -73,14 +76,20 @@ public class LevelController implements InputProcessor {
 		timeInTrial = timeInTrial + deltaTime;
 		
 		// Procesa cambios de trial si los hay pendientes
+		if (this.trialActive.trialCompleted) {
+				this.nextTrialPending=true;
+			}
 		this.changeTrial();
 	}
 
 	private void changeTrial() {
 		if (this.nextTrialPending) {
 			boolean wait = false;
-			for (Box box :this.trialActive.answerBoxes) {
+			for (AnswerBox box :this.trialActive.answerBoxes) {
 				if (box.answerActive) {wait=true;}
+			}
+			for (TrainingBox box :this.trialActive.trainigBoxes) {
+				if (box.runningSound) {wait=true;}
 			}
 			if (!wait) {
 				this.nextTrialPending=false;
@@ -92,7 +101,6 @@ public class LevelController implements InputProcessor {
 
 	private void completeLevel() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	private boolean isLastTrial() {
@@ -137,7 +145,7 @@ public class LevelController implements InputProcessor {
 
 	private void stopSound() {
 		for (Box box: this.trialActive.allBox) {
-			box.contenido.sonido.stop();
+			box.stopSound();
 		}
 	}
 
@@ -167,7 +175,7 @@ public class LevelController implements InputProcessor {
 
 	private void procesarToque(TouchInfo touchData) {
     	if (touchData.actionToDo == Constants.Touch.ToDo.DETECTOVERLAP) {
-	    	boolean elementoSeleccionado = false; // Sin seleccion
+	    	elementoSeleccionado = false; // Sin seleccion
 	    	if (touchSecuence.size > 0) {
 	    		touchData.lastTouchBox = touchSecuence.peek().thisTouchBox;
 	    	}
@@ -213,7 +221,7 @@ public class LevelController implements InputProcessor {
 				if (this.trialActive.modo == TIPOdeTRIAL.TEST) {
 					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) { // Significa q se selecciono la opcion correcta
 						touchData.thisTouchBox.answer=true;
-						this.trialActive.stimuliBox.contenido.sonido.stop();
+						this.trialActive.stimuliBox.stopSound();
 			    		this.nextTrialPending=true;
 					}
 				}
@@ -225,12 +233,13 @@ public class LevelController implements InputProcessor {
 			for (Botones boton:this.levelInterfaz.botones) {
 				if (boton.imagen.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 					Gdx.app.debug(TAG, "Ha tocado el boton " + boton.getClass().getName());
-					
+					elementoSeleccionado = true;
 					if (boton.getClass() == LevelInterfaz.BotonSiguiente.class){ this.goToNextTrial();}
 					if (boton.getClass() == LevelInterfaz.BotonAnterior.class){ this.goToPreviousTrial();}
 	
 				}
 			}
+			this.trialActive.checkTrialCompleted();
     	}		
 	}
 

@@ -95,6 +95,7 @@ public class Constants {
 			}
 		}
 	
+		/*
 		public enum TIPOdeCAJA {
 			
 			/*
@@ -105,7 +106,7 @@ public class Constants {
 			 * Las de estimulo son las que sirven para generar un estimulo auditivo (no visual) que el usuario deba identificar ya sea en una categoria o buscando la imagen correspondiente. Estas cajas se reproducen solas y no son seleccionables
 			 * 
 			 */
-			
+			/*
 			ENTRENAMIENTO(true,true,false,false,true),
 			IMAGEN(true,true,true,false,false), 
 			ESTIMULO(false,false,false,true,true);   
@@ -125,6 +126,7 @@ public class Constants {
 				this.reproducible = reproducible;
 			}
 		}
+		*/
 		
 		public enum Categorias {
 			LINEA, TUTORIAL, ANGULO, AGUDO, GRAVE, RECTO, LINEASx2, PARALELAS, noPARALELAS, CUADRILATERO, CUADRADO, RECTANGULO, ROMBO, TEXTO 

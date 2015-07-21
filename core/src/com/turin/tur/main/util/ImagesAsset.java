@@ -29,6 +29,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	// Variables creadas
 
 	public void init(AssetManager assetManager) {
+		/*
 		this.assetManager = assetManager;
 		// set asset manager error handler
 		assetManager.setErrorListener(this);
@@ -43,12 +44,14 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 			Gdx.app.debug(TAG, "asset: " + a);
 		}
 
-		this.atlas = assetManager.get("experimentalsource/" +  Constants.version() + "/images.pack.atlas");
+		// this.atlas = assetManager.get("experimentalsource/" +  Constants.version() + "/images.pack.atlas");
 		// enable texture filtering for pixel smoothing
-		for (Texture t : atlas.getTextures()) {
-			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		}
+		//for (Texture t : atlas.getTextures()) {
+		//	t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		//}
 		// create game resource objects
+		 * 
+		 */
 	}
 
 	@Override
@@ -65,8 +68,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 
 	public Sprite imagen(int Id) {
 		// return new Sprite(this.atlas.findRegion("" + Id));
-		return new Sprite (new Texture(Gdx.files.internal("experimentalsource/"
-				+  Constants.version() + "/" + Id + ".png")));
+		return new Sprite (new Texture(Gdx.files.internal("experimentalsource/"	+  Constants.version() + "/" + Id + ".png")));
 	}
 
 	public Texture imagenFromFile(int Id) {
