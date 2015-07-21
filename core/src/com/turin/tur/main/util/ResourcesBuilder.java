@@ -19,6 +19,12 @@ public class ResourcesBuilder {
 	 * de libgdx.
 	 */
 
+	public static class Prueba {
+		static String title="chau!";
+		static String author="hola";
+	}
+	
+	
 	static int contadorDeRecursos = Constants.IDs.Resources.Reservados;
 	static int contadorLevels = 0;
 	static int contadorTrials = 0;
@@ -28,7 +34,7 @@ public class ResourcesBuilder {
 	
 	public static void buildNewSVG() {
 
-		Boolean elements = true;
+		Boolean elements = false;
 		if (elements) {
 			
 			// Crea los objetos reservados (por ahora textos de botones y categorias)
@@ -50,7 +56,7 @@ public class ResourcesBuilder {
 			}
 		}
 
-		Boolean makeLevels = true;
+		Boolean makeLevels = false;
 		if (makeLevels) {
 			/*
 			 * Arma el nivel Tutorial

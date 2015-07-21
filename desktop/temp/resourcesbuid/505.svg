@@ -1,18 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">  <image id="image0" width="100" height="100" x="0" y="0"
-    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAQAAADa613fAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
-AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZ
-cwAAAFoAAABaAHAjuH0AAAAHdElNRQffBxUNIChSsmDsAAABd0lEQVR42u3Wr0vccRzH8ec5UXE4
-xV8gk8GGYThBmGARNMxg0Gg1Wi9aL1q/0WoUTAsLEwYiGAwHK+JgKAgi6BCRHedu+rIY7O95b268
-Hp8/4PP8fNILzMzMzMzMzMzMWt0Q24xnR/wLBaJBQX92SNQABX8RN1TozI6J+sguQvxgOTslbolj
-hNhhIjslqps1bhANNhjMjol6zSb3iF+Uac+OiZpmHyEOWchOiWpjhXOE+My77Jiol1SoI24peJUd
-EzXGFkKcsUpbdkzUJ74jxAEz2SlR7axygbhnizfZMVH9FDQQv6nQlR0T9Z4vCHHKCqXsmKglfiLE
-NyazU6I6KHONuGOT4eyYqBE2uENcsdb603+KPYQ4YjE7JarEMicI8ZUP2TFR3VSoIf5Q0JsdEzX6
-OP0vKfMiOyZqjipCVJnNTol6Ov3fZsdE9bFOHVFjnZ5mXKgmnPnnf0YJNeGzWn6NmZmZmZmZmZmZ
-mZmZmZmZmZmZ2X/nAd6rlYJLu9ApAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTA3LTE2VDE1OjEy
-OjE3LTAzOjAwJ0OumAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0wNy0yMVQxMzozMjo0MC0wMzow
-MI2z4yMAAABedEVYdHN2ZzpiYXNlLXVyaQBmaWxlOi8vL0U6L0lvbmkvRHJvcGJveC9Qcm9ncmFt
-YWNpb24vQ29udG9ybm9zL2Rlc2t0b3AvdGVtcC9yZXNvdXJjZXNidWlkLzUwNS5zdmf8nn2BAAAA
-AElFTkSuQmCC" />
+<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version 1.1. Este elementos es el numero 505 de la serie actual-->
+<svg xmlns="http://www.w3.org/2000/svg" height="100" width="100">
+<line x1="50.0" y1="50.0" x2="0.0" y2="49.999996" stroke-width="2" stroke="black" />
+<line x1="50.0" y1="50.0" x2="6.6987305" y2="25.000002" stroke-width="2" stroke="black" />
 </svg>

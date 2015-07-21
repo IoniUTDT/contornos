@@ -1,24 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">  <image id="image0" width="100" height="100" x="0" y="0"
-    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAQAAADa613fAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
-AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZ
-cwAAAFoAAABaAHAjuH0AAAAHdElNRQffBxUNICUsAxxRAAACy0lEQVR42u3ZS0hUcRTH8a8vijIJ
-wiiHogeRk0mLqIwgaJM9BIOUQKGg0k1Bi8qW1bJWUdEiWmQvpCDptYsMWrQxjQyKSiUoeohED3XK
-mTltypyace5jrmeM81nNvff/+B24c+f+/wPGGGOMMcYYY4wxxhhjjDHGGGOMMcYYY0yWKaaeadoh
-/AshCLfJ0w7i10aECMI57SB+NSFcYQBhr3YUfy4i7GIrcaJUaYfx4zHCSuAwwheWasfxqoAIMaYC
-OVxC6GWmdiRvliC8+vV5Mg8RHjBJO5QX2xBaR45m8RrhfBAT5QZcSDnwZOToPdV8YwdNAc8agJsI
-NQlnNhElxhbtYG71Iiz+69whhEFWaEdzo4g4g0leTs4ivCWkHc+51QiPkpwvoA2hnSnaAZ1qTPmM
-msFLhGvkaEd05hTC/hTXwnxCOKId0Zn7COtTXq1kmDj12iGd6EeYPcb1fQhDVGjHTCeE8DFNmzMI
-75irHXVsGxDupWlTwF2EpxT5nSzIV5RyoCtNm2FqeUEZLdm8FL6AsNtBuwX0IRzXjptaJ8IqRy3X
-8h2hUTtwcvlEiFHosPVOhB+s0w6dTBih20X7Ewj9LNKO/a/EJVV6edxCeMZ0b9MF99Ry8swaLUYd
-XZRylfzAMnlyA6HWZZ95fEA4rR09UQ9Cqetea4gg7NEO/0cRcYY83STbEaJs1i7gtwqEDo99jyF8
-zpatvAaEZo99c2lF6KHYXadguH1mjRanjnbmcz0btvLaECp99C/hTVBbee6kW1Klt5wBhIO6ZZQg
-9PkepYY4Mao1C6lEaMvAOEcRvrJMr5ADCCczME4Ol3W38poRGjIyUiGdCC1ahXQgGdsbmcMdSnTK
-yGeIuOMlVRYLI/SM96RB/LIn/rkzwQvx+npihQShGyGsHcK/QmIel1S+ZP7WKiOX50QnfiFK35D/
-ppDMC1HFwvGf9icdK72zPFjtcwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0wNy0xNlQxNToxMjox
-NS0wMzowMLDcv7EAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMDctMjFUMTM6MzI6MzctMDM6MDBC
-0dS0AAAAXnRFWHRzdmc6YmFzZS11cmkAZmlsZTovLy9FOi9Jb25pL0Ryb3Bib3gvUHJvZ3JhbWFj
-aW9uL0NvbnRvcm5vcy9kZXNrdG9wL3RlbXAvcmVzb3VyY2VzYnVpZC8yMDguc3ZnwamHvgAAAABJ
-RU5ErkJggg==" />
+<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version 1.1. Este elementos es el numero 208 de la serie actual-->
+<svg xmlns="http://www.w3.org/2000/svg" height="100" width="100">
+<line x1="50.0" y1="50.0" x2="82.13938" y2="88.30222" stroke-width="2" stroke="black" />
+<line x1="50.0" y1="50.0" x2="41.31759" y2="99.24039" stroke-width="2" stroke="black" />
 </svg>
