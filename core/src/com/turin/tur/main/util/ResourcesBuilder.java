@@ -28,7 +28,7 @@ public class ResourcesBuilder {
 	
 	public static void buildNewSVG() {
 
-		Boolean elements = false;
+		Boolean elements = true;
 		if (elements) {
 			
 			// Crea los objetos reservados (por ahora textos de botones y categorias)
@@ -41,6 +41,8 @@ public class ResourcesBuilder {
 			objetos.addAll(secuenciaLineasVertical()); // Agrega las lineas
 			objetos.addAll(secuenciaLinesAngulo()); // Agrega las lineas con angulo
 			objetos.addAll(secuenciaAngulos()); // Agrega los angulos
+			objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
+			objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
 			
 			// Crea los archivos correspondientes
 			for (Imagen im : objetos) {
@@ -217,15 +219,46 @@ public class ResourcesBuilder {
 			angulo = MathUtils.random(180f);
 			offset = MathUtils.random(10f,30f);
 			Imagen imagen = crearImagen();
-			
-			
-			
-			
+			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 + offset, angulo, largo)); // La primer linea
+			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 - offset, angulo, largo)); // La segunda linea
+			imagen.name = "Rectas paralelas random, imagen numero " + i + " de la secuencia creada por secuenciaDosRectasCentradasVerticalParalelas";
+			imagen.comments="Parametros: "+"Largo: "+largo+" Angulo: "+angulo+" Offset: +-"+offset;
+			imagen.categories.add(Constants.Diseno.Categorias.PARALELAS);
+			objetos.add(imagen);
 		}
 		return objetos;
 		
 	}
 	  
+	private static Array<Imagen> secuenciaDosRectasCentradasVerticalNoParalelas(){
+		
+		/*
+		 *  Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas  
+		 */
+		
+		int cantidad = 100;
+		float largo;
+		float angulo1;
+		float angulo2;
+		float offset;
+		
+		Array<Imagen> objetos = new Array<Imagen>();
+		for (int i=0; i<cantidad; i++) {
+			largo = MathUtils.random(50f,90f);
+			angulo1 = MathUtils.random(180f);
+			angulo2 = angulo1 + MathUtils.random(10f,180f);
+			offset = MathUtils.random(10f,30f);
+			Imagen imagen = crearImagen();
+			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 + offset, angulo1, largo)); // La primer linea
+			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 - offset, angulo2, largo)); // La segunda linea
+			imagen.name = "Rectas no paralelas random, imagen numero " + i + " de la secuencia creada por secuenciaDosRectasCentradasVerticalNoParalelas";
+			imagen.comments="Parametros: "+" Largo: "+largo+" Angulo1: "+angulo1+" Angulo2: "+angulo2+" Offset: "+offset;
+			imagen.categories.add(Constants.Diseno.Categorias.noPARALELAS);
+			objetos.add(imagen);
+		}
+		return objetos;
+		
+	}
 	 
 	public static class Imagen {
 		int id;
