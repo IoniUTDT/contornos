@@ -55,6 +55,7 @@ public class LevelController implements InputProcessor {
 		this.trialActive = new Trial (this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
 		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition, this.trialActive);
 		this.timeInTrial=0;
+		this.nextTrialPending=false;
 		String logText = TAG + ": Inicializado el trial " + this.trialActive.Id + ".\r\n";
 		FileHelper.appendFile(Constants.USERLOG, logText);
 	}

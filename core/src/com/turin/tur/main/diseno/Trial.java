@@ -139,7 +139,7 @@ public class Trial {
 		}
 		
 		private static JsonTrial LoadTrial(int Id) {
-			String savedData = FileHelper.readFile("experimentalconfig/"+  Constants.version() + "/trial" + Id + ".meta");
+			String savedData = FileHelper.readFile("experimentalsource/"+  Constants.version() + "/trial" + Id + ".meta");
 			
 			if (!savedData.isEmpty()) {
 				Json json = new Json();

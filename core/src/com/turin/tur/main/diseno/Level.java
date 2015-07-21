@@ -67,7 +67,7 @@ public class Level {
 	 */
 	
 	private JsonLevel loadLevel(int level) {
-		String savedData = FileHelper.readFile("experimentalconfig/"+ Constants.version() + "/level" + level + ".meta");
+		String savedData = FileHelper.readFile("experimentalsource/"+ Constants.version() + "/level" + level + ".meta");
 		if (!savedData.isEmpty()) {
 			Json json = new Json();
 			return json.fromJson(JsonLevel.class, savedData);
@@ -94,6 +94,6 @@ public class Level {
 		jsonLevel.trials=secuenciaTrials;
 		jsonLevel.levelTitle=levelTitle;
 		Json json = new Json();
-		FileHelper.writeFile("experimentalconfig/" + Constants.version()+ "/level" + level + ".meta", json.toJson(jsonLevel));
+		FileHelper.writeFile("experimentalsource/" + Constants.version()+ "/level" + level + ".meta", json.toJson(jsonLevel));
 	}	
 }

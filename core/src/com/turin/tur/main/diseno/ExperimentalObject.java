@@ -36,7 +36,6 @@ public class ExperimentalObject {
 		}
 	}
 
-	
 	private void loadMetaData() {
 		JsonMetaData jsonMetaData = JsonMetaData.Load(this.Id);
 		this.comments = jsonMetaData.comments;

@@ -21,7 +21,7 @@ import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
-import com.turin.tur.main.util.ResourcesBuilder.Prueba;
+import com.turin.tur.main.util.ResourcesBuilder.comments;
 
 public class MenuScreen extends AbstractGameScreen {
 
@@ -105,7 +105,7 @@ public class MenuScreen extends AbstractGameScreen {
 
 				final Json json = new Json();
 
-				Prueba prueba = new Prueba();
+				comments prueba = new comments();
 
 				String requestJson = json.toJson(prueba); // this is just an
 															// example
@@ -114,7 +114,8 @@ public class MenuScreen extends AbstractGameScreen {
 				final String url = "http://localhost:3000/posts";
 				request.setUrl(url);
 
-				request.setContent(requestJson);
+				request.setContent("");
+				// request.setContent(requestJson);
 
 				request.setHeader("Content-Type", "application/json");
 				request.setHeader("Accept", "application/json");

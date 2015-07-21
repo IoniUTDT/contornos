@@ -19,9 +19,8 @@ public class ResourcesBuilder {
 	 * de libgdx.
 	 */
 
-	public static class Prueba {
-		static String title="chau!";
-		static String author="hola";
+	public static class comments {
+		static String body="chau!";
 	}
 	
 	
@@ -56,7 +55,7 @@ public class ResourcesBuilder {
 			}
 		}
 
-		Boolean makeLevels = false;
+		Boolean makeLevels = true;
 		if (makeLevels) {
 			/*
 			 * Arma el nivel Tutorial
@@ -76,7 +75,12 @@ public class ResourcesBuilder {
 			trialsTutorial.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
 					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
 			trialsTutorial.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {44,52,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+					new int[] {44,51,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+			trialsTutorial.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+					new int[] {181,182,186,188,191,198}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+			trialsTutorial.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+					new int[] {216,217,226,227,228,230}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+			
 			
 			for (JsonTrial jsonTrial: trialsTutorial) {
 				tutorial.trials.add(jsonTrial.Id);
@@ -134,7 +138,7 @@ public class ResourcesBuilder {
 	
 	private static Array<Imagen> secuenciaAngulos() {
 		float largo = 50;
-		int cantidad = 36;
+		int cantidad = 18;
 		float shiftAngulo = 360 / cantidad;
 
 		Array<Imagen> objetos = new Array<Imagen>();
@@ -214,7 +218,7 @@ public class ResourcesBuilder {
 		 *  Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas  
 		 */
 		
-		int cantidad = 100;
+		int cantidad = 30;
 		float largo;
 		float angulo;
 		float offset;
@@ -242,7 +246,7 @@ public class ResourcesBuilder {
 		 *  Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas  
 		 */
 		
-		int cantidad = 100;
+		int cantidad = 30;
 		float largo;
 		float angulo1;
 		float angulo2;
