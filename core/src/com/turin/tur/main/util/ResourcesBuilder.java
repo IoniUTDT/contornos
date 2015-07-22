@@ -55,7 +55,7 @@ public class ResourcesBuilder {
 			}
 		}
 
-		Boolean makeLevels = true;
+		Boolean makeLevels = false;
 		if (makeLevels) {
 			/*
 			 * Arma el nivel Tutorial
@@ -63,31 +63,51 @@ public class ResourcesBuilder {
 
 			// Crea el nivel tutorial
 			JsonLevel tutorial = crearLevel();
-			tutorial.Id = 1;
 			tutorial.levelTitle = "Tutorial";
 
-			Array<JsonTrial> trialsTutorial = new Array<JsonTrial>();
+			
 			// Ahora vamos a ir creando los trials
-			trialsTutorial.add(crearTrial("Bienvenido al juego", "Toque el boton para continuar", DISTRIBUCIONESenPANTALLA.LINEALx1, 
+			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para continuar", DISTRIBUCIONESenPANTALLA.LINEALx1, 
 					new int[] {Constants.IDs.Resources.textSiguiente}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
-			trialsTutorial.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4, 
+			tutorial.jsonTrials.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4, 
 					new int[] {21,22,24,25}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
-			trialsTutorial.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
 					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
-			trialsTutorial.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+			tutorial.jsonTrials.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
 					new int[] {44,51,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
-			trialsTutorial.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+			tutorial.jsonTrials.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
 					new int[] {181,182,186,188,191,198}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
-			trialsTutorial.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
+			tutorial.jsonTrials.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
 					new int[] {216,217,226,227,228,230}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
 			
+			tutorial.build();
 			
-			for (JsonTrial jsonTrial: trialsTutorial) {
-				tutorial.trials.add(jsonTrial.Id);
-				JsonTrial.CreateTrial(jsonTrial,"/temp/resourcesbuid/");
-			}
 			
-			JsonLevel.CreateLevel(tutorial, "/temp/resourcesbuid/");
+
+			/*
+			 *  Arma el nivel 1
+			 */
+		
+			JsonLevel level1 = crearLevel();
+			level1.levelTitle = "Primer desafio: dificultad facil";
+			
+
+			// Ahora vamos a ir creando los trials
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 27, false));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 208, false));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 22, false));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 40, false));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 46, false));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 66, false));
+			
+			level1.build();	
+			
 		}
 
 	}
@@ -110,7 +130,9 @@ public class ResourcesBuilder {
 	private static JsonLevel crearLevel() {
 		// Crea un JsonLevel y aumenta en 1 el contador de niveles
 		contadorLevels += 1;
-		return new JsonLevel();
+		JsonLevel jsonLevel = new JsonLevel();
+		jsonLevel.Id = contadorLevels;
+		return jsonLevel;
 	}
 
 	private static Array<Texto> objetosTexto() {

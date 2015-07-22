@@ -101,7 +101,11 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void completeLevel() {
-		// TODO Auto-generated method stub
+		if (this.user.lastLevelCompletedId < Constants.NUMERODENIVELES - 1)
+			{this.user.lastLevelCompletedId += 1;}
+		this.user.save();
+		this.saveTouches();
+		this.backToMenu();
 	}
 
 	private boolean isLastTrial() {

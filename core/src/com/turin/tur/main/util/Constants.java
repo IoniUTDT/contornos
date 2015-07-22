@@ -60,6 +60,8 @@ public class Constants {
 
 	public static final String TOUCHLOG = "logs/touchs.log";
 
+	public static final int NUMERODENIVELES = 2; // Nota esto es temporal, hay que implementar una clase session que maneje todas las cuestiones globales del juego
+
 
 
 	// Constantes relacionadas con el diseno de experimentos
