@@ -36,7 +36,7 @@ public class Constants {
 			"images/uiskin.atlas";
 	// Location of description file for skins
 	public static final String SKIN_LIBGDX_UI =
-			"test/uiskin.json";
+			"skins/uiskin.json";
 
 	// Conjunto de configuraciones
 	public static final int NUMERO_ELEMENTOS = 6;

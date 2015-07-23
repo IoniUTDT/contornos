@@ -72,7 +72,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	
 	public Sound sonido(int Id) {
 		Sound sonido = Gdx.audio.newSound(Gdx.files.internal("experimentalsource/"
-				+  Constants.version() + "/" + Id + ".wav"));
+				+  Constants.version() + "/" + Id + ".mp3"));
 		return sonido;
 	}
 }
