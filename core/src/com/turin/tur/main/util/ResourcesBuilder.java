@@ -20,7 +20,10 @@ public class ResourcesBuilder {
 	 */
 
 	public static class comments {
-		static String body="chau!";
+		public String body = "chau!";
+		
+		public comments(){
+		}
 	}
 	
 	

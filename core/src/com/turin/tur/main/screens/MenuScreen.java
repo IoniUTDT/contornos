@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Json;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.User;
+import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ResourcesBuilder.comments;
@@ -103,20 +104,24 @@ public class MenuScreen extends AbstractGameScreen {
 				 * Zona de prueba
 				 */
 
-				final Json json = new Json();
 
-				comments prueba = new comments();
+				User user = new User();
+				user.name = "Unnamed";
+				user.id = 1;
+				user.comments = "Usuario generado automaticamente";
+				user.lastLevelCompletedId = 0;
+				Json json = new Json();
 
-				String requestJson = json.toJson(prueba); // this is just an
-															// example
+				String requestJson = "{name:Unnamed,comments:Usuario generado automaticamente}";
 
 				Net.HttpRequest request = new Net.HttpRequest(HttpMethods.POST);
 				final String url = "http://localhost:3000/posts";
 				request.setUrl(url);
+				
+				
+				request.setContent(requestJson);
 
-				request.setContent("");
-				// request.setContent(requestJson);
-
+				Gdx.app.debug(TAG, requestJson);
 				request.setHeader("Content-Type", "application/json");
 				request.setHeader("Accept", "application/json");
 
@@ -129,6 +134,7 @@ public class MenuScreen extends AbstractGameScreen {
 								int statusCode = httpResponse.getStatus()
 										.getStatusCode();
 								if (statusCode != HttpStatus.SC_OK) {
+									Gdx.app.debug(TAG, httpResponse.getResultAsString());
 									System.out.println("Request Failed");
 									return;
 								}
