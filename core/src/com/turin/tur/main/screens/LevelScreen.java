@@ -3,6 +3,8 @@ package com.turin.tur.main.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.turin.tur.ContornosMain;
+import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.logic.LevelController;
 import com.turin.tur.main.logic.LevelRenderer;
 
@@ -20,9 +22,9 @@ public class LevelScreen extends AbstractGameScreen  {
 	
 	private boolean paused;
 	
-	public LevelScreen (Game game, int Id) {
+	public LevelScreen (Game game, int level) {
 		super(game);
-		this.levelNumber=Id;
+		this.levelNumber=level;
 	}
 
 	@Override

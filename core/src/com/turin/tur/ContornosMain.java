@@ -5,6 +5,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.ImagesAsset;
@@ -15,6 +16,7 @@ public class ContornosMain extends Game {
 	
 	private static final String TAG = ContornosMain.class.getName();
 	private static boolean buildResources = true;
+	public Session session;
 	
 	@Override
 	public void create () {
@@ -28,8 +30,11 @@ public class ContornosMain extends Game {
 		// Load assets
 		Assets.instance.init(new AssetManager());
 		ImagesAsset.instance.init(new AssetManager());
-		// Start game at menu screen
+		
+		// Inicializa la session y el juego
+		this.session = new Session();
 		setScreen(new MenuScreen(this));
 	}
+	
 	
 }

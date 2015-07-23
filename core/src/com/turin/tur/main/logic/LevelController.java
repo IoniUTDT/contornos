@@ -45,7 +45,7 @@ public class LevelController implements InputProcessor {
 	boolean elementoSeleccionado = false; // Sin seleccion
 	
 	public LevelController(Game game, int levelNumber, int trialNumber) {
-		this.game = game;
+		this.game=game;
 		this.levelInfo = new Level(levelNumber);
 		this.initCamera();
 		this.initTrial();

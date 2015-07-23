@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.MathUtils;
 public class Constants {
 
 	// Version of game; Es importante porque dentro de una version (notada por la parte entera) se respeta compatibilidad de todos los identificadores. al cambiar la version no se cargan los datos viejo ni las estructuras viejas
-	public static final float VERSION = 1.1f; 
+	public static final float VERSION = 1.1f;
+
+	 
 
 	
 	// Version of game for internal use 
@@ -38,6 +40,9 @@ public class Constants {
 	public static final String SKIN_LIBGDX_UI =
 			"skins/uiskin.json";
 
+	// Localizacion de archivos
+	public static String resourcesPath="experimentalsource"+"/"+version()+"/";
+	
 	// Conjunto de configuraciones
 	public static final int NUMERO_ELEMENTOS = 6;
 	public static final float LADO_CUADROS = 1;
@@ -140,8 +145,8 @@ public class Constants {
 		public static final float TAMANO = 1; //tamaño de la caja
 		public static final float TAMANO_ESTIMULO = 2; //tamaño de la caja
 		public static final float DURACION_REPRODUCCION_PREDETERMINADA = 5; // medida en segundos
-		public static final float TAMANO_CONTORNO_X = 0.2f;
-		public static final float TAMANO_CONTORNO_Y = 0.02f;
+		public static final float TAMANO_CONTORNO_X = 0.02f;
+		public static final float TAMANO_CONTORNO_Y = 0.1f;
 		public static final float SHIFT_MODO_SELECCIONAR = 1.5f;
 		public static final float SHIFT_ESTIMULO_MODO_SELECCIONAR = -2.5f;
 		public static final float DELAY_ESTIMULO_MODO_SELECCIONAR = 2f;
