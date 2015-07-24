@@ -14,9 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.turin.tur.main.diseno.Level;
+import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
@@ -34,12 +36,19 @@ public class MenuScreen extends AbstractGameScreen {
 	private Stage stage;
 	private Table table;
 	private TextButton buttonUserName;
-	private TextButton buttonL1;
+	private Array<TextButton> levelButtons = new Array<TextButton>();
 
 	public User user;
+	public Session session;
 	
-	public MenuScreen(Game game) {
+	// Variables para funcionamiento interno
+	int levelIterator;
+	
+	
+	public MenuScreen(Game game, Session session) {
 		super(game);
+		this.session=session;
+		this.user = this.session.user;
 	}
 
 	@Override
@@ -61,14 +70,7 @@ public class MenuScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 
-		// Chequea si el usuario ya existe o si es la primera vez
-		if (!Gdx.files.local(Constants.USERFILE).exists()) {
-			User.CreateUser();
-			Gdx.app.debug(TAG, "Creando nuevo usuario");
-		}
-		user = User.Load();
-		
-		
+		// Crea las cosas que tienen que ver con los graficos.
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
@@ -78,6 +80,33 @@ public class MenuScreen extends AbstractGameScreen {
 		shapeRenderer = new ShapeRenderer();
 		skin = new Skin(Gdx.files.internal(Constants.SKIN_LIBGDX_UI));
 		
+		// Crea los botones de los niveles
+		
+		Array<Integer> levelIteration = new Array<Integer>();
+		for (int i=1; i < this.session.numberOfLevels+1; i++) {
+			levelIteration.add(i);
+		}
+		for (final int levelIterator : levelIteration) {
+			Level level = new Level(levelIterator);
+			TextButton button = new TextButton("Level: "+ level.levelTitle, skin, "default");
+			button.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					
+					goToLevelLog(levelIterator); // CORREGIR hay que hacer que tome de parametro el nivel
+					game.setScreen(new LevelScreen(game,levelIterator, session));
+				}
+			});
+			if (session.user.levelsCompleted.contains(levelIterator, false)) {
+				button.setColor(1, 0, 0, 1);
+			} else {
+				button.setColor(0, 1, 0, 1);
+			}
+			levelButtons.add(button);
+			Gdx.app.debug(TAG, "agregado boton" + button.getText());
+		}
+		
+		/*
 		Level nextLevel = new Level(this.user.lastLevelCompletedId + 1);
 
 		// Boton que lleva al nivel 1
@@ -87,12 +116,14 @@ public class MenuScreen extends AbstractGameScreen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				goToLevelLog();
-				game.setScreen(new LevelScreen(game,user.lastLevelCompletedId+1));
+				game.setScreen(new LevelScreen(game,user.lastLevelCompletedId+1, session));
 			}
 		});
 
+		 */
+		
 		// Boton que carga el nombre del usuario y permite modificarlo
-		buttonUserName = new TextButton(this.user.name, skin, "default");
+		buttonUserName = new TextButton("Usuario: "+this.user.name, skin, "default");
 		buttonUserName.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -101,7 +132,7 @@ public class MenuScreen extends AbstractGameScreen {
 				 * Zona de prueba
 				 */
 
-
+				/*
 				User user = new User();
 				user.name = "Unnamed";
 				user.id = 1;
@@ -172,15 +203,19 @@ public class MenuScreen extends AbstractGameScreen {
 		// Arma el menu
 		table.add(buttonUserName);
 		table.row();
-		table.add(buttonL1);
+		for (TextButton button : levelButtons) {
+			table.add(button);
+			table.row();
+		}
+		
 
 		Gdx.app.debug(TAG, "Menu cargado");
 
 	}
 
-	protected void goToLevelLog() {
+	protected void goToLevelLog(int levelId) {
 		String logText = TAG + ": " + this.user.name + " goes to level "
-				+ (this.user.lastLevelCompletedId + 1) + ".\r\n";
+				+ levelId + ".\r\n";
 		FileHelper.appendFile(Constants.USERLOG, logText);
 	}
 

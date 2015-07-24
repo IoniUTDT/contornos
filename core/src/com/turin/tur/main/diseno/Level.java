@@ -35,6 +35,7 @@ public class Level {
 	
 	private void initlevel(int level) {
 		JsonLevel jsonLevel = loadLevel(level);
+		this.Id=jsonLevel.Id;
 		this.secuenciaTrailsId = jsonLevel.trials;
 		this.levelTitle = jsonLevel.levelTitle;
 		this.setActiveTrialId (this.activeTrialPosition);

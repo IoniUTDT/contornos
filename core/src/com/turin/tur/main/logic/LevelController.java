@@ -11,11 +11,11 @@ import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.LevelInterfaz;
+import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.diseno.TouchInfo;
 import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
-import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
@@ -36,16 +36,18 @@ public class LevelController implements InputProcessor {
 	public LevelInterfaz levelInterfaz;
 	private Game game;
 	private Level levelInfo; //Informacion del nivel cargado
-	public User user = User.Load();
+
 	
 	// Variables que manejan la dinamica de flujo de informacion en el control del nivel
 	public boolean nextTrialPending = false; // Genera la señal de que hay que cambiar de trial (para esperar a que finalicen cuestiones de animacion) 
 	public float timeInLevel = 0; // Tiempo general dentro del nivel.
 	public float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
 	boolean elementoSeleccionado = false; // Sin seleccion
+	public Session session;
 	
-	public LevelController(Game game, int levelNumber, int trialNumber) {
+	public LevelController(Game game, int levelNumber, int trialNumber, Session session) {
 		this.game=game;
+		this.session = session;
 		this.levelInfo = new Level(levelNumber);
 		this.initCamera();
 		this.initTrial();
@@ -68,6 +70,7 @@ public class LevelController implements InputProcessor {
 	}
 
 	public void update(float deltaTime) {
+				
 		// Actualiza el trial
 		this.trialActive.update(deltaTime);
 				
@@ -101,9 +104,8 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void completeLevel() {
-		if (this.user.lastLevelCompletedId < Constants.NUMERODENIVELES - 1)
-			{this.user.lastLevelCompletedId += 1;}
-		this.user.save();
+		this.session.user.levelsCompleted.add(levelInfo.Id);
+		this.session.user.save();
 		this.saveTouches();
 		this.backToMenu();
 	}
@@ -145,7 +147,7 @@ public class LevelController implements InputProcessor {
 
 	private void backToMenu() {
 		stopSound();
-		game.setScreen(new MenuScreen(game));
+		game.setScreen(new MenuScreen(game, this.session));
 	}
 
 	private void stopSound() {
@@ -163,7 +165,7 @@ public class LevelController implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// Crea un evento de toque
-    	TouchInfo touch = new TouchInfo(timeInLevel,timeInTrial,levelInfo,trialActive,user);
+    	TouchInfo touch = new TouchInfo(timeInLevel,timeInTrial,levelInfo,trialActive,session.user);
     	// calcula el toque en pantalla
    		touch.coordScreen = new Vector3 (screenX, screenY, 0);
    		// calcula el toque en el juego 

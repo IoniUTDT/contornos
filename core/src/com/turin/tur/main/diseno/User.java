@@ -19,7 +19,8 @@ public class User {
 	public String comments;
 	public Array<Integer> levelHistory = new Array<Integer>();
 	public Array<Integer> trialHistory = new Array<Integer>();
-	public int lastLevelCompletedId;
+	public Array<Integer> levelsCompleted = new Array<Integer>();
+	// public int lastLevelCompletedId;
 	
 	public void save() {
 		JsonUser jsonUser = new JsonUser();
@@ -27,7 +28,7 @@ public class User {
 		jsonUser.comments = this.comments;
 		jsonUser.name = this.name;
 		jsonUser.Id = this.id;
-		jsonUser.lastLevelCompletedId = this.lastLevelCompletedId;
+		jsonUser.levelsCompleted = this.levelsCompleted;
 		jsonUser.levelHistoryId = this.levelHistory;
 		jsonUser.trialHistoryId = this.trialHistory;
 		// Graba el json
@@ -51,7 +52,7 @@ public class User {
 		user.name = "Unnamed";
 		user.id = GenerateId();
 		user.comments = "Usuario generado automaticamente";
-		user.lastLevelCompletedId = 0;
+		user.levelsCompleted = new Array<Integer>();
 		return user;
 	}
 
@@ -63,7 +64,7 @@ public class User {
 		user.comments = jsonUser.comments;
 		user.name = jsonUser.name;
 		user.id = jsonUser.Id;
-		user.lastLevelCompletedId = jsonUser.lastLevelCompletedId;
+		user.levelsCompleted = jsonUser.levelsCompleted;
 		user.levelHistory = jsonUser.levelHistoryId;
 		user.trialHistory = jsonUser.trialHistoryId;
 		return user;
@@ -80,7 +81,7 @@ public class User {
 		public String comments;
 		public Array<Integer> levelHistoryId = new Array<Integer>();
 		public Array<Integer> trialHistoryId = new Array<Integer>();
-		public int lastLevelCompletedId;
+		public Array<Integer> levelsCompleted = new Array<Integer>();
 		
 		public void save(){
 			Json json = new Json();

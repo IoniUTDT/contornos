@@ -21,11 +21,11 @@ public class Session {
 		
 		// Chequea la cantidad de niveles que hay disponibles. Se asume que estan numerados y empiezan en 1.
 		boolean isFile=true;
-		int i=1;
+		int i=0;
 		while (isFile) {
-			if (Gdx.files.local("experimentalsource/"+ Constants.version() + "/level" + i + ".meta").exists()) {
-				i++;
+			if (Gdx.files.internal("experimentalsource/"+ Constants.version() + "/level" + (i+1) + ".meta").exists()) {
 				isFile=true;
+				i++;
 			} else {
 				isFile=false;
 			}

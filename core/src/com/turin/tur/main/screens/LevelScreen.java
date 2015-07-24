@@ -21,9 +21,12 @@ public class LevelScreen extends AbstractGameScreen  {
 	private int levelNumber;
 	
 	private boolean paused;
+
+	public Session session;
 	
-	public LevelScreen (Game game, int level) {
+	public LevelScreen (Game game, int level, Session session) {
 		super(game);
+		this.session = session;
 		this.levelNumber=level;
 	}
 
@@ -52,7 +55,7 @@ public class LevelScreen extends AbstractGameScreen  {
 	@Override
 	public void show () {
 	    Gdx.app.debug(TAG, "Level");
-	    levelController = new LevelController(game, this.levelNumber, 0); 
+	    levelController = new LevelController(game, this.levelNumber, 0, this.session); 
 	    levelRenderer = new LevelRenderer(levelController);
 		Gdx.input.setCatchBackKey(true);
 	}

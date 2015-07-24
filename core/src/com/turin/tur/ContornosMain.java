@@ -33,7 +33,7 @@ public class ContornosMain extends Game {
 		
 		// Inicializa la session y el juego
 		this.session = new Session();
-		setScreen(new MenuScreen(this));
+		setScreen(new MenuScreen(this, this.session));
 	}
 	
 	
