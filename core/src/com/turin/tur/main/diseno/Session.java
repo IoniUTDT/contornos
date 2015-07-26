@@ -9,7 +9,7 @@ import com.turin.tur.main.util.FileHelper;
 public class Session {
 
 	
-	// Prueba 123
+	// Prueba 1234
 	private static final String TAG = Session.class.getName();
 	public User user;
 	public int numberOfLevels;
