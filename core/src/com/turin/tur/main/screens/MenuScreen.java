@@ -106,22 +106,6 @@ public class MenuScreen extends AbstractGameScreen {
 			Gdx.app.debug(TAG, "agregado boton" + button.getText());
 		}
 		
-		/*
-		Level nextLevel = new Level(this.user.lastLevelCompletedId + 1);
-
-		// Boton que lleva al nivel 1
-		buttonL1 = new TextButton("Next level: " + nextLevel.levelTitle, skin,
-				"default");
-		buttonL1.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				goToLevelLog();
-				game.setScreen(new LevelScreen(game,user.lastLevelCompletedId+1, session));
-			}
-		});
-
-		 */
-		
 		// Boton que carga el nombre del usuario y permite modificarlo
 		buttonUserName = new TextButton("Usuario: "+this.user.name, skin, "default");
 		buttonUserName.addListener(new ClickListener() {
@@ -207,7 +191,6 @@ public class MenuScreen extends AbstractGameScreen {
 			table.add(button);
 			table.row();
 		}
-		
 
 		Gdx.app.debug(TAG, "Menu cargado");
 

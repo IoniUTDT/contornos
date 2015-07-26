@@ -19,12 +19,6 @@ public class ResourcesBuilder {
 	 * de libgdx.
 	 */
 
-	public static class comments {
-		public String body = "chau!";
-		
-		public comments(){
-		}
-	}
 	
 	
 	static int contadorDeRecursos = Constants.IDs.Resources.Reservados;
@@ -92,7 +86,7 @@ public class ResourcesBuilder {
 			 */
 		
 			JsonLevel level1 = crearLevel();
-			level1.levelTitle = "Primer desafio: dificultad facil";
+			level1.levelTitle = "Primer desafio";
 			
 
 			// Ahora vamos a ir creando los trials
@@ -108,7 +102,6 @@ public class ResourcesBuilder {
 					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 46, false));
 			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
 					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 66, false));
-			
 			level1.build();	
 			
 		}

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.turin.tur.main.diseno.Pruebas;
 import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.Assets;
@@ -27,13 +28,20 @@ public class ContornosMain extends Game {
 		
 		// Set Libgdx log level
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		/*
 		// Load assets
 		Assets.instance.init(new AssetManager());
 		ImagesAsset.instance.init(new AssetManager());
+		*/
 		
 		// Inicializa la session y el juego
+		
+		Pruebas prueba = new Pruebas();
+		
+		/*
 		this.session = new Session();
 		setScreen(new MenuScreen(this, this.session));
+		*/
 	}
 	
 	

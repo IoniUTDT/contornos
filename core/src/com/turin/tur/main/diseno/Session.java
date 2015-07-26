@@ -1,7 +1,11 @@
 package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.turin.tur.main.diseno.User.JsonUser;
 import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.FileHelper;
 
 public class Session {
 
@@ -9,6 +13,7 @@ public class Session {
 	public User user;
 	public int numberOfLevels;
 	public int nextLevel;
+	public JsonSession sessionInfo;
 	
 	public Session () {
 
@@ -31,7 +36,39 @@ public class Session {
 			}
 		}
 		this.numberOfLevels = i;
-
 		this.nextLevel=0;
+		
+		
+	}
+	
+	public static class JsonSession {
+		public int userID;
+		public long timeOfCreation;
+		public Array<Long> logins = new Array<Long>();
+		
+		public static JsonSession Load() {
+			
+			JsonSession jsonSession;
+			if (Gdx.files.internal("config/"+ Constants.version() + "/session.info").exists()) {
+				jsonSession = LoadFromFile();
+			} else {
+				jsonSession = CreateFile();
+			}
+			return jsonSession;
+		}
+
+		private static JsonSession CreateFile() {
+			JsonSession jsonsession = new JsonSession();
+			//jsonsession.timeOfCreation
+			return null;
+		}
+
+		private static JsonSession LoadFromFile() {
+			Json json = new Json();
+			String savedData = FileHelper.readFile("config/"+ Constants.version() + "/session.info");
+			return json.fromJson(JsonSession.class, savedData);
+		}
+		
+		
 	}
 }
