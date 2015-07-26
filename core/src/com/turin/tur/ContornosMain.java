@@ -28,20 +28,16 @@ public class ContornosMain extends Game {
 		
 		// Set Libgdx log level
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		/*
+		
 		// Load assets
 		Assets.instance.init(new AssetManager());
 		ImagesAsset.instance.init(new AssetManager());
-		*/
+		
+		
 		
 		// Inicializa la session y el juego
-		
-		Pruebas prueba = new Pruebas();
-		
-		/*
 		this.session = new Session();
 		setScreen(new MenuScreen(this, this.session));
-		*/
 	}
 	
 	
