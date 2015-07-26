@@ -15,7 +15,7 @@ public class Session {
 	public int numberOfLevels;
 	public int nextLevel;
 	public JsonSession sessionInfo;
-	
+	// 1
 	public Session () {
 
 		// Chequea si el usuario ya existe o si es la primera vez
