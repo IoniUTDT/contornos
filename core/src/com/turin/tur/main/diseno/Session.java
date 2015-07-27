@@ -9,13 +9,12 @@ import com.turin.tur.main.util.FileHelper;
 public class Session {
 
 	
-	// Prueba
 	private static final String TAG = Session.class.getName();
 	public User user;
 	public int numberOfLevels;
 	public int nextLevel;
 	public JsonSession sessionInfo;
-	// 1234
+
 	public Session () {
 
 		// Chequea si el usuario ya existe o si es la primera vez

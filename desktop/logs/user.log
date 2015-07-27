@@ -203,3 +203,7 @@ com.turin.tur.main.screens.MenuScreen: Unnamed change name to Turin.
 
 com.turin.tur.main.screens.MenuScreen: Turin change name to Cucu.
 
+com.turin.tur.main.screens.MenuScreen: Cucu goes to level 2.
+
+com.turin.tur.main.logic.LevelController: Inicializado el trial 7.
+
