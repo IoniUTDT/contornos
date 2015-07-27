@@ -126,7 +126,7 @@ public class MenuScreen extends AbstractGameScreen {
 				// String requestJson = "{name:\"Unnamed\",comments:\"Usuario generado automaticamente\"}";
 
 				Net.HttpRequest request = new Net.HttpRequest(HttpMethods.POST);
-				final String url = "http://localhost:3000/posts";
+				final String url = "http://localhost:3000/history";
 				request.setUrl(url);
 				
 				

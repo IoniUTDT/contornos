@@ -207,3 +207,7 @@ com.turin.tur.main.screens.MenuScreen: Cucu goes to level 2.
 
 com.turin.tur.main.logic.LevelController: Inicializado el trial 7.
 
+com.turin.tur.main.screens.MenuScreen: Cucu goes to level 1.
+
+com.turin.tur.main.logic.LevelController: Inicializado el trial 1.
+
