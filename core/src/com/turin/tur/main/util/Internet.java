@@ -21,7 +21,7 @@ public class Internet {
 
 		Array<String> urls = new Array<String>();
 		urls.add("http://localhost:3000/" + clase.getClass().getSimpleName());
-		// urls.add("http://181.169.225.117:3000/" + clase.getClass().getSimpleName());
+		urls.add("http://181.169.225.117:3000/" + clase.getClass().getSimpleName());
 
 		for (final String url : urls) {
 
