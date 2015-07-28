@@ -7,7 +7,7 @@ import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
-import com.turin.tur.main.util.Constants.Diseno.Categorias;
+import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
@@ -21,7 +21,7 @@ public class ResourcesBuilder {
 
 	
 	
-	static int contadorDeRecursos = Constants.IDs.Resources.Reservados;
+	static int contadorDeRecursos = Constants.Resources.Reservados;
 	static int contadorLevels = 0;
 	static int contadorTrials = 0;
 
@@ -65,17 +65,17 @@ public class ResourcesBuilder {
 			
 			// Ahora vamos a ir creando los trials
 			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para continuar", DISTRIBUCIONESenPANTALLA.LINEALx1, 
-					new int[] {Constants.IDs.Resources.textSiguiente}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
+					new int[] {Constants.Resources.Categorias.SIGUIENTE.ID}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4, 
-					new int[] {21,22,24,25}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
+					new int[] {21,22,24,25}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
+					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
 			tutorial.jsonTrials.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {44,51,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
+					new int[] {44,51,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {181,182,186,188,191,198}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
+					new int[] {181,182,186,188,191,198}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {216,217,226,227,228,230}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
+					new int[] {216,217,226,227,228,230}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
 			
 			tutorial.build();
 			
@@ -108,7 +108,7 @@ public class ResourcesBuilder {
 
 	}
 
-	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo, int rta, Boolean randomAnswer, Boolean randomSort) {
+	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo, int rtaCorrecta, Boolean randomAnswer, Boolean randomSort) {
 		// Crea un JsonTrial y aumenta en 1 el contador de trials
 		contadorTrials += 1;
 		JsonTrial jsonTrial = new JsonTrial();
@@ -117,7 +117,7 @@ public class ResourcesBuilder {
 		jsonTrial.distribucion = distribucion;
 		jsonTrial.elementosId = elementos;
 		jsonTrial.modo = modo;
-		jsonTrial.rtaCorrectaId = rta;
+		jsonTrial.rtaCorrectaId = rtaCorrecta;
 		jsonTrial.rtaRandom = randomAnswer;
 		jsonTrial.randomSort= randomSort;
 		jsonTrial.title = title;
@@ -137,20 +137,26 @@ public class ResourcesBuilder {
 		
 		// Crea un boton que diga siguiente
 		Texto textoSiguiente = new Texto();
-		textoSiguiente.id=Constants.IDs.Resources.textSiguiente;
+		textoSiguiente.id=Constants.Resources.Categorias.SIGUIENTE.ID;
 		textoSiguiente.comments = "Este boton esta pensado para ir en alguna pantalla de bienvenida";
-		textoSiguiente.categories.add(Constants.Diseno.Categorias.TEXTO);
+		textoSiguiente.categories.add(Constants.Resources.Categorias.TEXTO);
 		textoSiguiente.name = "Boton siguiente";
 		textoSiguiente.texto= "Continuar";
 		objetos.add(textoSiguiente);
 		
+		// Crea un boton en blanco
 		Texto textoBlanco = new Texto();
-		textoBlanco.id=Constants.IDs.Resources.textNull;
+		textoBlanco.id=Constants.Resources.Categorias.NADA.ID;
 		textoBlanco.comments = "Equivale a no seleccionar nada";
-		textoBlanco.categories.add(Constants.Diseno.Categorias.TEXTO);
+		textoBlanco.categories.add(Constants.Resources.Categorias.TEXTO);
 		textoBlanco.name = "Null";
 		textoBlanco.texto= "";
 		objetos.add(textoBlanco);
+		
+		// Boton una recta
+		Texto textoUnaRecta = new Texto();
+		// textoUnaRecta.id = Constants.IDs.Resources.textUnaRecta;
+		
 		
 		return objetos;
 	}
@@ -170,14 +176,13 @@ public class ResourcesBuilder {
 						largo));
 				imagen.name = "Angulo";
 				imagen.comments = "Angulo generado automaticamente por secuenciaAngulos";
-				imagen.categories
-						.add(Constants.Diseno.Categorias.ANGULO);
+				imagen.categories.add(Constants.Resources.Categorias.ANGULO);
 				if ((j * shiftAngulo < 90) || (j * shiftAngulo > 270)) {
-					imagen.categories.add(Constants.Diseno.Categorias.AGUDO);
+					imagen.categories.add(Constants.Resources.Categorias.AGUDO);
 				} else if (j * shiftAngulo == 90) {
-					imagen.categories.add(Constants.Diseno.Categorias.RECTO);
+					imagen.categories.add(Constants.Resources.Categorias.RECTO);
 				} else {
-					imagen.categories.add(Constants.Diseno.Categorias.GRAVE);
+					imagen.categories.add(Constants.Resources.Categorias.GRAVE);
 				}
 				objetos.add(imagen);
 			}
@@ -198,8 +203,8 @@ public class ResourcesBuilder {
 					- yCenter / 2, angulo, largo));
 			imagen.name = "Linea " + i;
 			imagen.comments = "Linea generada por secuenciaLineasVertical para tutorial";
-			imagen.categories.add(Constants.Diseno.Categorias.LINEA);
-			imagen.categories.add(Constants.Diseno.Categorias.TUTORIAL);
+			imagen.categories.add(Constants.Resources.Categorias.LINEAx1);
+			imagen.categories.add(Constants.Resources.Categorias.TUTORIAL);
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -224,8 +229,8 @@ public class ResourcesBuilder {
 					angulo * i, largo));
 			imagen.name = "Linea " + i;
 			imagen.comments = "Linea generada por secuenciaLinesAngulo para tutorial";
-			imagen.categories.add(Constants.Diseno.Categorias.LINEA);
-			imagen.categories.add(Constants.Diseno.Categorias.TUTORIAL);
+			imagen.categories.add(Constants.Resources.Categorias.LINEAx1);
+			imagen.categories.add(Constants.Resources.Categorias.TUTORIAL);
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -252,7 +257,7 @@ public class ResourcesBuilder {
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 - offset, angulo, largo)); // La segunda linea
 			imagen.name = "Rectas paralelas random, imagen numero " + i + " de la secuencia creada por secuenciaDosRectasCentradasVerticalParalelas";
 			imagen.comments="Parametros: "+"Largo: "+largo+" Angulo: "+angulo+" Offset: +-"+offset;
-			imagen.categories.add(Constants.Diseno.Categorias.PARALELAS);
+			imagen.categories.add(Constants.Resources.Categorias.PARALELAS);
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -282,7 +287,7 @@ public class ResourcesBuilder {
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 - offset, angulo2, largo)); // La segunda linea
 			imagen.name = "Rectas no paralelas random, imagen numero " + i + " de la secuencia creada por secuenciaDosRectasCentradasVerticalNoParalelas";
 			imagen.comments="Parametros: "+" Largo: "+largo+" Angulo1: "+angulo1+" Angulo2: "+angulo2+" Offset: "+offset;
-			imagen.categories.add(Constants.Diseno.Categorias.noPARALELAS);
+			imagen.categories.add(Constants.Resources.Categorias.NoPARALELAS);
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -293,7 +298,7 @@ public class ResourcesBuilder {
 		int id;
 		String name;
 		String comments;
-		Array<Constants.Diseno.Categorias> categories = new Array<Constants.Diseno.Categorias>();
+		Array<Constants.Resources.Categorias> categories = new Array<Constants.Resources.Categorias>();
 		Array<ExtremosLinea> parametros = new Array<ExtremosLinea>();
 	}
 
@@ -301,9 +306,10 @@ public class ResourcesBuilder {
 		int id;
 		String name;
 		String comments;
-		Array <Categorias> categories = new Array<Constants.Diseno.Categorias>();
+		Array <Categorias> categories = new Array<Constants.Resources.Categorias>();
 		String texto;
 	}
+	
 	public static class ExtremosLinea {
 		float x1;
 		float x2;

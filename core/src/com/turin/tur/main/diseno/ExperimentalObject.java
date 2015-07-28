@@ -17,7 +17,7 @@ public class ExperimentalObject {
 	public final int Id; 
 	public String name;
 	public String comments = "Aca va opcionalmente una descripcion del objeto";
-	public Array<Constants.Diseno.Categorias> categoria = new Array<Constants.Diseno.Categorias>();
+	public Array<Constants.Resources.Categorias> categoria = new Array<Constants.Resources.Categorias>();
 	public boolean noSound;
 	
 	// Constantes
@@ -50,7 +50,7 @@ public class ExperimentalObject {
 		public int Id;
 		public String name;
 		public String comments;
-		public Array<Constants.Diseno.Categorias> categories = new Array<Constants.Diseno.Categorias>();
+		public Array<Constants.Resources.Categorias> categories = new Array<Constants.Resources.Categorias>();
 		
 		public static void CreateJsonMetaData (JsonMetaData jsonMetaData, String path) {
 			Json json = new Json();
@@ -70,5 +70,10 @@ public class ExperimentalObject {
 			} else { Gdx.app.error(TAG,"No se a podido encontrar la info del recurso experimental" + Id); }
 			return null;
 		}
+	}
+
+
+	public static Array<ExperimentalObject> Search(int id) {
+		return new Array<ExperimentalObject>();
 	}
 }
