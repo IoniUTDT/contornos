@@ -31,7 +31,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		// set asset manager error handler
 		assetManager.setErrorListener(this);
 		// load texture atlas
-		assetManager.load("experimentalsource/" +  Constants.version() + "/images.pack.atlas", TextureAtlas.class);
+		assetManager.load("experimentalsource/" +  Constants.version() + "/images.atlas", TextureAtlas.class);
 		// start loading assets and wait until finished
 		assetManager.finishLoading();
 		Gdx.app.debug(TAG,
@@ -39,7 +39,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 		for (String a : assetManager.getAssetNames()) {
 			Gdx.app.debug(TAG, "asset: " + a);
 		}
-		this.atlas = assetManager.get("experimentalsource/" +  Constants.version() + "/images.pack.atlas");
+		this.atlas = assetManager.get("experimentalsource/" +  Constants.version() + "/images.atlas");
 		// enable texture filtering for pixel smoothing
 		for (Texture t : atlas.getTextures()) {
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -62,7 +62,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 
 	public Sprite imagen(int Id) {
 		return new Sprite(this.atlas.findRegion("" + Id));
-		// return new Sprite (new Texture(Gdx.files.internal("experimentalsource/"	+  Constants.version() + "/" + Id + ".png")));
+		// return new Sprite (new Texture(Gdx.files.internal("experimentalsource/"	+  Constants.version() + "/" + Id + ".png"))); // Esto hace lio con los colores!
 	}
 
 	public Texture imagenFromFile(int Id) {

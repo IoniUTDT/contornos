@@ -19,6 +19,7 @@ import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
@@ -226,7 +227,16 @@ public class LevelController implements InputProcessor {
 			if (touchData.elementTouched) {
 				// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
 				if (this.trialActive.jsonTrial.modo == TIPOdeTRIAL.TEST) {
-					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) { // Significa q se selecciono la opcion correcta
+					Boolean correcta=false;
+					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) {correcta=true;} // Significa que se toco la respuesta igual a la correcta
+					if (touchData.thisTouchBox.contenido.categoria.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
+						for (Categorias categoriaDelObjetoTocado: touchData.thisTouchBox.contenido.categoria){
+							if (this.trialActive.rtaCorrecta.categoria.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
+								correcta=true;
+							}
+						}
+					}
+					if (correcta){ // Significa q se selecciono la opcion correcta
 						touchData.thisTouchBox.answer=true;
 						this.trialActive.stimuliBox.stopSound();
 			    		this.nextTrialPending=true;

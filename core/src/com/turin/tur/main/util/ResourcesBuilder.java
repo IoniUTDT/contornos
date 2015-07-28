@@ -2,6 +2,8 @@ package com.turin.tur.main.util;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonMetaData;
@@ -14,43 +16,46 @@ import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 public class ResourcesBuilder {
 
 	/*
-	 * Esta clase crea los archivos SVG. Solo deberia ser llamada desde el
-	 * constructor en windows xq la idea es poder usar cosas de java por fuera
-	 * de libgdx.
+	 * Esta clase crea los archivos SVG. Solo deberia ser llamada desde el constructor en windows xq la idea es poder usar cosas de java por fuera de libgdx.
 	 */
 
-	
-	
 	static int contadorDeRecursos = Constants.Resources.Reservados;
 	static int contadorLevels = 0;
 	static int contadorTrials = 0;
 
 	static int height = 100;
 	static int width = 100;
-	
+
 	public static void buildNewSVG() {
 
-		Boolean elements = true;
+		Boolean elements = false;
 		if (elements) {
-			
+
 			// Crea los objetos reservados (por ahora textos de botones y categorias)
 			Array<Texto> objetosTexto = objetosTexto();
-			for (Texto text: objetosTexto) {
+			for (Texto text : objetosTexto) {
 				SVG.SVGtexto(text);
 			}
 			// Crea los objetos
 			Array<Imagen> objetos = new Array<Imagen>();
-			
-			objetos.addAll(secuenciaLineasVertical()); // Agrega las lineas
-			objetos.addAll(secuenciaLinesAngulo()); // Agrega las lineas con angulo
-			objetos.addAll(secuenciaAngulos()); // Agrega los angulos
-			objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
-			objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
-			
+
+			boolean geometrias=false;
+			if (geometrias) {
+				objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
+				objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
+				objetos.addAll(secuenciaAngulos()); // Agrega los angulos
+				objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
+				objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
+			}
 			// Crea los archivos correspondientes
 			for (Imagen im : objetos) {
 				SVG.SVGimagen(im);
 			}
+		}
+
+		Boolean rebuild = false;
+		if (rebuild) {
+			rebuildAtlasSource();
 		}
 
 		Boolean makeLevels = false;
@@ -63,64 +68,100 @@ public class ResourcesBuilder {
 			JsonLevel tutorial = crearLevel();
 			tutorial.levelTitle = "Tutorial";
 
-			
 			// Ahora vamos a ir creando los trials
-			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para continuar", DISTRIBUCIONESenPANTALLA.LINEALx1, 
-					new int[] {Constants.Resources.Categorias.SIGUIENTE.ID}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4, 
-					new int[] {21,22,24,25}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {44,51,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {181,182,186,188,191,198}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {216,217,226,227,228,230}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.NADA.ID, false, true));
-			
+			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para continuar", DISTRIBUCIONESenPANTALLA.LINEALx1,
+					new int[] { Constants.Resources.Categorias.Siguiente.ID }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			tutorial.jsonTrials.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+					new int[] { 21, 22, 24, 25 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 26, 27, 33, 34, 35, 42 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			tutorial.jsonTrials.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 44, 51, 65, 70, 92, 100 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			tutorial.jsonTrials.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 181, 182, 186, 188, 191, 198 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			tutorial.jsonTrials.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 216, 217, 226, 227, 228, 230 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+
 			tutorial.build();
-			
-			
 
 			/*
-			 *  Arma el nivel 1
+			 * Arma el nivel 1 (test por imagenes)
 			 */
-		
+
 			JsonLevel level1 = crearLevel();
 			level1.levelTitle = "Primer desafio";
-			
 
 			// Ahora vamos a ir creando los trials
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 27, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 208, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 22, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 40, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 46, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 66, false, true));
-			level1.build();	
-			
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 27, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 208, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 22, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 40, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 46, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 66, false, true));
+			level1.build();
+
+			/*
+			 * Arma el nivel 2 (test por categorias)
+			 */
+
+			JsonLevel level2 = crearLevel();
+			level2.levelTitle = "Segundo Desafio";
+
+			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
+					new int[] { Categorias.Lineax1.ID, Categorias.Angulo.ID }, TIPOdeTRIAL.TEST, 46, false, true));
+			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
+					new int[] { Categorias.Lineax1.ID, Categorias.Lineax2.ID }, TIPOdeTRIAL.TEST, 27, false, true));
+			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
+					new int[] { Categorias.Paralelas.ID, Categorias.NoParalelas.ID }, TIPOdeTRIAL.TEST, 208, false, true));
+			level2.build();
+
 		}
 
 	}
 
-	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo, int rtaCorrecta, Boolean randomAnswer, Boolean randomSort) {
+	private static void rebuildAtlasSource() {
+		int version_temp = MathUtils.roundPositive(Constants.VERSION);
+		int temp;
+		if (version_temp > Constants.VERSION) {
+			temp = -1;
+		} else {
+			temp = 0;
+		}
+		int version = version_temp + temp;
+
+		Settings settings = new Settings();
+		settings.maxWidth = 1024;
+		settings.maxHeight = 1024;
+		settings.duplicatePadding = false;
+		settings.debug = false;
+		TexturePacker.process(settings, "temp/resourcesbuid/", "../android/assets/experimentalsource/" + version + "/", "images");
+	}
+
+	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo,
+			int rtaCorrecta, Boolean randomAnswer, Boolean randomSort) {
 		// Crea un JsonTrial y aumenta en 1 el contador de trials
 		contadorTrials += 1;
 		JsonTrial jsonTrial = new JsonTrial();
-		jsonTrial.Id=contadorTrials;
+		jsonTrial.Id = contadorTrials;
 		jsonTrial.caption = caption;
 		jsonTrial.distribucion = distribucion;
 		jsonTrial.elementosId = elementos;
 		jsonTrial.modo = modo;
 		jsonTrial.rtaCorrectaId = rtaCorrecta;
 		jsonTrial.rtaRandom = randomAnswer;
-		jsonTrial.randomSort= randomSort;
+		jsonTrial.randomSort = randomSort;
 		jsonTrial.title = title;
 		return jsonTrial;
 	}
@@ -135,28 +176,22 @@ public class ResourcesBuilder {
 
 	private static Array<Texto> objetosTexto() {
 		Array<Texto> objetos = new Array<Texto>();
-		
-		// Crea un boton que diga siguiente
-		Texto textoSiguiente = new Texto();
-		textoSiguiente.id=Constants.Resources.Categorias.SIGUIENTE.ID;
-		textoSiguiente.comments = "Este boton esta pensado para ir en alguna pantalla de bienvenida";
-		textoSiguiente.categories.add(Constants.Resources.Categorias.TEXTO);
-		textoSiguiente.name = "Boton siguiente";
-		textoSiguiente.texto= "Continuar";
-		objetos.add(textoSiguiente);
-		
-		// Crea un boton en blanco
-		Texto textoBlanco = new Texto();
-		textoBlanco.id=Constants.Resources.Categorias.NADA.ID;
-		textoBlanco.comments = "Equivale a no seleccionar nada";
-		textoBlanco.categories.add(Constants.Resources.Categorias.TEXTO);
-		textoBlanco.name = "Null";
-		textoBlanco.texto= "";
-		objetos.add(textoBlanco);
-		
+
+		// Crea un recurso para cada categoria
+		for (Constants.Resources.Categorias categoria : Constants.Resources.Categorias.values()) {
+			Texto recurso = new Texto();
+			recurso.id = categoria.ID;
+			recurso.comments = "Recurso experimental generado automaticamente correspondiente a la categoria: " + categoria.nombre;
+			recurso.categories.add(categoria);
+			recurso.categories.add(Categorias.Texto); // Marca que son textos
+			recurso.name = categoria.nombre;
+			recurso.texto = categoria.texto;
+			objetos.add(recurso);
+		}
+
 		return objetos;
 	}
-	
+
 	private static Array<Imagen> secuenciaAngulos() {
 		float largo = 50;
 		int cantidad = 18;
@@ -172,13 +207,13 @@ public class ResourcesBuilder {
 						largo));
 				imagen.name = "Angulo";
 				imagen.comments = "Angulo generado automaticamente por secuenciaAngulos";
-				imagen.categories.add(Constants.Resources.Categorias.ANGULO);
+				imagen.categories.add(Constants.Resources.Categorias.Angulo);
 				if ((j * shiftAngulo < 90) || (j * shiftAngulo > 270)) {
-					imagen.categories.add(Constants.Resources.Categorias.AGUDO);
+					imagen.categories.add(Constants.Resources.Categorias.Agudo);
 				} else if (j * shiftAngulo == 90) {
-					imagen.categories.add(Constants.Resources.Categorias.RECTO);
+					imagen.categories.add(Constants.Resources.Categorias.Recto);
 				} else {
-					imagen.categories.add(Constants.Resources.Categorias.GRAVE);
+					imagen.categories.add(Constants.Resources.Categorias.Grave);
 				}
 				objetos.add(imagen);
 			}
@@ -186,7 +221,7 @@ public class ResourcesBuilder {
 		return objetos;
 	}
 
-	private static Array<Imagen> secuenciaLineasVertical() {
+	private static Array<Imagen> secuenciaLineasHorizontales() {
 		float largo = 90;
 		float angulo = 0;
 		int cantidad = 5;
@@ -198,9 +233,10 @@ public class ResourcesBuilder {
 			imagen.parametros.addAll(ExtremosLinea.Linea(width / 2, yCenter * i
 					- yCenter / 2, angulo, largo));
 			imagen.name = "Linea " + i;
-			imagen.comments = "Linea generada por secuenciaLineasVertical para tutorial";
-			imagen.categories.add(Constants.Resources.Categorias.LINEAx1);
-			imagen.categories.add(Constants.Resources.Categorias.TUTORIAL);
+			imagen.comments = "Linea generada por secuenciaLineasHorizontales para tutorial";
+			imagen.categories.add(Constants.Resources.Categorias.Lineas);
+			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -209,11 +245,11 @@ public class ResourcesBuilder {
 	private static Imagen crearImagen() {
 		contadorDeRecursos += 1;
 		Imagen imagen = new Imagen();
-		imagen.id=contadorDeRecursos;
+		imagen.id = contadorDeRecursos;
 		return imagen;
 	}
 
-	private static Array<Imagen> secuenciaLinesAngulo() {
+	private static Array<Imagen> secuenciaLineasConAngulo() {
 		float largo = 90;
 		int cantidad = 18;
 		float angulo = 180 / cantidad;
@@ -224,72 +260,77 @@ public class ResourcesBuilder {
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2,
 					angulo * i, largo));
 			imagen.name = "Linea " + i;
-			imagen.comments = "Linea generada por secuenciaLinesAngulo para tutorial";
-			imagen.categories.add(Constants.Resources.Categorias.LINEAx1);
-			imagen.categories.add(Constants.Resources.Categorias.TUTORIAL);
+			imagen.comments = "Linea generada por secuenciaLineasConAngulo para tutorial";
+			imagen.categories.add(Constants.Resources.Categorias.Lineas);
+			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 			objetos.add(imagen);
 		}
 		return objetos;
 	}
 
-	private static Array<Imagen> secuenciaDosRectasCentradasVerticalParalelas(){
-	
+	private static Array<Imagen> secuenciaDosRectasCentradasVerticalParalelas() {
+
 		/*
-		 *  Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas  
+		 * Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas
 		 */
-		
+
 		int cantidad = 30;
 		float largo;
 		float angulo;
 		float offset;
-		
+
 		Array<Imagen> objetos = new Array<Imagen>();
-		for (int i=0; i<cantidad; i++) {
-			largo = MathUtils.random(50f,90f);
+		for (int i = 0; i < cantidad; i++) {
+			largo = MathUtils.random(50f, 90f);
 			angulo = MathUtils.random(180f);
-			offset = MathUtils.random(10f,30f);
+			offset = MathUtils.random(10f, 30f);
 			Imagen imagen = crearImagen();
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 + offset, angulo, largo)); // La primer linea
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 - offset, angulo, largo)); // La segunda linea
 			imagen.name = "Rectas paralelas random, imagen numero " + i + " de la secuencia creada por secuenciaDosRectasCentradasVerticalParalelas";
-			imagen.comments="Parametros: "+"Largo: "+largo+" Angulo: "+angulo+" Offset: +-"+offset;
-			imagen.categories.add(Constants.Resources.Categorias.PARALELAS);
+			imagen.comments = "Parametros: " + "Largo: " + largo + " Angulo: " + angulo + " Offset: +-" + offset;
+			imagen.categories.add(Constants.Resources.Categorias.Lineas);
+			imagen.categories.add(Constants.Resources.Categorias.Lineax2);
+			imagen.categories.add(Constants.Resources.Categorias.Paralelas);
 			objetos.add(imagen);
 		}
 		return objetos;
-		
+
 	}
-	  
-	private static Array<Imagen> secuenciaDosRectasCentradasVerticalNoParalelas(){
-		
+
+	private static Array<Imagen> secuenciaDosRectasCentradasVerticalNoParalelas() {
+
 		/*
-		 *  Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas  
+		 * Crea secuencias de dos rectas, ambas centradas en x, pero levemente por encima y por debajo del centro en y, rotando angulos y paralelas
 		 */
-		
+
 		int cantidad = 30;
 		float largo;
 		float angulo1;
 		float angulo2;
 		float offset;
-		
+
 		Array<Imagen> objetos = new Array<Imagen>();
-		for (int i=0; i<cantidad; i++) {
-			largo = MathUtils.random(50f,90f);
+		for (int i = 0; i < cantidad; i++) {
+			largo = MathUtils.random(50f, 90f);
 			angulo1 = MathUtils.random(180f);
-			angulo2 = angulo1 + MathUtils.random(10f,180f);
-			offset = MathUtils.random(10f,30f);
+			angulo2 = angulo1 + MathUtils.random(10f, 180f);
+			offset = MathUtils.random(10f, 30f);
 			Imagen imagen = crearImagen();
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 + offset, angulo1, largo)); // La primer linea
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2 - offset, angulo2, largo)); // La segunda linea
 			imagen.name = "Rectas no paralelas random, imagen numero " + i + " de la secuencia creada por secuenciaDosRectasCentradasVerticalNoParalelas";
-			imagen.comments="Parametros: "+" Largo: "+largo+" Angulo1: "+angulo1+" Angulo2: "+angulo2+" Offset: "+offset;
-			imagen.categories.add(Constants.Resources.Categorias.NoPARALELAS);
+			imagen.comments = "Parametros: " + " Largo: " + largo + " Angulo1: " + angulo1 + " Angulo2: " + angulo2 + " Offset: " + offset;
+			imagen.categories.add(Constants.Resources.Categorias.Lineas);
+			imagen.categories.add(Constants.Resources.Categorias.Lineax2);
+			imagen.categories.add(Constants.Resources.Categorias.NoParalelas);
 			objetos.add(imagen);
 		}
 		return objetos;
-		
+
 	}
-	 
+
 	public static class Imagen {
 		int id;
 		String name;
@@ -302,10 +343,10 @@ public class ResourcesBuilder {
 		int id;
 		String name;
 		String comments;
-		Array <Categorias> categories = new Array<Constants.Resources.Categorias>();
+		Array<Categorias> categories = new Array<Constants.Resources.Categorias>();
 		String texto;
 	}
-	
+
 	public static class ExtremosLinea {
 		float x1;
 		float x2;
@@ -315,13 +356,10 @@ public class ResourcesBuilder {
 		public static ExtremosLinea Linea(float xCenter, float yCenter,
 				float angle, float length) {
 			/*
-			 * Para encontrar el origen y el fin de la linea deseada utilizo las
-			 * funcionalidades que tienen los Vector2. Para eso creo dos
-			 * vectores en el origen (cada uno con la mitad del largo, uno
-			 * angulo 0 y otro 180) Luego los roto lo necesario y los traslado a
-			 * las coordenadas del centro
+			 * Para encontrar el origen y el fin de la linea deseada utilizo las funcionalidades que tienen los Vector2. Para eso creo dos vectores en el origen
+			 * (cada uno con la mitad del largo, uno angulo 0 y otro 180) Luego los roto lo necesario y los traslado a las coordenadas del centro
 			 */
-			
+
 			Vector2 V1 = new Vector2(1, 1);
 			Vector2 V2 = new Vector2(1, 1);
 			V1.setLength(length / 2);
@@ -346,8 +384,7 @@ public class ResourcesBuilder {
 				float yVertice, float angleInicial, float angleFinal,
 				float length) {
 			/*
-			 * El angulo esta formado por dos linas, ambas del mismo largo
-			 * orientado cada uno en un angulo diferente.
+			 * El angulo esta formado por dos linas, ambas del mismo largo orientado cada uno en un angulo diferente.
 			 */
 			Array<ExtremosLinea> lineas = new Array<ExtremosLinea>();
 			Vector2 V1 = new Vector2(1, 1);
@@ -381,14 +418,14 @@ public class ResourcesBuilder {
 	public static class SVG {
 
 		static int version = Constants.version(); // Version de la aplicacion en la que
-											// se esta trabajando (esto
-											// determina el paquete entero de
-											// recursos
+		// se esta trabajando (esto
+		// determina el paquete entero de
+		// recursos
 		static String tempPath = "/temp/resourcesbuid/"; // Directorio donde se
-													// almacenan los recursos
-													// durante la construccion
-													// antes de pasar todo a su
-													// version final.
+		// almacenan los recursos
+		// durante la construccion
+		// antes de pasar todo a su
+		// version final.
 		static String content = "";
 
 		public static void SVGimagen(Imagen imagen) {
@@ -422,7 +459,7 @@ public class ResourcesBuilder {
 			add("<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"" + height
 					+ "\" width=\"" + width + "\">"); // Inicializa el SVG
 
-		    add ("<text text-anchor=\"middle\" x=\"" +width/2+ "\" y=\"" +height/2+ "\">" +text.texto+ "</text>");
+			add("<text text-anchor=\"middle\" x=\"" + width / 2 + "\" y=\"" + height / 2 + "\">" + text.texto + "</text>");
 			add("</svg>"); // Finaliza el SVG
 			createFileText(text);
 			createMetadataText(text);
@@ -430,12 +467,12 @@ public class ResourcesBuilder {
 
 		private static void createMetadata(Imagen imagen) {
 			JsonMetaData jsonMetaData = new JsonMetaData();
-			jsonMetaData.Id=imagen.id;
-			jsonMetaData.name=imagen.name;
-			jsonMetaData.comments=imagen.comments;
-			jsonMetaData.categories=imagen.categories;
-			jsonMetaData.noSound=false;
-			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData,tempPath);
+			jsonMetaData.Id = imagen.id;
+			jsonMetaData.name = imagen.name;
+			jsonMetaData.comments = imagen.comments;
+			jsonMetaData.categories = imagen.categories;
+			jsonMetaData.noSound = false;
+			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData, tempPath);
 
 		}
 
@@ -446,19 +483,19 @@ public class ResourcesBuilder {
 		private static void createFile(Imagen imagen) {
 			FileHelper.writeFile(tempPath + imagen.id + ".svg", content);
 		}
-		
+
 		private static void createFileText(Texto text) {
 			FileHelper.writeFile(tempPath + text.id + ".svg", content);
 		}
-		
+
 		private static void createMetadataText(Texto text) {
 			JsonMetaData jsonMetaData = new JsonMetaData();
-			jsonMetaData.Id=text.id;
-			jsonMetaData.name=text.name;
-			jsonMetaData.comments=text.comments;
-			jsonMetaData.categories=text.categories;
-			jsonMetaData.noSound=true;
-			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData,tempPath);
+			jsonMetaData.Id = text.id;
+			jsonMetaData.name = text.name;
+			jsonMetaData.comments = text.comments;
+			jsonMetaData.categories = text.categories;
+			jsonMetaData.noSound = true;
+			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData, tempPath);
 
 		}
 	}

@@ -82,7 +82,7 @@ public class Constants {
 			LINEALx2(new float[][] { { -1.5f, 0 }, { +1.5f, 0 } }),
 			BILINEALx6(new float[][] { { -1.5f, 1 }, { 0, 1 }, { 1.5f, 1 }, { -1.5f, -1 }, { 0, -1 }, { 1.5f, -1 } }),
 			BILINEALx4(new float[][] { { -1, 1 }, { 1, 1 }, { -1, -1 }, { 1, -1 } }),
-			BILINEALx2(new float[][] { { -1.5f, 0 }, { +1.5f, 0 } }),
+			BILINEALx2(new float[][] { { 0f, 1f }, { 0f, -1f } }),
 			LINEALx1(new float[][] { { 0, 0 } });
 
 			public float[][] distribucion;
@@ -162,32 +162,43 @@ public class Constants {
 	public static class Resources {
 
 		public enum Categorias {
-			NADA(0), 
-			TEXTO(1), 
-			IMAGEN(2),
-			TUTORIAL(3),
-			SIGUIENTE(4),
+			Nada(0,""), 
+			Texto(1), 
+			Imagen(2),
+			Tutorial(3),
+			Siguiente(4),
 			
-			LINEAx1(6), 
-			LINEAx2(7), 
-			PARALELAS(8),
-			NoPARALELAS(9),
-			ANGULO(10),
-			AGUDO(11),
-			GRAVE(12),
-			RECTO(13),
+			Lineax1(6,"Una Linea"), 
+			Lineax2(7, "Dos Lineas"), 
+			Paralelas(8, "Paralelas"),
+			NoParalelas(9, "No Paralelas"),
+			Angulo(10),
+			Agudo(11),
+			Grave(12),
+			Recto(13),
+			Lineas(14),  
+			NoAngulo(15,"No Angulo"),
 			;
 
 			/*
 			 * Son las categorias con las que se puede taguear a los recursos experimentales.
 			 */
 			public int ID; // El id de la categoria que se corresponde con el del recurso que la nombra
-			public String nombre; // Sombre de la categoria (igual a su nombre, pero incluido para que sea explicito en los Jsons)
+			public String nombre; // Nombre de la categoria (igual a su nombre, pero incluido para que sea explicito en los Jsons)
+			public String texto; // Texto que se muestra en el cuadro. A priori es igual al nombre salvo que se especifique otra cosa
 			public Array<ExperimentalObject> idsOfResources = new Array<ExperimentalObject>(); // Lista de todos los elementos que estan incluidos en la categoria
 
 			private Categorias(int Id) {
 				this.ID = Id;
 				this.nombre = this.name();
+				this.texto = this.name();
+				this.idsOfResources = ExperimentalObject.Search(this.ID);
+			}
+			
+			private Categorias(int Id, String texto) {
+				this.ID = Id;
+				this.nombre = this.name();
+				this.texto = texto;
 				this.idsOfResources = ExperimentalObject.Search(this.ID);
 			}
 		}
