@@ -30,7 +30,7 @@ public class ResourcesBuilder {
 	
 	public static void buildNewSVG() {
 
-		Boolean elements = false;
+		Boolean elements = true;
 		if (elements) {
 			
 			// Crea los objetos reservados (por ahora textos de botones y categorias)
@@ -40,6 +40,7 @@ public class ResourcesBuilder {
 			}
 			// Crea los objetos
 			Array<Imagen> objetos = new Array<Imagen>();
+			
 			objetos.addAll(secuenciaLineasVertical()); // Agrega las lineas
 			objetos.addAll(secuenciaLinesAngulo()); // Agrega las lineas con angulo
 			objetos.addAll(secuenciaAngulos()); // Agrega los angulos
@@ -152,11 +153,6 @@ public class ResourcesBuilder {
 		textoBlanco.name = "Null";
 		textoBlanco.texto= "";
 		objetos.add(textoBlanco);
-		
-		// Boton una recta
-		Texto textoUnaRecta = new Texto();
-		// textoUnaRecta.id = Constants.IDs.Resources.textUnaRecta;
-		
 		
 		return objetos;
 	}
