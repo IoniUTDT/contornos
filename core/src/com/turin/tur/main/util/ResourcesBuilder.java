@@ -65,17 +65,17 @@ public class ResourcesBuilder {
 			
 			// Ahora vamos a ir creando los trials
 			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para continuar", DISTRIBUCIONESenPANTALLA.LINEALx1, 
-					new int[] {Constants.IDs.Resources.textSiguiente}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+					new int[] {Constants.IDs.Resources.textSiguiente}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4, 
-					new int[] {21,22,24,25}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+					new int[] {21,22,24,25}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+					new int[] {26,27,33,34,35,42}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
 			tutorial.jsonTrials.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {44,51,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+					new int[] {44,51,65,70,92,100}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {181,182,186,188,191,198}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+					new int[] {181,182,186,188,191,198}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
 			tutorial.jsonTrials.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6, 
-					new int[] {216,217,226,227,228,230}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false));
+					new int[] {216,217,226,227,228,230}, TIPOdeTRIAL.ENTRENAMIENTO, Constants.IDs.Resources.sinDatos, false, true));
 			
 			tutorial.build();
 			
@@ -91,24 +91,24 @@ public class ResourcesBuilder {
 
 			// Ahora vamos a ir creando los trials
 			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 27, false));
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 27, false, true));
 			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 208, false));
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 208, false, true));
 			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 22, false));
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 22, false, true));
 			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 40, false));
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 40, false, true));
 			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 46, false));
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 46, false, true));
 			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 66, false));
+					new int[] {22,27,40,46,66,208}, TIPOdeTRIAL.TEST, 66, false, true));
 			level1.build();	
 			
 		}
 
 	}
 
-	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo, int rta, Boolean random) {
+	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo, int rta, Boolean randomAnswer, Boolean randomSort) {
 		// Crea un JsonTrial y aumenta en 1 el contador de trials
 		contadorTrials += 1;
 		JsonTrial jsonTrial = new JsonTrial();
@@ -118,7 +118,8 @@ public class ResourcesBuilder {
 		jsonTrial.elementosId = elementos;
 		jsonTrial.modo = modo;
 		jsonTrial.rtaCorrectaId = rta;
-		jsonTrial.rtaRandom = random;
+		jsonTrial.rtaRandom = randomAnswer;
+		jsonTrial.randomSort= randomSort;
 		jsonTrial.title = title;
 		return jsonTrial;
 	}

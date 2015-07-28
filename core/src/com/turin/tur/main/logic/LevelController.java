@@ -225,7 +225,7 @@ public class LevelController implements InputProcessor {
 			// selecciona el elemento actual si hay elemento tocado
 			if (touchData.elementTouched) {
 				// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
-				if (this.trialActive.modo == TIPOdeTRIAL.TEST) {
+				if (this.trialActive.jsonTrial.modo == TIPOdeTRIAL.TEST) {
 					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) { // Significa q se selecciono la opcion correcta
 						touchData.thisTouchBox.answer=true;
 						this.trialActive.stimuliBox.stopSound();

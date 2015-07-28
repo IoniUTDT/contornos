@@ -129,8 +129,8 @@ public class LevelInterfaz {
 	
 	public void renderTitle (SpriteBatch batch, OrthographicCamera cameraGUI) {
 		Assets.instance.fonts.defaultSmallFont.draw(batch, levelInfo.levelTitle, cameraGUI.viewportWidth/5 , 50); 
-		Assets.instance.fonts.defaultSmallFont.draw(batch, trialActive.title , cameraGUI.viewportWidth/5*2 , 50);
-		Assets.instance.fonts.defaultSmallFont.draw(batch, trialActive.caption , cameraGUI.viewportWidth/5*2 , cameraGUI.viewportHeight/10*9);
+		Assets.instance.fonts.defaultSmallFont.draw(batch, trialActive.jsonTrial.title , cameraGUI.viewportWidth/5*2 , 50);
+		Assets.instance.fonts.defaultSmallFont.draw(batch, trialActive.jsonTrial.caption , cameraGUI.viewportWidth/5*2 , cameraGUI.viewportHeight/10*9);
 		Assets.instance.fonts.defaultSmallFont.draw(batch, "Trial #" + trialNumber + " Id: "+ trialActive.Id , cameraGUI.viewportWidth/5 *4, 50); 
 	}
 }
