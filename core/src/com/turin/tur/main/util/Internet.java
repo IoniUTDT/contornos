@@ -71,41 +71,8 @@ public class Internet {
 		}
 	}
 		
-	/*
-	 * Este metodo tiene que cargar el objeto 
-	 */
-	public static void Enviar (Class clase, Enviable objeto, String path) throws ClassNotFoundException {
-		objeto = Internet.Load(clase,path);
-		Internet.PUT(objeto);
-	}
-		
-	private static Enviable Load(Class clase, String path) throws ClassNotFoundException { //Revisar bien que onda el throws!
-		String savedData = FileHelper.readLocalFile(path);
-		if (!savedData.isEmpty()) {
-			Json json = new Json();
-			return json.fromJson(clase, savedData);
-		} else {
-			Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones");
-		}
-		return new contenidoVacio();
-	}
-
 	public static abstract class Enviable {
 		public abstract void enviado();
 		public abstract void noEnviado();
-	}
-	
-	public static class contenidoVacio extends Enviable {
-
-		@Override
-		public void enviado() {
-			Gdx.app.error(TAG, "Error al generar el contenido a enviar. Se ha generado un envio vacio");
-		}
-
-		@Override
-		public void noEnviado() {
-			Gdx.app.error(TAG, "Error al generar el contenido a enviar. Se ha generado un envio vacio");	
-		}
-		
 	}
 }

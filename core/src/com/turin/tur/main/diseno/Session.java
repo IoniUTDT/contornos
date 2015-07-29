@@ -17,7 +17,6 @@ public class Session {
 	public JsonSession session;
 
 	public Session() {
-
 		loadUser();
 		initSession();
 		uploadSession();
