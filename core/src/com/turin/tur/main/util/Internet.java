@@ -7,6 +7,7 @@ import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
+import com.turin.tur.main.diseno.Session.JsonSessionLog;
 
 public class Internet {
 
@@ -77,8 +78,24 @@ public class Internet {
 	}
 
 	public static abstract class Enviable {
-		public abstract void enviado();
-
-		public abstract void noEnviado();
+		public abstract String path();
+		public abstract Object getObject();
+		public abstract Class getMyclass ();
+		
+		public void enviar() {
+			// Esta rutina intenta subir los datos de la session al servidor. En funcion del resultado se activa enviado o no enviado (esto sucede en la funcion put de la clase internet)
+			this.load();
+			Internet.PUT(this);	
+		}
+		private <getMyclass> getMyclass load() {
+			String savedData = FileHelper.readLocalFile(this.path());
+			if (!savedData.isEmpty()) {
+				Json json = new Json();
+				return (getMyclass) json.fromJson(getMyclass(),savedData);
+			} else {
+				Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones");
+			}
+			return (getMyclass) new JsonSessionLog();
+		}
 	}
 }
