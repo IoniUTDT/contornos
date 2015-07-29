@@ -19,19 +19,18 @@ public class Session {
 	public Session() {
 
 		loadUser();
-		initSessionLog();
-		JsonSessionLog.upload();
-		uploadSessionLog();
-		countLevels();
+		initSession();
+		uploadSession();
+		loadLevels();
 	}
 
-	private void uploadSessionLog() {
+	private void uploadSession() {
 		// Esta rutina intenta subir los datos de la session al servidor
-		JsonSessionLog jsonHistory = JsonSessionLog.Load();
+		JsonSessionHistory jsonHistory = JsonSessionHistory.Load();
 		Internet.PUT(jsonHistory);
 	}
 
-	private void countLevels() {
+	private void loadLevels() {
 		// Chequea la cantidad de niveles que hay disponibles. Se asume que estan numerados y empiezan en 1.
 		boolean isFile = true;
 		int i = 0;
@@ -48,12 +47,12 @@ public class Session {
 
 	}
 
-	private void initSessionLog() {
+	private void initSession() {
 		// Crea la session
 		this.session = new JsonSession();
 		this.session.userID = this.user.id;
 		this.session.userName = this.user.name;
-		JsonSessionLog jsonHistory = JsonSessionLog.Load();
+		JsonSessionHistory jsonHistory = JsonSessionHistory.Load();
 		jsonHistory.history.add(this.session);
 		jsonHistory.save();
 	}
@@ -67,46 +66,48 @@ public class Session {
 		this.user = User.Load();
 	}
 
-	public static class JsonSessionLog extends Internet.Enviable{
+	public static class JsonSessionHistory extends Internet.Enviable{
 
+		public static String path = "config/" + Constants.version() + "/sessionHistory.info";
+		public static String pathUploaded = path + ".uploaded";
 		public Array<JsonSession> history = new Array<JsonSession>();
 
-		public static JsonSessionLog Load() {
+		public static JsonSessionHistory Load() {
 			String savedData = FileHelper.readLocalFile(path);
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
-				return json.fromJson(JsonSessionLog.class, savedData);
+				return json.fromJson(JsonSessionHistory.class, savedData);
 			} else {
 				Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones");
 			}
-			return new JsonSessionLog();
+			return new JsonSessionHistory();
 		}
 		
-		public static JsonSessionLog LoadUploaded() {
+		public static JsonSessionHistory LoadUploaded() {
 			String savedData = FileHelper.readLocalFile(pathUploaded);
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
-				return json.fromJson(JsonSessionLog.class, savedData);
+				return json.fromJson(JsonSessionHistory.class, savedData);
 			} else {
 				Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones uploaded");
 			}
-			return new JsonSessionLog();
+			return new JsonSessionHistory();
 		}
 
 		public void save() {
 			Json json = new Json();
-			FileHelper.writeFile(JsonSessionLog.path, json.toJson(this));
+			FileHelper.writeFile(JsonSessionHistory.path, json.toJson(this));
 		}
 		public void saveUploaded() {
 			Json json = new Json();
-			FileHelper.writeFile(JsonSessionLog.pathUploaded, json.toJson(this));
+			FileHelper.writeFile(JsonSessionHistory.pathUploaded, json.toJson(this));
 		}
 
 		@Override
 		public void enviado() {
 			Gdx.app.debug(TAG, "Historial enviado");
 			// Crea un nuevo json con la info que esta en saved, le agrega la que esta en no saved y despues guarda saved y limpia no saved
-			JsonSessionLog jsonHistorySaved = JsonSessionLog.LoadUploaded();
+			JsonSessionHistory jsonHistorySaved = JsonSessionHistory.LoadUploaded();
 			jsonHistorySaved.history.addAll(this.history);
 			jsonHistorySaved.saveUploaded();
 			this.history.clear();
@@ -116,34 +117,6 @@ public class Session {
 		@Override
 		public void noEnviado() {
 			Gdx.app.debug(TAG, "Historial no enviado correctamente");
-		}
-
-		@Override
-		public void enviar() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void load() {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public String path() {
-			return "config/" + Constants.version() + "/sessionHistory.info";
-		}
-
-		@Override
-		public Object getObject() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Class getMyclass() {
-			// TODO Auto-generated method stub
-			return null;
 		}
 	}
 

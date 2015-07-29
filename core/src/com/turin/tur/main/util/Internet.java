@@ -7,22 +7,17 @@ import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
-import com.turin.tur.main.diseno.Session.JsonSessionLog;
+import com.turin.tur.main.diseno.Session.JsonSessionHistory;
 
 public class Internet {
 
 	private static final String TAG = Internet.class.getName();
 
-	void enviado(Object clase, String mensaje) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public static void PUT(final Enviable clase) {
+	public static void PUT(final Enviable objetoEnviado) {
 
 		Array<String> urls = new Array<String>();
-		urls.add("http://localhost:3000/" + clase.getClass().getSimpleName());
-		urls.add("http://181.169.225.117:3000/" + clase.getClass().getSimpleName());
+		urls.add("http://localhost:3000/" + objetoEnviado.getClass().getSimpleName());
+		urls.add("http://181.169.225.117:3000/" + objetoEnviado.getClass().getSimpleName());
 
 		for (final String url : urls) {
 
@@ -33,7 +28,7 @@ public class Internet {
 
 					Json json = new Json();
 					json.setOutputType(OutputType.json);
-					String requestJson = json.toJson(clase);
+					String requestJson = json.toJson(objetoEnviado);
 
 					Net.HttpRequest request = new Net.HttpRequest(HttpMethods.POST);
 					request.setContent(requestJson);
@@ -51,21 +46,21 @@ public class Internet {
 							System.out.println(httpResponse.getStatus().getStatusCode());
 							if (statusCode != HttpStatus.SC_CREATED) {
 								Gdx.app.debug(TAG, "" + httpResponse.getStatus().getStatusCode());
-								clase.noEnviado();
+								objetoEnviado.noEnviado();
 								System.out.println("Request Failed");
 							} else {
-								clase.enviado();
+								objetoEnviado.enviado();
 							}
 						}
 
 						public void failed(Throwable t) {
-							clase.noEnviado();
+							objetoEnviado.noEnviado();
 							System.out.println("Request Failed Completely");
 						}
 
 						@Override
 						public void cancelled() {
-							clase.noEnviado();
+							objetoEnviado.noEnviado();
 							System.out.println("request cancelled");
 						}
 
@@ -74,28 +69,43 @@ public class Internet {
 				}
 			}).start();
 		}
-
+	}
+		
+	/*
+	 * Este metodo tiene que cargar el objeto 
+	 */
+	public static void Enviar (Class clase, Enviable objeto, String path) throws ClassNotFoundException {
+		objeto = Internet.Load(clase,path);
+		Internet.PUT(objeto);
+	}
+		
+	private static Enviable Load(Class clase, String path) throws ClassNotFoundException { //Revisar bien que onda el throws!
+		String savedData = FileHelper.readLocalFile(path);
+		if (!savedData.isEmpty()) {
+			Json json = new Json();
+			return json.fromJson(clase, savedData);
+		} else {
+			Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones");
+		}
+		return new contenidoVacio();
 	}
 
 	public static abstract class Enviable {
-		public abstract String path();
-		public abstract Object getObject();
-		public abstract Class getMyclass ();
+		public abstract void enviado();
+		public abstract void noEnviado();
+	}
+	
+	public static class contenidoVacio extends Enviable {
+
+		@Override
+		public void enviado() {
+			Gdx.app.error(TAG, "Error al generar el contenido a enviar. Se ha generado un envio vacio");
+		}
+
+		@Override
+		public void noEnviado() {
+			Gdx.app.error(TAG, "Error al generar el contenido a enviar. Se ha generado un envio vacio");	
+		}
 		
-		public void enviar() {
-			// Esta rutina intenta subir los datos de la session al servidor. En funcion del resultado se activa enviado o no enviado (esto sucede en la funcion put de la clase internet)
-			this.load();
-			Internet.PUT(this);	
-		}
-		private <getMyclass> getMyclass load() {
-			String savedData = FileHelper.readLocalFile(this.path());
-			if (!savedData.isEmpty()) {
-				Json json = new Json();
-				return (getMyclass) json.fromJson(getMyclass(),savedData);
-			} else {
-				Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones");
-			}
-			return (getMyclass) new JsonSessionLog();
-		}
 	}
 }
