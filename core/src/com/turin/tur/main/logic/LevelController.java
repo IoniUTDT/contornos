@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level;
@@ -50,6 +51,8 @@ public class LevelController implements InputProcessor {
 		this.game=game;
 		this.session = session;
 		this.levelInfo = new Level(levelNumber);
+		this.levelInfo.levelLog.sessionId = this.session.sessionLog.id;
+		this.levelInfo.levelLog.idUser = this.session.user.id;
 		this.initCamera();
 		this.initTrial();
 	}
@@ -59,6 +62,11 @@ public class LevelController implements InputProcessor {
 		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition, this.trialActive);
 		this.timeInTrial=0;
 		this.nextTrialPending=false;
+		
+		// Registra el evento de la creacion del trial (falta implementar el log dentro del trial!)
+		this.levelInfo.levelLog.trialsVisited.add(this.trialActive.Id);
+		
+		// Esto esta obsoleto porque no se envia
 		String logText = TAG + ": Inicializado el trial " + this.trialActive.Id + ".\r\n";
 		FileHelper.appendFile(Constants.USERLOG, logText);
 	}
@@ -105,8 +113,11 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void completeLevel() {
+		// Indica y guarda en la info del usuario que completo este nivel
 		this.session.user.levelsCompleted.add(levelInfo.Id);
 		this.session.user.save();
+		// Indica en el log del level que se completo
+		this.levelInfo.levelLog.levelCompleted = true;
 		this.saveTouches();
 		this.backToMenu();
 	}
@@ -147,6 +158,15 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void backToMenu() {
+		// Registra que se sale al menu principal en los logs (falta agregar el log dentro del trial)
+		this.levelInfo.levelLog.exitTrialId = this.trialActive.Id;
+		this.levelInfo.levelLog.exitTrialPosition = this.levelInfo.activeTrialPosition;
+		this.levelInfo.levelLog.timeExit = TimeUtils.millis();
+		
+		// Guarda en el registro general de log de levels el log de esta instanciacion del nivel e intenta enviarlo por interner.
+		Level.LevelLogHistory.append(this.levelInfo.levelLog);
+		
+		// continua con la logica del programa
 		stopSound();
 		game.setScreen(new MenuScreen(game, this.session));
 	}

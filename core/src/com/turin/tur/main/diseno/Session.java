@@ -14,7 +14,7 @@ public class Session {
 	public User user;
 	public int numberOfLevels;
 	public int nextLevel;
-	public JsonSession session;
+	public JsonSession sessionLog;
 
 	public Session() {
 		loadUser();
@@ -48,11 +48,11 @@ public class Session {
 
 	private void initSession() {
 		// Crea la session
-		this.session = new JsonSession();
-		this.session.userID = this.user.id;
-		this.session.userName = this.user.name;
+		this.sessionLog = new JsonSession();
+		this.sessionLog.userID = this.user.id;
+		this.sessionLog.userName = this.user.name;
 		JsonSessionHistory jsonHistory = JsonSessionHistory.Load();
-		jsonHistory.history.add(this.session);
+		jsonHistory.history.add(this.sessionLog);
 		jsonHistory.save();
 	}
 
@@ -67,7 +67,7 @@ public class Session {
 
 	public static class JsonSessionHistory extends Internet.Enviable{
 
-		public static String path = "config/" + Constants.version() + "/sessionHistory.info";
+		public static String path = "logs/" + Constants.version() + "/sessionHistory.info";
 		public static String pathUploaded = path + ".uploaded";
 		public Array<JsonSession> history = new Array<JsonSession>();
 
@@ -119,13 +119,13 @@ public class Session {
 		}
 	}
 
-	public static class JsonSession {
+	public static class JsonSession { //Nota: tiene que ser static porque sino colapsa el JsonLoad al quere crear instancias
 		public long userID;
-		public long time;
+		public long id;
 		public String userName;
 
 		public JsonSession() {
-			this.time = TimeUtils.millis();
+			this.id = TimeUtils.millis();
 		}
 	}
 	

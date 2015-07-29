@@ -10,6 +10,7 @@ import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
@@ -186,5 +187,60 @@ public class Trial {
 			Gdx.app.error(TAG, "No se a podido encontrar la info del objeto experimental " + Id);
 			return null;
 		}
+	}
+	
+	public static class TouchLog {
+		// Todas las cosas se deberian generar al mismo tiempo
+		public long touchInstance;
+		public long trialInstance;
+		public int idResourceTouched;
+		public TIPOdeTRIAL tipoDeTrial; 
+		public boolean isTrue;
+		public long timeSinceLastStartSound;
+		public int numberOfSoundLoops;
+	}
+	
+	public static class SoundLog {
+		// Variables que se crean con el evento
+		public long soundInstance;
+		public int soundId;
+		public Array<Categorias> categorias = new Array<Categorias>();
+		public long trialInstance;
+		public int trialId;
+		public boolean fromStimuli;
+		public int numberOfLoop;
+		public long startTime;
+		public int numberOfSoundInTrial;
+		// Variables que se generan una vez creado el evento
+		public long stopTime;
+		public boolean stopByExit;
+		public boolean stopByUser;
+	}
+
+	public static class TrialLog {
+		// Info de arbol del evento 
+		public long sessionId;
+		public long levelInstance;
+		public long trialInstance;
+		// Info del usuario y del trial
+		public long trialId;
+		public long userId;
+		public String userName;
+		public Array<Categorias> categoriasElementos = new Array<Categorias>(); 
+		public Array<Categorias> categoriasEstimulo = new Array<Categorias>();
+		public int idRtaCorrecta;
+		public int indexOfTrialInLevel;
+		public int trialsInLevel;
+		public Array<Integer> resourcesIdSort = new Array<Integer>();
+		public DISTRIBUCIONESenPANTALLA distribucionEnPantalla;
+		public TIPOdeTRIAL tipoDeTrial;
+		
+		// Informacion de lo que sucede durante la interaccion del usuario
+		public long timeStartTrial;
+		public long timeStopTrial;
+		public boolean trialCompleted;
+		public Array<Integer> resourcesIdSelected = new Array<Integer>();
+		public Array<TouchLog> touchLog = new Array<TouchLog>();
+		public Array<SoundLog> soundLog = new Array<SoundLog>(); 
 	}
 }

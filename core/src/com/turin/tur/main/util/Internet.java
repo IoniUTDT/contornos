@@ -7,7 +7,7 @@ import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
-import com.turin.tur.main.diseno.Session.JsonSessionHistory;
+
 
 public class Internet {
 
