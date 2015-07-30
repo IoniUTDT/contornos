@@ -17,6 +17,7 @@ public class Session {
 	public JsonSession sessionLog;
 
 	public Session() {
+		Internet.Check();
 		loadUser();
 		initSession();
 		uploadSession();

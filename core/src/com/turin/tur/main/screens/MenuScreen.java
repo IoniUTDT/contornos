@@ -6,6 +6,9 @@ import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,8 +23,10 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.diseno.User;
+import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
+import com.turin.tur.main.util.Internet;
 
 
 public class MenuScreen extends AbstractGameScreen {
@@ -43,6 +48,9 @@ public class MenuScreen extends AbstractGameScreen {
 	
 	// Variables para funcionamiento interno
 	int levelIterator;
+
+	public SpriteBatch batch;
+	public OrthographicCamera cameraGUI;
 	
 	
 	public MenuScreen(Game game, Session session) {
@@ -59,7 +67,42 @@ public class MenuScreen extends AbstractGameScreen {
 		stage.draw();
 		table.drawDebug(shapeRenderer); // This is optional, but enables debug
 										// lines for tables.
+		guiRender();
+		
+	}
 
+	private void guiRender() {
+		batch.setProjectionMatrix(cameraGUI.combined);
+		batch.begin();
+		renderServerStatus();
+		//this.levelController.levelInterfaz.renderFps(batch,cameraGUI);
+		//this.levelController.levelInterfaz.renderTitle(batch, cameraGUI);
+		batch.end();
+	}
+
+	private void renderServerStatus() {
+		float x = cameraGUI.viewportWidth - 70;
+		float y = cameraGUI.viewportHeight - 30;
+		BitmapFont fpsFont = Assets.instance.fonts.defaultSmallFont;
+		if (Internet.serverOk) {
+			// show up in green
+			fpsFont.setColor(0, 1, 0, 1);
+		} else {
+			// show up in red
+			fpsFont.setColor(1, 0, 0, 1);
+		}
+		fpsFont.draw(batch, "Server", x, y);
+		fpsFont.setColor(1, 1, 1, 1); // white
+		
+	}
+
+	private void guiRenderInit() {
+		batch = new SpriteBatch();
+		cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH,
+				Constants.VIEWPORT_GUI_HEIGHT);
+		cameraGUI.position.set(0, 0, 0);
+		cameraGUI.setToOrtho(true); // flip y-axis
+		cameraGUI.update();
 	}
 
 	@Override
@@ -104,6 +147,7 @@ public class MenuScreen extends AbstractGameScreen {
 			}
 			levelButtons.add(button);
 			Gdx.app.debug(TAG, "agregado boton" + button.getText());
+			guiRenderInit();
 		}
 		
 		// Boton que carga el nombre del usuario y permite modificarlo

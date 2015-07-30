@@ -17,10 +17,10 @@ public class LevelInterfaz {
 	public Array<Botones> botones = new Array<Botones>(); // conjunto de botones
 	private Level levelInfo;   
 	private int trialNumber; // Numero de trial que esta activo
-	private Trial trialActive;
+	private Trial trial;
 	
-	public LevelInterfaz (Level levelInfo, int trialNumber, Trial trialActive){
-		this.trialActive = trialActive;
+	public LevelInterfaz (Level levelInfo, int trialNumber, Trial trial){
+		this.trial = trial;
 		this.levelInfo = levelInfo;
 		this.trialNumber = trialNumber;
 		if (this.trialNumber!=0) {botones.add(new BotonAnterior());}
@@ -28,11 +28,13 @@ public class LevelInterfaz {
 	}
 	
 	public void render(SpriteBatch batch) {
-		for (Botones boton:botones) {
-			boton.render(batch);
+		if (this.trial.trialCompleted) {
+			for (Botones boton:botones) {
+				boton.render(batch);
+			}
 		}
 	}
-		
+	
 	public abstract class Botones {
 		public Sprite imagen; // Imagen del boton
 		public float tamano; // Tamano del boton
@@ -129,8 +131,8 @@ public class LevelInterfaz {
 	
 	public void renderTitle (SpriteBatch batch, OrthographicCamera cameraGUI) {
 		Assets.instance.fonts.defaultSmallFont.draw(batch, levelInfo.levelTitle, cameraGUI.viewportWidth/5 , 50); 
-		Assets.instance.fonts.defaultSmallFont.draw(batch, trialActive.jsonTrial.title , cameraGUI.viewportWidth/5*2 , 50);
-		Assets.instance.fonts.defaultSmallFont.draw(batch, trialActive.jsonTrial.caption , cameraGUI.viewportWidth/5*2 , cameraGUI.viewportHeight/10*9);
-		Assets.instance.fonts.defaultSmallFont.draw(batch, "Trial #" + trialNumber + " Id: "+ trialActive.Id , cameraGUI.viewportWidth/5 *4, 50); 
+		Assets.instance.fonts.defaultSmallFont.draw(batch, trial.jsonTrial.title , cameraGUI.viewportWidth/5*2 , 50);
+		Assets.instance.fonts.defaultSmallFont.draw(batch, trial.jsonTrial.caption , cameraGUI.viewportWidth/5*2 , cameraGUI.viewportHeight/10*9);
+		Assets.instance.fonts.defaultSmallFont.draw(batch, "Trial #" + trialNumber + " Id: "+ trial.Id , cameraGUI.viewportWidth/5 *4, 50); 
 	}
 }

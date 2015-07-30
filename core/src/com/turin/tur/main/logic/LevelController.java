@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -26,6 +27,9 @@ import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
 public class LevelController implements InputProcessor {
 
+	// Constantes generales del la interfaz
+	private static final boolean autoChangeTrial = true;
+	
 	// Cosas relacionadas con la interfaz grafica
 	public OrthographicCamera camera; 
 	public static final String TAG = LevelController.class.getName();
@@ -34,7 +38,7 @@ public class LevelController implements InputProcessor {
 	// Cosas relacionadas con los elementos del juego
 	public Array<TouchInfo> touchSecuence = new Array<TouchInfo>();
 	public Array<TouchInfo> completeTouchSecuence = new Array<TouchInfo>();
-	public Trial trialActive;
+	public Trial trial;
 	public LevelInterfaz levelInterfaz;
 	private Game game;
 	private Level levelInfo; //Informacion del nivel cargado
@@ -46,7 +50,8 @@ public class LevelController implements InputProcessor {
 	public float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
 	boolean elementoSeleccionado = false; // Sin seleccion
 	public Session session;
-	
+	public Sound runingSound;
+		
 	public LevelController(Game game, int levelNumber, int trialNumber, Session session) {
 		this.game=game;
 		this.session = session;
@@ -59,16 +64,16 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void initTrial() {
-		this.trialActive = new Trial (this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
-		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition, this.trialActive);
+		this.trial = new Trial (this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
+		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition, this.trial);
 		this.timeInTrial=0;
 		this.nextTrialPending=false;
 		
 		// Registra el evento de la creacion del trial (falta implementar el log dentro del trial!)
-		this.levelInfo.levelLog.trialsVisited.add(this.trialActive.Id);
+		this.levelInfo.levelLog.trialsVisited.add(this.trial.Id);
 		
 		// Esto esta obsoleto porque no se envia
-		String logText = TAG + ": Inicializado el trial " + this.trialActive.Id + ".\r\n";
+		String logText = TAG + ": Inicializado el trial " + this.trial.Id + ".\r\n";
 		FileHelper.appendFile(Constants.USERLOG, logText);
 	}
 
@@ -82,7 +87,7 @@ public class LevelController implements InputProcessor {
 	public void update(float deltaTime) {
 				
 		// Actualiza el trial
-		this.trialActive.update(deltaTime);
+		this.trial.update(deltaTime);
 				
 		// actualiza cosas generales
 		cameraHelper.update(deltaTime);
@@ -90,7 +95,7 @@ public class LevelController implements InputProcessor {
 		timeInTrial = timeInTrial + deltaTime;
 		
 		// Procesa cambios de trial si los hay pendientes
-		if (this.trialActive.trialCompleted) {
+		if ((this.trial.trialCompleted) & (this.autoChangeTrial)) {
 				this.nextTrialPending=true;
 			}
 		this.changeTrial();
@@ -99,10 +104,10 @@ public class LevelController implements InputProcessor {
 	private void changeTrial() {
 		if (this.nextTrialPending) {
 			boolean wait = false;
-			for (AnswerBox box :this.trialActive.answerBoxes) {
+			for (AnswerBox box :this.trial.answerBoxes) {
 				if (box.answerActive) {wait=true;}
 			}
-			for (TrainingBox box :this.trialActive.trainigBoxes) {
+			for (TrainingBox box :this.trial.trainigBoxes) {
 				if (box.runningSound) {wait=true;}
 			}
 			if (!wait) {
@@ -160,7 +165,7 @@ public class LevelController implements InputProcessor {
 
 	private void backToMenu() {
 		// Registra que se sale al menu principal en los logs (falta agregar el log dentro del trial)
-		this.levelInfo.levelLog.exitTrialId = this.trialActive.Id;
+		this.levelInfo.levelLog.exitTrialId = this.trial.Id;
 		this.levelInfo.levelLog.exitTrialPosition = this.levelInfo.activeTrialPosition;
 		this.levelInfo.levelLog.timeExit = TimeUtils.millis();
 		
@@ -173,9 +178,7 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void stopSound() {
-		for (Box box: this.trialActive.allBox) {
-			box.stopSound();
-		}
+		this.trial.stopSound();
 	}
 
 	@Override
@@ -187,7 +190,7 @@ public class LevelController implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// Crea un evento de toque
-    	TouchInfo touch = new TouchInfo(timeInLevel,timeInTrial,levelInfo,trialActive,session.user);
+    	TouchInfo touch = new TouchInfo(timeInLevel,timeInTrial,levelInfo,trial,session.user);
     	// calcula el toque en pantalla
    		touch.coordScreen = new Vector3 (screenX, screenY, 0);
    		// calcula el toque en el juego 
@@ -210,7 +213,7 @@ public class LevelController implements InputProcessor {
 	    	}
 	    	
 	    	// se fija si se toco alguna imagen training
-	    	for (Box box : this.trialActive.trainigBoxes) {
+	    	for (Box box : this.trial.trainigBoxes) {
 	    		if (box.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 	    			Gdx.app.debug(TAG, "Ha tocado la imagen " + box.contenido.Id);
 	    			cargarInfoDelTouch (box,touchData);
@@ -219,7 +222,7 @@ public class LevelController implements InputProcessor {
 	    	}
 
 	    	// se fija si se toco alguna imagen answer
-	    	for (Box box : this.trialActive.answerBoxes) {
+	    	for (Box box : this.trial.answerBoxes) {
 	    		if (box.spr.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
 	    			Gdx.app.debug(TAG, "Ha tocado la imagen " + box.contenido.Id);
 	    			cargarInfoDelTouch (box,touchData);
@@ -247,19 +250,19 @@ public class LevelController implements InputProcessor {
 			// selecciona el elemento actual si hay elemento tocado
 			if (touchData.elementTouched) {
 				// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
-				if (this.trialActive.jsonTrial.modo == TIPOdeTRIAL.TEST) {
+				if (this.trial.jsonTrial.modo == TIPOdeTRIAL.TEST) {
 					Boolean correcta=false;
-					if (this.trialActive.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) {correcta=true;} // Significa que se toco la respuesta igual a la correcta
+					if (this.trial.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) {correcta=true;} // Significa que se toco la respuesta igual a la correcta
 					if (touchData.thisTouchBox.contenido.categoria.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
 						for (Categorias categoriaDelObjetoTocado: touchData.thisTouchBox.contenido.categoria){
-							if (this.trialActive.rtaCorrecta.categoria.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
+							if (this.trial.rtaCorrecta.categoria.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
 								correcta=true;
 							}
 						}
 					}
 					if (correcta){ // Significa q se selecciono la opcion correcta
 						touchData.thisTouchBox.answer=true;
-						this.trialActive.stimuliBox.stopSound();
+						this.trial.stopSound();
 			    		this.nextTrialPending=true;
 					}
 				}
@@ -268,16 +271,18 @@ public class LevelController implements InputProcessor {
 			}
 	    	
 			// Se fija si se toco algun elemento de la interfaz del nivel
-			for (Botones boton:this.levelInterfaz.botones) {
-				if (boton.imagen.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
-					Gdx.app.debug(TAG, "Ha tocado el boton " + boton.getClass().getName());
-					elementoSeleccionado = true;
-					if (boton.getClass() == LevelInterfaz.BotonSiguiente.class){ this.goToNextTrial();}
-					if (boton.getClass() == LevelInterfaz.BotonAnterior.class){ this.goToPreviousTrial();}
-	
+			if (this.trial.trialCompleted) {
+				for (Botones boton:this.levelInterfaz.botones) {
+					if (boton.imagen.getBoundingRectangle().contains(touchData.coordGame.x, touchData.coordGame.y)){
+						Gdx.app.debug(TAG, "Ha tocado el boton " + boton.getClass().getName());
+						elementoSeleccionado = true;
+						if (boton.getClass() == LevelInterfaz.BotonSiguiente.class){ this.goToNextTrial();}
+						if (boton.getClass() == LevelInterfaz.BotonAnterior.class){ this.goToPreviousTrial();}
+		
+					}
 				}
 			}
-			this.trialActive.checkTrialCompleted();
+			this.trial.checkTrialCompleted();
     	}		
 	}
 

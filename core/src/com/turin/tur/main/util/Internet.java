@@ -12,7 +12,67 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 public class Internet {
 
 	private static final String TAG = Internet.class.getName();
+	public static boolean internetChecked=false;
+	public static boolean serverOnline=false;
+	public static String serverStatus="";
+	public static HttpStatus serverStatusCode;
+	public static boolean serverOk;
+	public static final String server = "http://turintur.dynu.com/";
+	
+	public static void Check() {
+		serverOnline = false; // Reinicia el status del server
+		serverOk = false;
+		internetChecked=true; // Indica que comenzo a chaequear
+		new Thread(new Runnable() {
 
+			@Override
+			public void run() {
+
+				String requestJson = "";
+				
+				final Net.HttpRequest request = new Net.HttpRequest(HttpMethods.GET);
+				request.setContent(requestJson);
+
+				request.setHeader("Content-Type", "application/json");
+				request.setHeader("Accept", "application/json");
+				request.setUrl(server+"status/");
+
+				Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
+
+					public void handleHttpResponse(Net.HttpResponse httpResponse) {
+
+						serverOnline=true;
+						serverStatus = httpResponse.getStatus().toString();
+						serverStatusCode= httpResponse.getStatus();
+						String rta = httpResponse.getResultAsString();
+						if (rta.contains("on")) {
+							serverOk=true;
+							System.out.println("Server ok");
+						} else {
+							serverOk = false;
+							System.out.println("Server not ok");
+						}
+						
+					}
+
+					public void failed(Throwable t) {
+						serverOnline=false;
+						System.out.println("Request Failed Completely");
+					}
+
+					@Override
+					public void cancelled() {
+						serverOnline=false;
+						System.out.println("request cancelled");
+					}
+
+				});
+
+			}
+		}).start();
+		
+	}
+	
 	public static void PUT(final Enviable objetoEnviado) {
 
 		Array<String> urls = new Array<String>();

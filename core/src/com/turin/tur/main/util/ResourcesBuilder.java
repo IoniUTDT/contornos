@@ -1,11 +1,13 @@
 package com.turin.tur.main.util;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.diseno.ExperimentalObject;
+import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
@@ -19,6 +21,8 @@ public class ResourcesBuilder {
 	 * Esta clase crea los archivos SVG. Solo deberia ser llamada desde el constructor en windows xq la idea es poder usar cosas de java por fuera de libgdx.
 	 */
 
+	private static final String TAG = ResourcesBuilder.class.getName();
+	
 	static int contadorDeRecursos = Constants.Resources.Reservados;
 	static int contadorLevels = 0;
 	static int contadorTrials = 0;
@@ -46,6 +50,7 @@ public class ResourcesBuilder {
 				objetos.addAll(secuenciaAngulos()); // Agrega los angulos
 				objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
 				objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
+				//objetos.addAll(secuenciaCuadradosVerticales()); // Agrega cuadrados
 			}
 			// Crea los archivos correspondientes
 			for (Imagen im : objetos) {
@@ -219,6 +224,120 @@ public class ResourcesBuilder {
 			}
 		}
 		return objetos;
+	}
+
+	private static Array<Imagen> secuenciaRombos(float ladoP, float excentricidadMaxima, float excentricidadMinima, float anguloP, int cantidad, 
+			boolean centered, boolean rotados, boolean escalaFija) {
+		/*
+		 * Esta rutina devuelve una secuencia de rombos que se contruyen a partir de los siguientes parametros:
+		 * 
+		 * lado: longitud del lado del cuadrilatero
+		 * angulo: inclinacion del rombo, un angulo de 0º significa que la diagonal menor esta horizontal. Un angulo de 45º para un cuadrado significa que los lados estan horizontales y verticales
+		 * excentricidad: relacion entre la diagonal menor y la mayor. Si la excentricidad es mayor que uno calcula la inversa de manera que siempre la diagonal mayor se asuma vertical (previamente a la rotacion dada por angulo)
+		 * 				  una excentricidad igual a 1 da un cuadrado. Si son diferentes la minima y la maxima hace random entre ellas, sino usa la maxima.
+		 * 
+		 * cantidad determina la cantidad de figuras que se generan
+		 * centered determina si estan centradas o si se las posiciona al azar.
+		 * rotados determina si se agraga una rotacion random al angulo o no. 
+		 * escala determina si se modifica (para menos) el tamaño o no.
+		 * 
+		 * Se asume que todos los parametros son positivos!
+		 */
+		
+		float margen = 10; // Esta variable determina cuanto espacio se debe dejar de margen para que la figura no este muy pegada al borde.
+		
+		// Parametros de la figura que se calculan durante la generacion
+		double ancho;
+		double alto;
+		double diagMayor;
+		double diagMenor;
+		
+		// Constantes con los que se pueden modificar los parametros si se lo indica
+		double escalaMinima=0.2;
+		
+		// parametros generales
+		float angulo;
+		double lado;
+		float excentricidad;
+		double xCenter;
+		double yCenter;
+		
+		int errores = 0;
+		
+		for (int creados=0; creados<cantidad; creados++) {
+			// Verifica que no haya muchas figuras invalidas (por ej por no entrar)
+			if (errores>cantidad){
+				Gdx.app.error(TAG, "Demaciadas figuras no pudieron ser creadas en la rutina que crea cuadrilateros. Considere revisar los parametros");
+				break;
+			}
+			
+			// Generamos los parametros para cada cuadrilatero especifico si depende de factores random.
+			excentricidad = excentricidadMaxima - MathUtils.random(excentricidadMaxima-excentricidadMinima);
+			
+			if (rotados) {
+				angulo = anguloP + MathUtils.random(180);
+			} else {
+				angulo = anguloP;
+			}
+			
+			if (escalaFija) {
+				lado = ladoP;
+			} else {
+				lado = ladoP*escalaMinima;
+			}
+			
+			// Primero calculamos las diagonales a partir de la medida del lado y la excentricidad
+			
+			
+			/*
+			 * De plantear que con d=semidiagonal mayor:  d^2 + (d*e)^2 = l^2 sale que  
+			 */
+			
+			diagMayor = 2 * Math.sqrt(lado*lado/(1+excentricidad*excentricidad));
+			diagMenor = diagMayor * excentricidad;
+			
+			// una vez que calcula las diagonales, sabiendo la inclinacion puede calcular el alto y el ancho
+			double anchoDiagMayor = diagMayor * Math.sin(angulo);
+			double altoDiagMayor = diagMayor * Math.cos(angulo);
+			double anchoDiagMenor = diagMenor * Math.cos(angulo);
+			double altoDiagMenor = diagMenor * Math.sin(angulo);
+			ancho = Math.max(anchoDiagMayor,anchoDiagMenor);
+			alto = Math.max(altoDiagMayor,altoDiagMenor);
+			
+			// Verifica que la figura entre en la imagen
+			
+			if ((ancho+margen*2>=height) || (alto+margen*2>=width)) {
+				errores++;
+				Gdx.app.log(TAG, "El cuadrilatero calculado ha sido descartado por no entrar en la figura");
+			} else { // Si la figura entra sigue
+				
+				// setea el centro
+				if (centered) {
+					xCenter = width/2;
+					yCenter = height/2;
+				} else {
+					xCenter = width/2 + MathUtils.random((float) (width/2 - margen - ancho/2));
+					yCenter = height/2 + MathUtils.random((float) (height/2 - margen - alto/2));
+				}
+				
+				// SEGUIR ACA
+			}
+			
+		}
+		
+		return null;
+		
+		
+		
+	}
+	
+	private static void calcularAncho(float lado, float angulo) {
+		/*
+		 * Esta funcion calcula el ancho que tiene la proyeccion sobre cada eje para un cuadrado de lado l y rotado un cierto angulo.
+		 * Para eso primero calcula la diagonal 
+		 */
+		
+		
 	}
 
 	private static Array<Imagen> secuenciaLineasHorizontales() {

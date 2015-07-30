@@ -31,6 +31,7 @@ public abstract class Boxes {
 		public Sprite spr; // Guarda la imagen que se va a mostrar (se genera a partir del contenido de la caja)
 		
 		// Variables utiles para la dinamica del programa
+		public Trial trial;
 		
 		// Variables especificas de cada tipo pero que estan en la clase general porque se llaman desde afuera
 		public boolean answer=false; // Resultado de la respuesta
@@ -57,22 +58,6 @@ public abstract class Boxes {
 			this.posicionCenter.x = xCenter;
 			this.posicionCenter.y = yCenter;
 		}
-			
-		protected long waitForLoadCompleted(Sound sound) {
-	        long id;
-	        while ((id = sound.play(0)) == -1) {
-	            long t = TimeUtils.nanoTime();
-	            while (TimeUtils.nanoTime() - t < 100000000);
-	        }
-	        return id;
-	    }
-
-		public void stopSound() {
-			if (!this.contenido.noSound){
-				this.contenido.sonido.stop();
-			}
-			
-		}
 
 	}
 	
@@ -85,12 +70,13 @@ public abstract class Boxes {
 		private Sprite soundAnimationSpr; // imagen para mostrar la animacion de reproduccion del sonido 
 		public boolean alreadySelected;
 		
-		public TrainingBox (ExperimentalObject contenido) {
+		public TrainingBox (ExperimentalObject contenido, Trial trial) {
 			
 			// Carga cosas relacionadas al contenido
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = this.contenido.imagen;
+			this.trial = trial;
 			
 			// inicializa las variables que manejan la reproduccion del sonido
 			this.runningSound = false;
@@ -135,7 +121,7 @@ public abstract class Boxes {
 			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.Id);
 			if (!this.contenido.noSound) {
 				this.runningSound = false;
-				this.contenido.sonido.stop();
+				this.trial.stopSound();
 				soundAvanceReproduccion = 0; //reset the advance point of sound animation
 			}
 		}
@@ -146,9 +132,7 @@ public abstract class Boxes {
 			if (!this.contenido.noSound) {
 				this.runningSound = true;
 				this.soundAvanceReproduccion = 0;
-				Sound sonido = this.contenido.sonido;
-				waitForLoadCompleted(this.contenido.sonido);
-				sonido.play();
+				this.trial.playSound(this.contenido.sonido);
 			}
 		}
 	}
@@ -162,11 +146,12 @@ public abstract class Boxes {
 		private Sprite answerSprFalse; // Imagen para respuestas falsas
 		public boolean answerActive;
 		
-		public AnswerBox (ExperimentalObject contenido){
+		public AnswerBox (ExperimentalObject contenido, Trial trial){
 			// Carga cosas relacionadas al contenido
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = this.contenido.imagen;
+			this.trial = trial;
 			
 			// inicializa las variables relacionadas a la dinamica de la respuesta
 			this.createAnswerAnimationResources();
@@ -291,16 +276,16 @@ public abstract class Boxes {
 		private Sprite stimuliAnimationSpr; // Sprite para la animacion del sonido 
 		private boolean drawStimuli; // Variable que determina si se debe dibujar o no (cuando llega al fin del sonido deba de dibujar)
 
-		public StimuliBox (ExperimentalObject contenido) {
+		public StimuliBox (ExperimentalObject contenido, Trial trial) {
 			
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = new Sprite (Assets.instance.imagenes.stimuliLogo);
+			this.trial = trial;
 		
 			// inicializa el tiempo de modo q se resetee apenas empieza
 			this.stimuliAvanceReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR;
 			this.stimuliDuracionReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA;	
-			// this.stimuliActive = true;
 			
 			this.createSoundAnimationResources();
 		}
@@ -327,8 +312,7 @@ public abstract class Boxes {
 				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
 					this.drawStimuli=true;
 					stimuliAvanceReproduccion = 0; //reset the advance point of sound
-					waitForLoadCompleted(this.contenido.sonido);
-					this.contenido.sonido.play();
+					this.trial.playSound(this.contenido.sonido);
 				}
 			}
 		}

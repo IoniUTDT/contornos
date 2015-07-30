@@ -1,10 +1,11 @@
 package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.oracle.webservices.internal.api.message.DistributedPropertySet;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
@@ -19,15 +20,6 @@ public class Trial {
 
 	public int Id; // Id q identifica al trial
 
-	// Cosas que se cargan desde archivos
-	// public String title; // Titulo optativo q describe al trial
-	// public String caption; // Texto que se muestra debajo
-	// public TIPOdeTRIAL modo; // Tipo de trial
-	// public int[] elementosId; // Lista de objetos del trial.
-	// public int rtaCorrectaId; // Respuesta correcta en caso de que sea test.
-	// public boolean rtaRandom; // Determina si se elije una rta random
-	// public DISTRIBUCIONESenPANTALLA distribucion; // guarda las posiciones de
-	// los elementos a mostrar
 	public JsonTrial jsonTrial;
 
 	// objetos que se cargan en el load o al inicializar
@@ -43,6 +35,8 @@ public class Trial {
 
 	// Variable que tiene que ver con el estado del trial
 	public boolean trialCompleted = false;
+	public Sound activeSound;
+	public boolean runningSound=false;
 
 	// constantes
 	public static final String TAG = Trial.class.getName();
@@ -69,7 +63,7 @@ public class Trial {
 			}
 
 			for (ExperimentalObject elemento : this.elementos) {
-				TrainingBox box = new TrainingBox(elemento);
+				TrainingBox box = new TrainingBox(elemento, this);
 				if (this.jsonTrial.randomSort) {
 					box.SetPosition(jsonTrial.distribucion.X(ordenRandom.get(this.elementos.indexOf(elemento, true))),
 							jsonTrial.distribucion.Y(ordenRandom.get(this.elementos.indexOf(elemento, true))));
@@ -95,7 +89,7 @@ public class Trial {
 			}
 
 			for (ExperimentalObject elemento : this.elementos) {
-				AnswerBox box = new AnswerBox(elemento);
+				AnswerBox box = new AnswerBox(elemento, this);
 				if (this.jsonTrial.randomSort) {
 					box.SetPosition(jsonTrial.distribucion.X(ordenRandom.get(this.elementos.indexOf(elemento, true))) + Constants.Box.SHIFT_MODO_SELECCIONAR,
 							jsonTrial.distribucion.Y(ordenRandom.get(this.elementos.indexOf(elemento, true))));
@@ -105,7 +99,7 @@ public class Trial {
 				}
 				this.answerBoxes.add(box);
 			}
-			stimuliBox = new StimuliBox(rtaCorrecta);
+			stimuliBox = new StimuliBox(rtaCorrecta, this);
 			stimuliBox.SetPosition(0 + Constants.Box.SHIFT_ESTIMULO_MODO_SELECCIONAR, 0);
 			allBox.add(stimuliBox);
 		}
@@ -154,7 +148,30 @@ public class Trial {
 		}
 		return trialCompleted;
 	}
+	
+	public void playSound(Sound sonido) {
+		this.activeSound = sonido;
+		waitForLoadCompleted(this.activeSound);
+		this.activeSound.play();
+		this.runningSound = true;
+		
+	}
 
+	public long waitForLoadCompleted(Sound sound) {
+        long id;
+        while ((id = sound.play(0)) == -1) {
+            long t = TimeUtils.nanoTime();
+            while (TimeUtils.nanoTime() - t < 50000000);
+        }
+        return id;
+    }
+	
+	public void stopSound() {
+		if (this.runningSound) {
+			this.activeSound.stop();
+			this.runningSound=false;
+		}
+	}
 	// Seccion encargada de guardar y cargar info de trials
 
 	// devuelve la info de la metadata

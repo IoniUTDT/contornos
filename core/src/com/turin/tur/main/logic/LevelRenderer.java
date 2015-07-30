@@ -3,10 +3,7 @@ package com.turin.tur.main.logic;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import com.turin.tur.main.diseno.Boxes;
-import com.turin.tur.main.diseno.LevelInterfaz;
 import com.turin.tur.main.diseno.Boxes.Box;
-import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.util.Constants;
 
 public class LevelRenderer implements Disposable {
@@ -42,9 +39,10 @@ public class LevelRenderer implements Disposable {
 
 	private void renderInterfaz(SpriteBatch batch) {
 		
-		 for (Botones boton:levelController.levelInterfaz.botones) {
-			boton.render(batch);
-		}
+		levelController.levelInterfaz.render(batch);
+		//for (Botones boton:levelController.levelInterfaz.botones) {
+		//	boton.render(batch);
+		//}
 		
 	}
 
@@ -62,7 +60,7 @@ public class LevelRenderer implements Disposable {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
-		for (Box box : levelController.trialActive.allBox) {
+		for (Box box : levelController.trial.allBox) {
 			box.render(batch);
 		}
 		
