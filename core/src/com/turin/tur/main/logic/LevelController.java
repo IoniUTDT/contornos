@@ -53,6 +53,7 @@ public class LevelController implements InputProcessor {
 		this.levelInfo = new Level(levelNumber);
 		this.levelInfo.levelLog.sessionId = this.session.sessionLog.id;
 		this.levelInfo.levelLog.idUser = this.session.user.id;
+		this.levelInfo.levelLog.userName = this.session.user.name;
 		this.initCamera();
 		this.initTrial();
 	}

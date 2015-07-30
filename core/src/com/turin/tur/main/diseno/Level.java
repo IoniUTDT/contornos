@@ -125,6 +125,7 @@ public class Level {
 		public long levelInstance;
 		public int levelId;
 		public long idUser;
+		public String userName;
 		public long timeStarts;
 		public long timeExit;
 		public boolean levelCompleted;

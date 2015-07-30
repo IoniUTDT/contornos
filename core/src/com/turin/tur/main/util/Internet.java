@@ -16,8 +16,8 @@ public class Internet {
 	public static void PUT(final Enviable objetoEnviado) {
 
 		Array<String> urls = new Array<String>();
-		urls.add("http://localhost:3000/" + objetoEnviado.getClass().getSimpleName());
-		urls.add("http://181.169.225.117:3000/" + objetoEnviado.getClass().getSimpleName());
+		urls.add("http://turintur.dynu.com/" + objetoEnviado.getClass().getSimpleName());
+		//urls.add("http://181.169.225.117:3000/" + objetoEnviado.getClass().getSimpleName());
 
 		for (final String url : urls) {
 
