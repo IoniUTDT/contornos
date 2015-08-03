@@ -32,7 +32,7 @@ public class ResourcesBuilder {
 
 	public static void buildNewSVG() {
 
-		Boolean elements = false;
+		Boolean elements = true;
 		if (elements) {
 
 			// Crea los objetos reservados (por ahora textos de botones y categorias)
@@ -43,14 +43,14 @@ public class ResourcesBuilder {
 			// Crea los objetos
 			Array<Imagen> objetos = new Array<Imagen>();
 
-			boolean geometrias=false;
+			boolean geometrias=true;
 			if (geometrias) {
 				objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
 				objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
 				objetos.addAll(secuenciaAngulos()); // Agrega los angulos
 				objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
 				objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
-				//objetos.addAll(secuenciaCuadradosVerticales()); // Agrega cuadrados
+				objetos.addAll(secuenciaRombos(30, 1, 1, 45, 10, true, true, false)); // Agrega cuadrados
 			}
 			// Crea los archivos correspondientes
 			for (Imagen im : objetos) {
@@ -346,8 +346,8 @@ public class ResourcesBuilder {
 				nodo3.x = (float) (-diagMenor/2);
 				nodo3.y = (float) (-diagMayor/2);
 				nodo4 = new Vector2();
-				nodo3.x = (float) (+diagMenor/2);
-				nodo3.y = (float) (-diagMayor/2);
+				nodo4.x = (float) (+diagMenor/2);
+				nodo4.y = (float) (-diagMayor/2);
 				// Los rota lo que corresponda segun el angulo del cuadrilatero
 				nodo1.rotate(angulo);
 				nodo2.rotate(angulo);
