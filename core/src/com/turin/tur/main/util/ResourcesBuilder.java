@@ -49,7 +49,7 @@ public class ResourcesBuilder {
 				//objetos.addAll(secuenciaAngulos()); // Agrega los angulos
 				//objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
 				//objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
-				objetos.addAll(secuenciaRombos(50, 1, 0.1f, 0, 100, false, true, false)); // Agrega cuadrados
+				objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 100, false, true, false)); // Agrega cuadrados
 			}
 			// Crea los archivos correspondientes
 			for (Imagen im : objetos) {
@@ -243,7 +243,7 @@ public class ResourcesBuilder {
 		 * Se asume que todos los parametros son positivos!
 		 */
 		
-		float margen = 10; // Esta variable determina cuanto espacio se debe dejar de margen para que la figura no este muy pegada al borde.
+		float margen = 20; // Esta variable determina cuanto espacio se debe dejar de margen para que la figura no este muy pegada al borde.
 		
 		// Parametros de la figura que se calculan durante la generacion
 		float ancho;
@@ -285,7 +285,11 @@ public class ResourcesBuilder {
 			}
 			
 			// Generamos los parametros para cada cuadrilatero especifico si depende de factores random.
-			excentricidad = excentricidadMaxima - MathUtils.random(excentricidadMaxima-excentricidadMinima);
+			if (MathUtils.randomBoolean()) {
+				excentricidad = excentricidadMaxima - MathUtils.random(excentricidadMaxima-excentricidadMinima);
+			} else { // Genera que la mitad sean cuadrados
+				excentricidad=1;
+			}
 			
 			if (rotados) {
 				angulo = anguloP + MathUtils.random(180);
@@ -333,29 +337,29 @@ public class ResourcesBuilder {
 				if (centered) {
 					xCenter = width/2;
 					yCenter = height/2;
-				} else {
+				} else { //ERROR!
 					xCenter =MathUtils.random(margen+ancho/2, (width - margen - ancho/2));
 					yCenter =MathUtils.random(margen+alto/2, (height - margen - alto/2));
 				}
 				
 				// encuentra el centro de los lados (nodos, que se numeran del primer al cuarto cuadrante en la orientacion original) 
 				nodo1 = new Vector2();
-				nodo1.x = (float) (diagMenor/4);
-				nodo1.y = (float) (diagMayor/4);
+				nodo1.x = (float) (diagMayor/4);
+				nodo1.y = (float) (diagMenor/4);
 				nodo2 = new Vector2();
-				nodo2.x = (float) (-diagMenor/4);
-				nodo2.y = (float) (diagMayor/4);
+				nodo2.x = (float) (-diagMayor/4);
+				nodo2.y = (float) (diagMenor/4);
 				nodo3 = new Vector2();
-				nodo3.x = (float) (-diagMenor/4);
-				nodo3.y = (float) (-diagMayor/4);
+				nodo3.x = (float) (-diagMayor/4);
+				nodo3.y = (float) (-diagMenor/4);
 				nodo4 = new Vector2();
-				nodo4.x = (float) (+diagMenor/4);
-				nodo4.y = (float) (-diagMayor/4);
+				nodo4.x = (float) (+diagMayor/4);
+				nodo4.y = (float) (-diagMenor/4);
 				// Los rota lo que corresponda segun el angulo del cuadrilatero
-				nodo1.rotate(angulo);
-				nodo2.rotate(angulo);
-				nodo3.rotate(angulo);
-				nodo4.rotate(angulo);
+				nodo1.rotate(-angulo);
+				nodo2.rotate(-angulo);
+				nodo3.rotate(-angulo);
+				nodo4.rotate(-angulo);
 				Vector2 center = new Vector2();
 				center.x = xCenter;
 				center.y = yCenter;
@@ -364,13 +368,13 @@ public class ResourcesBuilder {
 				nodo3.add(center);
 				nodo4.add(center);
 				// Calcula los angulos con que esta orientado cada lado.
-				float anguloInclinacionLadoRad = MathUtils.atan2(diagMayor, diagMenor);
+				float anguloInclinacionLadoRad = MathUtils.atan2(diagMenor, diagMayor);
 				float anguloInclinacionLadoDeg = anguloInclinacionLadoRad * 180 / MathUtils.PI;
 				// Nota!! Aca hice un lio con eltema de como se miden las coordenadas (creo que se miden de la esq superio izq). Los signos los saque a prueba y error!
-				angulo1 = anguloInclinacionLadoDeg - angulo;
-				angulo3 = anguloInclinacionLadoDeg - angulo;
-				angulo2 = - anguloInclinacionLadoDeg - angulo;
-				angulo4 = - anguloInclinacionLadoDeg - angulo;
+				angulo2 = - anguloInclinacionLadoDeg + angulo;
+				angulo4 = - anguloInclinacionLadoDeg + angulo;
+				angulo1 = + anguloInclinacionLadoDeg + angulo;
+				angulo3 = + anguloInclinacionLadoDeg + angulo;
 				
 				// Llegado este punto esta la informacion de los cuadro segmentos que forman la figura dados por sus centro y sus inclinaciones.
 				// Ahora vamos a crear los datos como en todas las demas figuras.
