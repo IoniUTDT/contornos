@@ -280,7 +280,7 @@ public class ResourcesBuilder {
 		for (int creados=0; creados<cantidad;) {
 			// Verifica que no haya muchas figuras invalidas (por ej por no entrar)
 			if (errores>cantidad){
-				Gdx.app.error(TAG, "Demaciadas figuras no pudieron ser creadas en la rutina que crea cuadrilateros. Considere revisar los parametros");
+				Gdx.app.error(TAG, "Demasiadas figuras no pudieron ser creadas en la rutina que crea cuadrilateros. Considere revisar los parametros");
 				break;
 			}
 			
@@ -322,7 +322,7 @@ public class ResourcesBuilder {
 			
 			// Verifica que la figura entre en la imagen
 			
-			if ((ancho+margen*2>=height) || (alto+margen*2>=width)) {
+			if ((alto+margen*2>=height) || (ancho+margen*2>=width)) {
 				errores++;
 				Gdx.app.log(TAG, "El cuadrilatero calculado ha sido descartado por no entrar en la figura");
 				
