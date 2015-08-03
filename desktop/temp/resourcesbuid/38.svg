@@ -1,4 +1,7 @@
 <!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version 1.1. Este elementos es el numero 38 de la serie actual-->
 <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100">
-<line x1="21.074556" y1="15.528" x2="78.92544" y2="84.472" stroke-width="2" stroke="black" />
+<line x1="71.05863" y1="53.781643" x2="61.65545" y2="86.692764" stroke-width="2" stroke="black" />
+<line x1="61.704662" y1="86.692764" x2="52.301487" y2="53.781643" stroke-width="2" stroke="black" />
+<line x1="61.704662" y1="20.856495" x2="52.301483" y2="53.76762" stroke-width="2" stroke="black" />
+<line x1="71.05863" y1="53.76762" x2="61.655453" y2="20.856495" stroke-width="2" stroke="black" />
 </svg>

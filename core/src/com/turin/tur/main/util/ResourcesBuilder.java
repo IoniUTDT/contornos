@@ -7,7 +7,6 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.diseno.ExperimentalObject;
-import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
@@ -45,12 +44,12 @@ public class ResourcesBuilder {
 
 			boolean geometrias=true;
 			if (geometrias) {
-				objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
-				objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
-				objetos.addAll(secuenciaAngulos()); // Agrega los angulos
-				objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
-				objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
-				objetos.addAll(secuenciaRombos(30, 1, 1, 45, 10, true, true, false)); // Agrega cuadrados
+				//objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
+				//objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
+				//objetos.addAll(secuenciaAngulos()); // Agrega los angulos
+				//objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
+				//objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
+				objetos.addAll(secuenciaRombos(50, 1, 0.1f, 0, 100, false, true, false)); // Agrega cuadrados
 			}
 			// Crea los archivos correspondientes
 			for (Imagen im : objetos) {
@@ -294,13 +293,16 @@ public class ResourcesBuilder {
 				angulo = anguloP;
 			}
 			
+			float anguloRad = (float) (angulo / 180 * Math.PI);
+			
 			if (escalaFija) {
 				lado = ladoP;
 			} else {
-				lado = ladoP*escalaMinima;
+				lado = ladoP* MathUtils.random(escalaMinima,1);
 			}
 			
 			// Primero calculamos las diagonales a partir de la medida del lado y la excentricidad
+			
 			
 			
 			/*
@@ -311,10 +313,10 @@ public class ResourcesBuilder {
 			diagMenor = diagMayor * excentricidad;
 			
 			// una vez que calcula las diagonales, sabiendo la inclinacion puede calcular el alto y el ancho
-			float anchoDiagMayor = (float) (diagMayor * Math.sin(angulo));
-			float altoDiagMayor = (float) (diagMayor * Math.cos(angulo));
-			float anchoDiagMenor = (float) (diagMenor * Math.cos(angulo));
-			float altoDiagMenor = (float) (diagMenor * Math.sin(angulo));
+			float anchoDiagMayor = (float) (diagMayor * Math.sin(anguloRad));
+			float altoDiagMayor = (float) (diagMayor * Math.cos(anguloRad));
+			float anchoDiagMenor = (float) (diagMenor * Math.cos(anguloRad));
+			float altoDiagMenor = (float) (diagMenor * Math.sin(anguloRad));
 			ancho = Math.max(anchoDiagMayor,anchoDiagMenor);
 			alto = Math.max(altoDiagMayor,altoDiagMenor);
 			
@@ -325,41 +327,50 @@ public class ResourcesBuilder {
 				Gdx.app.log(TAG, "El cuadrilatero calculado ha sido descartado por no entrar en la figura");
 				
 			} else { // Si la figura entra sigue
+				creados++;
 				
 				// setea el centro
 				if (centered) {
 					xCenter = width/2;
 					yCenter = height/2;
 				} else {
-					xCenter = width/2 + MathUtils.random((float) (width/2 - margen - ancho/2));
-					yCenter = height/2 + MathUtils.random((float) (height/2 - margen - alto/2));
+					xCenter =MathUtils.random(margen+ancho/2, (width - margen - ancho/2));
+					yCenter =MathUtils.random(margen+alto/2, (height - margen - alto/2));
 				}
 				
 				// encuentra el centro de los lados (nodos, que se numeran del primer al cuarto cuadrante en la orientacion original) 
 				nodo1 = new Vector2();
-				nodo1.x = (float) (diagMenor/2);
-				nodo1.y = (float) (diagMayor/2);
+				nodo1.x = (float) (diagMenor/4);
+				nodo1.y = (float) (diagMayor/4);
 				nodo2 = new Vector2();
-				nodo2.x = (float) (-diagMenor/2);
-				nodo2.y = (float) (diagMayor/2);
+				nodo2.x = (float) (-diagMenor/4);
+				nodo2.y = (float) (diagMayor/4);
 				nodo3 = new Vector2();
-				nodo3.x = (float) (-diagMenor/2);
-				nodo3.y = (float) (-diagMayor/2);
+				nodo3.x = (float) (-diagMenor/4);
+				nodo3.y = (float) (-diagMayor/4);
 				nodo4 = new Vector2();
-				nodo4.x = (float) (+diagMenor/2);
-				nodo4.y = (float) (-diagMayor/2);
+				nodo4.x = (float) (+diagMenor/4);
+				nodo4.y = (float) (-diagMayor/4);
 				// Los rota lo que corresponda segun el angulo del cuadrilatero
 				nodo1.rotate(angulo);
 				nodo2.rotate(angulo);
 				nodo3.rotate(angulo);
 				nodo4.rotate(angulo);
+				Vector2 center = new Vector2();
+				center.x = xCenter;
+				center.y = yCenter;
+				nodo1.add(center);
+				nodo2.add(center);
+				nodo3.add(center);
+				nodo4.add(center);
 				// Calcula los angulos con que esta orientado cada lado.
 				float anguloInclinacionLadoRad = MathUtils.atan2(diagMayor, diagMenor);
 				float anguloInclinacionLadoDeg = anguloInclinacionLadoRad * 180 / MathUtils.PI;
-				angulo2 = anguloInclinacionLadoDeg + angulo;
-				angulo4 = anguloInclinacionLadoDeg + angulo;
-				angulo1 = - anguloInclinacionLadoDeg + angulo;
-				angulo3 = - anguloInclinacionLadoDeg + angulo;
+				// Nota!! Aca hice un lio con eltema de como se miden las coordenadas (creo que se miden de la esq superio izq). Los signos los saque a prueba y error!
+				angulo1 = anguloInclinacionLadoDeg - angulo;
+				angulo3 = anguloInclinacionLadoDeg - angulo;
+				angulo2 = - anguloInclinacionLadoDeg - angulo;
+				angulo4 = - anguloInclinacionLadoDeg - angulo;
 				
 				// Llegado este punto esta la informacion de los cuadro segmentos que forman la figura dados por sus centro y sus inclinaciones.
 				// Ahora vamos a crear los datos como en todas las demas figuras.
@@ -379,10 +390,10 @@ public class ResourcesBuilder {
 				}
 				objetos.add(imagen);
 			}
-			
+						
 		}
-		
-		return null;
+		Gdx.app.log(TAG,  "Figuras fallidas: "+errores);
+		return objetos;
 		
 		
 		
