@@ -247,24 +247,38 @@ public class ResourcesBuilder {
 		float margen = 10; // Esta variable determina cuanto espacio se debe dejar de margen para que la figura no este muy pegada al borde.
 		
 		// Parametros de la figura que se calculan durante la generacion
-		double ancho;
-		double alto;
-		double diagMayor;
-		double diagMenor;
+		float ancho;
+		float alto;
+		float diagMayor;
+		float diagMenor;
 		
 		// Constantes con los que se pueden modificar los parametros si se lo indica
-		double escalaMinima=0.2;
+		float escalaMinima=0.2f;
 		
 		// parametros generales
 		float angulo;
-		double lado;
+		float lado;
 		float excentricidad;
-		double xCenter;
-		double yCenter;
+		float xCenter;
+		float yCenter;
+		
+		Vector2 nodo1;
+		Vector2 nodo2;
+		Vector2 nodo3;
+		Vector2 nodo4;
+		float angulo1;
+		float angulo2;
+		float angulo3;
+		float angulo4;
+		
+		
+		// El array de salida
+		Array<Imagen> objetos = new Array<Imagen>();
+		
 		
 		int errores = 0;
 		
-		for (int creados=0; creados<cantidad; creados++) {
+		for (int creados=0; creados<cantidad;) {
 			// Verifica que no haya muchas figuras invalidas (por ej por no entrar)
 			if (errores>cantidad){
 				Gdx.app.error(TAG, "Demaciadas figuras no pudieron ser creadas en la rutina que crea cuadrilateros. Considere revisar los parametros");
@@ -293,14 +307,14 @@ public class ResourcesBuilder {
 			 * De plantear que con d=semidiagonal mayor:  d^2 + (d*e)^2 = l^2 sale que  
 			 */
 			
-			diagMayor = 2 * Math.sqrt(lado*lado/(1+excentricidad*excentricidad));
+			diagMayor = (float) (2 * Math.sqrt(lado*lado/(1+excentricidad*excentricidad)));
 			diagMenor = diagMayor * excentricidad;
 			
 			// una vez que calcula las diagonales, sabiendo la inclinacion puede calcular el alto y el ancho
-			double anchoDiagMayor = diagMayor * Math.sin(angulo);
-			double altoDiagMayor = diagMayor * Math.cos(angulo);
-			double anchoDiagMenor = diagMenor * Math.cos(angulo);
-			double altoDiagMenor = diagMenor * Math.sin(angulo);
+			float anchoDiagMayor = (float) (diagMayor * Math.sin(angulo));
+			float altoDiagMayor = (float) (diagMayor * Math.cos(angulo));
+			float anchoDiagMenor = (float) (diagMenor * Math.cos(angulo));
+			float altoDiagMenor = (float) (diagMenor * Math.sin(angulo));
 			ancho = Math.max(anchoDiagMayor,anchoDiagMenor);
 			alto = Math.max(altoDiagMayor,altoDiagMenor);
 			
@@ -309,6 +323,7 @@ public class ResourcesBuilder {
 			if ((ancho+margen*2>=height) || (alto+margen*2>=width)) {
 				errores++;
 				Gdx.app.log(TAG, "El cuadrilatero calculado ha sido descartado por no entrar en la figura");
+				
 			} else { // Si la figura entra sigue
 				
 				// setea el centro
@@ -320,7 +335,49 @@ public class ResourcesBuilder {
 					yCenter = height/2 + MathUtils.random((float) (height/2 - margen - alto/2));
 				}
 				
-				// SEGUIR ACA
+				// encuentra el centro de los lados (nodos, que se numeran del primer al cuarto cuadrante en la orientacion original) 
+				nodo1 = new Vector2();
+				nodo1.x = (float) (diagMenor/2);
+				nodo1.y = (float) (diagMayor/2);
+				nodo2 = new Vector2();
+				nodo2.x = (float) (-diagMenor/2);
+				nodo2.y = (float) (diagMayor/2);
+				nodo3 = new Vector2();
+				nodo3.x = (float) (-diagMenor/2);
+				nodo3.y = (float) (-diagMayor/2);
+				nodo4 = new Vector2();
+				nodo3.x = (float) (+diagMenor/2);
+				nodo3.y = (float) (-diagMayor/2);
+				// Los rota lo que corresponda segun el angulo del cuadrilatero
+				nodo1.rotate(angulo);
+				nodo2.rotate(angulo);
+				nodo3.rotate(angulo);
+				nodo4.rotate(angulo);
+				// Calcula los angulos con que esta orientado cada lado.
+				float anguloInclinacionLadoRad = MathUtils.atan2(diagMayor, diagMenor);
+				float anguloInclinacionLadoDeg = anguloInclinacionLadoRad * 180 / MathUtils.PI;
+				angulo2 = anguloInclinacionLadoDeg + angulo;
+				angulo4 = anguloInclinacionLadoDeg + angulo;
+				angulo1 = - anguloInclinacionLadoDeg + angulo;
+				angulo3 = - anguloInclinacionLadoDeg + angulo;
+				
+				// Llegado este punto esta la informacion de los cuadro segmentos que forman la figura dados por sus centro y sus inclinaciones.
+				// Ahora vamos a crear los datos como en todas las demas figuras.
+				
+				Imagen imagen = crearImagen();
+				imagen.parametros.add(ExtremosLinea.Linea(nodo1.x, nodo1.y, angulo1, lado));
+				imagen.parametros.add(ExtremosLinea.Linea(nodo2.x, nodo2.y, angulo2, lado));
+				imagen.parametros.add(ExtremosLinea.Linea(nodo3.x, nodo3.y, angulo3, lado));
+				imagen.parametros.add(ExtremosLinea.Linea(nodo4.x, nodo4.y, angulo4, lado));
+				imagen.name = "Cuadrilatero";
+				imagen.comments= "Imagen generada automaticamente con el generador de cuadrilateros";
+				imagen.categories.add(Categorias.Cuadrilatero);
+				if (excentricidad==1) {
+					imagen.categories.add(Categorias.Cuadrado);
+				} else {
+					imagen.categories.add(Categorias.Rombo);
+				}
+				objetos.add(imagen);
 			}
 			
 		}
@@ -331,15 +388,6 @@ public class ResourcesBuilder {
 		
 	}
 	
-	private static void calcularAncho(float lado, float angulo) {
-		/*
-		 * Esta funcion calcula el ancho que tiene la proyeccion sobre cada eje para un cuadrado de lado l y rotado un cierto angulo.
-		 * Para eso primero calcula la diagonal 
-		 */
-		
-		
-	}
-
 	private static Array<Imagen> secuenciaLineasHorizontales() {
 		float largo = 90;
 		float angulo = 0;

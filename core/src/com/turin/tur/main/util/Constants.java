@@ -178,6 +178,9 @@ public class Constants {
 			Recto(13),
 			Lineas(14),  
 			NoAngulo(15,"No Angulo"),
+			Cuadrilatero(16),
+			Cuadrado(17),
+			Rombo(18),
 			;
 
 			/*
