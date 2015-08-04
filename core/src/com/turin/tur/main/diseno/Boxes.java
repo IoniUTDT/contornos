@@ -31,9 +31,7 @@ public abstract class Boxes {
 		public Vector2 posicionCenter; // Esta es la posicion de la caja dada por las coordenadas de su centro. 
 		public Sprite spr; // Guarda la imagen que se va a mostrar (se genera a partir del contenido de la caja)
 		
-		// Variables utiles para la dinamica del programa
-		public Trial trial;
-		
+	
 		// Variables especificas de cada tipo pero que estan en la clase general porque se llaman desde afuera
 		public boolean answer=false; // Resultado de la respuesta
 		
@@ -52,7 +50,7 @@ public abstract class Boxes {
 			
 		protected abstract void specificRender (SpriteBatch batch);
 		protected abstract void update(float deltaTime);
-		public abstract void select();
+		public abstract void select(TouchInfo touchData);
 		public abstract void unSelect();
 		
 		public void SetPosition(float xCenter, float yCenter) {
@@ -71,13 +69,13 @@ public abstract class Boxes {
 		private Sprite soundAnimationSpr; // imagen para mostrar la animacion de reproduccion del sonido 
 		public boolean alreadySelected;
 		
-		public TrainingBox (ExperimentalObject contenido, Trial trial) {
+		public TrainingBox (ExperimentalObject contenido) {
 			
 			// Carga cosas relacionadas al contenido
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = this.contenido.imagen;
-			this.trial = trial;
+			
 			
 			// inicializa las variables que manejan la reproduccion del sonido
 			this.runningSound = false;
@@ -127,7 +125,7 @@ public abstract class Boxes {
 			}
 		}
 		
-		public void select() {
+		public void select(TouchInfo touchData) {
 			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.Id);
 			this.alreadySelected = true;
 			if (!this.contenido.noSound) {
@@ -147,12 +145,12 @@ public abstract class Boxes {
 		private Sprite answerSprFalse; // Imagen para respuestas falsas
 		public boolean answerActive;
 		
-		public AnswerBox (ExperimentalObject contenido, Trial trial){
+		public AnswerBox (ExperimentalObject contenido){
 			// Carga cosas relacionadas al contenido
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = this.contenido.imagen;
-			this.trial = trial;
+			
 			
 			// inicializa las variables relacionadas a la dinamica de la respuesta
 			this.createAnswerAnimationResources();
@@ -187,7 +185,7 @@ public abstract class Boxes {
 			this.answerSprFalse = new Sprite(textureFalse);
 		}
 
-		public void select(){
+		public void select(TouchInfo touchData){
 			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.Id);
 			this.answerActive = true;
 			this.answerAnimationAdvance = 0;
@@ -277,12 +275,12 @@ public abstract class Boxes {
 		private Sprite stimuliAnimationSpr; // Sprite para la animacion del sonido 
 		private boolean drawStimuli; // Variable que determina si se debe dibujar o no (cuando llega al fin del sonido deba de dibujar)
 
-		public StimuliBox (ExperimentalObject contenido, Trial trial) {
+		public StimuliBox (ExperimentalObject contenido) {
 			
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = new Sprite (Assets.instance.imagenes.stimuliLogo);
-			this.trial = trial;
+	
 		
 			// inicializa el tiempo de modo q se resetee apenas empieza
 			this.stimuliAvanceReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR;
@@ -318,7 +316,7 @@ public abstract class Boxes {
 			}
 		}
 
-		public void select() {} // No hace nada
+		public void select(TouchInfo touchData) {} // No hace nada
 
 		public void unSelect() {} // No hace nada
 		

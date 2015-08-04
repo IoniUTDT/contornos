@@ -3,7 +3,6 @@ package com.turin.tur.main.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.turin.tur.ContornosMain;
 import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.logic.LevelController;
 import com.turin.tur.main.logic.LevelRenderer;

@@ -38,15 +38,10 @@ public class LevelRenderer implements Disposable {
 	}
 
 	private void renderInterfaz(SpriteBatch batch) {
-		
 		levelController.levelInterfaz.render(batch);
-		//for (Botones boton:levelController.levelInterfaz.botones) {
-		//	boton.render(batch);
-		//}
-		
 	}
 
-	private void renderGui(SpriteBatch batch) { // estoy reemplazando cameraGUI por camera
+	private void renderGui(SpriteBatch batch) { 
 		batch.setProjectionMatrix(cameraGUI.combined);
 		batch.begin();
 		this.levelController.levelInterfaz.renderFps(batch,cameraGUI);

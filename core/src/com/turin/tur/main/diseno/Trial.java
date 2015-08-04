@@ -1,7 +1,6 @@
 package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -10,7 +9,6 @@ import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level.LevelLogHistory;
-import com.turin.tur.main.logic.LevelController;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Internet;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
@@ -39,8 +37,6 @@ public class Trial {
 
 	// Variable que tiene que ver con el estado del trial
 	public boolean trialCompleted = false;
-	// public Sound activeSound;
-	// public boolean runningSound = false;
 	
 	// Variables que llevan el registro
 	public TrialLog log;
@@ -66,7 +62,7 @@ public class Trial {
 		// Crea las cajas segun corresponda a su tipo
 		if (this.jsonTrial.modo == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
 			for (ExperimentalObject elemento : this.elementos) {
-				TrainingBox box = new TrainingBox(elemento, this);
+				TrainingBox box = new TrainingBox(elemento);
 				box.SetPosition(jsonTrial.distribucion.X(orden.get(this.elementos.indexOf(elemento, true))),
 						jsonTrial.distribucion.Y(orden.get(this.elementos.indexOf(elemento, true))));
 				this.trainigBoxes.add(box);
@@ -75,12 +71,12 @@ public class Trial {
 
 		if (this.jsonTrial.modo == Constants.Diseno.TIPOdeTRIAL.TEST) {
 			for (ExperimentalObject elemento : this.elementos) {
-				AnswerBox box = new AnswerBox(elemento, this);
+				AnswerBox box = new AnswerBox(elemento);
 				box.SetPosition(jsonTrial.distribucion.X(orden.get(this.elementos.indexOf(elemento, true))) + Constants.Box.SHIFT_MODO_SELECCIONAR,
 						jsonTrial.distribucion.Y(orden.get(this.elementos.indexOf(elemento, true))));
 				this.answerBoxes.add(box);
 			}
-			stimuliBox = new StimuliBox(rtaCorrecta, this);
+			stimuliBox = new StimuliBox(rtaCorrecta);
 			stimuliBox.SetPosition(0 + Constants.Box.SHIFT_ESTIMULO_MODO_SELECCIONAR, 0);
 			allBox.add(stimuliBox);
 		}
@@ -116,8 +112,7 @@ public class Trial {
 		}
 	}
 
-	public boolean checkTrialCompleted() { // Se encarga de ver si ya se
-											// completo trial o no
+	public boolean checkTrialCompleted() { // Se encarga de ver si ya se completo trial o no
 		if (this.jsonTrial.modo == TIPOdeTRIAL.ENTRENAMIENTO) {
 			boolean allCheck = true;
 			for (TrainingBox box : trainigBoxes) {

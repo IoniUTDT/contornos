@@ -3,14 +3,11 @@ package com.turin.tur.main.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -18,14 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
-import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Internet;
 
 
@@ -135,8 +129,6 @@ public class MenuScreen extends AbstractGameScreen {
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					
-					goToLevelLog(levelIterator); // CORREGIR hay que hacer que tome de parametro el nivel
 					game.setScreen(new LevelScreen(game,levelIterator, session));
 				}
 			});
@@ -174,12 +166,6 @@ public class MenuScreen extends AbstractGameScreen {
 
 	}
 
-	protected void goToLevelLog(int levelId) {
-		String logText = TAG + ": " + this.user.name + " goes to level "
-				+ levelId + ".\r\n";
-		FileHelper.appendFile(Constants.USERLOG, logText);
-	}
-
 	@Override
 	public void hide() {
 		stage.dispose();
@@ -195,9 +181,6 @@ public class MenuScreen extends AbstractGameScreen {
 
 		@Override
 		public void input(String text) {
-			String logText = TAG + ": " + user.name + " change name to " + text
-					+ ".\r\n";
-			FileHelper.appendFile(Constants.USERLOG, logText);
 			user.name = text;
 			buttonUserName.setText(text);
 			user.save();

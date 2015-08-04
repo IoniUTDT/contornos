@@ -71,9 +71,4 @@ public class ExperimentalObject {
 			return null;
 		}
 	}
-
-
-	public static Array<ExperimentalObject> Search(int id) {
-		return new Array<ExperimentalObject>();
-	}
 }

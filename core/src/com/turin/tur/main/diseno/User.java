@@ -37,14 +37,7 @@ public class User {
 
 	static public void CreateUser() {
 		User user = LoadNewUser();
-		CreateUserLog();
 		user.save();
-	}
-
-	
-	private static void CreateUserLog() {
-		String encabezado = "Este archivo guarda la info de todo lo que va haciendo el usuario" + ".\r\n";
-		FileHelper.writeFile(Constants.USERLOG, encabezado);
 	}
 
 	private static User LoadNewUser() {
