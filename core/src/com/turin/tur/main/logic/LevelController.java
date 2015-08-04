@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Boxes.AnswerBox;
+import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.LevelInterfaz;
@@ -18,6 +19,8 @@ import com.turin.tur.main.diseno.TouchInfo;
 import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
+import com.turin.tur.main.diseno.Trial.SoundLog;
+import com.turin.tur.main.diseno.Trial.TouchLog;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
@@ -50,8 +53,39 @@ public class LevelController implements InputProcessor {
 	public float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
 	boolean elementoSeleccionado = false; // Sin seleccion
 	public Session session;
-	public Sound runingSound;
+	
 		
+	public static class RunningSound {
+		public static Sound sound; // Elemento de sonido
+		public static boolean running; // Si se esta reproduciendo o no
+		public static float start; // Cuando comienza la reproduccion del ultimo sonido
+		public static float ends; // Cuando termina la reproduccion del ultimo sonido
+		public static int id; // El id que identifica el recurso del ultimo sonido
+		public static int loopsNumber; // Numero de veces que re reproduce el mismo sonido en forma seguida 
+		public static long instance; // instancia que identifica cada reproduccion unequivocamente
+		public static Array<SoundLog> history = new Array<SoundLog>(); // Log de eventos de sonido
+		public static Array<Integer> secuenceId = new Array<Integer>(); // secuencia de los sonidos reproducidos.
+		
+		public static void Play(Sound sonido) {
+			sound = sonido;
+			long id;
+			while ((id = sound.play(0)) == -1) {
+				long t = TimeUtils.nanoTime();
+				while (TimeUtils.nanoTime() - t < 50000000)
+					;
+			}
+			sound.play();
+			running = true;
+		}
+		
+		public static void Stop() {
+			if (running) {
+				sound.stop();
+				running = false;
+			}
+		}		
+	}
+	
 	public LevelController(Game game, int levelNumber, int trialNumber, Session session) {
 		this.game=game;
 		this.session = session;
@@ -65,11 +99,16 @@ public class LevelController implements InputProcessor {
 
 	private void initTrial() {
 		this.trial = new Trial (this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
+		// Carga la info general del trial al log
+		this.trial.loadLog(this.session, this.levelInfo);
+		this.trial.log.timeStartTrial = this.timeInLevel;
+		
+		// Carga la interfaz
 		this.levelInterfaz = new LevelInterfaz (this.levelInfo, this.levelInfo.activeTrialPosition, this.trial);
 		this.timeInTrial=0;
 		this.nextTrialPending=false;
 		
-		// Registra el evento de la creacion del trial (falta implementar el log dentro del trial!)
+		// Registra el evento de la creacion del trial
 		this.levelInfo.levelLog.trialsVisited.add(this.trial.Id);
 		
 		// Esto esta obsoleto porque no se envia
@@ -112,6 +151,9 @@ public class LevelController implements InputProcessor {
 			}
 			if (!wait) {
 				this.nextTrialPending=false;
+				// Agrega al log que termino el trial
+				this.trial.log.timeStopTrial = this.timeInLevel;
+				this.trial.log.timeInTrial = this.timeInTrial;
 				if (isLastTrial()) {completeLevel();} else {goToNextTrial();}
 			}
 		}
@@ -173,12 +215,8 @@ public class LevelController implements InputProcessor {
 		Level.LevelLogHistory.append(this.levelInfo.levelLog);
 		
 		// continua con la logica del programa
-		stopSound();
+		LevelController.RunningSound.Stop();
 		game.setScreen(new MenuScreen(game, this.session));
-	}
-
-	private void stopSound() {
-		this.trial.stopSound();
 	}
 
 	@Override
@@ -253,19 +291,44 @@ public class LevelController implements InputProcessor {
 				if (this.trial.jsonTrial.modo == TIPOdeTRIAL.TEST) {
 					Boolean correcta=false;
 					if (this.trial.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) {correcta=true;} // Significa que se toco la respuesta igual a la correcta
-					if (touchData.thisTouchBox.contenido.categoria.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
-						for (Categorias categoriaDelObjetoTocado: touchData.thisTouchBox.contenido.categoria){
-							if (this.trial.rtaCorrecta.categoria.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
+					if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
+						for (Categorias categoriaDelObjetoTocado: touchData.thisTouchBox.contenido.categorias){
+							if (this.trial.rtaCorrecta.categorias.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
 								correcta=true;
 							}
 						}
 					}
 					if (correcta){ // Significa q se selecciono la opcion correcta
 						touchData.thisTouchBox.answer=true;
-						this.trial.stopSound();
+						LevelController.RunningSound.Stop();
 			    		this.nextTrialPending=true;
 					}
 				}
+				// Agrega al log el elemento tocado
+				this.trial.log.resourcesIdSelected.add(touchData.thisTouchBox.contenido.Id);
+				// Agrega la info que corresponda al log creando un TouchLog nuevo
+				TouchLog touchLog = new TouchLog();
+				touchLog.touchInstance = TimeUtils.millis();
+				touchLog.trialInstance = this.trial.log.trialInstance;
+				touchLog.trialId = this.trial.log.trialId;
+				touchLog.idResourceTouched = touchData.thisTouchBox.contenido.Id;
+				for (Categorias categoria: touchData.thisTouchBox.contenido.categorias){
+					touchLog.categorias.add(categoria);
+				}
+				touchLog.tipoDeTrial = this.trial.jsonTrial.modo;
+				touchLog.isTrue = touchData.thisTouchBox.answer;
+				if (touchData.thisTouchBox.getClass()==StimuliBox.class) {
+					touchLog.isStimuli = true;
+				} else { touchLog.isStimuli = false;}
+				touchLog.timeSinceTrialStarts = this.timeInTrial;
+				// Carga la info relacionada al sonido que esta en ejecucion
+				touchLog.soundInstance = LevelController.RunningSound.instance;
+				touchLog.soundRunning = LevelController.RunningSound.running;
+				touchLog.timeLastStartSound = LevelController.RunningSound.start;
+				touchLog.numberOfSoundLoops = LevelController.RunningSound.loopsNumber;
+				touchLog.soundIdSecuenceInTrial = LevelController.RunningSound.secuenceId;
+				
+				
 				// Activa el elemento tocado
 				touchData.thisTouchBox.select();
 			}
@@ -289,7 +352,7 @@ public class LevelController implements InputProcessor {
 
 	private void exitTrial() {
 		saveTouches();
-		this.stopSound();		
+		LevelController.RunningSound.Stop();		
 	}
 	
 

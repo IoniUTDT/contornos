@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.turin.tur.main.logic.LevelController;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 
@@ -121,7 +122,7 @@ public abstract class Boxes {
 			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.Id);
 			if (!this.contenido.noSound) {
 				this.runningSound = false;
-				this.trial.stopSound();
+				LevelController.RunningSound.Stop();
 				soundAvanceReproduccion = 0; //reset the advance point of sound animation
 			}
 		}
@@ -132,7 +133,7 @@ public abstract class Boxes {
 			if (!this.contenido.noSound) {
 				this.runningSound = true;
 				this.soundAvanceReproduccion = 0;
-				this.trial.playSound(this.contenido.sonido);
+				LevelController.RunningSound.Play(this.contenido.sonido);
 			}
 		}
 	}
@@ -312,7 +313,7 @@ public abstract class Boxes {
 				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
 					this.drawStimuli=true;
 					stimuliAvanceReproduccion = 0; //reset the advance point of sound
-					this.trial.playSound(this.contenido.sonido);
+					LevelController.RunningSound.Play(this.contenido.sonido);
 				}
 			}
 		}

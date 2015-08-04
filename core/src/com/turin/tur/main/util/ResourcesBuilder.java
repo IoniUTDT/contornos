@@ -31,7 +31,7 @@ public class ResourcesBuilder {
 
 	public static void buildNewSVG() {
 
-		Boolean elements = true;
+		Boolean elements = false;
 		if (elements) {
 
 			// Crea los objetos reservados (por ahora textos de botones y categorias)

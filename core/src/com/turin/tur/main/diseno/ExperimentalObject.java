@@ -17,7 +17,7 @@ public class ExperimentalObject {
 	public final int Id; 
 	public String name;
 	public String comments = "Aca va opcionalmente una descripcion del objeto";
-	public Array<Constants.Resources.Categorias> categoria = new Array<Constants.Resources.Categorias>();
+	public Array<Constants.Resources.Categorias> categorias = new Array<Constants.Resources.Categorias>();
 	public boolean noSound;
 	
 	// Constantes
@@ -40,7 +40,7 @@ public class ExperimentalObject {
 		JsonMetaData jsonMetaData = JsonMetaData.Load(this.Id);
 		this.comments = jsonMetaData.comments;
 		this.name = jsonMetaData.name;
-		this.categoria = jsonMetaData.categories;
+		this.categorias = jsonMetaData.categories;
 		this.noSound =jsonMetaData.noSound ;
 	}
 
