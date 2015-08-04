@@ -40,7 +40,7 @@ public class Trial {
 	
 	// Variables que llevan el registro
 	public TrialLog log;
-
+	
 	// constantes
 	public static final String TAG = Trial.class.getName();
 
@@ -102,7 +102,6 @@ public class Trial {
 		this.rtaCorrecta = new ExperimentalObject(this.jsonTrial.rtaCorrectaId);
 		// Crea el log que se carga en el controller
 		this.log = new TrialLog();
-		Gdx.app.log(TAG, "Info del trial cargado");
 	}
 
 	public void update(float deltaTime) {
@@ -202,31 +201,33 @@ public class Trial {
 
 	public static class TrialLog {
 		// Info de arbol del evento 
-		public long sessionId; 
-		public long levelInstance;
+		public long sessionId; // Instancia de la session a la que este trial pertence
+		public long levelInstance; // Intancia del nivel al que este trial pertenece
 		public long trialInstance; // identificador de la instancia de este trial.
 		// Info del usuario y del trial
-		public int trialId;
-		public long userId;
+		public int trialId; // Id del trial activo
+		public long userId; // Id del usuario activo
 		public String userName;
-		public Array<Categorias> categoriasElementos = new Array<Categorias>();
-		public Array<Categorias> categoriasEstimulo = new Array<Categorias>();
-		public Array<Categorias> categoriasRta = new Array<Categorias>();
-		public int idRtaCorrecta;
-		public int indexOfTrialInLevel;
-		public int trialsInLevel;
-		public Array<Integer> resourcesIdSort = new Array<Integer>();
-		public DISTRIBUCIONESenPANTALLA distribucionEnPantalla;
-		public TIPOdeTRIAL tipoDeTrial;
+		public Array<Categorias> categoriasElementos = new Array<Categorias>(); // Listado de categorias existentes en este trial
+		public Array<Categorias> categoriasEstimulo = new Array<Categorias>(); // Listado de categorias a las que pertenece el estimulo del trial si lo hay
+		public Array<Categorias> categoriasRta = new Array<Categorias>(); // Listado de categorias a las que pertenece la reta valida de este trial si la hay
+		public int idRtaCorrecta; // id del recurso correspondiente a la rta correcta para este trial
+		public int indexOfTrialInLevel; // posicion de este trial dentro del nivel
+		public int trialsInLevel; // Cantidad total de trials en el nivel activo
+		public long timeInGame; // Tiempo total acumulado de juego
+		public Array<Integer> resourcesIdSort = new Array<Integer>(); // Ids de los recursos en orden segun se completan en la distribucion. Esto es importante porque el orden puede estar randomizado instancia a instancia
+		public DISTRIBUCIONESenPANTALLA distribucionEnPantalla; // Distribucion en pantalla de los recursos
+		public TIPOdeTRIAL tipoDeTrial; // Tipo de trial (test, entrnamiento, etc)
+		public float version = Constants.VERSION; // Version del programa. Esto es super importante porque de version a version pueden cambiar los recursos (es decir que el mismo id lleve a otro recurso) y tambien otras cosas como la distribucion en pantalla, etc
 
 		// Informacion de lo que sucede durante la interaccion del usuario
-		public float timeStartTrial; //since level start
-		public float timeStopTrial; //since level start
-		public float timeInTrial;
+		public float timeStartTrialInLevel; // Tiempo en que se crea el trial en relacion al nivel 
+		public float timeStopTrialInLevel; // Tiempo en que se termina el trial en relacion al nivel
+		public float timeInTrial; // tiempo transcurrido dentro del trial
 		public boolean trialCompleted; //Por ahora solo se puede completar un trial en modo training. En modo test no tiene sentido completar el nivel. Este dato se carga de cuando sehace el checkTrialCompleted 
-		public Array<Integer> resourcesIdSelected = new Array<Integer>();
-		public Array<TouchLog> touchLog = new Array<TouchLog>(); // se crean y cargan en la parte de procesamiento de toque en LevelController
-		public Array<SoundLog> soundLog = new Array<SoundLog>();
+		public Array<Integer> resourcesIdSelected = new Array<Integer>(); // Lista de elementos seleccionados
+		public Array<TouchLog> touchLog = new Array<TouchLog>(); // FALTA
+		public Array<SoundLog> soundLog = new Array<SoundLog>(); // FALTA
 		
 		public TrialLog() {
 			this.trialInstance = TimeUtils.millis();
@@ -285,6 +286,7 @@ public class Trial {
 		// Carga la info general del contexto
 		this.log.levelInstance = levelInfo.levelLog.levelInstance;
 		this.log.sessionId = session.sessionLog.id;
+		this.log.timeInGame = TimeUtils.timeSinceMillis(session.sessionLog.id)*1000; // Tiempo en segundos desde que se inicio la session. Recordar que el id o las intancias se crean con las marcas temporales 
 		this.log.trialId = this.Id;
 		this.log.userId = session.sessionLog.userID;
 		this.log.userName = session.sessionLog.userName;
@@ -311,7 +313,7 @@ public class Trial {
 		this.log.trialsInLevel = levelInfo.secuenciaTrailsId.size;
 		// Recupera los Id de los recursos en el orden que estan en pantalla
 		for (int orden : this.orden) {
-			this.log.resourcesIdSort.add(this.elementos.get(orden).Id);
+			this.log.resourcesIdSort.add(this.elementos.get(orden).Id); // Recupera los ids de los recursos segun el orden en que esten
 		}
 		this.log.distribucionEnPantalla = this.jsonTrial.distribucion;
 		this.log.tipoDeTrial = this.jsonTrial.modo;

@@ -21,6 +21,7 @@ import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
 import com.turin.tur.main.diseno.Trial.SoundLog;
 import com.turin.tur.main.diseno.Trial.TouchLog;
+import com.turin.tur.main.diseno.Trial.TrialLogHistory;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
@@ -98,7 +99,7 @@ public class LevelController implements InputProcessor {
 		this.trial = new Trial(this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
 		// Carga la info general del trial al log
 		this.trial.loadLog(this.session, this.levelInfo);
-		this.trial.log.timeStartTrial = this.timeInLevel;
+		this.trial.log.timeStartTrialInLevel = this.timeInLevel;
 
 		// Carga la interfaz
 		this.levelInterfaz = new LevelInterfaz(this.levelInfo, this.levelInfo.activeTrialPosition, this.trial);
@@ -150,7 +151,7 @@ public class LevelController implements InputProcessor {
 			if (!wait) {
 				this.nextTrialPending = false;
 				// Agrega al log que termino el trial
-				this.trial.log.timeStopTrial = this.timeInLevel;
+				this.trial.log.timeStopTrialInLevel = this.timeInLevel;
 				this.trial.log.timeInTrial = this.timeInTrial;
 				if (isLastTrial()) {
 					completeLevel();
@@ -206,6 +207,7 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void backToMenu() {
+		this.exitTrial();
 		// Registra que se sale al menu principal en los logs (falta agregar el log dentro del trial)
 		this.levelInfo.levelLog.exitTrialId = this.trial.Id;
 		this.levelInfo.levelLog.exitTrialPosition = this.levelInfo.activeTrialPosition;
@@ -285,6 +287,8 @@ public class LevelController implements InputProcessor {
 			this.logTouch(touchData);
 			// Activa el elemento tocado
 			touchData.thisTouchBox.select(touchData);
+			// Agrega al log que se selecciono el recurso
+			this.trial.log.resourcesIdSelected.add(touchData.thisTouchBox.contenido.Id);
 			// Se fija si se completo el nivel
 			this.trial.checkTrialCompleted();
 		}
@@ -357,10 +361,13 @@ public class LevelController implements InputProcessor {
 
 	}
 
+	
 	private void exitTrial() {
+		// TrialLogHistory.append(this.trial.log); PROBLEMA!
 		LevelController.RunningSound.Stop();
 	}
-
+	
+	
 	private void cargarInfoDelTouch(Box box, TouchInfo thisTouch) {
 		// carga la info en el touch
 		thisTouch.elementTouched = true;
