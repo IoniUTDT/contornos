@@ -9,6 +9,7 @@ import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level.LevelLogHistory;
+import com.turin.tur.main.logic.LevelController.RunningSound;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Internet;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
@@ -40,6 +41,7 @@ public class Trial {
 	
 	// Variables que llevan el registro
 	public TrialLog log;
+	public RunningSound runningSound;
 	
 	// constantes
 	public static final String TAG = Trial.class.getName();

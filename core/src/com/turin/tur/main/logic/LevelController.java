@@ -54,23 +54,24 @@ public class LevelController implements InputProcessor {
 	boolean elementoSeleccionado = false; // Sin seleccion
 	public Session session;
 
-	public static class RunningSound {
-		public static ExperimentalObject contenido; // Todo el objeto que se esta reproduciendo
-		public static Sound sound; // Elemento de sonido
-		public static boolean running = false; // Si se esta reproduciendo o no
-		public static float start = -1; // Cuando comienza la reproduccion del ultimo sonido. Un "-1" equivale a no tener datos.
-		public static float ends = -1; // Cuando termina la reproduccion del ultimo sonido. Un "-1" equivale a no tener datos.
-		public static int id; // El id que identifica el recurso del ultimo sonido
-		public static int loopsNumber; // Numero de veces que re reproduce el mismo sonido en forma seguida 
-		public static long instance; // instancia que identifica cada reproduccion unequivocamente
-		public static Array<Integer> secuenceId = new Array<Integer>(); // secuencia de los sonidos reproducidos.
-		public static SoundLog soundLog = new SoundLog();
-		public static String stopReason = "";
+	public class RunningSound {
+		public ExperimentalObject contenido; // Todo el objeto que se esta reproduciendo
+		public Sound sound; // Elemento de sonido
+		public boolean running = false; // Si se esta reproduciendo o no
+		public float start = -1; // Cuando comienza la reproduccion del ultimo sonido. Un "-1" equivale a no tener datos.
+		public float ends = -1; // Cuando termina la reproduccion del ultimo sonido. Un "-1" equivale a no tener datos.
+		public int id; // El id que identifica el recurso del ultimo sonido
+		public int loopsNumber; // Numero de veces que re reproduce el mismo sonido en forma seguida 
+		public long instance; // instancia que identifica cada reproduccion unequivocamente
+		public Array<Integer> secuenceId = new Array<Integer>(); // secuencia de los sonidos reproducidos.
+		public SoundLog soundLog = new SoundLog();
+		public String stopReason = "";
 
-		public static void Play(ExperimentalObject contenidoP) {
+		public void play(ExperimentalObject contenidoP) {
 			// Primer detiene cualquier reproduccion previa 
 			if (running) {
-				Stop();
+				stop();
+				stopReason ="inicio";
 			}
 			// Crea un log nuevo
 			soundLog = new SoundLog();
@@ -128,20 +129,18 @@ public class LevelController implements InputProcessor {
 			sound.play();
 		}
 
-		public static void Stop() {
+		
+		public void stop() {
 			if (running) {
 				
 				ends = timeInTrial;
 				// Completa el log y lo agrega a la lista
 				soundLog.stopTime = timeInTrial;
-				switch (stopReason) {
-				case "unselect":
-					soundLog.stopByUnselect = true;
-				case "exit":
-					soundLog.stopByExit = true;
-				case "end":
-					soundLog.stopByEnd = true;
-				}
+				System.out.println(stopReason);
+				soundLog.stopByUnselect = (stopReason=="unselect");
+				soundLog.stopByExit = (stopReason=="exit");
+				soundLog.stopByEnd = (stopReason=="end");
+				stopReason = "";
 				trial.log.soundLog.add(soundLog);
 				// Detiene el sonido
 				sound.stop();
@@ -163,6 +162,8 @@ public class LevelController implements InputProcessor {
 
 	private void initTrial() {
 		trial = new Trial(this.levelInfo.IdTrial(this.levelInfo.activeTrialPosition));
+		trial.runningSound = new RunningSound();
+		
 		// Carga la info general del trial al log
 		trial.loadLog(this.session, this.levelInfo);
 		trial.log.timeStartTrialInLevel = timeInLevel;
@@ -283,7 +284,8 @@ public class LevelController implements InputProcessor {
 		Level.LevelLogHistory.append(this.levelInfo.levelLog);
 
 		// continua con la logica del programa
-		LevelController.RunningSound.Stop();
+		trial.runningSound.stopReason="exit";
+		trial.runningSound.stop();
 		game.setScreen(new MenuScreen(game, this.session));
 	}
 
@@ -341,7 +343,7 @@ public class LevelController implements InputProcessor {
 
 		// anula la seleccion del evento previo
 		if (touchData.lastTouchBox != null) {
-			Gdx.app.debug(TAG, "Voy a deseleccionar!");
+			trial.runningSound.stopReason = "unselect";
 			touchData.lastTouchBox.unSelect();
 		}
 
@@ -395,12 +397,12 @@ public class LevelController implements InputProcessor {
 		}
 		touchLog.timeSinceTrialStarts = timeInTrial;
 		// Carga la info relacionada al sonido que esta en ejecucion
-		touchLog.soundInstance = LevelController.RunningSound.instance;
-		touchLog.soundRunning = LevelController.RunningSound.running;
-		touchLog.timeLastStartSound = LevelController.RunningSound.start;
-		touchLog.timeLastStopSound = LevelController.RunningSound.ends;
-		touchLog.numberOfSoundLoops = LevelController.RunningSound.loopsNumber;
-		touchLog.soundIdSecuenceInTrial = new Array<Integer>(LevelController.RunningSound.secuenceId);
+		touchLog.soundInstance = trial.runningSound.instance;
+		touchLog.soundRunning = trial.runningSound.running;
+		touchLog.timeLastStartSound = trial.runningSound.start;
+		touchLog.timeLastStopSound = trial.runningSound.ends;
+		touchLog.numberOfSoundLoops = trial.runningSound.loopsNumber;
+		touchLog.soundIdSecuenceInTrial = new Array<Integer>(trial.runningSound.secuenceId);
 		trial.log.touchLog.add(touchLog);
 	}
 
@@ -428,7 +430,8 @@ public class LevelController implements InputProcessor {
 
 	private void exitTrial() {
 		TrialLogHistory.append(trial.log);
-		LevelController.RunningSound.Stop();
+		trial.runningSound.stopReason="exit";
+		trial.runningSound.stop();
 	}
 
 	private void cargarInfoDelTouch(Box box, TouchInfo thisTouch) {

@@ -110,6 +110,7 @@ public abstract class Boxes {
 			if (runningSound) {
 				this.soundAvanceReproduccion += deltaTime;
 				if (this.soundAvanceReproduccion > this.soundDuracionReproduccion) {
+					LevelController.trial.runningSound.stopReason = "end";
 					this.unSelect();
 				}
 			}
@@ -120,7 +121,7 @@ public abstract class Boxes {
 			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.Id);
 			if (!this.contenido.noSound) {
 				this.runningSound = false;
-				LevelController.RunningSound.Stop();
+				LevelController.trial.runningSound.stop();
 				soundAvanceReproduccion = 0; //reset the advance point of sound animation
 			}
 		}
@@ -131,7 +132,7 @@ public abstract class Boxes {
 			if (!this.contenido.noSound) {
 				this.runningSound = true;
 				this.soundAvanceReproduccion = 0;
-				LevelController.RunningSound.Play(this.contenido);
+				LevelController.trial.runningSound.play(this.contenido);
 			}
 		}
 	}
@@ -307,11 +308,13 @@ public abstract class Boxes {
 				stimuliAvanceReproduccion = stimuliAvanceReproduccion + deltaTime;
 				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion) {
 					this.drawStimuli=false;
+					LevelController.trial.runningSound.stopReason = "end";
+					LevelController.trial.runningSound.stop();
 				}
 				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
 					this.drawStimuli=true;
 					stimuliAvanceReproduccion = 0; //reset the advance point of sound
-					LevelController.RunningSound.Play(this.contenido);
+					LevelController.trial.runningSound.play(this.contenido);
 				}
 			}
 		}
