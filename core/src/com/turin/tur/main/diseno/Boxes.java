@@ -131,7 +131,7 @@ public abstract class Boxes {
 			if (!this.contenido.noSound) {
 				this.runningSound = true;
 				this.soundAvanceReproduccion = 0;
-				LevelController.RunningSound.Play(this.contenido.sonido);
+				LevelController.RunningSound.Play(this.contenido);
 			}
 		}
 	}
@@ -311,7 +311,7 @@ public abstract class Boxes {
 				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
 					this.drawStimuli=true;
 					stimuliAvanceReproduccion = 0; //reset the advance point of sound
-					LevelController.RunningSound.Play(this.contenido.sonido);
+					LevelController.RunningSound.Play(this.contenido);
 				}
 			}
 		}

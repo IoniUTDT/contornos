@@ -175,7 +175,8 @@ public class Trial {
 		public float timeSinceTrialStarts; // Tiempo desde que se muestra el trial
 		public long soundInstance; // Intancia del ultimo sonido en ejecucion
 		public boolean soundRunning; // indica si se esta ejecutando algun sonido
-		public float timeLastStartSound; // Tiempo desde que comenzo el ultimo sonido
+		public float timeLastStartSound; // Tiempo (en el trial) en que comenzo el ultimo sonido 
+		public float timeLastStopSound; // Tiempo (en el trial en que terimo el ultimo sonido 
 		public int numberOfSoundLoops; // Cantidad de veces que re reprodujo el ultimo sonido
 		public Array<Integer> soundIdSecuenceInTrial; // Ids de todos los sonidos que se reprodujeron en el trial
 	}
@@ -191,11 +192,12 @@ public class Trial {
 		public TIPOdeTRIAL tipoDeTrial; // Tipo de trial en el que se reproduce este sonido
 		public int numberOfLoop; // Numero de loop que corresponde a la reproduccion de este sonido
 		public float startTimeSinceTrial;  // tiempo en que se inicia la reproduccion del sonido desde que comenzo el trial
-		public int numberOfSoundInTrial; // Cantidad de sonidos reproducidos previamente 
+		public int numberOfSoundInTrial; // Cantidad de sonidos reproducidos previamente
+		public Array<Integer> soundSecuenceInTrial; // Listado de sonidos reproducidos
 		// Variables que se generan una vez creado el evento
 		public float stopTime; // tiempo en que se detiene el sonido 
 		public boolean stopByExit; // Indica si se detuvo el sonido porque se inicio alguna secuencia de cierre del trial (porque se completo el trial, el level, etc)
-		public boolean stopByUser; // Indica si se detuvo el sonido porque el usuario selecciono algo como parte de la dinamica del juego
+		public boolean stopByUnselect; // Indica si se detuvo el sonido porque el usuario selecciono algo como parte de la dinamica del juego
 		public boolean stopByEnd; // Indica si el sonido se detuvo porque se completo la reproduccion prevista (por ahora esta determinada por el tiempo preestablecido de duracion de los sonidos en 5s. No es el tiempo en que de verdad termina el sonido)
 	}
 
@@ -226,8 +228,8 @@ public class Trial {
 		public float timeInTrial; // tiempo transcurrido dentro del trial
 		public boolean trialCompleted; //Por ahora solo se puede completar un trial en modo training. En modo test no tiene sentido completar el nivel. Este dato se carga de cuando sehace el checkTrialCompleted 
 		public Array<Integer> resourcesIdSelected = new Array<Integer>(); // Lista de elementos seleccionados
-		public Array<TouchLog> touchLog = new Array<TouchLog>(); // FALTA
-		public Array<SoundLog> soundLog = new Array<SoundLog>(); // FALTA
+		public Array<TouchLog> touchLog = new Array<TouchLog>(); // Secuencia de la info detallada de todos los touch
+		public Array<SoundLog> soundLog = new Array<SoundLog>(); // Secuencia de la info detallada de todos los sounds
 		
 		public TrialLog() {
 			this.trialInstance = TimeUtils.millis();
@@ -244,7 +246,7 @@ public class Trial {
 			// first add the new log to the log history. If there is not log not sent, the list is empty
 			TrialLogHistory history = TrialLogHistory.Load(path);
 			history.history.add(log);
-			history.save(LevelLogHistory.path);
+			history.save(TrialLogHistory.path);
 			// then try to send the log
 			Internet.PUT(history);
 		}
