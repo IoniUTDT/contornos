@@ -1,5 +1,6 @@
 package com.turin.tur.main.util;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.diseno.ExperimentalObject;
@@ -24,6 +25,16 @@ public class Constants {
 		return version_temp + temp;
 	}
 
+	// recupera la escala para mostrar todos los textos con el tamaño correcto
+	public static float factorEscala () {
+		float factorEscala;
+		// Escala de referencia
+		float anchoDefault = 800;
+		float altoDefault = 300;
+		factorEscala = Gdx.graphics.getHeight()/altoDefault;
+		return factorEscala;
+	}
+	
 	// Visible game world is 5 meters wide
 	public static final float VIEWPORT_WIDTH = 7.0f;
 

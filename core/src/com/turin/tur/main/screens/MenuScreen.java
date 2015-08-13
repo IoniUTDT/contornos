@@ -1,5 +1,7 @@
 package com.turin.tur.main.screens;
 
+import javax.swing.plaf.ButtonUI;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
@@ -78,6 +80,7 @@ public class MenuScreen extends AbstractGameScreen {
 		float x = cameraGUI.viewportWidth - 70;
 		float y = cameraGUI.viewportHeight - 30;
 		BitmapFont fpsFont = Assets.instance.fonts.defaultSmallFont;
+		fpsFont.getData().setScale(Constants.factorEscala());
 		if (Internet.serverOk) {
 			// show up in green
 			fpsFont.setColor(0, 1, 0, 1);
@@ -155,10 +158,12 @@ public class MenuScreen extends AbstractGameScreen {
 		});
 
 		// Arma el menu
-		table.add(buttonUserName);
-		table.row();
+		//table.add(buttonUserName);
+		//table.row();
 		for (TextButton button : levelButtons) {
-			table.add(button);
+			button.getStyle().font.getData().setScale(Constants.factorEscala(),Constants.factorEscala());
+			
+			table.add(button).width(Gdx.graphics.getWidth()/2.5f);
 			table.row();
 		}
 
