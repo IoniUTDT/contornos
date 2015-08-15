@@ -28,6 +28,12 @@ public class ResourcesBuilder {
 
 	static int height = 100;
 	static int width = 100;
+	
+	static String tempPath = "/temp/resourcesbuild/"; // Directorio donde se
+	// almacenan los recursos
+	// durante la construccion
+	// antes de pasar todo a su
+	// version final.
 
 	public static void buildNewSVG() {
 
@@ -44,12 +50,12 @@ public class ResourcesBuilder {
 
 			boolean geometrias=true;
 			if (geometrias) {
-				//objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
-				//objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
-				//objetos.addAll(secuenciaAngulos()); // Agrega los angulos
-				//objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
-				//objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
-				objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 100, false, true, false)); // Agrega cuadrados
+				objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
+				objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
+				objetos.addAll(secuenciaAngulos()); // Agrega los angulos
+				objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
+				objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
+				objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 50, false, true, false)); // Agrega cuadrados
 			}
 			// Crea los archivos correspondientes
 			for (Imagen im : objetos) {
@@ -150,7 +156,7 @@ public class ResourcesBuilder {
 		settings.maxHeight = 1024;
 		settings.duplicatePadding = false;
 		settings.debug = false;
-		TexturePacker.process(settings, "temp/resourcesbuid/", "../android/assets/experimentalsource/" + version + "/", "images");
+		TexturePacker.process(settings, tempPath, "../android/assets/experimentalsource/" + version + "/", "images");
 	}
 
 	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo,
@@ -203,14 +209,14 @@ public class ResourcesBuilder {
 
 		Array<Imagen> objetos = new Array<Imagen>();
 
-		for (int i = 0; i < cantidad - 1; i++) {
-			for (int j = 1; j + i < cantidad - 1; j++) {
+		for (int i = 0; i < cantidad ; i++) {
+			for (int j = 1; j + i < cantidad ; j++) {
 				Imagen imagen = crearImagen();
 				imagen.parametros.addAll(ExtremosLinea.Angulo(width / 2,
 						height / 2, i * shiftAngulo, (j + i) * shiftAngulo,
 						largo));
 				imagen.name = "Angulo";
-				imagen.comments = "Angulo generado automaticamente por secuenciaAngulos";
+				imagen.comments = "Angulo generado automaticamente por secuenciaAngulos. Parametros: Angulo inicial: "+ (i * shiftAngulo) +"; Angulo final: "+ ((j + i) * shiftAngulo) +";";
 				imagen.categories.add(Constants.Resources.Categorias.Angulo);
 				if ((j * shiftAngulo < 90) || (j * shiftAngulo > 270)) {
 					imagen.categories.add(Constants.Resources.Categorias.Agudo);
@@ -252,7 +258,7 @@ public class ResourcesBuilder {
 		float diagMenor;
 		
 		// Constantes con los que se pueden modificar los parametros si se lo indica
-		float escalaMinima=0.2f;
+		float escalaMinima=0.5f;
 		
 		// parametros generales
 		float angulo;
@@ -385,7 +391,7 @@ public class ResourcesBuilder {
 				imagen.parametros.add(ExtremosLinea.Linea(nodo3.x, nodo3.y, angulo3, lado));
 				imagen.parametros.add(ExtremosLinea.Linea(nodo4.x, nodo4.y, angulo4, lado));
 				imagen.name = "Cuadrilatero";
-				imagen.comments= "Imagen generada automaticamente con el generador de cuadrilateros";
+				imagen.comments= "Imagen generada automaticamente con el generador de cuadrilateros. Parametros: Excentricidad: "+excentricidad+"; Lado: "+lado+"; Angulo: "+angulo+";";
 				imagen.categories.add(Categorias.Cuadrilatero);
 				if (excentricidad==1) {
 					imagen.categories.add(Categorias.Cuadrado);
@@ -415,7 +421,7 @@ public class ResourcesBuilder {
 			imagen.parametros.addAll(ExtremosLinea.Linea(width / 2, yCenter * i
 					- yCenter / 2, angulo, largo));
 			imagen.name = "Linea " + i;
-			imagen.comments = "Linea generada por secuenciaLineasHorizontales para tutorial";
+			imagen.comments = "Linea generada por secuenciaLineasHorizontales para tutorial. Parametros: Altura:" + (yCenter * i - yCenter / 2);
 			imagen.categories.add(Constants.Resources.Categorias.Lineas);
 			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
 			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
@@ -442,7 +448,7 @@ public class ResourcesBuilder {
 			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2,
 					angulo * i, largo));
 			imagen.name = "Linea " + i;
-			imagen.comments = "Linea generada por secuenciaLineasConAngulo para tutorial";
+			imagen.comments = "Linea generada por secuenciaLineasConAngulo para tutorial. Parametros: Posicion: centrada; Angulo: " + (angulo * i) + ";";
 			imagen.categories.add(Constants.Resources.Categorias.Lineas);
 			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
 			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
@@ -603,11 +609,6 @@ public class ResourcesBuilder {
 		// se esta trabajando (esto
 		// determina el paquete entero de
 		// recursos
-		static String tempPath = "/temp/resourcesbuid/"; // Directorio donde se
-		// almacenan los recursos
-		// durante la construccion
-		// antes de pasar todo a su
-		// version final.
 		static String content = "";
 
 		public static void SVGimagen(Imagen imagen) {
