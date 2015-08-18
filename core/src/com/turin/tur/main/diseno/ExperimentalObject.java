@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.turin.tur.main.diseno.Trial.ResourceId;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ImagesAsset;
@@ -14,19 +15,20 @@ public class ExperimentalObject {
 
 	public final Sprite imagen;
 	public final Sound sonido;
-	public final int Id; 
+	// public final int Id; 
 	public String name;
 	public String comments = "Aca va opcionalmente una descripcion del objeto";
 	public Array<Constants.Resources.Categorias> categorias = new Array<Constants.Resources.Categorias>();
+	public ResourceId resourceId;
 	public boolean noSound;
 	
 	// Constantes
 	private static final String TAG = ExperimentalObject.class.getName();
 	
 	public ExperimentalObject (int Id){ // Esto carga la info desde archivo
-		this.Id = Id;
+		
 		// Carga ma metadata
-		this.loadMetaData();
+		this.loadMetaData(Id);
 		// Crea los recursos graficos y sonoros
 		this.imagen = ImagesAsset.instance.imagen(Id);
 		if (!this.noSound) {
@@ -36,12 +38,14 @@ public class ExperimentalObject {
 		}
 	}
 
-	private void loadMetaData() {
-		JsonMetaData jsonMetaData = JsonMetaData.Load(this.Id);
+	private void loadMetaData(int Id) {
+		JsonMetaData jsonMetaData = JsonMetaData.Load(Id);
 		this.comments = jsonMetaData.comments;
 		this.name = jsonMetaData.name;
 		this.categorias = jsonMetaData.categories;
 		this.noSound =jsonMetaData.noSound ;
+		this.resourceId.id = jsonMetaData.Id;
+		this.resourceId.resourceVersion = jsonMetaData.ResourceVersion;
 	}
 
 
@@ -50,6 +54,7 @@ public class ExperimentalObject {
 		public int Id;
 		public String name;
 		public String comments;
+		public int ResourceVersion;
 		public Array<Constants.Resources.Categorias> categories = new Array<Constants.Resources.Categorias>();
 		
 		public static void CreateJsonMetaData (JsonMetaData jsonMetaData, String path) {

@@ -118,7 +118,7 @@ public abstract class Boxes {
 		}
 
 		public void unSelect() {
-			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.Id);
+			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			if (!this.contenido.noSound) {
 				this.runningSound = false;
 				LevelController.trial.runningSound.stop();
@@ -127,7 +127,7 @@ public abstract class Boxes {
 		}
 		
 		public void select(TouchInfo touchData) {
-			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.Id);
+			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			this.alreadySelected = true;
 			if (!this.contenido.noSound) {
 				this.runningSound = true;
@@ -187,13 +187,13 @@ public abstract class Boxes {
 		}
 
 		public void select(TouchInfo touchData){
-			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.Id);
+			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			this.answerActive = true;
 			this.answerAnimationAdvance = 0;
 		}
 		
 		public void unSelect() {
-			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.Id);
+			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			this.answerActive = false;
 			this.answerAnimationAdvance = 0;
 		}

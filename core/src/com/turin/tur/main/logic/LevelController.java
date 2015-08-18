@@ -20,6 +20,7 @@ import com.turin.tur.main.diseno.TouchInfo;
 import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.LevelInterfaz.Botones;
+import com.turin.tur.main.diseno.Trial.ResourceId;
 import com.turin.tur.main.diseno.Trial.SoundLog;
 import com.turin.tur.main.diseno.Trial.TouchLog;
 import com.turin.tur.main.diseno.Trial.TrialLogHistory;
@@ -82,7 +83,7 @@ public class LevelController implements InputProcessor {
 			running = true;
 			start = timeInTrial;
 			ends = -1;
-			id = contenido.Id;
+			id = contenido.resourceId.id;
 			if (secuenceId.size > 0) {
 				if (secuenceId.peek() == id) {
 					loopsNumber++;
@@ -97,7 +98,7 @@ public class LevelController implements InputProcessor {
 
 			// Crea el log
 			soundLog.soundInstance = instance;
-			soundLog.soundId = id;
+			soundLog.soundId = contenido.resourceId;
 			for (Categorias categoria : contenido.categorias) {
 				soundLog.categorias.add(categoria);
 			}
@@ -165,7 +166,7 @@ public class LevelController implements InputProcessor {
 		trial.runningSound = new RunningSound();
 		
 		// Carga la info general del trial al log
-		trial.loadLog(this.session, this.levelInfo);
+		trial.newLog(this.session, this.levelInfo);
 		trial.log.timeStartTrialInLevel = timeInLevel;
 
 		// Carga la interfaz
@@ -378,13 +379,13 @@ public class LevelController implements InputProcessor {
 
 	private void logTouch(TouchInfo touchData) {
 		// Agrega al log el elemento tocado
-		trial.log.resourcesIdSelected.add(touchData.thisTouchBox.contenido.Id);
+		trial.log.resourcesIdSelected.add(touchData.thisTouchBox.contenido.resourceId);
 		// Agrega la info que corresponda al log creando un TouchLog nuevo
 		TouchLog touchLog = new TouchLog();
 		touchLog.touchInstance = TimeUtils.millis();
 		touchLog.trialInstance = trial.log.trialInstance;
 		touchLog.trialId = trial.log.trialId;
-		touchLog.idResourceTouched = touchData.thisTouchBox.contenido.Id;
+		touchLog.idResourceTouched = touchData.thisTouchBox.contenido.resourceId;
 		for (Categorias categoria : touchData.thisTouchBox.contenido.categorias) {
 			touchLog.categorias.add(categoria);
 		}
@@ -410,7 +411,7 @@ public class LevelController implements InputProcessor {
 		// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
 		if (trial.jsonTrial.modo == TIPOdeTRIAL.TEST) {
 			Boolean correcta = false;
-			if (trial.rtaCorrecta.Id == touchData.thisTouchBox.contenido.Id) {
+			if (trial.rtaCorrecta.resourceId.id == touchData.thisTouchBox.contenido.resourceId.id) {
 				correcta = true;
 			} // Significa que se toco la respuesta igual a la correcta
 			if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto

@@ -95,18 +95,19 @@ public class Level {
 		public int Id; // Id q identifica al level
 		public Array<Integer> trials = new Array<Integer>(); // Lista de ids de los trial que incluye el nivel
 		public Array<JsonTrial> jsonTrials = new Array<JsonTrial>(); // Este se usa solamente en el proceso de creacion de niveles (pero por como esta diseñado el codigo que graba y carga el json completo se guarda   
-
+		public int resourceVersion;
+		
 		public static void CreateLevel(JsonLevel jsonLevel, String path) {
 			Json json = new Json();
 			FileHelper.writeFile(path + "level" + jsonLevel.Id + ".meta", json.toJson(jsonLevel));
 		}
 
-		public void build() {
+		public void build(String path) {
 			for (JsonTrial jsonTrial : this.jsonTrials) {
 				this.trials.add(jsonTrial.Id);
-				JsonTrial.CreateTrial(jsonTrial, "/temp/resourcesbuid/");
+				JsonTrial.CreateTrial(jsonTrial, path);
 			}
-			JsonLevel.CreateLevel(this, "/temp/resourcesbuid/");
+			JsonLevel.CreateLevel(this, path);
 		}
 	}
 
