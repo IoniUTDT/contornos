@@ -1,5 +1,11 @@
 package com.turin.tur.main.util;
 
+import it.sauronsoftware.jave.AudioAttributes;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.EncodingAttributes;
+import it.sauronsoftware.jave.InputFormatException;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
@@ -181,10 +187,48 @@ public class ResourcesBuilder {
 		System.out.println("Recursos transformados a png");
 		SVGtoSound.Convert(fullUsedResources);
 		System.out.println("Recursos transformados a sonido");
+		WAVtoMP3(fullUsedResources);
+		System.out.println("sonido pasado a mp3");
 		rebuildAtlasSource();
 	}
 
 	
+	private static void WAVtoMP3(String path) {
+		
+		File[] archivos;
+		// Primero busca la lista de archivos de interes
+		File dir = new File(path);
+		archivos = dir.listFiles(new WavFileFilter());
+		
+		for (File file : archivos) {	
+			File out = new File(fullUsedResources + file.getName().substring(0, file.getName().lastIndexOf(".")) + ".mp3");
+			
+			AudioAttributes audio = new AudioAttributes();
+			audio.setCodec("libmp3lame");
+			audio.setBitRate(new Integer(128000));
+			audio.setChannels(new Integer(1));
+			audio.setSamplingRate(new Integer(44100));
+			EncodingAttributes attrs = new EncodingAttributes();
+			attrs.setFormat("mp3");
+			attrs.setAudioAttributes(audio);
+			Encoder encoder = new Encoder();
+			try {
+				encoder.encode(file, out, attrs);
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InputFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (EncoderException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+	}
+
 	private static void convertirSVGtoPNG(String path) {
 		
 		File[] archivos;
@@ -831,6 +875,24 @@ public class ResourcesBuilder {
 			jsonMetaData.ResourceVersion = text.ResourceVersion;
 			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData, currentVersionPath);
 
+		}
+	}
+	
+	public static class WavFileFilter implements FileFilter
+	{
+		private final String[] okFileExtensions =
+				new String[] { "wav" };
+
+		public boolean accept(File file)
+		{
+			for (String extension : okFileExtensions)
+			{
+				if (file.getName().toLowerCase().endsWith(extension))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }
