@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.turin.tur.wave.WavFile;
 import com.turin.tur.wave.WavFileException;
 
@@ -53,9 +54,9 @@ public class SVGtoSound {
 	 * @return
 	 * 
 	 */
-	private static double[] createMusicRamp(float freci, float frecf, float ti, float tf) {
+	private static double[] createMusicRamp(double freci, double frecf, double ti, double tf) {
 		double dt = 1 / (double) fs; // es el dt que transcurre entre sample y sample
-		int N = Math.round((tf - ti) * fs); // El numero de samples que hay que crear
+		long N = Math.round((tf - ti) * fs); // El numero de samples que hay que crear
 		double[] frec = logspacelog(freci, frecf, N, base); // Crea una escala logaritmica en base 10 que va de la frecuencia inicial a la final
 		for (int i = 0; i < frec.length; i++) { // Lo multiplica x 2pi para trabajar con la fase
 			frec[i] = frec[i] * 2 * Math.PI;
@@ -88,7 +89,7 @@ public class SVGtoSound {
 	 *            Frecuencia final
 	 * @return secuencia de datos con el pulso de frecuencia
 	 */
-	private static double[] createPulse(float freci, float frecf) {
+	private static double[] createPulse(double freci, double frecf) {
 		// Usamos la antritransformada de fourirer de un rectangulo, ver : https://en.wikipedia.org/wiki/Sinc_filter
 		double frecM;
 		double frecm;
@@ -193,8 +194,8 @@ public class SVGtoSound {
 	 * @return an array of lineraly space points.
 	 */
 
-	public strictfp static double[] logspacelog(double d1, double d2, int n, double base) {
-		double[] y = new double[n];
+	public strictfp static double[] logspacelog(double d1, double d2, long n, double base) {
+		double[] y = new double[(int) n];
 		double[] p = linspace(logOfBase(base, d1), logOfBase(base, d2), n);
 		for (int i = 0; i < y.length - 1; i++) {
 			y[i] = Math.pow(base, p[i]);
@@ -214,9 +215,9 @@ public class SVGtoSound {
 	 *            The number of points to generated
 	 * @return an array of lineraly space points.
 	 */
-	public static strictfp double[] linspace(double d1, double d2, int n) {
+	public static strictfp double[] linspace(double d1, double d2, long n) {
 
-		double[] y = new double[n];
+		double[] y = new double[(int) n];
 		double dy = (d2 - d1) / (n - 1);
 		for (int i = 0; i < n; i++) {
 			y[i] = d1 + (dy * i);
@@ -228,7 +229,8 @@ public class SVGtoSound {
 
 	/**
 	 * Create the secuence of mp3 from the info in files
-	 * @param path 
+	 * 
+	 * @param path
 	 */
 	public static void createSounds(String path) {
 
@@ -252,18 +254,18 @@ public class SVGtoSound {
 
 					if (Math.abs(angulo) < (Math.PI / 2 - 0.001)) { // Agrega una linea en caso de que sea rampa (con 0.001 de tolerancia se distingue hasta 0.1 pixel de corrimiento lateral en todo el alto de la imagen. Este es el limite en que se escucha casi identico aunque mucho antes ya no se distingue visualmente 
 						double[] rampa = createMusicRamp(linea.freci, linea.frecf, linea.ti, linea.tf);
-						int frameInicial = (int) linea.ti * fs;
+						int frameInicial = (int) (linea.ti * fs);
 						for (int i = 0; i < rampa.length; i++) { // agrega a la secuencia general
 							secuence[i + frameInicial] = secuence[i + frameInicial] + rampa[i];
 						}
 					} else { // agrega una linea en caso de que sea pulso
 						double[] pulso = createPulse(linea.freci, linea.frecf);
-						float tiempoCentral = (linea.tf + linea.ti) / 2;
+						double tiempoCentral = (linea.tf + linea.ti) / 2;
 						int frameCentral = (int) (tiempoCentral * fs);
 						int posicionInicial = frameCentral - pulso.length / 2;
 						for (int i = 0; i < pulso.length; i++) {
 							if (posicionInicial + i < 0) {
-								i=i-posicionInicial; // No hace nada en la primer iteracion y corrige el i para que vaya al primer lugar util
+								i = i - posicionInicial; // No hace nada en la primer iteracion y corrige el i para que vaya al primer lugar util
 							} else {
 								if (posicionInicial + i > secuence.length - 1) {
 									break; // Termina el for si ya se excede del rando del sonido
@@ -275,9 +277,11 @@ public class SVGtoSound {
 						}
 					}
 				}
-				double max=0;
+				double max = 0;
 				for (int i = 0; i < secuence.length; i++) { // busca el maximo
-					if (Math.abs(secuence[i]) > max) {max = Math.abs(secuence[i]);}
+					if (Math.abs(secuence[i]) > max) {
+						max = Math.abs(secuence[i]);
+					}
 				}
 				for (int i = 0; i < secuence.length; i++) { // busca el maximo
 					secuence[i] = secuence[i] / max;
@@ -302,7 +306,7 @@ public class SVGtoSound {
 
 		// se fija que la linea vaya de izquierda a derecha y sino lo corrige
 		if (linea.xi > linea.xf) {
-			float temp = linea.xi;
+			double temp = linea.xi;
 			linea.xi = linea.xf;
 			linea.xf = temp;
 			temp = linea.yi;
@@ -310,6 +314,52 @@ public class SVGtoSound {
 			linea.yf = temp;
 		}
 
+		double m = (linea.yf - linea.yi) / (linea.xf - linea.xi); //Pendiente
+		// Se fija q los extremos este dentro del rango de la imagen
+		if (linea.xi < 0) {
+			System.out.println("Corrigiendo imagen fuera de rango");
+			double deltaX = 0 - linea.xi;
+			linea.xi = linea.xi + deltaX;
+			linea.yi = linea.yi + deltaX * m;
+		}
+		if (linea.xf > ancho) {
+			System.out.println("Corrigiendo imagen fuera de rango");
+			double deltaX = ancho - linea.xf;
+			linea.xf = linea.xf + deltaX;
+			linea.yf = linea.yf + deltaX * m;
+		}
+		if (linea.yi < 0) { // Corrige si la y inicial esta por debajo del cero
+			System.out.println("Corrigiendo imagen fuera de rango");
+			double deltaY = 0 - linea.yi;
+			linea.yi = linea.yi + deltaY;
+			if ((linea.xf - linea.xi)!=0) {
+				linea.xi = linea.xi + 1/m * deltaY;
+			}
+		}
+		if (linea.yi > alto) { // corrige si la y inicial esta por encima del alto maximo
+			System.out.println("Corrigiendo imagen fuera de rango");
+			double deltaY = alto - linea.yi;
+			linea.yi = linea.yi + deltaY;
+			if ((linea.xf - linea.xi)!=0) {
+				linea.xi = linea.xi + 1/m * deltaY;
+			}
+		}
+		if (linea.yf > alto) { // corrige si la yf esta por encima del alto maximo
+			System.out.println("Corrigiendo imagen fuera de rango");
+			double deltaY = alto - linea.yf;
+			linea.yf = linea.yf + deltaY;
+			if ((linea.xf - linea.xi)!=0) {
+				linea.xf = linea.xf + 1/m * deltaY;
+			}
+		}
+		if (linea.yf < 0) { // corrige si la yf esta por encima del alto maximo
+			System.out.println("Corrigiendo imagen fuera de rango");
+			double deltaY = 0 - linea.yf;
+			linea.yf = linea.yf + deltaY;
+			if ((linea.xf - linea.xi)!=0) {
+				linea.xf = linea.xf + 1/m * deltaY;
+			}
+		}
 		// get scale correction for file
 		float timefactor;
 		if (fixedTime) {
@@ -324,11 +374,11 @@ public class SVGtoSound {
 			frecfactor = 1;
 		}
 
-		float xi = linea.xi * timefactor;
-		float xf = linea.xf * timefactor;
+		double xi = linea.xi * timefactor;
+		double xf = linea.xf * timefactor;
 		// get the initial and final frec based in conditions
-		float yi = linea.yi * frecfactor;
-		float yf = linea.yf * frecfactor;
+		double yi = linea.yi * frecfactor;
+		double yf = linea.yf * frecfactor;
 
 		// corrige que el SVG toma el cero arriba
 		yi = maxHeigth - yi;
@@ -369,15 +419,15 @@ public class SVGtoSound {
 
 	public static class Linea {
 		// Parametros que se leen desde cada linea del SVG
-		float xi;
-		float xf;
-		float yi;
-		float yf;
+		double xi;
+		double xf;
+		double yi;
+		double yf;
 		// Parametros que se calculan en funcion de parametros generales de la imagen y del programa
-		float freci;
-		float frecf;
-		float ti;
-		float tf;
+		double freci;
+		double frecf;
+		double ti;
+		double tf;
 
 	}
 

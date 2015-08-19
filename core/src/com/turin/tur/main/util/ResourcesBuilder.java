@@ -114,6 +114,15 @@ public class ResourcesBuilder {
 			 * Arma el nivel Tutorial
 			 */
 
+			// Limpia la carpeta de destino
+			try {
+				FileUtils.cleanDirectory(new File(fullLevelsPath));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			
 			// Crea el nivel tutorial
 			JsonLevel tutorial = crearLevel();
 			tutorial.levelTitle = "Tutorial";
@@ -133,11 +142,13 @@ public class ResourcesBuilder {
 					new int[] { 216, 217, 226, 227, 228, 230 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
 
 			tutorial.build(levelsPath);
+	
 
 			/*
 			 * Arma el nivel 1 (test por imagenes)
 			 */
 
+		
 			JsonLevel level1 = crearLevel();
 			level1.levelTitle = "Primer desafio";
 
@@ -169,8 +180,9 @@ public class ResourcesBuilder {
 			JsonLevel level2 = crearLevel();
 			level2.levelTitle = "Segundo Desafio";
 
+			
 			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
-					new int[] { Categorias.Lineax1.ID, Categorias.Angulo.ID }, TIPOdeTRIAL.TEST, 46, false, true));
+					new int[] { Categorias.Lineax1.ID, Categorias.Angulo.ID }, TIPOdeTRIAL.TEST, 100, false, true));
 			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
 					new int[] { Categorias.Lineax1.ID, Categorias.Lineax2.ID }, TIPOdeTRIAL.TEST, 27, false, true));
 			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
