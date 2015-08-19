@@ -2,7 +2,7 @@ package com.turin.tur.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.turin.tur.ContornosMain;
+import com.turin.tur.Visound;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 
@@ -29,6 +29,6 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 800;
 		config.height = 480;
-		new LwjglApplication(new ContornosMain(), config);
+		new LwjglApplication(new Visound(), config);
 	}
 }

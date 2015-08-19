@@ -11,10 +11,10 @@ import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.ImagesAsset;
 import com.turin.tur.main.util.ResourcesBuilder;
 
-public class ContornosMain extends Game {
+public class Visound extends Game {
 
 	
-	private static final String TAG = ContornosMain.class.getName();
+	private static final String TAG = Visound.class.getName();
 	private static boolean buildResources = true;
 	public Session session;
 	

@@ -1,6 +1,7 @@
 package com.turin.tur.main.util;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +32,8 @@ import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
+import com.turin.tur.main.util.SVGtoSound.SvgFileFilter;
+import com.turin.tur.main.util.SVGtoSound;
 
 public class ResourcesBuilder {
 
@@ -166,17 +169,68 @@ public class ResourcesBuilder {
 					new int[] { Categorias.Paralelas.ID, Categorias.NoParalelas.ID }, TIPOdeTRIAL.TEST, 208, false, true));
 			level2.build(levelsPath);
 
-			Boolean rebuild = true;
-			if (rebuild) {
-				rebuildAtlasSource();
-			}
+			createStructure();
 
 		}
 	}
 
-	private static void rebuildAtlasSource() {
+	private static void createStructure() {
 		seleccionarRecursos(); // Copia solo los recursos que se usan a una carpeta para su procesamiento
+		System.out.println("Recursos seleccionados");
+		convertirSVGtoPNG(fullUsedResources);
+		System.out.println("Recursos transformados a png");
+		SVGtoSound.Convert(fullUsedResources);
+		System.out.println("Recursos transformados a sonido");
+		rebuildAtlasSource();
+	}
 
+	
+	private static void convertirSVGtoPNG(String path) {
+		
+		File[] archivos;
+		// Primero busca la lista de archivos de interes
+		File dir = new File(path);
+		archivos = dir.listFiles(new SvgFileFilter());
+		
+		
+		// Convertimos los SVG a PNG
+
+		for (File file : archivos) {
+			try {
+				//Step -1: We read the input SVG document into Transcoder Input
+				//We use Java NIO for this purpose
+				String svg_URI_input = Paths.get(file.getAbsolutePath()).toUri().toURL().toString();
+				TranscoderInput input_svg_image = new TranscoderInput(svg_URI_input);
+				//Step-2: Define OutputStream to PNG Image and attach to TranscoderOutput
+				OutputStream png_ostream;
+				file = new File(fullUsedResources + file.getName().substring(0, file.getName().lastIndexOf(".")) + ".png");
+				png_ostream = new FileOutputStream(file);
+
+				TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
+				// Step-3: Create PNGTranscoder and define hints if required
+				PNGTranscoder my_converter = new PNGTranscoder();
+				// Step-4: Convert and Write output
+				my_converter.transcode(input_svg_image, output_png_image);
+				// Step 5- close / flush Output Stream
+				png_ostream.flush();
+				png_ostream.close();
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TranscoderException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	private static void rebuildAtlasSource() {
+		
 		int version_temp = MathUtils.roundPositive(Constants.VERSION);
 		int temp;
 		if (version_temp > Constants.VERSION) {
@@ -223,11 +277,11 @@ public class ResourcesBuilder {
 
 		// Se limpia el directorio de detino
 		try {
-			FileUtils.cleanDirectory(new File (fullUsedResources));
+			FileUtils.cleanDirectory(new File(fullUsedResources));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		} 
+		}
 		// Se copia solo los recursos utilizados
 		for (int id : listado) {
 			File file = new File(fullCurrentVersionPath + id + ".svg");
@@ -252,43 +306,6 @@ public class ResourcesBuilder {
 				e.printStackTrace();
 			}
 		}
-
-		// Convertimos los SVG a PNG
-
-		
-		for (int id : listado) {
-			try {
-				//Step -1: We read the input SVG document into Transcoder Input
-				//We use Java NIO for this purpose
-				File file = new File(fullUsedResources + id + ".svg");
-				String svg_URI_input = Paths.get(file.getAbsolutePath()).toUri().toURL().toString();
-				TranscoderInput input_svg_image = new TranscoderInput(svg_URI_input);
-				//Step-2: Define OutputStream to PNG Image and attach to TranscoderOutput
-				OutputStream png_ostream;
-				file = new File(fullUsedResources + id + ".png");
-				png_ostream = new FileOutputStream(file);
-
-				TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
-				// Step-3: Create PNGTranscoder and define hints if required
-				PNGTranscoder my_converter = new PNGTranscoder();
-				// Step-4: Convert and Write output
-				my_converter.transcode(input_svg_image, output_png_image);
-				// Step 5- close / flush Output Stream
-				png_ostream.flush();
-				png_ostream.close();
-
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TranscoderException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
 	}
 
 	private static JsonTrial crearTrial(String title, String caption, DISTRIBUCIONESenPANTALLA distribucion, int[] elementos, TIPOdeTRIAL modo,

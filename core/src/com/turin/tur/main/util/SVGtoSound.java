@@ -19,23 +19,22 @@ import com.turin.tur.wave.WavFileException;
 public class SVGtoSound {
 
 	// Define algunas constantes
-	public String path = "./testFiles/";
-	public File[] archivosOriginales;
-	public ArrayList<InfoArchivo> archivos = new ArrayList<InfoArchivo>();
-	public final boolean logScale = true;
-	public final boolean fixScale = true;
-	public final float maxHeigth = 100;
-	public final float frecMax = 8000;
-	public final float frecMin = 100;
-	public final float time = 5; // in secs
-	public final boolean fixedTime = true; // indicate if the length of sound must be the variable time
-	public final float secByPix = 5 / 100f; // indicate how many sec are represented by pixel.
-	public final int fs = 44100; // hz of the sound
-	public final float base = 10; // base of the log scale
+	public static File[] archivosOriginales;
+	public static ArrayList<InfoArchivo> archivos = new ArrayList<InfoArchivo>();
+	public final static boolean logScale = true;
+	public final static boolean fixScale = true;
+	public final static float maxHeigth = 100;
+	public final static float frecMax = 8000;
+	public final static float frecMin = 100;
+	public final static float time = 5; // in secs
+	public final static boolean fixedTime = true; // indicate if the length of sound must be the variable time
+	public final static float secByPix = 5 / 100f; // indicate how many sec are represented by pixel.
+	public final static int fs = 44100; // hz of the sound
+	public final static float base = 10; // base of the log scale
 
-	public SVGtoSound() {
-		this.loadFiles();
-		this.createSounds();
+	public static void Convert(String path) {
+		loadFiles(path);
+		createSounds(path);
 		System.out.println("Finalizado con exito");
 	}
 
@@ -54,7 +53,7 @@ public class SVGtoSound {
 	 * @return
 	 * 
 	 */
-	private double[] createMusicRamp(float freci, float frecf, float ti, float tf) {
+	private static double[] createMusicRamp(float freci, float frecf, float ti, float tf) {
 		double dt = 1 / (double) fs; // es el dt que transcurre entre sample y sample
 		int N = Math.round((tf - ti) * fs); // El numero de samples que hay que crear
 		double[] frec = logspacelog(freci, frecf, N, base); // Crea una escala logaritmica en base 10 que va de la frecuencia inicial a la final
@@ -89,7 +88,7 @@ public class SVGtoSound {
 	 *            Frecuencia final
 	 * @return secuencia de datos con el pulso de frecuencia
 	 */
-	private double[] createPulse(float freci, float frecf) {
+	private static double[] createPulse(float freci, float frecf) {
 		// Usamos la antritransformada de fourirer de un rectangulo, ver : https://en.wikipedia.org/wiki/Sinc_filter
 		double frecM;
 		double frecm;
@@ -139,7 +138,7 @@ public class SVGtoSound {
 	 *            a suavizar
 	 * @return Devuelve el input suavizado
 	 */
-	private double[] tukeywin(double[] frec, double d) {
+	private static double[] tukeywin(double[] frec, double d) {
 		int framesMaximos;
 
 		if (d >= 1) { // recupera cuantos frames tiene que suavizar
@@ -176,7 +175,7 @@ public class SVGtoSound {
 	 *            The argument of log
 	 * @return
 	 */
-	public double logOfBase(double base, double num) {
+	public static double logOfBase(double base, double num) {
 		return Math.log(num) / Math.log(base);
 	}
 
@@ -194,7 +193,7 @@ public class SVGtoSound {
 	 * @return an array of lineraly space points.
 	 */
 
-	public strictfp double[] logspacelog(double d1, double d2, int n, double base) {
+	public strictfp static double[] logspacelog(double d1, double d2, int n, double base) {
 		double[] y = new double[n];
 		double[] p = linspace(logOfBase(base, d1), logOfBase(base, d2), n);
 		for (int i = 0; i < y.length - 1; i++) {
@@ -229,8 +228,9 @@ public class SVGtoSound {
 
 	/**
 	 * Create the secuence of mp3 from the info in files
+	 * @param path 
 	 */
-	public void createSounds() {
+	public static void createSounds(String path) {
 
 		if (archivos != null) {
 			for (InfoArchivo archivo : archivos) {
@@ -298,7 +298,7 @@ public class SVGtoSound {
 		}
 	}
 
-	private void findParameters(Linea linea, float ancho, float alto) {
+	private static void findParameters(Linea linea, float ancho, float alto) {
 
 		// se fija que la linea vaya de izquierda a derecha y sino lo corrige
 		if (linea.xi > linea.xf) {
@@ -359,7 +359,7 @@ public class SVGtoSound {
 		}
 	}
 
-	public class InfoArchivo {
+	public static class InfoArchivo {
 		String nombre;
 		float ancho;
 		float alto;
@@ -367,7 +367,7 @@ public class SVGtoSound {
 		ArrayList<Linea> lineas = new ArrayList<Linea>();
 	}
 
-	public class Linea {
+	public static class Linea {
 		// Parametros que se leen desde cada linea del SVG
 		float xi;
 		float xf;
@@ -381,7 +381,7 @@ public class SVGtoSound {
 
 	}
 
-	private void loadFiles() {
+	private static void loadFiles(String path) {
 
 		// Primero busca la lista de archivos de interes
 		File dir = new File(path);
@@ -429,7 +429,7 @@ public class SVGtoSound {
 		}
 	}
 
-	public class SvgFileFilter implements FileFilter
+	public static class SvgFileFilter implements FileFilter
 	{
 		private final String[] okFileExtensions =
 				new String[] { "svg" };
