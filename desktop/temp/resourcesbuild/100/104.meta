@@ -1,1 +1,1 @@
-{Id:104,name:Angulo,comments:Angulo generado automaticamente por secuenciaAngulos. Parametros: Angulo inicial: 60.0; Angulo final: 320.0;,ResourceVersion:100,categories:[Angulo,Grave]}
+{name:Angulo,comments:Angulo generado automaticamente por secuenciaAngulos. Parametros: Angulo inicial: 60.0; Angulo final: 320.0;,resourceId:{id:104,resourceVersion:100},categories:[Angulo,Grave]}

@@ -44,27 +44,25 @@ public class ExperimentalObject {
 		this.name = jsonMetaData.name;
 		this.categorias = jsonMetaData.categories;
 		this.noSound =jsonMetaData.noSound ;
-		this.resourceId.id = jsonMetaData.Id;
-		this.resourceId.resourceVersion = jsonMetaData.ResourceVersion;
+		this.resourceId = jsonMetaData.resourceId;
 	}
 
 
 	public static class JsonMetaData {
 		public boolean noSound;
-		public int Id;
 		public String name;
 		public String comments;
-		public int ResourceVersion;
+		public ResourceId resourceId;
 		public Array<Constants.Resources.Categorias> categories = new Array<Constants.Resources.Categorias>();
 		
 		public static void CreateJsonMetaData (JsonMetaData jsonMetaData, String path) {
 			Json json = new Json();
-			FileHelper.writeFile(path + jsonMetaData.Id + ".meta", json.toJson(jsonMetaData));			
+			FileHelper.writeFile(path + jsonMetaData.resourceId.id + ".meta", json.toJson(jsonMetaData));			
 		} 
 		
 		public void save() {
 			Json json = new Json();
-			FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta", json.toJson(this));
+			FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + resourceId.id + ".meta", json.toJson(this));
 		}
 		
 		public static JsonMetaData Load(int Id) {

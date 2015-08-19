@@ -35,6 +35,7 @@ import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
+import com.turin.tur.main.diseno.Trial.ResourceId;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
@@ -65,6 +66,7 @@ public class ResourcesBuilder {
 	static String fullLevelsPath = fullTempPath + "tempLevels/";
 	static String levelsPath = tempPath + "tempLevels/";
 	static String fullUsedResources = fullTempPath + "selected/";
+	static String finalPath = "../android/assets/experimentalsource/" + Constants.version() + "/";
 
 	public static void buildNewSVG() {
 
@@ -100,7 +102,7 @@ public class ResourcesBuilder {
 			}
 		}
 
-		Boolean makeLevels = true;
+		Boolean makeLevels = false;
 		if (makeLevels) {
 			// Se fija q exista el paquete de recursos de la version actual
 			if (!new File(fullCurrentVersionPath).exists()) {
@@ -189,20 +191,19 @@ public class ResourcesBuilder {
 		System.out.println("Recursos transformados a sonido");
 		WAVtoMP3(fullUsedResources);
 		System.out.println("sonido pasado a mp3");
-		rebuildAtlasSource();
+		rebuildAtlasAndSource();
 	}
 
-	
 	private static void WAVtoMP3(String path) {
-		
+
 		File[] archivos;
 		// Primero busca la lista de archivos de interes
 		File dir = new File(path);
 		archivos = dir.listFiles(new WavFileFilter());
-		
-		for (File file : archivos) {	
+
+		for (File file : archivos) {
 			File out = new File(fullUsedResources + file.getName().substring(0, file.getName().lastIndexOf(".")) + ".mp3");
-			
+
 			AudioAttributes audio = new AudioAttributes();
 			audio.setCodec("libmp3lame");
 			audio.setBitRate(new Integer(128000));
@@ -214,6 +215,7 @@ public class ResourcesBuilder {
 			Encoder encoder = new Encoder();
 			try {
 				encoder.encode(file, out, attrs);
+				file.delete();
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -225,18 +227,16 @@ public class ResourcesBuilder {
 				e.printStackTrace();
 			}
 		}
-		
-		
+
 	}
 
 	private static void convertirSVGtoPNG(String path) {
-		
+
 		File[] archivos;
 		// Primero busca la lista de archivos de interes
 		File dir = new File(path);
 		archivos = dir.listFiles(new SvgFileFilter());
-		
-		
+
 		// Convertimos los SVG a PNG
 
 		for (File file : archivos) {
@@ -273,22 +273,87 @@ public class ResourcesBuilder {
 
 	}
 
-	private static void rebuildAtlasSource() {
-		
-		int version_temp = MathUtils.roundPositive(Constants.VERSION);
-		int temp;
-		if (version_temp > Constants.VERSION) {
-			temp = -1;
-		} else {
-			temp = 0;
+	private static void rebuildAtlasAndSource() {
+
+		// Limpia la carpeta de destino
+		try {
+			FileUtils.cleanDirectory(new File(finalPath));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		int version = version_temp + temp;
+
+		// Crea el atlas
 		Settings settings = new Settings();
 		settings.maxWidth = 1024;
 		settings.maxHeight = 1024;
 		settings.duplicatePadding = false;
 		settings.debug = false;
-		TexturePacker.process(settings, fullUsedResources, "../android/assets/experimentalsource/" + version + "/", "images");
+		TexturePacker.process(settings, fullUsedResources, finalPath, "images");
+
+		// Copia los archivos meta para los recursos
+		File[] archivos;
+		// Primero busca la lista de archivos de interes
+		File dir = new File(fullUsedResources);
+		archivos = dir.listFiles(new MetaFileFilter());
+		for (File file : archivos) {
+			Path FROM = Paths.get(file.getAbsolutePath());
+			File out = new File(finalPath + file.getName());
+			Path TO = Paths.get(out.getAbsolutePath());
+			//overwrite existing file, if exists
+			CopyOption[] options = new CopyOption[] {
+					StandardCopyOption.REPLACE_EXISTING,
+					StandardCopyOption.COPY_ATTRIBUTES
+			};
+			try {
+				Files.copy(FROM, TO, options);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		// Copia los archivos mp3 para los recursos
+		// Primero busca la lista de archivos de interes
+		dir = new File(fullUsedResources);
+		archivos = dir.listFiles(new Mp3FileFilter());
+		for (File file : archivos) {
+			Path FROM = Paths.get(file.getAbsolutePath());
+			File out = new File(finalPath + file.getName());
+			Path TO = Paths.get(out.getAbsolutePath());
+			//overwrite existing file, if exists
+			CopyOption[] options = new CopyOption[] {
+					StandardCopyOption.REPLACE_EXISTING,
+					StandardCopyOption.COPY_ATTRIBUTES
+			};
+			try {
+				Files.copy(FROM, TO, options);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		// Copia los archivos con la info de los niveles
+		// Primero busca la lista de archivos de interes
+		dir = new File(fullLevelsPath);
+		archivos = dir.listFiles();
+		for (File file : archivos) {
+			Path FROM = Paths.get(file.getAbsolutePath());
+			File out = new File(finalPath + file.getName());
+			Path TO = Paths.get(out.getAbsolutePath());
+			//overwrite existing file, if exists
+			CopyOption[] options = new CopyOption[] {
+					StandardCopyOption.REPLACE_EXISTING,
+					StandardCopyOption.COPY_ATTRIBUTES
+			};
+			try {
+				Files.copy(FROM, TO, options);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static void seleccionarRecursos() {
@@ -385,13 +450,13 @@ public class ResourcesBuilder {
 		// Crea un recurso para cada categoria
 		for (Constants.Resources.Categorias categoria : Constants.Resources.Categorias.values()) {
 			Texto recurso = new Texto();
-			recurso.id = categoria.ID;
+			recurso.resourceId.id = categoria.ID;
 			recurso.comments = "Recurso experimental generado automaticamente correspondiente a la categoria: " + categoria.nombre;
 			recurso.categories.add(categoria);
 			recurso.categories.add(Categorias.Texto); // Marca que son textos
 			recurso.name = categoria.nombre;
 			recurso.texto = categoria.texto;
-			recurso.ResourceVersion = ResourceVersion;
+			recurso.resourceId.resourceVersion = ResourceVersion;
 			objetos.add(recurso);
 		}
 
@@ -623,8 +688,8 @@ public class ResourcesBuilder {
 	private static Imagen crearImagen() {
 		contadorDeRecursos += 1;
 		Imagen imagen = new Imagen();
-		imagen.id = contadorDeRecursos;
-		imagen.ResourceVersion = ResourceVersion;
+		imagen.resourceId.id = contadorDeRecursos;
+		imagen.resourceId.resourceVersion = ResourceVersion;
 		return imagen;
 	}
 
@@ -711,19 +776,17 @@ public class ResourcesBuilder {
 	}
 
 	public static class Imagen {
-		int id;
+		ResourceId resourceId = new ResourceId();
 		String name;
 		String comments;
-		int ResourceVersion;
 		Array<Constants.Resources.Categorias> categories = new Array<Constants.Resources.Categorias>();
 		Array<ExtremosLinea> parametros = new Array<ExtremosLinea>();
 	}
 
 	public static class Texto {
-		int id;
+		ResourceId resourceId = new ResourceId();
 		String name;
 		String comments;
-		int ResourceVersion;
 		Array<Categorias> categories = new Array<Constants.Resources.Categorias>();
 		String texto;
 	}
@@ -809,8 +872,8 @@ public class ResourcesBuilder {
 			add("<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version "
 					+ Constants.VERSION
 					+ ". Este elementos es el numero "
-					+ imagen.id
-					+ " de la serie " + imagen.ResourceVersion + " -->"); // Comentario inicial
+					+ imagen.resourceId.id
+					+ " de la serie " + imagen.resourceId.resourceVersion + " -->"); // Comentario inicial
 			add("<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"" + height
 					+ "\" width=\"" + width + "\">"); // Inicializa el SVG
 			for (ExtremosLinea par : imagen.parametros) {
@@ -830,8 +893,8 @@ public class ResourcesBuilder {
 			add("<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version "
 					+ Constants.VERSION
 					+ ". Este elementos es el numero "
-					+ text.id
-					+ " de la serie " + text.ResourceVersion + " de textos-->"); // Comentario inicial
+					+ text.resourceId.id
+					+ " de la serie " + text.resourceId.resourceVersion + " de textos-->"); // Comentario inicial
 			add("<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"" + height
 					+ "\" width=\"" + width + "\">"); // Inicializa el SVG
 
@@ -843,12 +906,11 @@ public class ResourcesBuilder {
 
 		private static void createMetadata(Imagen imagen) {
 			JsonMetaData jsonMetaData = new JsonMetaData();
-			jsonMetaData.Id = imagen.id;
+			jsonMetaData.resourceId = imagen.resourceId;
 			jsonMetaData.name = imagen.name;
 			jsonMetaData.comments = imagen.comments;
 			jsonMetaData.categories = imagen.categories;
 			jsonMetaData.noSound = false;
-			jsonMetaData.ResourceVersion = imagen.ResourceVersion;
 			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData, currentVersionPath);
 
 		}
@@ -858,30 +920,65 @@ public class ResourcesBuilder {
 		}
 
 		private static void createFile(Imagen imagen) {
-			FileHelper.writeFile(currentVersionPath + imagen.id + ".svg", content);
+			FileHelper.writeFile(currentVersionPath + imagen.resourceId.id + ".svg", content);
 		}
 
 		private static void createFileText(Texto text) {
-			FileHelper.writeFile(currentVersionPath + text.id + ".svg", content);
+			FileHelper.writeFile(currentVersionPath + text.resourceId.id + ".svg", content);
 		}
 
 		private static void createMetadataText(Texto text) {
 			JsonMetaData jsonMetaData = new JsonMetaData();
-			jsonMetaData.Id = text.id;
+			jsonMetaData.resourceId = text.resourceId;
 			jsonMetaData.name = text.name;
 			jsonMetaData.comments = text.comments;
 			jsonMetaData.categories = text.categories;
 			jsonMetaData.noSound = true;
-			jsonMetaData.ResourceVersion = text.ResourceVersion;
 			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData, currentVersionPath);
 
 		}
 	}
-	
+
 	public static class WavFileFilter implements FileFilter
 	{
 		private final String[] okFileExtensions =
 				new String[] { "wav" };
+
+		public boolean accept(File file)
+		{
+			for (String extension : okFileExtensions)
+			{
+				if (file.getName().toLowerCase().endsWith(extension))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public static class MetaFileFilter implements FileFilter
+	{
+		private final String[] okFileExtensions =
+				new String[] { "meta" };
+
+		public boolean accept(File file)
+		{
+			for (String extension : okFileExtensions)
+			{
+				if (file.getName().toLowerCase().endsWith(extension))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	public static class Mp3FileFilter implements FileFilter
+	{
+		private final String[] okFileExtensions =
+				new String[] { "mp3" };
 
 		public boolean accept(File file)
 		{
