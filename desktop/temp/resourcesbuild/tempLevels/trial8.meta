@@ -1,1 +1,1 @@
-{caption:Escuche el sonido y toque la imagen que le corresponde,Id:8,title:¿Hiciste la tarea?,modo:TEST,elementosId:[22,27,40,46,66,208],rtaCorrectaId:208,distribucion:BILINEALx6,randomSort:true,resourceVersion:100}
+{caption:Identifique a que categoria pertenece la imagen que suena,Id:8,title:Test por categorias,modo:TEST,elementosId:[16,7,18,17],rtaCorrectaId:753,rtaRandom:true,distribucion:BILINEALx4,randomSort:true,resourceVersion:110}

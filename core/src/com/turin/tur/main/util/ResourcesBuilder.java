@@ -57,8 +57,7 @@ public class ResourcesBuilder {
 	static int height = 100;
 	static int width = 100;
 
-	static final int ResourceVersion = 100;
-	// static String tempPath = "/temp/resourcesbuild/"+ResourceVersion+"/"; // Directorio donde se almacenan los recursos durante la construccion antes de pasar todo a su version final.
+	static final int ResourceVersion = 110;
 	static String tempPath = "/temp/resourcesbuild/";
 	static String fullTempPath = "." + tempPath;
 	static String currentVersionPath = tempPath + ResourceVersion + "/";
@@ -90,6 +89,7 @@ public class ResourcesBuilder {
 			boolean geometrias = true;
 			if (geometrias) {
 				objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
+				objetos.addAll(secuenciaLineasVerticales()); // Agrega un set de lineas verticales
 				objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
 				objetos.addAll(secuenciaAngulos()); // Agrega los angulos
 				objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
@@ -121,73 +121,42 @@ public class ResourcesBuilder {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-			
+
+			// Armado con la version 108 
+
 			// Crea el nivel tutorial
 			JsonLevel tutorial = crearLevel();
 			tutorial.levelTitle = "Tutorial";
 
 			// Ahora vamos a ir creando los trials
-			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para continuar", DISTRIBUCIONESenPANTALLA.LINEALx1,
+
+			// Bienvenida
+			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para completar la pantalla", DISTRIBUCIONESenPANTALLA.LINEALx1,
 					new int[] { Constants.Resources.Categorias.Siguiente.ID }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas horizontales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-					new int[] { 21, 22, 24, 25 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 26, 27, 33, 34, 35, 42 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Algunos angulos", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 44, 51, 65, 70, 92, 100 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 181, 182, 186, 188, 191, 198 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
-			tutorial.jsonTrials.add(crearTrial("Rectas no paralelas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 216, 217, 226, 227, 228, 230 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			// Muestra rectas horizontales y verticales
+			tutorial.jsonTrials.add(crearTrial("Rectas horizontales y verticales", "Escuche todos los sonidos para continuar",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 26, 25, 27, 23, 28 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			// Muestra rectas en diagonal
+			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.LINEALx3,
+					new int[] { 29, 36, 41 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			// Primer test sencillo
+			tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 25, 27, 28, 29, 36, 23 }, TIPOdeTRIAL.TEST, 25, true, true));
+			// Muestra angulo y pares de rectas (un angulo agudo, uno recto y uno grave, y dos pares de rectas paralelas y unas q no.)
+			tutorial.jsonTrials.add(crearTrial("Angulos y rectas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 49, 55, 414, 691, 694, 708 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			// Segundo test
+			tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+					new int[] { 49, 55, 708, 691 }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true));
+			// Ultima presentacion, cuadrilateros
+			tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+					new int[] { 742, 748, 750, 757 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true));
+			// tercer test (por categorias 1) */
+			tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+					new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, 753, true, true));
 
 			tutorial.build(levelsPath);
-	
-
-			/*
-			 * Arma el nivel 1 (test por imagenes)
-			 */
-
-		
-			JsonLevel level1 = crearLevel();
-			level1.levelTitle = "Primer desafio";
-
-			// Ahora vamos a ir creando los trials
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
-					DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 27, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
-					DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 208, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
-					DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 22, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
-					DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 40, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
-					DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 46, false, true));
-			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
-					DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 66, false, true));
-			level1.build(levelsPath);
-
-			/*
-			 * Arma el nivel 2 (test por categorias)
-			 */
-
-			JsonLevel level2 = crearLevel();
-			level2.levelTitle = "Segundo Desafio";
-
-			
-			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
-					new int[] { Categorias.Lineax1.ID, Categorias.Angulo.ID }, TIPOdeTRIAL.TEST, 100, false, true));
-			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
-					new int[] { Categorias.Lineax1.ID, Categorias.Lineax2.ID }, TIPOdeTRIAL.TEST, 27, false, true));
-			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
-					new int[] { Categorias.Paralelas.ID, Categorias.NoParalelas.ID }, TIPOdeTRIAL.TEST, 208, false, true));
-			level2.build(levelsPath);
 
 			createStructure();
 
@@ -206,6 +175,12 @@ public class ResourcesBuilder {
 		rebuildAtlasAndSource();
 	}
 
+	/**
+	 * Conversion de wav a mp3 que usa el paquete JAVE. Para documentacion mirar
+	 * http://www.sauronsoftware.it/projects/jave/manual.php?PHPSESSID=lgde8c08ha8mrbcn74259ap3d4
+	 * 
+	 * @param path
+	 */
 	private static void WAVtoMP3(String path) {
 
 		File[] archivos;
@@ -221,6 +196,7 @@ public class ResourcesBuilder {
 			audio.setBitRate(new Integer(128000));
 			audio.setChannels(new Integer(1));
 			audio.setSamplingRate(new Integer(44100));
+			audio.setVolume(1500);
 			EncodingAttributes attrs = new EncodingAttributes();
 			attrs.setFormat("mp3");
 			attrs.setAudioAttributes(audio);
@@ -345,7 +321,7 @@ public class ResourcesBuilder {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// Copia los archivos con la info de los niveles
 		// Primero busca la lista de archivos de interes
 		dir = new File(fullLevelsPath);
@@ -477,7 +453,7 @@ public class ResourcesBuilder {
 
 	private static Array<Imagen> secuenciaAngulos() {
 		float largo = 50;
-		int cantidad = 18;
+		int cantidad = 36; // Nota: si no se pone una cantidad que sea correcta pueden no quedar angulos rectos!
 		float shiftAngulo = 360 / cantidad;
 
 		Array<Imagen> objetos = new Array<Imagen>();
@@ -502,6 +478,45 @@ public class ResourcesBuilder {
 				objetos.add(imagen);
 			}
 		}
+		return objetos;
+	}
+
+	/**
+	 * Crea un set de lineas verticales para el tutorial. En este caso se crean a mano las lineas utiles
+	 * 
+	 * @return
+	 */
+	private static Array<Imagen> secuenciaLineasVerticales() {
+		Array<Imagen> objetos = new Array<Imagen>();
+		Imagen imagen;
+		// recta vertical completa centrada
+		imagen = crearImagen();
+		imagen.parametros.addAll(ExtremosLinea.Linea(height / 2, width / 2, 90, 90));
+		imagen.name = "Linea vertical centrada completa";
+		imagen.comments = "Imagen generada por sucuenciaLineasVerticuales";
+		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
+		imagen.categories.add(Constants.Resources.Categorias.Lineas);
+		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+		objetos.add(imagen);
+		// recta vertical incompleta superior
+		imagen = crearImagen();
+		imagen.parametros.addAll(ExtremosLinea.Linea(height / 6, width / 4, 90, height / 3));
+		imagen.name = "Linea vertical superior";
+		imagen.comments = "Imagen generada por sucuenciaLineasVerticuales";
+		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
+		imagen.categories.add(Constants.Resources.Categorias.Lineas);
+		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+		objetos.add(imagen);
+		// recta vertical incompleta inferior
+		imagen = crearImagen();
+		imagen.parametros.addAll(ExtremosLinea.Linea(height / 6 * 5, width / 4 * 3, 90, height / 3));
+		imagen.name = "Linea vertical superior";
+		imagen.comments = "Imagen generada por sucuenciaLineasVerticuales";
+		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
+		imagen.categories.add(Constants.Resources.Categorias.Lineas);
+		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+		objetos.add(imagen);
+
 		return objetos;
 	}
 
@@ -568,9 +583,13 @@ public class ResourcesBuilder {
 			}
 
 			if (rotados) {
-				angulo = anguloP + MathUtils.random(180);
+				if (MathUtils.randomBoolean(0.6f)) {
+					angulo = anguloP + MathUtils.random(180);
+				} else {
+					angulo = anguloP + 45;
+				}
 			} else {
-				angulo = anguloP;
+				angulo = anguloP + 45;
 			}
 
 			float anguloRad = (float) (angulo / 180 * Math.PI);
@@ -888,6 +907,7 @@ public class ResourcesBuilder {
 					+ " de la serie " + imagen.resourceId.resourceVersion + " -->"); // Comentario inicial
 			add("<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"" + height
 					+ "\" width=\"" + width + "\">"); // Inicializa el SVG
+			add("<rect stroke-width=\"5\" stroke=\"#ffffff\" fill=\"#ffffff\" height=\"100\" width=\"100\" y=\"0\" x=\"0\"/>"); // crea el fondo blanco
 			for (ExtremosLinea par : imagen.parametros) {
 				add("<line x1=\"" + par.x1 + "\" y1=\"" + par.y1 + "\" x2=\""
 						+ par.x2 + "\" y2=\"" + par.y2
@@ -909,6 +929,7 @@ public class ResourcesBuilder {
 					+ " de la serie " + text.resourceId.resourceVersion + " de textos-->"); // Comentario inicial
 			add("<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"" + height
 					+ "\" width=\"" + width + "\">"); // Inicializa el SVG
+			add("<rect stroke-width=\"5\" stroke=\"#ffffff\" fill=\"#ffffff\" height=\"100\" width=\"100\" y=\"0\" x=\"0\"/>"); // crea el fondo blanco
 
 			add("<text text-anchor=\"middle\" x=\"" + width / 2 + "\" y=\"" + height / 2 + "\">" + text.texto + "</text>");
 			add("</svg>"); // Finaliza el SVG
@@ -986,7 +1007,7 @@ public class ResourcesBuilder {
 			return false;
 		}
 	}
-	
+
 	public static class Mp3FileFilter implements FileFilter
 	{
 		private final String[] okFileExtensions =

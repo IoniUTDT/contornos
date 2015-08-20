@@ -128,7 +128,7 @@ public class MenuScreen extends AbstractGameScreen {
 		}
 		for (final int levelIterator : levelIteration) {
 			Level level = new Level(levelIterator);
-			TextButton button = new TextButton("Level: "+ level.levelTitle, skin, "default");
+			TextButton button = new TextButton(""+ level.levelTitle, skin, "default");
 			button.addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {

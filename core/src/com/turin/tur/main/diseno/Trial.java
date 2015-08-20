@@ -1,6 +1,7 @@
 package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -8,7 +9,6 @@ import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
-import com.turin.tur.main.diseno.Level.LevelLogHistory;
 import com.turin.tur.main.logic.LevelController.RunningSound;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Internet;
@@ -101,7 +101,22 @@ public class Trial {
 		for (int elemento : this.jsonTrial.elementosId) {
 			this.elementos.add(new ExperimentalObject(elemento));
 		}
-		this.rtaCorrecta = new ExperimentalObject(this.jsonTrial.rtaCorrectaId);
+		
+		boolean rtaEntreOpciones = false;
+		for (int i: this.jsonTrial.elementosId) {
+			if (this.jsonTrial.rtaCorrectaId == i){
+				rtaEntreOpciones = true;
+			}
+		}
+		if ((this.jsonTrial.rtaRandom) && (rtaEntreOpciones)){ // Pone una random solo si esta seteada como random y la rta esta entre las figuras
+			this.rtaCorrecta = new ExperimentalObject(this.jsonTrial.elementosId[MathUtils.random(this.jsonTrial.elementosId.length-1)]);
+		} else {
+			this.rtaCorrecta = new ExperimentalObject(this.jsonTrial.rtaCorrectaId);
+		}
+		
+		if (new ExperimentalObject(this.jsonTrial.rtaCorrectaId).categorias.contains(Categorias.Nada, false)) { // Pone si o si una respuesta random si la rta es nada.
+			this.rtaCorrecta = new ExperimentalObject(this.jsonTrial.elementosId[MathUtils.random(this.jsonTrial.elementosId.length-1)]);
+		}
 		// Crea el log que se carga en el controller
 		this.log = new TrialLog();
 	}

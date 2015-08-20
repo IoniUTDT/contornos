@@ -1,1 +1,1 @@
-{caption:Escuche todos los sonidos para continuar,Id:6,title:Rectas no paralelas,modo:ENTRENAMIENTO,elementosId:[216,217,226,227,228,230],distribucion:BILINEALx6,randomSort:true,resourceVersion:100}
+{caption:Identifique cual imagen esta sonando,Id:6,title:Test por imagen,modo:TEST,elementosId:[49,55,708,691],rtaRandom:true,distribucion:BILINEALx4,randomSort:true,resourceVersion:110}
