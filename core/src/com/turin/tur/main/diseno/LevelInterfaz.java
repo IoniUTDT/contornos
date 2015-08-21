@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.turin.tur.main.util.Assets;
+import com.turin.tur.main.util.Constants;
 
 
 
@@ -110,10 +111,10 @@ public class LevelInterfaz {
 	}
 
 	public void renderFps(SpriteBatch batch, OrthographicCamera cameraGUI) {
-		float x = cameraGUI.viewportWidth - 70;
-		float y = cameraGUI.viewportHeight - 30;
+		float x = cameraGUI.viewportWidth - cameraGUI.viewportWidth*1/10;
+		float y = cameraGUI.viewportHeight - cameraGUI.viewportHeight*1/20;
 		int fps = Gdx.graphics.getFramesPerSecond();
-		BitmapFont fpsFont = Assets.instance.fonts.defaultSmallFont;
+		BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 		if (fps >= 45) {
 			// 45 or more FPS show up in green
 			fpsFont.setColor(0, 1, 0, 1);
@@ -124,15 +125,18 @@ public class LevelInterfaz {
 			// less than 30 FPS show up in red
 			fpsFont.setColor(1, 0, 0, 1);
 		}
+		fpsFont.getData().setScale(Constants.factorEscala());
 		fpsFont.draw(batch, "FPS: " + fps, x, y);
 		fpsFont.setColor(1, 1, 1, 1); // white
 		
 	}
 	
 	public void renderTitle (SpriteBatch batch, OrthographicCamera cameraGUI) {
-		Assets.instance.fonts.defaultSmallFont.draw(batch, levelInfo.levelTitle, cameraGUI.viewportWidth/5 , 50); 
-		Assets.instance.fonts.defaultSmallFont.draw(batch, trial.jsonTrial.title , cameraGUI.viewportWidth/5*2 , 50);
-		Assets.instance.fonts.defaultSmallFont.draw(batch, trial.jsonTrial.caption , cameraGUI.viewportWidth/5*2 , cameraGUI.viewportHeight/10*9);
-		Assets.instance.fonts.defaultSmallFont.draw(batch, "Trial #" + trialNumber + " Id: "+ trial.Id , cameraGUI.viewportWidth/5 *4, 50); 
+		BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
+		fpsFont.getData().setScale(Constants.factorEscala());
+		fpsFont.draw(batch, levelInfo.levelTitle, cameraGUI.viewportWidth*1/20 , cameraGUI.viewportHeight*1/10); 
+		fpsFont.draw(batch, trial.jsonTrial.title , cameraGUI.viewportWidth*2/5 , cameraGUI.viewportHeight*1/10);
+		Assets.instance.fonts.defaultFont.draw(batch, trial.jsonTrial.caption , cameraGUI.viewportWidth*1/5 , cameraGUI.viewportHeight*9/10);
+		Assets.instance.fonts.defaultFont.draw(batch, "Trial #" + trialNumber + " Id: "+ trial.Id , cameraGUI.viewportWidth*4/5, cameraGUI.viewportHeight*1/10); 
 	}
 }

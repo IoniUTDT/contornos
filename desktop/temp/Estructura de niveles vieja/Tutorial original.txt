@@ -1,0 +1,44 @@
+			/*
+			 * Arma el nivel 1 (test por imagenes)
+			 */
+
+		
+			JsonLevel level1 = crearLevel();
+			level1.levelTitle = "Primer desafio";
+
+			// Ahora vamos a ir creando los trials
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 27, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 208, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 22, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 40, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 46, false, true));
+			level1.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Escuche el sonido y toque la imagen que le corresponde",
+					DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					new int[] { 22, 27, 40, 46, 66, 208 }, TIPOdeTRIAL.TEST, 66, false, true));
+			level1.build(levelsPath);
+
+			/*
+			 * Arma el nivel 2 (test por categorias)
+			 */
+
+			JsonLevel level2 = crearLevel();
+			level2.levelTitle = "Segundo Desafio";
+
+			
+			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
+					new int[] { Categorias.Lineax1.ID, Categorias.Angulo.ID }, TIPOdeTRIAL.TEST, 100, false, true));
+			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
+					new int[] { Categorias.Lineax1.ID, Categorias.Lineax2.ID }, TIPOdeTRIAL.TEST, 27, false, true));
+			level2.jsonTrials.add(crearTrial("¿Hiciste la tarea?", "Toque la categoria que corresponda", DISTRIBUCIONESenPANTALLA.BILINEALx2,
+					new int[] { Categorias.Paralelas.ID, Categorias.NoParalelas.ID }, TIPOdeTRIAL.TEST, 208, false, true));
+			level2.build(levelsPath);

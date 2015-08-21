@@ -14,6 +14,7 @@ import com.turin.tur.main.util.ResourcesBuilder;
 public class Visound extends Game {
 
 	
+	@SuppressWarnings("unused")
 	private static final String TAG = Visound.class.getName();
 	private static boolean buildResources = true;
 	public Session session;

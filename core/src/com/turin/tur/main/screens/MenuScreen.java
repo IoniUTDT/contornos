@@ -77,9 +77,9 @@ public class MenuScreen extends AbstractGameScreen {
 	}
 
 	private void renderServerStatus() {
-		float x = cameraGUI.viewportWidth - 70;
-		float y = cameraGUI.viewportHeight - 30;
-		BitmapFont fpsFont = Assets.instance.fonts.defaultSmallFont;
+		float x = cameraGUI.viewportWidth - cameraGUI.viewportWidth*1/10;
+		float y = cameraGUI.viewportHeight - cameraGUI.viewportHeight*1/20;
+		BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 		fpsFont.getData().setScale(Constants.factorEscala());
 		if (Internet.serverOk) {
 			// show up in green
@@ -145,23 +145,12 @@ public class MenuScreen extends AbstractGameScreen {
 			guiRenderInit();
 		}
 		
-		// Boton que carga el nombre del usuario y permite modificarlo
-		buttonUserName = new TextButton("Usuario: "+this.user.name, skin, "default");
-		buttonUserName.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-
-				MyTextInputListener listener = new MyTextInputListener();
-				Gdx.input.getTextInput(listener,
-						"Ingrese un nombre de usuario", "", null);
-			}
-		});
 
 		// Arma el menu
 		//table.add(buttonUserName);
 		//table.row();
 		for (TextButton button : levelButtons) {
-			button.getStyle().font.getData().setScale(Constants.factorEscala(),Constants.factorEscala());
+			button.getStyle().font.getData().setScale(Constants.factorEscala()*3,Constants.factorEscala()*3);
 			
 			table.add(button).width(Gdx.graphics.getWidth()/2.5f);
 			table.row();

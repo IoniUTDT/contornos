@@ -29,9 +29,9 @@ public class Constants {
 	public static float factorEscala () {
 		float factorEscala;
 		// Escala de referencia
-		float anchoDefault = 800;
+		float anchoDefault = 600;
 		float altoDefault = 300;
-		factorEscala = Gdx.graphics.getHeight()/altoDefault;
+		factorEscala = Gdx.graphics.getWidth()/anchoDefault*1/3;
 		return factorEscala;
 	}
 	
