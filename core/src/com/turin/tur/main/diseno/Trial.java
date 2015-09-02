@@ -17,6 +17,7 @@ import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 import com.turin.tur.main.util.Internet.Enviable;
+import com.turin.tur.main.util.ResourcesBuilder;
 
 public class Trial {
 
@@ -234,20 +235,25 @@ public class Trial {
 		public ResourceId idRtaCorrecta; // id del recurso correspondiente a la rta correcta para este trial
 		public int indexOfTrialInLevel; // posicion de este trial dentro del nivel
 		public int trialsInLevel; // Cantidad total de trials en el nivel activo
-		public long timeInGame; // Tiempo total acumulado de juego
+		
+		public long timeTrialStart; // Marca temporal absoluta de cuando se inicia el trial
+		public long timeExitTrial; // Marca temporal absoluta de cuando se sale del trial
 		public Array<Integer> resourcesIdSort = new Array<Integer>(); // Ids de los recursos en orden segun se completan en la distribucion. Esto es importante porque el orden puede estar randomizado instancia a instancia
 		public DISTRIBUCIONESenPANTALLA distribucionEnPantalla; // Distribucion en pantalla de los recursos
 		public TIPOdeTRIAL tipoDeTrial; // Tipo de trial (test, entrnamiento, etc)
 		public float version = Constants.VERSION; // Version del programa. Esto es super importante porque de version a version pueden cambiar los recursos (es decir que el mismo id lleve a otro recurso) y tambien otras cosas como la distribucion en pantalla, etc
+		public float resourcesVersion = ResourcesBuilder.ResourceVersion; // Version de los recursos generados
 
 		// Informacion de lo que sucede durante la interaccion del usuario
-		public float timeStartTrialInLevel; // Tiempo en que se crea el trial en relacion al nivel 
+
+		public float timeStartTrialInLevel; // Tiempo en que se crea el trial en relacion al nivel  
 		public float timeStopTrialInLevel; // Tiempo en que se termina el trial en relacion al nivel
 		public float timeInTrial; // tiempo transcurrido dentro del trial
 		public boolean trialCompleted; //Por ahora solo se puede completar un trial en modo training. En modo test no tiene sentido completar el nivel. Este dato se carga de cuando sehace el checkTrialCompleted 
 		public Array<ResourceId> resourcesIdSelected = new Array<ResourceId>(); // Lista de elementos seleccionados
 		public Array<TouchLog> touchLog = new Array<TouchLog>(); // Secuencia de la info detallada de todos los touch
 		public Array<SoundLog> soundLog = new Array<SoundLog>(); // Secuencia de la info detallada de todos los sounds
+		public boolean trialExitRecorded; // registra que se guardo la informacion de salida del trial. 
 		
 		public TrialLog() {
 			this.trialInstance = TimeUtils.millis();
@@ -311,7 +317,7 @@ public class Trial {
 		// Carga la info general del contexto
 		this.log.levelInstance = levelInfo.levelLog.levelInstance;
 		this.log.sessionId = session.sessionLog.id;
-		this.log.timeInGame = TimeUtils.timeSinceMillis(session.sessionLog.id)*1000; // Tiempo en segundos desde que se inicio la session. Recordar que el id o las intancias se crean con las marcas temporales 
+		this.log.timeTrialStart = TimeUtils.millis();  
 		this.log.trialId = this.Id;
 		this.log.userId = session.sessionLog.userID;
 		this.log.userName = session.sessionLog.userName;

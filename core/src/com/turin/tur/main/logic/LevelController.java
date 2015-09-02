@@ -49,7 +49,7 @@ public class LevelController implements InputProcessor {
 	private Level levelInfo; //Informacion del nivel cargado
 
 	// Variables que manejan la dinamica de flujo de informacion en el control del nivel
-	public boolean nextTrialPending = false; // Genera la señal de que hay que cambiar de trial (para esperar a que finalicen cuestiones de animacion) 
+	public boolean nextTrialPending = false; // Genera la seï¿½al de que hay que cambiar de trial (para esperar a que finalicen cuestiones de animacion) 
 	public static float timeInLevel = 0; // Tiempo general dentro del nivel.
 	public static float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
 	boolean elementoSeleccionado = false; // Sin seleccion
@@ -218,9 +218,6 @@ public class LevelController implements InputProcessor {
 			}
 			if (!wait) {
 				this.nextTrialPending = false;
-				// Agrega al log que termino el trial
-				trial.log.timeStopTrialInLevel = timeInLevel;
-				trial.log.timeInTrial = timeInTrial;
 				if (isLastTrial()) {
 					completeLevel();
 				} else {
@@ -430,9 +427,15 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void exitTrial() {
-		TrialLogHistory.append(trial.log);
+		// Agrega al log que termino el trial
+		trial.log.timeStopTrialInLevel = timeInLevel;
+		trial.log.timeInTrial = timeInTrial;
+		trial.log.timeExitTrial = TimeUtils.millis();
+		trial.log.trialExitRecorded=true;
 		trial.runningSound.stopReason="exit";
 		trial.runningSound.stop();
+		
+		TrialLogHistory.append(trial.log);
 	}
 
 	private void cargarInfoDelTouch(Box box, TouchInfo thisTouch) {
