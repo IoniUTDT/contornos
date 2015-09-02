@@ -57,7 +57,7 @@ public class ResourcesBuilder {
 	static int height = 100;
 	static int width = 100;
 
-	static final int ResourceVersion = 110;
+	public static final int ResourceVersion = 110;
 	static String tempPath = "/temp/resourcesbuild/";
 	static String fullTempPath = "." + tempPath;
 	static String currentVersionPath = tempPath + ResourceVersion + "/";
@@ -525,13 +525,13 @@ public class ResourcesBuilder {
 		/*
 		 * Esta rutina devuelve una secuencia de rombos que se contruyen a partir de los siguientes parametros:
 		 * 
-		 * lado: longitud del lado del cuadrilatero angulo: inclinacion del rombo, un angulo de 0º significa que la diagonal menor esta horizontal. Un angulo de
-		 * 45º para un cuadrado significa que los lados estan horizontales y verticales excentricidad: relacion entre la diagonal menor y la mayor. Si la
+		 * lado: longitud del lado del cuadrilatero angulo: inclinacion del rombo, un angulo de 0ï¿½ significa que la diagonal menor esta horizontal. Un angulo de
+		 * 45ï¿½ para un cuadrado significa que los lados estan horizontales y verticales excentricidad: relacion entre la diagonal menor y la mayor. Si la
 		 * excentricidad es mayor que uno calcula la inversa de manera que siempre la diagonal mayor se asuma vertical (previamente a la rotacion dada por
 		 * angulo) una excentricidad igual a 1 da un cuadrado. Si son diferentes la minima y la maxima hace random entre ellas, sino usa la maxima.
 		 * 
 		 * cantidad determina la cantidad de figuras que se generan centered determina si estan centradas o si se las posiciona al azar. rotados determina si se
-		 * agraga una rotacion random al angulo o no. escala determina si se modifica (para menos) el tamaño o no.
+		 * agraga una rotacion random al angulo o no. escala determina si se modifica (para menos) el tamaï¿½o o no.
 		 * 
 		 * Se asume que todos los parametros son positivos!
 		 */
