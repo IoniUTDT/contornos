@@ -51,7 +51,6 @@ public class Session {
 		// Crea la session
 		this.sessionLog = new JsonSession();
 		this.sessionLog.userID = this.user.id;
-		this.sessionLog.userName = this.user.name;
 		JsonSessionHistory jsonHistory = JsonSessionHistory.Load();
 		jsonHistory.history.add(this.sessionLog);
 		jsonHistory.save();
@@ -123,7 +122,6 @@ public class Session {
 	public static class JsonSession { //Nota: tiene que ser static porque sino colapsa el JsonLoad al quere crear instancias
 		public long userID;
 		public long id;
-		public String userName;
 
 		public JsonSession() {
 			this.id = TimeUtils.millis();

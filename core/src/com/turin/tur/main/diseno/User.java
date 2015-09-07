@@ -8,13 +8,10 @@ import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 
 
-
-
 public class User {
 
 	private static final String TAG = User.class.getName();
 	
-	public String name;
 	public long id;
 	public String comments;
 	public Array<Integer> levelHistory = new Array<Integer>();
@@ -26,7 +23,6 @@ public class User {
 		JsonUser jsonUser = new JsonUser();
 		// Tranfiere los datos del usuario al Json
 		jsonUser.comments = this.comments;
-		jsonUser.name = this.name;
 		jsonUser.Id = this.id;
 		jsonUser.levelsCompleted = this.levelsCompleted;
 		jsonUser.levelHistoryId = this.levelHistory;
@@ -42,7 +38,6 @@ public class User {
 
 	private static User LoadNewUser() {
 		User user = new User();
-		user.name = "Unnamed";
 		user.id = GenerateId();
 		user.comments = "Usuario generado automaticamente";
 		user.levelsCompleted = new Array<Integer>();
@@ -55,7 +50,6 @@ public class User {
 		jsonUser = JsonUser.load();
 		// Transpasa los datos
 		user.comments = jsonUser.comments;
-		user.name = jsonUser.name;
 		user.id = jsonUser.Id;
 		user.levelsCompleted = jsonUser.levelsCompleted;
 		user.levelHistory = jsonUser.levelHistoryId;
@@ -69,7 +63,6 @@ public class User {
 	}
 
 	public static class JsonUser {
-		public String name;
 		public long Id;
 		public String comments;
 		public Array<Integer> levelHistoryId = new Array<Integer>();

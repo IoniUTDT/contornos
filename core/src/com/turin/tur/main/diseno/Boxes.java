@@ -25,7 +25,7 @@ public abstract class Boxes {
 	public static abstract class Box {
 		
 		// Variable generales que definen a la caja
-		public ExperimentalObject contenido; // Esta variable guarda toda la informacion del contenido de la caja usando una clase especialmente diseñada para eso
+		public ExperimentalObject contenido; // Esta variable guarda toda la informacion del contenido de la caja usando una clase especialmente diseï¿½ada para eso
 		public Vector2 posicionCenter; // Esta es la posicion de la caja dada por las coordenadas de su centro. 
 		public Sprite spr; // Guarda la imagen que se va a mostrar (se genera a partir del contenido de la caja)
 		
@@ -47,9 +47,9 @@ public abstract class Boxes {
 		}
 			
 		protected abstract void specificRender (SpriteBatch batch);
-		protected abstract void update(float deltaTime);
-		public abstract void select(TouchInfo touchData);
-		public abstract void unSelect();
+		protected abstract void update(float deltaTime, Trial trial);
+		public abstract void select(TouchInfo touchData, Trial trial);
+		public abstract void unSelect(Trial trial);
 		
 		public void SetPosition(float xCenter, float yCenter) {
 			this.posicionCenter.x = xCenter;
@@ -104,33 +104,33 @@ public abstract class Boxes {
 			}
 		}
 
-		public void update(float deltaTime) {
+		public void update(float deltaTime, Trial trial) {
 			if (runningSound) {
 				this.soundAvanceReproduccion += deltaTime;
 				if (this.soundAvanceReproduccion > this.soundDuracionReproduccion) {
-					LevelController.trial.runningSound.stopReason = "end";
-					this.unSelect();
+					trial.runningSound.stopReason = "end";
+					this.unSelect(trial);
 				}
 			}
 			
 		}
 
-		public void unSelect() {
+		public void unSelect(Trial trial) {
 			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			if (!this.contenido.noSound) {
 				this.runningSound = false;
-				LevelController.trial.runningSound.stop();
+				trial.runningSound.stop();
 				soundAvanceReproduccion = 0; //reset the advance point of sound animation
 			}
 		}
 		
-		public void select(TouchInfo touchData) {
+		public void select(TouchInfo touchData, Trial trial) {
 			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			this.alreadySelected = true;
 			if (!this.contenido.noSound) {
 				this.runningSound = true;
 				this.soundAvanceReproduccion = 0;
-				LevelController.trial.runningSound.play(this.contenido);
+				trial.runningSound.play(this.contenido);
 			}
 		}
 	}
@@ -155,7 +155,7 @@ public abstract class Boxes {
 			this.createAnswerAnimationResources();
 		}
 
-		public void update(float deltaTime) {
+		public void update(float deltaTime, Trial trial) {
 			this.answerAnimationAdvance += deltaTime;
 			if (answerAnimationAdvance > Constants.Box.ANIMATION_ANSWER_TIME) {
 				this.answerActive = false;
@@ -184,13 +184,13 @@ public abstract class Boxes {
 			this.answerSprFalse = new Sprite(textureFalse);
 		}
 
-		public void select(TouchInfo touchData){
+		public void select(TouchInfo touchData, Trial trial){
 			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			this.answerActive = true;
 			this.answerAnimationAdvance = 0;
 		}
 		
-		public void unSelect() {
+		public void unSelect(Trial trial) {
 			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			this.answerActive = false;
 			this.answerAnimationAdvance = 0;
@@ -301,25 +301,25 @@ public abstract class Boxes {
 		}
 
 		
-		protected void update(float deltaTime) {
+		protected void update(float deltaTime, Trial trial) {
 			if (!this.contenido.noSound) {
 				stimuliAvanceReproduccion = stimuliAvanceReproduccion + deltaTime;
 				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion) {
 					this.drawStimuli=false;
-					LevelController.trial.runningSound.stopReason = "end";
-					LevelController.trial.runningSound.stop();
+					trial.runningSound.stopReason = "end";
+					trial.runningSound.stop();
 				}
 				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
 					this.drawStimuli=true;
 					stimuliAvanceReproduccion = 0; //reset the advance point of sound
-					LevelController.trial.runningSound.play(this.contenido);
+					trial.runningSound.play(this.contenido);
 				}
 			}
 		}
 
-		public void select(TouchInfo touchData) {} // No hace nada
+		public void select(TouchInfo touchData, Trial trial) {} // No hace nada
 
-		public void unSelect() {} // No hace nada
+		public void unSelect(Trial trial) {} // No hace nada
 		
 		private void createSoundAnimationResources() {
 			Pixmap pixmap = new Pixmap(10, 10, Format.RGBA8888);

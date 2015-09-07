@@ -1,10 +1,8 @@
 package com.turin.tur.main.screens;
 
-import javax.swing.plaf.ButtonUI;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -36,7 +34,6 @@ public class MenuScreen extends AbstractGameScreen {
 	private Skin skin;
 	private Stage stage;
 	private Table table;
-	private TextButton buttonUserName;
 	private Array<TextButton> levelButtons = new Array<TextButton>();
 
 	public User user;
@@ -169,19 +166,5 @@ public class MenuScreen extends AbstractGameScreen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-	}
-
-	public class MyTextInputListener implements TextInputListener {
-
-		@Override
-		public void input(String text) {
-			user.name = text;
-			buttonUserName.setText(text);
-			user.save();
-		}
-
-		@Override
-		public void canceled() {
-		}
 	}
 }

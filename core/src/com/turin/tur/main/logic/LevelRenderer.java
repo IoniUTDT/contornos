@@ -38,7 +38,7 @@ public class LevelRenderer implements Disposable {
 	}
 
 	private void renderInterfaz(SpriteBatch batch) {
-		levelController.levelInterfaz.render(batch);
+		//levelController.levelInterfaz.render(batch);
 	}
 
 	private void renderGui(SpriteBatch batch) { 

@@ -94,7 +94,7 @@ public class Level {
 		public String levelTitle;
 		public int Id; // Id q identifica al level
 		public Array<Integer> trials = new Array<Integer>(); // Lista de ids de los trial que incluye el nivel
-		public Array<JsonTrial> jsonTrials = new Array<JsonTrial>(); // Este se usa solamente en el proceso de creacion de niveles (pero por como esta diseñado el codigo que graba y carga el json completo se guarda   
+		public Array<JsonTrial> jsonTrials = new Array<JsonTrial>(); // Este se usa solamente en el proceso de creacion de niveles (pero por como esta diseï¿½ado el codigo que graba y carga el json completo se guarda   
 		public int resourceVersion;
 		
 		public static void CreateLevel(JsonLevel jsonLevel, String path) {
@@ -126,7 +126,6 @@ public class Level {
 		public long levelInstance;
 		public int levelId;
 		public long idUser;
-		public String userName;
 		public long timeStarts;
 		public long timeExit;
 		public boolean levelCompleted;

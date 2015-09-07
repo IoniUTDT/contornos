@@ -9,7 +9,6 @@ import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
-import com.turin.tur.main.logic.LevelController.RunningSound;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Internet;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
@@ -125,7 +124,7 @@ public class Trial {
 	public void update(float deltaTime) {
 		// Actualiza las boxes
 		for (Box box : allBox) {
-			box.update(deltaTime);
+			box.update(deltaTime, this);
 		}
 	}
 
@@ -139,6 +138,8 @@ public class Trial {
 			}
 			if (allCheck) {
 				trialCompleted = true;
+			} else {
+				trialCompleted = false;
 			}
 		}
 		//Agrega al log el estado de trial
@@ -246,7 +247,7 @@ public class Trial {
 
 		// Informacion de lo que sucede durante la interaccion del usuario
 
-		public float timeStartTrialInLevel; // Tiempo en que se crea el trial en relacion al nivel  
+		// public float timeStartTrialInLevel; // Tiempo en que se crea el trial en relacion al nivel  
 		public float timeStopTrialInLevel; // Tiempo en que se termina el trial en relacion al nivel
 		public float timeInTrial; // tiempo transcurrido dentro del trial
 		public boolean trialCompleted; //Por ahora solo se puede completar un trial en modo training. En modo test no tiene sentido completar el nivel. Este dato se carga de cuando sehace el checkTrialCompleted 
@@ -320,7 +321,6 @@ public class Trial {
 		this.log.timeTrialStart = TimeUtils.millis();  
 		this.log.trialId = this.Id;
 		this.log.userId = session.sessionLog.userID;
-		this.log.userName = session.sessionLog.userName;
 		// Agrega las categorias del estimulo
 		if (this.stimuliBox !=null) {
 			for (Categorias categoria: this.stimuliBox.contenido.categorias){
