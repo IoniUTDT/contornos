@@ -138,14 +138,15 @@ public abstract class Boxes {
 	public static class AnswerBox extends Box {
 
 		private float answerAnimationAdvance = 0; // Avance el la animacion de respuesta
-		private float answerAnimationTime = Constants.Box.ANIMATION_ANSWER_TIME; // Tiempo predeterminado de muestra del estimulo de respuesta (si no se desa feedback se debe setear esto en cero)
 		private Sprite answerUsedSprite; // Imagen con que se muestra la respuesta 
 		private Sprite answerSprTrue; // Imagen para respuestas verdaderas
 		private Sprite answerSprFalse; // Imagen para respuestas falsas
 		public boolean answerActive;
+		public boolean feedback;
 		
-		public AnswerBox (ExperimentalObject contenido){
+		public AnswerBox (ExperimentalObject contenido,boolean feedback){
 			// Carga cosas relacionadas al contenido
+			this.feedback = feedback;
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = this.contenido.imagen;
@@ -160,7 +161,6 @@ public abstract class Boxes {
 			if (answerAnimationAdvance > Constants.Box.ANIMATION_ANSWER_TIME) {
 				this.answerActive = false;
 			}
-			
 		}
 		
 		private Pixmap createAnswerResources(boolean condicion) {
@@ -186,8 +186,10 @@ public abstract class Boxes {
 
 		public void select(TouchInfo touchData, Trial trial){
 			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
-			this.answerActive = true;
-			this.answerAnimationAdvance = 0;
+			if (this.feedback) {
+				this.answerActive = true;
+				this.answerAnimationAdvance = 0;
+			}
 		}
 		
 		public void unSelect(Trial trial) {

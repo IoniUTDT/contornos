@@ -25,7 +25,7 @@ public class Constants {
 		return version_temp + temp;
 	}
 
-	// recupera la escala para mostrar todos los textos con el tamaño correcto
+	// recupera la escala para mostrar todos los textos con el tamaï¿½o correcto
 	public static float factorEscala () {
 		float factorEscala;
 		// Escala de referencia
@@ -102,8 +102,8 @@ public class Constants {
 
 	// Constantes relacionadas con las cajas
 	public class Box {
-		public static final float TAMANO = 1; // tamaño de la caja
-		public static final float TAMANO_ESTIMULO = 2; // tamaño de la caja
+		public static final float TAMANO = 1; // tamaï¿½o de la caja
+		public static final float TAMANO_ESTIMULO = 2; // tamaï¿½o de la caja
 		public static final float DURACION_REPRODUCCION_PREDETERMINADA = 5; // medida
 																			// en
 																			// segundos

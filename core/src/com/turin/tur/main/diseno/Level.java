@@ -23,6 +23,7 @@ public class Level {
 	public int activeTrialPosition; // Posicion del trial activo
 	public String levelTitle;
 	public LevelLog levelLog;
+	public JsonLevel jsonLevel;
 
 	public Level(int level) {
 		this.activeTrialPosition = 0;
@@ -37,7 +38,7 @@ public class Level {
 	}
 
 	private void initlevel(int level) {
-		JsonLevel jsonLevel = loadLevel(level);
+		this.jsonLevel = loadLevel(level);
 		this.Id = jsonLevel.Id;
 		this.secuenciaTrailsId = jsonLevel.trials;
 		this.levelTitle = jsonLevel.levelTitle;
@@ -96,6 +97,8 @@ public class Level {
 		public Array<Integer> trials = new Array<Integer>(); // Lista de ids de los trial que incluye el nivel
 		public Array<JsonTrial> jsonTrials = new Array<JsonTrial>(); // Este se usa solamente en el proceso de creacion de niveles (pero por como esta dise�ado el codigo que graba y carga el json completo se guarda   
 		public int resourceVersion;
+		public boolean randomTrialSort;
+		public boolean show;
 		
 		public static void CreateLevel(JsonLevel jsonLevel, String path) {
 			Json json = new Json();

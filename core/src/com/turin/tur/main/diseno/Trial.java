@@ -70,10 +70,9 @@ public class Trial {
 				this.trainigBoxes.add(box);
 			}
 		}
-
-		if (this.jsonTrial.modo == Constants.Diseno.TIPOdeTRIAL.TEST) {
+		if (this.jsonTrial.modo == Constants.Diseno.TIPOdeTRIAL.TEST){
 			for (ExperimentalObject elemento : this.elementos) {
-				AnswerBox box = new AnswerBox(elemento);
+				AnswerBox box = new AnswerBox(elemento,this.jsonTrial.feedback);
 				box.SetPosition(jsonTrial.distribucion.X(orden.get(this.elementos.indexOf(elemento, true))) + Constants.Box.SHIFT_MODO_SELECCIONAR,
 						jsonTrial.distribucion.Y(orden.get(this.elementos.indexOf(elemento, true))));
 				this.answerBoxes.add(box);
@@ -162,6 +161,7 @@ public class Trial {
 		public DISTRIBUCIONESenPANTALLA distribucion; // guarda las posiciones
 														// de los elementos a
 														// mostrar
+		public boolean feedback=false; // Sirve para configurar que en algunos test no haya feedback
 		public boolean randomSort;
 		public int resourceVersion;
 		

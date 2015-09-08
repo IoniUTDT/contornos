@@ -53,6 +53,9 @@ public class LevelController implements InputProcessor {
 		this.game = game; // Hereda la info del game (cosa de ventanas y eso)
 		this.session = session; // Hereda la info de la session. Que registra en que session esta
 		this.level = new Level(levelNumber); // Crea el nivel
+		if (level.jsonLevel.randomTrialSort) {
+			level.secuenciaTrailsId.shuffle();
+		}
 		// Agrega la info del log del level asociada a la creacion
 		this.level.levelLog.sessionId = this.session.sessionLog.id;
 		this.level.levelLog.idUser = this.session.user.id;
@@ -296,10 +299,18 @@ public class LevelController implements InputProcessor {
 					}
 				}
 			}
-			if (correcta) { // Significa q se selecciono la opcion correcta
-				touchData.thisTouchBox.answer = true;
+			if (this.trial.jsonTrial.feedback) { // Evita que se pase de nivel si esta activado el feedback
+				if (correcta) { // Significa q se selecciono la opcion correcta
+					touchData.thisTouchBox.answer = true;
+					this.nextTrialPending = true;
+				}
+			} else {
+				if (correcta) { // Significa q se selecciono la opcion correcta
+					touchData.thisTouchBox.answer = true;
+				}
 				this.nextTrialPending = true;
 			}
+				
 		}
 
 	}

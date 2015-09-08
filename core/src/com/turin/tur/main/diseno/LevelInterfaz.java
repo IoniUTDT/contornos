@@ -49,6 +49,6 @@ public class LevelInterfaz {
 		fpsFont.draw(batch, levelInfo.levelTitle, cameraGUI.viewportWidth*1/20 , cameraGUI.viewportHeight*1/10); 
 		fpsFont.draw(batch, trial.jsonTrial.title , cameraGUI.viewportWidth*2/5 , cameraGUI.viewportHeight*1/10);
 		Assets.instance.fonts.defaultFont.draw(batch, trial.jsonTrial.caption , cameraGUI.viewportWidth*1/5 , cameraGUI.viewportHeight*9/10);
-		Assets.instance.fonts.defaultFont.draw(batch, "Trial #" + trialNumber + " Id: "+ trial.Id , cameraGUI.viewportWidth*4/5, cameraGUI.viewportHeight*1/10); 
+		Assets.instance.fonts.defaultFont.draw(batch, "Trial #" + trialNumber + " Id: " + trial.Id+" de " + levelInfo.secuenciaTrailsId.size, cameraGUI.viewportWidth*7/10, cameraGUI.viewportHeight*1/10); 
 	}
 }
