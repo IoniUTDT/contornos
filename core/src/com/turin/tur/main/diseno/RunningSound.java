@@ -60,6 +60,8 @@ public class RunningSound {
 			soundLog.categorias.add(categoria);
 		}
 		soundLog.trialInstance = trial.log.trialInstance;
+		soundLog.levelInstance = trial.log.levelInstance;
+		soundLog.sessionInstance = trial.log.sessionId;
 		soundLog.trialId = trial.Id;
 		if (trial.jsonTrial.modo == TIPOdeTRIAL.TEST) {
 			if (trial.stimuliBox.contenido == contenido) {

@@ -221,6 +221,8 @@ public class Trial {
 		public boolean stopByExit; // Indica si se detuvo el sonido porque se inicio alguna secuencia de cierre del trial (porque se completo el trial, el level, etc)
 		public boolean stopByUnselect; // Indica si se detuvo el sonido porque el usuario selecciono algo como parte de la dinamica del juego
 		public boolean stopByEnd; // Indica si el sonido se detuvo porque se completo la reproduccion prevista (por ahora esta determinada por el tiempo preestablecido de duracion de los sonidos en 5s. No es el tiempo en que de verdad termina el sonido)
+		public long sessionInstance; // Indica la instancia de session en que se reproduce este sonido
+		public long levelInstance; // Indica la instancia de level en que se reproduce este sonido
 	}
 
 	public static class TrialLog {
