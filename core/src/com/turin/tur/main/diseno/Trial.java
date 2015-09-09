@@ -199,6 +199,8 @@ public class Trial {
 		public float timeLastStopSound; // Tiempo (en el trial en que terimo el ultimo sonido 
 		public int numberOfSoundLoops; // Cantidad de veces que re reprodujo el ultimo sonido
 		public Array<Integer> soundIdSecuenceInTrial; // Ids de todos los sonidos que se reprodujeron en el trial
+		public long levelInstance; // Registra el level en el que se toco
+		public long sessionInstance; // Registra la session en que se toco
 	}
 
 	public static class SoundLog {

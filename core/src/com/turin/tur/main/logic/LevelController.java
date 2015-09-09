@@ -262,6 +262,8 @@ public class LevelController implements InputProcessor {
 		TouchLog touchLog = new TouchLog();
 		touchLog.touchInstance = TimeUtils.millis();
 		touchLog.trialInstance = trial.log.trialInstance;
+		touchLog.levelInstance = trial.log.levelInstance;
+		touchLog.sessionInstance = trial.log.sessionId;
 		touchLog.trialId = trial.log.trialId;
 		touchLog.idResourceTouched = touchData.thisTouchBox.contenido.resourceId;
 		for (Categorias categoria : touchData.thisTouchBox.contenido.categorias) {
