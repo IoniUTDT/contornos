@@ -102,7 +102,7 @@ public class ResourcesBuilder {
 			}
 		}
 
-		Boolean makeLevels = true;
+		Boolean makeLevels = false;
 		if (makeLevels) {
 			// Se fija q exista el paquete de recursos de la version actual
 			if (!new File(fullCurrentVersionPath).exists()) {

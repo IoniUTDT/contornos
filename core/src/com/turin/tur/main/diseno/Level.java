@@ -50,6 +50,7 @@ public class Level {
 		this.levelLog = new LevelLog();
 		this.levelLog.timeStarts = TimeUtils.millis();
 		this.levelLog.levelId = this.Id;
+		this.levelLog.levelTitle = this.jsonLevel.levelTitle;
 		this.levelLog.levelInstance = TimeUtils.millis();
 		this.levelLog.levelLength = this.secuenciaTrailsId.size;
 		this.levelLog.startTrialPosition = this.activeTrialPosition;
@@ -125,6 +126,7 @@ public class Level {
 
 	public static class LevelLog {
 
+		public String levelTitle;
 		public long sessionId;
 		public long levelInstance;
 		public int levelId;

@@ -255,6 +255,7 @@ public class Trial {
 		public Array<TouchLog> touchLog = new Array<TouchLog>(); // Secuencia de la info detallada de todos los touch
 		public Array<SoundLog> soundLog = new Array<SoundLog>(); // Secuencia de la info detallada de todos los sounds
 		public boolean trialExitRecorded; // registra que se guardo la informacion de salida del trial. 
+		public String trialTitle;
 		
 		public TrialLog() {
 			this.trialInstance = TimeUtils.millis();
@@ -320,6 +321,7 @@ public class Trial {
 		this.log.sessionId = session.sessionLog.id;
 		this.log.timeTrialStart = TimeUtils.millis();  
 		this.log.trialId = this.Id;
+		this.log.trialTitle = this.jsonTrial.title;
 		this.log.userId = session.sessionLog.userID;
 		// Agrega las categorias del estimulo
 		if (this.stimuliBox !=null) {
