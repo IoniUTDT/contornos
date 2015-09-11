@@ -68,8 +68,6 @@ public class MenuScreen extends AbstractGameScreen {
 		batch.setProjectionMatrix(cameraGUI.combined);
 		batch.begin();
 		renderServerStatus();
-		//this.levelController.levelInterfaz.renderFps(batch,cameraGUI);
-		//this.levelController.levelInterfaz.renderTitle(batch, cameraGUI);
 		batch.end();
 	}
 

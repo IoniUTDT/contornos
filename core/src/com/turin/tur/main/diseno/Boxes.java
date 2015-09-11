@@ -1,13 +1,11 @@
 package com.turin.tur.main.diseno;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.turin.tur.main.logic.LevelController;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 
@@ -116,7 +114,7 @@ public abstract class Boxes {
 		}
 
 		public void unSelect(Trial trial) {
-			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
+//			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			if (!this.contenido.noSound) {
 				this.runningSound = false;
 				trial.runningSound.stop();
@@ -125,7 +123,7 @@ public abstract class Boxes {
 		}
 		
 		public void select(TouchInfo touchData, Trial trial) {
-			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
+//			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			this.alreadySelected = true;
 			if (!this.contenido.noSound) {
 				this.runningSound = true;
@@ -185,7 +183,7 @@ public abstract class Boxes {
 		}
 
 		public void select(TouchInfo touchData, Trial trial){
-			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
+//			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			if (this.feedback) {
 				this.answerActive = true;
 				this.answerAnimationAdvance = 0;
@@ -193,7 +191,7 @@ public abstract class Boxes {
 		}
 		
 		public void unSelect(Trial trial) {
-			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
+//			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			this.answerActive = false;
 			this.answerAnimationAdvance = 0;
 		}

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Internet;
@@ -14,20 +15,14 @@ public class Session {
 	public User user;
 	public int numberOfLevels;
 	public int nextLevel;
-	public JsonSession sessionLog;
+	public SessionLog sessionLog;
+	public SessionLogHistory sessionLogHistory;
 
 	public Session() {
 		Internet.Check();
 		loadUser();
 		initSession();
-		uploadSession();
 		loadLevels();
-	}
-
-	private void uploadSession() {
-		// Esta rutina intenta subir los datos de la session al servidor
-		JsonSessionHistory jsonHistory = JsonSessionHistory.Load();
-		Internet.PUT(jsonHistory);
 	}
 
 	private void loadLevels() {
@@ -49,11 +44,10 @@ public class Session {
 
 	private void initSession() {
 		// Crea la session
-		this.sessionLog = new JsonSession();
+		this.sessionLog = new SessionLog();
 		this.sessionLog.userID = this.user.id;
-		JsonSessionHistory jsonHistory = JsonSessionHistory.Load();
-		jsonHistory.history.add(this.sessionLog);
-		jsonHistory.save();
+		sessionLogHistory = new SessionLogHistory();
+		sessionLogHistory.append(this.sessionLog);
 	}
 
 	private void loadUser() {
@@ -65,65 +59,15 @@ public class Session {
 		this.user = User.Load();
 	}
 
-	public static class JsonSessionHistory extends Internet.Enviable{
+	
 
-		public static String path = "logs/" + Constants.version() + "/sessionHistory.info";
-		public static String pathUploaded = path + ".uploaded";
-		public Array<JsonSession> history = new Array<JsonSession>();
-
-		public static JsonSessionHistory Load() {
-			String savedData = FileHelper.readLocalFile(path);
-			if (!savedData.isEmpty()) {
-				Json json = new Json();
-				return json.fromJson(JsonSessionHistory.class, savedData);
-			} else {
-				Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones");
-			}
-			return new JsonSessionHistory();
-		}
-		
-		public static JsonSessionHistory LoadUploaded() {
-			String savedData = FileHelper.readLocalFile(pathUploaded);
-			if (!savedData.isEmpty()) {
-				Json json = new Json();
-				return json.fromJson(JsonSessionHistory.class, savedData);
-			} else {
-				Gdx.app.error(TAG, "No se a podido encontrar la info del historial de sesiones uploaded");
-			}
-			return new JsonSessionHistory();
-		}
-
-		public void save() {
-			Json json = new Json();
-			FileHelper.writeFile(JsonSessionHistory.path, json.toJson(this));
-		}
-		public void saveUploaded() {
-			Json json = new Json();
-			FileHelper.writeFile(JsonSessionHistory.pathUploaded, json.toJson(this));
-		}
-
-		@Override
-		public void enviado() {
-			Gdx.app.debug(TAG, "Historial enviado");
-			// Crea un nuevo json con la info que esta en saved, le agrega la que esta en no saved y despues guarda saved y limpia no saved
-			JsonSessionHistory jsonHistorySaved = JsonSessionHistory.LoadUploaded();
-			jsonHistorySaved.history.addAll(this.history);
-			jsonHistorySaved.saveUploaded();
-			this.history.clear();
-			this.save();
-		}
-
-		@Override
-		public void noEnviado() {
-			Gdx.app.debug(TAG, "Historial no enviado correctamente");
-		}
-	}
-
-	public static class JsonSession { //Nota: tiene que ser static porque sino colapsa el JsonLoad al quere crear instancias
+	public static class SessionLog { //Nota: tiene que ser static porque sino colapsa el JsonLoad al quere crear instancias
 		public long userID;
 		public long id;
+		public STATUS status=STATUS.CREADO;
+		public long idEnvio;
 
-		public JsonSession() {
+		public SessionLog() {
 			this.id = TimeUtils.millis();
 		}
 	}

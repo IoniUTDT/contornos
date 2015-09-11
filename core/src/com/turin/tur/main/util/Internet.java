@@ -7,6 +7,8 @@ import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
+import com.turin.tur.main.diseno.Enviables;
+
 
 
 public class Internet {
@@ -73,7 +75,7 @@ public class Internet {
 		
 	}
 	
-	public static void PUT(final Enviable objetoEnviado) {
+	public static void PUT(final Enviables objetoEnviado) {
 
 		Array<String> urls = new Array<String>();
 		urls.add("http://turintur.dynu.com/" + objetoEnviado.getClass().getSimpleName());
@@ -88,7 +90,7 @@ public class Internet {
 
 					Json json = new Json();
 					json.setOutputType(OutputType.json);
-					String requestJson = json.toJson(objetoEnviado);
+					String requestJson = json.toJson(objetoEnviado.contenido);
 
 					Net.HttpRequest request = new Net.HttpRequest(HttpMethods.POST);
 					request.setContent(requestJson);
@@ -97,6 +99,7 @@ public class Internet {
 					request.setHeader("Accept", "application/json");
 					request.setUrl(url);
 
+					System.out.println(url);
 					Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
 
 						public void handleHttpResponse(Net.HttpResponse httpResponse) {
@@ -114,6 +117,7 @@ public class Internet {
 						}
 
 						public void failed(Throwable t) {
+							System.out.println(t);
 							objetoEnviado.noEnviado();
 							System.out.println("Request Failed Completely");
 						}
@@ -131,8 +135,4 @@ public class Internet {
 		}
 	}
 		
-	public static abstract class Enviable {
-		public abstract void enviado();
-		public abstract void noEnviado();
-	}
 }

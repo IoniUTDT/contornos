@@ -9,19 +9,17 @@ import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
+import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.util.Constants;
-import com.turin.tur.main.util.Internet;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
-import com.turin.tur.main.util.Internet.Enviable;
 import com.turin.tur.main.util.ResourcesBuilder;
 
 public class Trial {
 
 	public int Id; // Id q identifica al trial
-
 	public JsonTrial jsonTrial;
 
 	// objetos que se cargan en el load o al inicializar
@@ -182,6 +180,8 @@ public class Trial {
 		}
 	}
 
+	
+	// Seccion de logs
 	public static class TouchLog {
 		// Todas las cosas se deberian generar al mismo tiempo
 		public long touchInstance; // Instancia que identyifica a cada toque
@@ -226,6 +226,10 @@ public class Trial {
 	}
 
 	public static class TrialLog {
+		// Info del envio
+		public STATUS status=STATUS.CREADO;
+		public long idEnvio;
+		
 		// Info de arbol del evento 
 		public long sessionId; // Instancia de la session a la que este trial pertence
 		public long levelInstance; // Intancia del nivel al que este trial pertenece
@@ -265,55 +269,7 @@ public class Trial {
 			this.trialInstance = TimeUtils.millis();
 		}		
 	}
-
-	public static class TrialLogHistory extends Enviable {
-
-		public static String path = "logs/" + Constants.version() + "/TrialLogHistory.info";
-		public static String pathUploaded = path + ".uploaded";
-		public Array<TrialLog> history = new Array<TrialLog>();
-
-		public static void append(TrialLog log) {
-			// first add the new log to the log history. If there is not log not sent, the list is empty
-			TrialLogHistory history = TrialLogHistory.Load(path);
-			history.history.add(log);
-			history.save(TrialLogHistory.path);
-			// then try to send the log
-			Internet.PUT(history);
-		}
-
-		private void save(String path) {
-			Json json = new Json();
-			FileHelper.writeFile(path, json.toJson(this));
-		}
-
-		private static TrialLogHistory Load(String path) {
-
-			String savedData = FileHelper.readLocalFile(path);
-			if (!savedData.isEmpty()) {
-				Json json = new Json();
-				return json.fromJson(TrialLogHistory.class, savedData);
-			}
-			return new TrialLogHistory();
-		}
-
-		@Override
-		public void enviado() {
-			// Crea un nuevo json con la info que esta en uploaded, le agrega la que esta en no uploaded y despues guarda uploaded y limpia no uploaded
-			TrialLogHistory uploaded = TrialLogHistory.Load(pathUploaded);
-			uploaded.history.addAll(this.history);
-			uploaded.save(pathUploaded);
-			this.history.clear();
-			this.save(path);
-			Gdx.app.debug(TAG, "Log del trial enviado correctamente");
-		}
-
-		@Override
-		public void noEnviado() {
-			Gdx.app.debug(TAG, "Log del trial no enviado correctamente");
-		}
-
-	}
-
+	
 	public static class ResourceId {
 		public int id;
 		public int resourceVersion;

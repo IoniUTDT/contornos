@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
-import com.turin.tur.main.util.Internet;
-import com.turin.tur.main.util.Internet.Enviable;
+
 
 public class Level {
 
@@ -125,7 +125,10 @@ public class Level {
 	}
 
 	public static class LevelLog {
-
+		// Info del envio
+		public STATUS status=STATUS.CREADO;
+		public long idEnvio;
+		
 		public String levelTitle;
 		public long sessionId;
 		public long levelInstance;
@@ -141,52 +144,5 @@ public class Level {
 		public Array<Integer> sortOfTrials;
 		public Array<Integer> trialsVisited = new Array<Integer>();
 
-	}
-
-	public static class LevelLogHistory extends Enviable {
-
-		public static String path = "logs/" + Constants.version() + "/LevelLogHistory.info";
-		public static String pathUploaded = path + ".uploaded";
-		public Array<LevelLog> history = new Array<LevelLog>();
-
-		public static void append(LevelLog log) {
-			// first add the new log to the log history. If there is not log not sent, the list is empty
-			LevelLogHistory history = LevelLogHistory.Load(path);
-			history.history.add(log);
-			history.save(LevelLogHistory.path);
-			// then try to send the log
-			Internet.PUT(history);
-		}
-
-		private void save(String path) {
-			Json json = new Json();
-			FileHelper.writeFile(path, json.toJson(this));
-		}
-
-		private static LevelLogHistory Load(String path) {
-
-			String savedData = FileHelper.readLocalFile(path);
-			if (!savedData.isEmpty()) {
-				Json json = new Json();
-				return json.fromJson(LevelLogHistory.class, savedData);
-			}
-			return new LevelLogHistory();
-
-		}
-
-		@Override
-		public void enviado() {
-			// Crea un nuevo json con la info que esta en uploaded, le agrega la que esta en no uploaded y despues guarda uploaded y limpia no uploaded
-			LevelLogHistory uploaded = LevelLogHistory.Load(pathUploaded);
-			uploaded.history.addAll(this.history);
-			uploaded.save(pathUploaded);
-			this.history.clear();
-			this.save(path);
-		}
-
-		@Override
-		public void noEnviado() {
-			Gdx.app.debug(TAG, "Log del level no enviado correctamente");
-		}
 	}
 }
