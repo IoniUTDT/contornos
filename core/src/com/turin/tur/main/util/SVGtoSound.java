@@ -144,7 +144,7 @@ public class SVGtoSound {
 		if (d >= 1) { // recupera cuantos frames tiene que suavizar
 			framesMaximos = (int) d;
 		} else {
-			framesMaximos = (int) ((double) frec.length * d);
+			framesMaximos = (int) (frec.length * d);
 		}
 
 		if (framesMaximos != 0) {
@@ -496,6 +496,7 @@ public class SVGtoSound {
 		private final String[] okFileExtensions =
 				new String[] { "svg" };
 
+		@Override
 		public boolean accept(File file)
 		{
 			for (String extension : okFileExtensions)

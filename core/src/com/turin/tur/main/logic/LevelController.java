@@ -13,14 +13,12 @@ import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.LevelInterfaz;
-import com.turin.tur.main.diseno.LevelLogHistory;
 import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.diseno.TouchInfo;
 import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.RunningSound;
 import com.turin.tur.main.diseno.Trial.TouchLog;
-import com.turin.tur.main.diseno.TrialLogHistory;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
@@ -48,11 +46,6 @@ public class LevelController implements InputProcessor {
 	boolean elementoSeleccionado = false; // Sin seleccion
 	public Session session;
 	
-	// Informacion relacionada con los logs
-	public TrialLogHistory trialLogHistory;
-	public LevelLogHistory levelLogHistory;
-	
-
 	public LevelController(Game game, int levelNumber, int trialNumber, Session session) {
 		// Inicia los logs
 		
@@ -67,8 +60,6 @@ public class LevelController implements InputProcessor {
 		this.level.levelLog.idUser = this.session.user.id;
 		this.initCamera();
 		this.initTrial();
-		trialLogHistory = new TrialLogHistory();
-		levelLogHistory = new LevelLogHistory();
 	}
 
 	private void initTrial() {
@@ -180,7 +171,10 @@ public class LevelController implements InputProcessor {
 		this.level.levelLog.timeExit = TimeUtils.millis();
 
 		// Guarda en el registro general de log de levels el log de esta instanciacion del nivel e intenta enviarlo por internet.
-		levelLogHistory.append(this.level.levelLog);
+		Gdx.app.debug(TAG, "Enviando log del trial");
+		
+		session.levelLogHistory.append(this.level.levelLog);
+		//session.trialLogHistory.append(this.trial.log);
 
 		// Marca en el sonido que se salio
 		trial.runningSound.stopReason="exit";
@@ -331,7 +325,7 @@ public class LevelController implements InputProcessor {
 		trial.runningSound.stopReason="exit";
 		trial.runningSound.stop();
 		// Intenta enviar la info del trial y sino la guarda
-		trialLogHistory.append(trial.log);
+		session.trialLogHistory.append(trial.log);
 	}
 
 	private void cargarInfoDelTouch(Box box, TouchInfo thisTouch) {

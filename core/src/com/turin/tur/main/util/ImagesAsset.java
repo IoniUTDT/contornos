@@ -57,7 +57,7 @@ public class ImagesAsset implements Disposable, AssetErrorListener {
 	public void error(@SuppressWarnings("rawtypes") AssetDescriptor asset,
 			Throwable throwable) {
 		Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'",
-				(Exception) throwable);
+				throwable);
 	}
 
 	public Sprite imagen(int Id) {

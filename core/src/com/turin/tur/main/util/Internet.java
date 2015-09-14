@@ -41,6 +41,7 @@ public class Internet {
 
 				Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
 
+					@Override
 					public void handleHttpResponse(Net.HttpResponse httpResponse) {
 
 						serverOnline=true;
@@ -49,23 +50,24 @@ public class Internet {
 						String rta = httpResponse.getResultAsString();
 						if (rta.contains("on")) {
 							serverOk=true;
-							System.out.println("Server ok");
+							Gdx.app.debug(TAG, "Server ok");
 						} else {
 							serverOk = false;
-							System.out.println("Server not ok");
+							Gdx.app.debug(TAG, "Server no ok");
 						}
 						
 					}
 
+					@Override
 					public void failed(Throwable t) {
 						serverOnline=false;
-						System.out.println("Request Failed Completely");
+						Gdx.app.debug(TAG, "Request Failed Completely");
 					}
 
 					@Override
 					public void cancelled() {
 						serverOnline=false;
-						System.out.println("request cancelled");
+						Gdx.app.debug(TAG, "request cancelled");
 					}
 
 				});
@@ -81,6 +83,10 @@ public class Internet {
 		urls.add("http://turintur.dynu.com/" + objetoEnviado.getClass().getSimpleName());
 		//urls.add("http://181.169.225.117:3000/" + objetoEnviado.getClass().getSimpleName());
 
+		if (objetoEnviado.contenidoLevel.size>0) {
+			Gdx.app.debug(TAG, "Tamañan de datos level" + objetoEnviado.contenidoLevel.size);
+		}
+		
 		for (final String url : urls) {
 
 			new Thread(new Runnable() {
@@ -99,33 +105,43 @@ public class Internet {
 					request.setHeader("Accept", "application/json");
 					request.setUrl(url);
 
-					System.out.println(url);
+					
+					if (objetoEnviado.contenidoLevel.size>0) {
+						Gdx.app.debug(TAG, "Contexto: " + objetoEnviado.levelLogHistory);
+						Gdx.app.debug(TAG, "Json:" + requestJson);
+					}
 					Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
 
+						@Override
 						public void handleHttpResponse(Net.HttpResponse httpResponse) {
 
+							if (objetoEnviado.contenidoLevel.size>0) {
+								Gdx.app.debug(TAG, "Dato level" + objetoEnviado.contenidoLevel.get(0).idEnvio);
+							}
+							
 							int statusCode = httpResponse.getStatus().getStatusCode();
-							System.out.println(url);
-							System.out.println(httpResponse.getStatus().getStatusCode());
 							if (statusCode != HttpStatus.SC_CREATED) {
 								Gdx.app.debug(TAG, "" + httpResponse.getStatus().getStatusCode());
 								objetoEnviado.noEnviado();
-								System.out.println("Request Failed");
+								Gdx.app.debug(TAG, "Request Failed");
 							} else {
 								objetoEnviado.enviado();
 							}
 						}
 
+						@Override
 						public void failed(Throwable t) {
-							System.out.println(t);
+							if (objetoEnviado.contenidoLevel.size>0) {
+								Gdx.app.debug(TAG, "Dato level" + objetoEnviado.contenidoLevel.get(0).idEnvio);
+							}
 							objetoEnviado.noEnviado();
-							System.out.println("Request Failed Completely");
+							Gdx.app.debug(TAG, "Request Failed Completely");
 						}
 
 						@Override
 						public void cancelled() {
 							objetoEnviado.noEnviado();
-							System.out.println("request cancelled");
+							Gdx.app.debug(TAG, "request cancelled");
 						}
 
 					});

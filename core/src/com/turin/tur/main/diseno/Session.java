@@ -1,12 +1,9 @@
 package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.util.Constants;
-import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Internet;
 
 public class Session {
@@ -17,8 +14,13 @@ public class Session {
 	public int nextLevel;
 	public SessionLog sessionLog;
 	public SessionLogHistory sessionLogHistory;
+	public LevelLogHistory levelLogHistory;
+	public TrialLogHistory trialLogHistory;
+	
 
 	public Session() {
+		levelLogHistory = new LevelLogHistory();
+		trialLogHistory = new TrialLogHistory();
 		Internet.Check();
 		loadUser();
 		initSession();

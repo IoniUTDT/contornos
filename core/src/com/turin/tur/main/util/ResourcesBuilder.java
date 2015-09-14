@@ -837,17 +837,17 @@ public class ResourcesBuilder {
 
 				// encuentra el centro de los lados (nodos, que se numeran del primer al cuarto cuadrante en la orientacion original) 
 				nodo1 = new Vector2();
-				nodo1.x = (float) (diagMayor / 4);
-				nodo1.y = (float) (diagMenor / 4);
+				nodo1.x = diagMayor / 4;
+				nodo1.y = diagMenor / 4;
 				nodo2 = new Vector2();
-				nodo2.x = (float) (-diagMayor / 4);
-				nodo2.y = (float) (diagMenor / 4);
+				nodo2.x = -diagMayor / 4;
+				nodo2.y = diagMenor / 4;
 				nodo3 = new Vector2();
-				nodo3.x = (float) (-diagMayor / 4);
-				nodo3.y = (float) (-diagMenor / 4);
+				nodo3.x = -diagMayor / 4;
+				nodo3.y = -diagMenor / 4;
 				nodo4 = new Vector2();
-				nodo4.x = (float) (+diagMayor / 4);
-				nodo4.y = (float) (-diagMenor / 4);
+				nodo4.x = +diagMayor / 4;
+				nodo4.y = -diagMenor / 4;
 				// Los rota lo que corresponda segun el angulo del cuadrilatero
 				nodo1.rotate(-angulo);
 				nodo2.rotate(-angulo);
@@ -1177,6 +1177,7 @@ public class ResourcesBuilder {
 		private final String[] okFileExtensions =
 				new String[] { "wav" };
 
+		@Override
 		public boolean accept(File file)
 		{
 			for (String extension : okFileExtensions)
@@ -1195,6 +1196,7 @@ public class ResourcesBuilder {
 		private final String[] okFileExtensions =
 				new String[] { "meta" };
 
+		@Override
 		public boolean accept(File file)
 		{
 			for (String extension : okFileExtensions)
@@ -1213,6 +1215,7 @@ public class ResourcesBuilder {
 		private final String[] okFileExtensions =
 				new String[] { "mp3" };
 
+		@Override
 		public boolean accept(File file)
 		{
 			for (String extension : okFileExtensions)

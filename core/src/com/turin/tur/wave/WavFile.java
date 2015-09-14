@@ -577,7 +577,7 @@ public class WavFile
 
 			for (int c=0 ; c<numChannels ; c++)
 			{
-				sampleBuffer[offset] = floatOffset + (double) readSample() / floatScale;
+				sampleBuffer[offset] = floatOffset + readSample() / floatScale;
 				offset ++;
 			}
 
@@ -600,7 +600,7 @@ public class WavFile
 		{
 			if (frameCounter == numFrames) return f;
 
-			for (int c=0 ; c<numChannels ; c++) sampleBuffer[c][offset] = floatOffset + (double) readSample() / floatScale;
+			for (int c=0 ; c<numChannels ; c++) sampleBuffer[c][offset] = floatOffset + readSample() / floatScale;
 
 			offset ++;
 			frameCounter ++;

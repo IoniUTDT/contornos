@@ -1,9 +1,7 @@
 package com.turin.tur.main.diseno;
 
 import com.badlogic.gdx.Gdx;
-import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.diseno.Level.LevelLog;
-import com.turin.tur.main.diseno.Trial.TrialLog;
 
 
 
@@ -27,7 +25,7 @@ public class LevelEnviables extends Enviables {
 				 }
 			 }
 		}
-		this.trialLogHistory.save();
+		this.levelLogHistory.save();
 	}
 
 	@Override

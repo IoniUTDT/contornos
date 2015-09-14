@@ -72,6 +72,7 @@ public class LevelRenderer implements Disposable {
 		
 	}
 
+	@Override
 	public void dispose() {
 		batch.dispose();	
 	}

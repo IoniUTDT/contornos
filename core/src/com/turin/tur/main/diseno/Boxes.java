@@ -90,6 +90,7 @@ public abstract class Boxes {
 		}
 
 	
+		@Override
 		protected void specificRender(SpriteBatch batch) {
 			// Render the animation of the box
 			if (runningSound) {
@@ -102,6 +103,7 @@ public abstract class Boxes {
 			}
 		}
 
+		@Override
 		public void update(float deltaTime, Trial trial) {
 			if (runningSound) {
 				this.soundAvanceReproduccion += deltaTime;
@@ -113,6 +115,7 @@ public abstract class Boxes {
 			
 		}
 
+		@Override
 		public void unSelect(Trial trial) {
 //			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			if (!this.contenido.noSound) {
@@ -122,6 +125,7 @@ public abstract class Boxes {
 			}
 		}
 		
+		@Override
 		public void select(TouchInfo touchData, Trial trial) {
 //			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			this.alreadySelected = true;
@@ -154,6 +158,7 @@ public abstract class Boxes {
 			this.createAnswerAnimationResources();
 		}
 
+		@Override
 		public void update(float deltaTime, Trial trial) {
 			this.answerAnimationAdvance += deltaTime;
 			if (answerAnimationAdvance > Constants.Box.ANIMATION_ANSWER_TIME) {
@@ -182,6 +187,7 @@ public abstract class Boxes {
 			this.answerSprFalse = new Sprite(textureFalse);
 		}
 
+		@Override
 		public void select(TouchInfo touchData, Trial trial){
 //			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			if (this.feedback) {
@@ -190,12 +196,14 @@ public abstract class Boxes {
 			}
 		}
 		
+		@Override
 		public void unSelect(Trial trial) {
 //			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			this.answerActive = false;
 			this.answerAnimationAdvance = 0;
 		}
 		
+		@Override
 		protected void specificRender(SpriteBatch batch) {
 			if (this.answerActive) {this.contourRender(batch);}
 		}
@@ -289,6 +297,7 @@ public abstract class Boxes {
 		}
 
 		
+		@Override
 		protected void specificRender(SpriteBatch batch) {
 			if (this.drawStimuli) {
 				stimuliAnimationSpr.setSize(Constants.Box.TAMANO_CONTORNO_X,Constants.Box.TAMANO_CONTORNO_Y);
@@ -301,6 +310,7 @@ public abstract class Boxes {
 		}
 
 		
+		@Override
 		protected void update(float deltaTime, Trial trial) {
 			if (!this.contenido.noSound) {
 				stimuliAvanceReproduccion = stimuliAvanceReproduccion + deltaTime;
@@ -317,8 +327,10 @@ public abstract class Boxes {
 			}
 		}
 
+		@Override
 		public void select(TouchInfo touchData, Trial trial) {} // No hace nada
 
+		@Override
 		public void unSelect(Trial trial) {} // No hace nada
 		
 		private void createSoundAnimationResources() {

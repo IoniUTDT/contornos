@@ -1,5 +1,6 @@
 package com.turin.tur.main.diseno;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -8,6 +9,9 @@ import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 
 public class RunningSound {
+	
+	private static final String TAG = RunningSound.class.getName();
+	
 	public ExperimentalObject contenido; // Todo el objeto que se esta reproduciendo
 	public Sound sound; // Elemento de sonido
 	public boolean running = false; // Si se esta reproduciendo o no
@@ -79,9 +83,9 @@ public class RunningSound {
 		soundLog.numberOfSoundInTrial = secuenceId.size;
 		soundLog.soundSecuenceInTrial = new Array<Integer>(secuenceId);
 
+		long idsonido;
 		// Espera a q se cargue el recurso (no se porque esto funciona pero lo saque de internet)
-		long id;
-		while ((id = sound.play(0)) == -1) {
+		while ((idsonido = sound.play(0)) == -1) {
 			long t = TimeUtils.nanoTime();
 			while (TimeUtils.nanoTime() - t < 50000000)
 				;
@@ -96,7 +100,8 @@ public class RunningSound {
 			ends = TimeUtils.millis();
 			// Completa el log y lo agrega a la lista
 			soundLog.stopTime = TimeUtils.millis();
-			System.out.println(stopReason);
+			Gdx.app.debug(TAG, stopReason);
+			
 			soundLog.stopByUnselect = (stopReason=="unselect");
 			soundLog.stopByExit = (stopReason=="exit");
 			soundLog.stopByEnd = (stopReason=="end");
