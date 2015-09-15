@@ -56,7 +56,7 @@ public class Constants {
 	// GUI Height
 	public static final float VIEWPORT_GUI_HEIGHT = 80.0f;
 
-	public static final String USERFILE = "experimentalconfig/user.txt";
+	public static final String USERFILE = "logs/user.txt";
 
 	// Constantes relacionadas con el diseno de experimentos
 

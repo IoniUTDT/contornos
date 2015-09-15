@@ -9,6 +9,8 @@ import com.turin.tur.main.diseno.Trial.ResourceId;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ImagesAsset;
+import com.turin.tur.main.util.ResourcesBuilder.ExtremosLinea;
+import com.turin.tur.main.util.ResourcesBuilder.InfoLinea;
 
 
 public class ExperimentalObject {
@@ -54,6 +56,9 @@ public class ExperimentalObject {
 		public String comments;
 		public ResourceId resourceId;
 		public Array<Constants.Resources.Categorias> categories = new Array<Constants.Resources.Categorias>();
+		public String idVinculo;
+		public Array<ExtremosLinea> parametros;
+		public Array<InfoLinea> infoLineas;
 		
 		public static void CreateJsonMetaData (JsonMetaData jsonMetaData, String path) {
 			Json json = new Json();

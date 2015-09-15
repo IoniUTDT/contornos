@@ -114,11 +114,6 @@ public class Internet {
 
 						@Override
 						public void handleHttpResponse(Net.HttpResponse httpResponse) {
-
-							if (objetoEnviado.contenidoLevel.size>0) {
-								Gdx.app.debug(TAG, "Dato level" + objetoEnviado.contenidoLevel.get(0).idEnvio);
-							}
-							
 							int statusCode = httpResponse.getStatus().getStatusCode();
 							if (statusCode != HttpStatus.SC_CREATED) {
 								Gdx.app.debug(TAG, "" + httpResponse.getStatus().getStatusCode());
@@ -131,9 +126,6 @@ public class Internet {
 
 						@Override
 						public void failed(Throwable t) {
-							if (objetoEnviado.contenidoLevel.size>0) {
-								Gdx.app.debug(TAG, "Dato level" + objetoEnviado.contenidoLevel.get(0).idEnvio);
-							}
 							objetoEnviado.noEnviado();
 							Gdx.app.debug(TAG, "Request Failed Completely");
 						}
