@@ -60,7 +60,7 @@ public class ResourcesBuilder {
 	static final Boolean makeLevels = false;
 	static final Boolean makeResources = false;
 	
-	public static final int ResourceVersion = 111;
+	public static final int ResourceVersion = 110;
 	static String tempPath = "/temp/resourcesbuild/";
 	static String fullTempPath = "." + tempPath;
 	static String currentVersionPath = tempPath + ResourceVersion + "/";
@@ -72,8 +72,7 @@ public class ResourcesBuilder {
 
 	public static void buildNewSVG() {
 
-		Boolean elements = true;
-		if (elements) {
+		if (makeResources) {
 
 			File file = new File(fullCurrentVersionPath);
 			if (file.exists()) {
@@ -484,7 +483,7 @@ public class ResourcesBuilder {
 			audio.setBitRate(new Integer(128000));
 			audio.setChannels(new Integer(1));
 			audio.setSamplingRate(new Integer(44100));
-			audio.setVolume(1500);
+			audio.setVolume(256);
 			EncodingAttributes attrs = new EncodingAttributes();
 			attrs.setFormat("mp3");
 			attrs.setAudioAttributes(audio);

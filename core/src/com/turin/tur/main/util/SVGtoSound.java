@@ -79,56 +79,6 @@ public class SVGtoSound {
 	}
 
 	/**
-	 * Crea un pulso limitado en frecuencia
-	 * 
-	 * @param freci
-	 *            Frecuencia inicial
-	 * 
-	 * @param frecf
-	 *            Frecuencia final
-	 * @return secuencia de datos con el pulso de frecuencia
-	 */
-	private static double[] createPulse(double freci, double frecf) {
-		// Usamos la antritransformada de fourirer de un rectangulo, ver : https://en.wikipedia.org/wiki/Sinc_filter
-		double frecM;
-		double frecm;
-		if (freci > frecf) {
-			frecM = freci;
-			frecm = frecf;
-		} else {
-			frecM = frecf;
-			frecm = freci;
-		}
-		// El pulso creado es en teoria infinito, pero el sonido hay que recortarlo. Igualmente al ser un sinc decae rapidamente.
-		// Usamos como longitud inicial el tiempo de parametro 
-		int frames = (int) (time * fs); // Numero de frames del pulso creado
-		// Creamos las escalas temporales
-		double[] pulse = linspace(-time / 2, time / 2, frames); // escala de tiempo
-		// Creamos las funciones sinc y las restamos
-		for (int i = 0; i < frames; i++) {
-			double sup;
-			double inf;
-			double x;
-			if (pulse[i] == 0) {
-				sup = 1;
-			} else {
-				x = 2 * Math.PI * frecM * pulse[i];
-				// sup = 2*frecM*Math.sin(x)/x;
-				sup = Math.sin(x) / x;
-			}
-			if (pulse[i] == 0) {
-				inf = 1;
-			} else {
-				x = 2 * Math.PI * frecm * pulse[i];
-				// inf = 2*frecm*Math.sin(x)/x;
-				inf = Math.sin(x) / x;
-			}
-			pulse[i] = (sup  - frecm/frecM * inf); // Nota: esta normalizacion respeta la que indica el pulso, pero normaliza a 5 el maximo porque despues tiene que sumarlo a rampas con normalizacion 1 y sino este termino prima. Por el momento es un problema que el pulso se escucha mucho mas bajo que las rampas, de ahi el 5.
-		}
-		return pulse;
-	}
-
-	/**
 	 * Aplica una funcion tipo tukeywin (que suaviza los extremos)
 	 * 
 	 * @param frec
@@ -247,57 +197,32 @@ public class SVGtoSound {
 				int N = (int) (secByPix * archivo.ancho * timefactor * fs);
 				double[] secuence = new double[N];
 
-				/*
-				 * Si sumo simplemente las rampas y los pulsos hay un problema, porque los pulsos son por naturaleza mucho mas suaves que su pico, mientras que las rampas tienen intesidad constantes
-				 * Por eso, hay que normalizar inteligentemente para que los pulsos se sigan escuchando, pero que no cambie significativamente el volumen de las rampas si hay o no hay pulso.
-				 * 
-				 * Tantos los pulsos como las rampas tienen normalizacion original 1.
-				 */
-				int Normalizaciopulso=7; // Este es el valor de intensidad que tiene el pulso. Cuando se normalice se asumira que ademas de esto puede haber como mucho la cantidad de lineas - 1 de rampas superpuestas 
 				for (Linea linea : archivo.lineas) {
-
-					double angulo = Math.atan((linea.yf - linea.yi) / (linea.xf - linea.xi));
-
-					if (Math.abs(angulo) < (Math.PI / 2 - 0.001)) { // Agrega una linea en caso de que sea rampa (con 0.001 de tolerancia se distingue hasta 0.1 pixel de corrimiento lateral en todo el alto de la imagen. Este es el limite en que se escucha casi identico aunque mucho antes ya no se distingue visualmente 
-						double[] rampa = createMusicRamp(linea.freci, linea.frecf, linea.ti, linea.tf);
-						int frameInicial = (int) (linea.ti * fs);
-						for (int i = 0; i < rampa.length; i++) { // agrega a la secuencia general
-							secuence[i + frameInicial] = secuence[i + frameInicial] + rampa[i];
-						}
-					} else { // agrega una linea en caso de que sea pulso
-						double[] pulso = createPulse(linea.freci, linea.frecf);
-						double tiempoCentral = (linea.tf + linea.ti) / 2;
-						int frameCentral = (int) (tiempoCentral * fs);
-						int posicionInicial = frameCentral - pulso.length / 2;
-						for (int i = 0; i < pulso.length; i++) {
-							if (posicionInicial + i < 0) {
-								i = i - posicionInicial; // No hace nada en la primer iteracion y corrige el i para que vaya al primer lugar util
-							} else {
-								if (posicionInicial + i > secuence.length - 1) {
-									break; // Termina el for si ya se excede del rango del sonido
-								} else {
-									secuence[posicionInicial + i] = secuence[posicionInicial + i] + pulso[i]*Normalizaciopulso; // Si esta en el rango valido agrega el pulso. 
-								}
-
-							}
+					
+					if ((linea.xf-linea.xi)<0.1) { // En caso de que sea una recta vertical o casi verticial crea un rampa ficticia en bajada muy rapida
+						if (linea.freci>linea.frecf) {
+							linea.tf = linea.ti + 0.01; 
+						} else {
+							linea.tf = linea.tf + 0.01; 
 						}
 					}
+					double[] rampa = createMusicRamp(linea.freci, linea.frecf, linea.ti, linea.tf);
+					int frameInicial = (int) (linea.ti * fs);
+					for (int i = 0; i < rampa.length; i++) { // agrega a la secuencia general
+						secuence[i + frameInicial] = secuence[i + frameInicial] + rampa[i];
+					}
 				}
-				for (int i = 0; i < secuence.length; i++) { // hace una prenormalizacion
-					secuence[i] = secuence[i] / (Normalizaciopulso) ;
-				}
-				// Hace una seguna normalizacion previendo la eventualidad de que haya dos pulsos muy cercanos y la normalizacion anterior no haya sido del todo correcta
+				// Normaliza
 				double max = 0;
 				for (int i = 0; i < secuence.length; i++) { // busca el maximo
 					if (Math.abs(secuence[i]) > max) {
 						max = Math.abs(secuence[i]);
 					}
 				} 
-				if (max>1) { // solo vuelve a normalizar si se execede de 1 y por lo tanto "satura" al crear el sonido. De esta manera se evita que renormalice para arriba si solo hay rampas
-					for (int i = 0; i < secuence.length; i++) { // busca el maximo
-						secuence[i] = secuence[i] / max;
-					}
+				for (int i = 0; i < secuence.length; i++) { // busca el maximo
+					secuence[i] = secuence[i] / max;
 				}
+
 				File file = new File(path, archivo.nombre + ".wav");
 				// Create a wav file with the name specified as the first argument
 				try {
