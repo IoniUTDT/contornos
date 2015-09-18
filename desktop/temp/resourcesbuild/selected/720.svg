@@ -1,6 +1,8 @@
-<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version 1.1. Este elementos es el numero 720 de la serie 110 -->
+<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version 1.1. Este elementos es el numero 720 de la serie 112 -->
 <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100">
 <rect stroke-width="5" stroke="#ffffff" fill="#ffffff" height="100" width="100" y="0" x="0"/>
-<line x1="24.693806" y1="50.18" x2="75.30619" y2="86.59305" stroke-width="2" stroke="black" />
-<line x1="68.44198" y1="56.748604" x2="31.558022" y2="6.478361" stroke-width="2" stroke="black" />
+<line x1="25.556253" y1="28.860872" x2="64.26105" y2="38.331856" stroke-width="2" stroke="black" />
+<line x1="64.26433" y1="38.3336" x2="93.75957" y2="65.12522" stroke-width="2" stroke="black" />
+<line x1="55.06166" y1="55.641296" x2="93.76645" y2="65.11228" stroke-width="2" stroke="black" />
+<line x1="25.56313" y1="28.847935" x2="55.058372" y2="55.639553" stroke-width="2" stroke="black" />
 </svg>

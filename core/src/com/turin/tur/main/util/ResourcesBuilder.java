@@ -32,7 +32,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.turin.tur.main.diseno.ExperimentalObject;
-import com.turin.tur.main.diseno.ExperimentalObject.JsonMetaData;
+import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.diseno.Trial.ResourceId;
@@ -57,19 +57,22 @@ public class ResourcesBuilder {
 	static int height = 100;
 	static int width = 100;
 	
-	static final Boolean makeLevels = false;
+	static final Boolean makeLevels = true;
 	static final Boolean makeResources = false;
 	
-	public static final int ResourceVersion = 110;
-	static String tempPath = "/temp/resourcesbuild/";
-	static String fullTempPath = "." + tempPath;
-	static String currentVersionPath = tempPath + ResourceVersion + "/";
-	static String fullCurrentVersionPath = "." + currentVersionPath;
-	static String fullLevelsPath = fullTempPath + "tempLevels/";
-	static String levelsPath = tempPath + "tempLevels/";
-	static String fullUsedResources = fullTempPath + "selected/";
-	static String finalPath = "../android/assets/experimentalsource/" + Constants.version() + "/";
-
+	public static final int ResourceVersion = 112;
+	public static String tempPath = "/temp/resourcesbuild/";
+	public static String fullTempPath = "." + tempPath;
+	public static String currentVersionPath = tempPath + ResourceVersion + "/";
+	public static String fullCurrentVersionPath = "." + currentVersionPath;
+	public static String fullLevelsPath = fullTempPath + "tempLevels/";
+	public static String levelsPath = tempPath + "tempLevels/";
+	public static String fullUsedResources = fullTempPath + "selected/";
+	public static String finalPath = "../android/assets/experimentalsource/" + Constants.version() + "/";
+	public static Array<JsonResourcesMetaData> listadoRecursos = new Array<JsonResourcesMetaData>();
+	public static Array<Array<Integer>> listadosId = new Array<Array<Integer>>();
+	public static Array<Agrupamientos> listadosGrupos = new Array<Agrupamientos>();
+	
 	public static void buildNewSVG() {
 
 		if (makeResources) {
@@ -90,13 +93,13 @@ public class ResourcesBuilder {
 
 			boolean geometrias = true;
 			if (geometrias) {
-				//objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
-				//objetos.addAll(secuenciaLineasVerticales()); // Agrega un set de lineas verticales
-				//objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
-				//objetos.addAll(secuenciaAngulos()); // Agrega los angulos
+				objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
+				objetos.addAll(secuenciaLineasVerticales()); // Agrega un set de lineas verticales
+				objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
+				objetos.addAll(secuenciaAngulos()); // Agrega los angulos
 				//objetos.addAll(secuenciaDosRectasCentradasVerticalParalelas()); // Agrega rectas paralelas
 				//objetos.addAll(secuenciaDosRectasCentradasVerticalNoParalelas()); //Agrega rectas no paralelas
-				//objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 50, false, true, false)); // Agrega cuadrados
+				objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 50, false, true, false)); // Agrega cuadrados
 				objetos.addAll(secuenciaParalelismoDificiles()); // Agrega recursos de paralelas dificiles
 			}
 			// Crea los archivos correspondientes
@@ -121,6 +124,7 @@ public class ResourcesBuilder {
 		int cantidad = 10;
 		float separacion = 10;
 		float limiteAngulo = 5; //grados (todo mi codigo trabaja en grados)
+		float limiteAnguloMinimo = 2; //grados
 		Array<Imagen> objetos = new Array<Imagen>();
 		
 		for (int i=0; i<cantidad; i++) {
@@ -135,8 +139,16 @@ public class ResourcesBuilder {
 			// Crea las 3 imagenes no paralelas
 			for (int j=1;j<4;j++) {
 				Imagen imagen = crearImagen();
-				float anguloVariacion1 = MathUtils.random(-limiteAngulo, +limiteAngulo);
-				float anguloVariacion2 = MathUtils.random(-limiteAngulo, +limiteAngulo);
+				float anguloVariacion1 = MathUtils.random(limiteAnguloMinimo, +limiteAngulo);
+				float anguloVariacion2;
+				if (MathUtils.randomBoolean()) {
+					anguloVariacion1 = anguloVariacion1 * -1;
+				}
+				if (anguloVariacion1>0) {
+					anguloVariacion2 = anguloVariacion1 + MathUtils.random(-limiteAnguloMinimo, -(limiteAngulo+anguloVariacion1));
+				} else {
+					anguloVariacion2 = anguloVariacion1 + MathUtils.random(+limiteAnguloMinimo, +(limiteAngulo-anguloVariacion1));
+				}
 				// agrega la primer linea
 				InfoLinea infoLinea = new InfoLinea();
 				infoLinea.angulo=angulo+anguloVariacion1;
@@ -200,6 +212,11 @@ public class ResourcesBuilder {
 			System.out.println("Primero debe crear los recuros version:" + ResourceVersion);
 			return;
 		}
+		
+		loadResources();
+		Array<Array<Integer>> listadosId2 = listadosId;
+		Array<Agrupamientos> listadosGrupos2 = listadosGrupos;
+		
 
 		// Limpia la carpeta de destino
 		try {
@@ -450,6 +467,48 @@ public class ResourcesBuilder {
 
 		createStructure();
 	}
+	private static void loadResources() {
+		for (int i=0;i<Categorias.values().length+1;i++) {
+			listadosId.add(new Array<Integer>());
+		}
+		File[] archivos;
+		// Primero busca la lista de archivos de interes
+		File dir = new File(fullCurrentVersionPath);
+		archivos = dir.listFiles(new MetaFileFilter());
+		// Ahora carga la info de cada archivo encontrado
+		for (File archivo: archivos) {
+			String savedData = FileHelper.readFile(archivo.getPath());
+			if (!savedData.isEmpty()) {
+				Json json = new Json();
+				listadoRecursos.add(json.fromJson(JsonResourcesMetaData.class, savedData));
+			} else { Gdx.app.error(TAG,"Error leyendo el archivo de metadatos"); }
+		}
+		// Clasifica los recursos por categorias. Usa los id de las categorias para armar la lista. Tambien por grupos
+		for (JsonResourcesMetaData metadata:listadoRecursos) {
+			for (Categorias categoria:metadata.categories) {
+				listadosId.get(categoria.ID).add(metadata.resourceId.id);
+			}
+			if (metadata.idVinculo != null) {
+				boolean nuevo=true;
+				for (Agrupamientos agrupamiento:listadosGrupos) {
+					if (agrupamiento.nombre.equals(metadata.idVinculo)) {
+						agrupamiento.ids.add(metadata.resourceId.id);
+						nuevo = false;
+						break;
+					}
+				}
+				if (nuevo) {
+					Agrupamientos agrupamiento = new Agrupamientos();
+					agrupamiento.nombre = metadata.idVinculo;
+					agrupamiento.ids.add(metadata.resourceId.id);
+					listadosGrupos.add(agrupamiento);
+				}
+			}
+		}
+		System.out.println("Listo");
+		
+	}
+
 	private static void createStructure() {
 		seleccionarRecursos(); // Copia solo los recursos que se usan a una carpeta para su procesamiento
 		System.out.println("Recursos seleccionados");
@@ -1238,7 +1297,7 @@ public class ResourcesBuilder {
 		}
 
 		private static void createMetadata(Imagen imagen) {
-			JsonMetaData jsonMetaData = new JsonMetaData();
+			JsonResourcesMetaData jsonMetaData = new JsonResourcesMetaData();
 			jsonMetaData.resourceId = imagen.resourceId;
 			jsonMetaData.name = imagen.name;
 			jsonMetaData.comments = imagen.comments;
@@ -1247,7 +1306,7 @@ public class ResourcesBuilder {
 			jsonMetaData.idVinculo = imagen.idVinculo;
 			jsonMetaData.infoLineas = imagen.infoLineas;
 			jsonMetaData.parametros = imagen.parametros;
-			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData, currentVersionPath);
+			ExperimentalObject.JsonResourcesMetaData.CreateJsonMetaData(jsonMetaData, currentVersionPath);
 
 		}
 
@@ -1264,13 +1323,13 @@ public class ResourcesBuilder {
 		}
 
 		private static void createMetadataText(Texto text) {
-			JsonMetaData jsonMetaData = new JsonMetaData();
+			JsonResourcesMetaData jsonMetaData = new JsonResourcesMetaData();
 			jsonMetaData.resourceId = text.resourceId;
 			jsonMetaData.name = text.name;
 			jsonMetaData.comments = text.comments;
 			jsonMetaData.categories = text.categories;
 			jsonMetaData.noSound = true;
-			ExperimentalObject.JsonMetaData.CreateJsonMetaData(jsonMetaData, currentVersionPath);
+			ExperimentalObject.JsonResourcesMetaData.CreateJsonMetaData(jsonMetaData, currentVersionPath);
 
 		}
 	}
@@ -1331,4 +1390,10 @@ public class ResourcesBuilder {
 			return false;
 		}
 	}
+	
+	public static class Agrupamientos {
+		public String nombre;
+		public Array<Integer> ids = new Array<Integer>();
+	}
+	
 }

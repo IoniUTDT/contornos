@@ -87,6 +87,7 @@ public class LevelController implements InputProcessor {
 
 	public void update(float deltaTime) {
 
+		
 		// Actualiza el trial
 		trial.update(deltaTime);
 
@@ -191,16 +192,18 @@ public class LevelController implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// Crea un evento de toque
-		TouchInfo touch = new TouchInfo();
-		// calcula el toque en pantalla
-		touch.coordScreen = new Vector3(screenX, screenY, 0);
-		// calcula el toque en el juego 
-		touch.coordGame = camera.unproject(touch.coordScreen.cpy()); // PREGUNTA: si no le pongo el copy, toma como el mismo vector y sobreescribe el coordScreen. RARO
-		// procesa la info del toque en funcion de otros elementos del juego
-		procesarToque(touch);
-		// agrega el toque a la secuencia de toques acumulados
-		touchSecuence.add(touch);
+		if (Gdx.graphics.getFramesPerSecond()>40) {
+			// Crea un evento de toque
+			TouchInfo touch = new TouchInfo();
+			// calcula el toque en pantalla
+			touch.coordScreen = new Vector3(screenX, screenY, 0);
+			// calcula el toque en el juego 
+			touch.coordGame = camera.unproject(touch.coordScreen.cpy()); // PREGUNTA: si no le pongo el copy, toma como el mismo vector y sobreescribe el coordScreen. RARO
+			// procesa la info del toque en funcion de otros elementos del juego
+			procesarToque(touch);
+			// agrega el toque a la secuencia de toques acumulados
+			touchSecuence.add(touch);
+		}
 		return false;
 	}
 

@@ -41,7 +41,7 @@ public class ExperimentalObject {
 	}
 
 	private void loadMetaData(int Id) {
-		JsonMetaData jsonMetaData = JsonMetaData.Load(Id);
+		JsonResourcesMetaData jsonMetaData = JsonResourcesMetaData.Load(Id);
 		this.comments = jsonMetaData.comments;
 		this.name = jsonMetaData.name;
 		this.categorias = jsonMetaData.categories;
@@ -50,7 +50,7 @@ public class ExperimentalObject {
 	}
 
 
-	public static class JsonMetaData {
+	public static class JsonResourcesMetaData {
 		public boolean noSound;
 		public String name;
 		public String comments;
@@ -60,7 +60,7 @@ public class ExperimentalObject {
 		public Array<ExtremosLinea> parametros;
 		public Array<InfoLinea> infoLineas;
 		
-		public static void CreateJsonMetaData (JsonMetaData jsonMetaData, String path) {
+		public static void CreateJsonMetaData (JsonResourcesMetaData jsonMetaData, String path) {
 			Json json = new Json();
 			FileHelper.writeFile(path + jsonMetaData.resourceId.id + ".meta", json.toJson(jsonMetaData));			
 		} 
@@ -70,11 +70,11 @@ public class ExperimentalObject {
 			FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + resourceId.id + ".meta", json.toJson(this));
 		}
 		
-		public static JsonMetaData Load(int Id) {
+		public static JsonResourcesMetaData Load(int Id) {
 			String savedData = FileHelper.readFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta");
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
-				return json.fromJson(JsonMetaData.class, savedData);
+				return json.fromJson(JsonResourcesMetaData.class, savedData);
 			} else { Gdx.app.error(TAG,"No se a podido encontrar la info del recurso experimental" + Id); }
 			return null;
 		}
