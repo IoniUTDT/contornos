@@ -31,6 +31,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
@@ -60,7 +61,7 @@ public class ResourcesBuilder {
 	static final Boolean makeLevels = true;
 	static final Boolean makeResources = false;
 	
-	public static final int ResourceVersion = 112;
+	public static final int ResourceVersion = 114;
 	public static String tempPath = "/temp/resourcesbuild/";
 	public static String fullTempPath = "." + tempPath;
 	public static String currentVersionPath = tempPath + ResourceVersion + "/";
@@ -213,18 +214,17 @@ public class ResourcesBuilder {
 			return;
 		}
 		
-		loadResources();
+		categorizeResources();// Categoriza los recusos
 		Array<Array<Integer>> listadosId2 = listadosId;
 		Array<Agrupamientos> listadosGrupos2 = listadosGrupos;
 		
-
-		// Limpia la carpeta de destino
-		try {
-			FileUtils.cleanDirectory(new File(fullLevelsPath));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// Manda los levels que ya estaban creados a una carpeta nueva
+		File oldDir = new File(fullLevelsPath);
+		String str = fullLevelsPath.substring(0, fullLevelsPath.length()-1)+"olds/"+TimeUtils.millis()+"/";
+		File newDir = new File(str);
+		newDir.mkdirs();
+		System.out.println(oldDir.renameTo(newDir));
+		new File(fullLevelsPath).mkdirs();
 
 		/*
 		 * Arma el nivel Tutorial
@@ -244,23 +244,26 @@ public class ResourcesBuilder {
 		tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para completar la pantalla", DISTRIBUCIONESenPANTALLA.LINEALx1,
 				new int[] { Constants.Resources.Categorias.Siguiente.ID }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
 		// Muestra rectas horizontales y verticales
-		tutorial.jsonTrials.add(crearTrial("Rectas horizontales y verticales", "Escuche todos los sonidos para continuar",
+		tutorial.jsonTrials.add(crearTrial("Rectas horizontales y verticales", "Toque las imagenes y escuche todos los sonidos para continuar",
 				DISTRIBUCIONESenPANTALLA.BILINEALx6,
 				new int[] { 22, 26, 25, 27, 23, 28 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
 		// Muestra rectas en diagonal
-		tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.LINEALx3,
+		tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.LINEALx3,
 				new int[] { 29, 36, 41 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
 		// Primer test sencillo
 		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx6,
 				new int[] { 25, 27, 28, 29, 36, 23 }, TIPOdeTRIAL.TEST, 25, true, true, true));
 		// Muestra angulo y pares de rectas (un angulo agudo, uno recto y uno grave, y dos pares de rectas paralelas y unas q no.)
-		tutorial.jsonTrials.add(crearTrial("Angulos y rectas", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-				new int[] { 49, 55, 414, 691, 694, 708 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+		tutorial.jsonTrials.add(crearTrial("Angulos y rectas", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGet(Categorias.Grave), rsGet(Categorias.Rombo, Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.Rotado) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+		
+		//TODO
+		
 		// Segundo test
 		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 				new int[] { 49, 55, 708, 691 }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true));
 		// Ultima presentacion, cuadrilateros
-		tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+		tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 				new int[] { 742, 748, 750, 757 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
 		// tercer test (por categorias 1) */
 		tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
@@ -467,7 +470,29 @@ public class ResourcesBuilder {
 
 		createStructure();
 	}
-	private static void loadResources() {
+	
+	private static int rsGet(Categorias categoria) {
+		return listadosId.get(categoria.ID).get(MathUtils.random(listadosId.get(categoria.ID).size));
+	}
+	
+	private static int rsGet(Categorias categoria, Categorias categoria2) {
+		Array<Integer> listadoCategoriaPrincipal = listadosId.get(categoria.ID);
+		for (int i=1;i<listadoCategoriaPrincipal.size+1;i++) {
+			int elemento = listadoCategoriaPrincipal.removeIndex(MathUtils.random(listadoCategoriaPrincipal.size-1));
+			// Carga la info de la metada 
+			String savedData = FileHelper.readFile(fullCurrentVersionPath + elemento + ".meta");
+			Json json = new Json();
+			JsonResourcesMetaData jsonMetaData =  json.fromJson(JsonResourcesMetaData.class, savedData);
+			if (jsonMetaData.categories.contains(categoria2, false)) {
+				return elemento;
+			}
+		}
+		System.out.println("Imposible conseguior un " + categoria.nombre + " que sea " + categoria2.nombre);
+		return listadosId.get(categoria.ID).get(MathUtils.random(listadosId.get(categoria.ID).size));
+	}
+	
+
+	private static void categorizeResources() {
 		for (int i=0;i<Categorias.values().length+1;i++) {
 			listadosId.add(new Array<Integer>());
 		}
@@ -505,7 +530,7 @@ public class ResourcesBuilder {
 				}
 			}
 		}
-		System.out.println("Listo");
+		System.out.println("Recursos catalogados");
 		
 	}
 
@@ -551,13 +576,10 @@ public class ResourcesBuilder {
 				encoder.encode(file, out, attrs);
 				file.delete();
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InputFormatException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (EncoderException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -594,13 +616,10 @@ public class ResourcesBuilder {
 				png_ostream.close();
 
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (TranscoderException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -613,7 +632,6 @@ public class ResourcesBuilder {
 		try {
 			FileUtils.cleanDirectory(new File(finalPath));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -642,7 +660,6 @@ public class ResourcesBuilder {
 			try {
 				Files.copy(FROM, TO, options);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -663,7 +680,6 @@ public class ResourcesBuilder {
 			try {
 				Files.copy(FROM, TO, options);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -684,7 +700,6 @@ public class ResourcesBuilder {
 			try {
 				Files.copy(FROM, TO, options);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -722,7 +737,6 @@ public class ResourcesBuilder {
 		try {
 			FileUtils.cleanDirectory(new File(fullUsedResources));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		// Se copia solo los recursos utilizados
@@ -745,7 +759,6 @@ public class ResourcesBuilder {
 				Files.copy(FROM, TO, options);
 				Files.copy(FROMmeta, TOmeta, options);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -817,8 +830,20 @@ public class ResourcesBuilder {
 				imagen.categories.add(Constants.Resources.Categorias.Angulo);
 				if ((j * shiftAngulo < 90) || (j * shiftAngulo > 270)) {
 					imagen.categories.add(Constants.Resources.Categorias.Agudo);
-				} else if (j * shiftAngulo == 90) {
+				} else if ((j * shiftAngulo == 90)||(j * shiftAngulo == 270)) {
 					imagen.categories.add(Constants.Resources.Categorias.Recto);
+					// Se fija si esta rotado
+					if (i * shiftAngulo == 0) {
+						imagen.categories.add(Categorias.SinRotar);
+					} else if (i * shiftAngulo == 90){
+						imagen.categories.add(Categorias.SinRotar);
+					} else if (i * shiftAngulo == 180){
+						imagen.categories.add(Categorias.SinRotar);
+					} else if (i * shiftAngulo == 270){
+						imagen.categories.add(Categorias.SinRotar);
+					} else {
+						imagen.categories.add(Categorias.Rotado);
+					}
 				} else {
 					imagen.categories.add(Constants.Resources.Categorias.Grave);
 				}
@@ -938,7 +963,13 @@ public class ResourcesBuilder {
 			} else {
 				angulo = anguloP + 45;
 			}
-
+			// Endereza los rombos
+			if (excentricidad!=1) {
+				if (angulo == 45) {
+					angulo=angulo-45;
+				}
+			}
+			
 			float anguloRad = (float) (angulo / 180 * Math.PI);
 
 			if (escalaFija) {
@@ -1030,9 +1061,21 @@ public class ResourcesBuilder {
 				imagen.categories.add(Categorias.Cuadrilatero);
 				if (excentricidad == 1) {
 					imagen.categories.add(Categorias.Cuadrado);
+					if ((angulo==45)||(angulo==135)||(angulo==225)||(angulo==315)) {
+						imagen.categories.add(Categorias.SinRotar);
+					} else {
+						imagen.categories.add(Categorias.Rotado);
+					}
 				} else {
 					imagen.categories.add(Categorias.Rombo);
+					if ((angulo==0)||(angulo==90)||(angulo==180)||(angulo==270)) {
+						imagen.categories.add(Categorias.SinRotar);
+					} else {
+						imagen.categories.add(Categorias.Rotado);
+					}
+					
 				}
+					
 				objetos.add(imagen);
 			}
 

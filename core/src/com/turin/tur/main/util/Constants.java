@@ -29,7 +29,7 @@ public class Constants {
 		// Escala de referencia
 		float anchoDefault = 600;
 		float altoDefault = 300;
-		factorEscala = Gdx.graphics.getWidth()/anchoDefault*1/3;
+		factorEscala = Gdx.graphics.getWidth()/anchoDefault*1/2;
 		return factorEscala;
 	}
 	
@@ -144,14 +144,16 @@ public class Constants {
 			Paralelas(8, "Paralelas"),
 			NoParalelas(9, "No Paralelas"),
 			Angulo(10),
-			Agudo(11),
-			Grave(12),
-			Recto(13),
+			Agudo(11, "Angulo agudo"),
+			Grave(12, "Angulo grave"),
+			Recto(13, "Angulo recto"),
 			Lineas(14),  
 			NoAngulo(15,"No Angulo"),
 			Cuadrilatero(16),
 			Cuadrado(17),
 			Rombo(18),
+			Rotado(19),
+			SinRotar(20)
 			;
 
 			/*
