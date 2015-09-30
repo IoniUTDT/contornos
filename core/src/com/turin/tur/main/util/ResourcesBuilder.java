@@ -256,18 +256,15 @@ public class ResourcesBuilder {
 		// Muestra angulo y pares de rectas (un angulo agudo, uno recto y uno grave, y dos pares de rectas paralelas y unas q no.)
 		tutorial.jsonTrials.add(crearTrial("Angulos y rectas", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
 				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGet(Categorias.Grave), rsGet(Categorias.Rombo, Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.Rotado) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
-		
-		//TODO
-		
 		// Segundo test
 		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-				new int[] { 49, 55, 708, 691 }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true));
+				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGetGrupo("Paralelismo9"), rsGetGrupo("Paralelismo1") }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true));
 		// Ultima presentacion, cuadrilateros
 		tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-				new int[] { 742, 748, 750, 757 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+				new int[] { rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Rombo,Categorias.Rotado), rsGet(Categorias.Cuadrado,Categorias.Rotado), rsGet(Categorias.Rombo,Categorias.SinRotar) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
 		// tercer test (por categorias 1) */
 		tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-				new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, 753, true, true, true));
+				new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, rsGet(Categorias.Cuadrado,Categorias.Rotado), true, true, true));
 
 		tutorial.build(levelsPath);
 
@@ -284,6 +281,8 @@ public class ResourcesBuilder {
 
 		// Ahora vamos a ir creando los trials
 
+		//TODO
+		
 		// seis test de reconocer paralelismo con imagenes entre imagenes
 		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
 				new int[] {680, 708}, TIPOdeTRIAL.TEST, 680, true, true, false));
@@ -471,6 +470,20 @@ public class ResourcesBuilder {
 		createStructure();
 	}
 	
+	private static int rsGetGrupo (String agrupamientoPedido) {
+		int recurso;
+		recurso=0;
+		for (Agrupamientos agrupamiento : listadosGrupos) {
+			if (agrupamiento.nombre.equals(agrupamientoPedido)) {
+				recurso = agrupamiento.ids.random();
+			}
+		}
+		if (recurso==0) {
+			System.out.println("Se ha solicitado un recurso del grupo "+agrupamientoPedido+" y no se ha podido encontrar dicho agrupamiento. Se devuelve un elemento nulo.");
+		}
+		return recurso;
+	}
+
 	private static int rsGet(Categorias categoria) {
 		return listadosId.get(categoria.ID).get(MathUtils.random(listadosId.get(categoria.ID).size));
 	}
