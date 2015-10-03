@@ -256,7 +256,7 @@ public class ResourcesBuilder {
 				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGet(Categorias.Grave), rsGet(Categorias.Rombo, Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.Rotado) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
 		// Segundo test
 		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGetGrupo("Paralelismo9"), rsGetGrupo("Paralelismo1") }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true));
+				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGetGrupo("Paralelismo7"), rsGetGrupo("Paralelismo1") }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true));
 		// Ultima presentacion, cuadrilateros
 		tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 				new int[] { rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Rombo,Categorias.Rotado), rsGet(Categorias.Cuadrado,Categorias.Rotado), rsGet(Categorias.Rombo,Categorias.SinRotar) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
