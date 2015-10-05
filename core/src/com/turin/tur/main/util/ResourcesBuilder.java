@@ -224,194 +224,80 @@ public class ResourcesBuilder {
 		System.out.println(oldDir.renameTo(newDir));
 		new File(fullLevelsPath).mkdirs();
 
-		/*
-		 * Arma el nivel Tutorial
-		 */
-
-		// Armado con la version 110 
-
-		// Crea el nivel tutorial
-		JsonLevel tutorial = crearLevel();
-		tutorial.levelTitle = "Tutorial";
-		tutorial.randomTrialSort=false;
-		tutorial.show = true;
-
-		// Ahora vamos a ir creando los trials
-
-		// Bienvenida
-		tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para completar la pantalla", DISTRIBUCIONESenPANTALLA.LINEALx1,
-				new int[] { Constants.Resources.Categorias.Siguiente.ID }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
-		// Muestra rectas horizontales y verticales
-		tutorial.jsonTrials.add(crearTrial("Rectas horizontales y verticales", "Toque las imagenes y escuche todos los sonidos para continuar",
-				DISTRIBUCIONESenPANTALLA.BILINEALx6,
-				new int[] { 22, 26, 25, 27, 23, 28 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
-		// Muestra rectas en diagonal
-		tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] { 29, 36, 41 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
-		// Primer test sencillo
-		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-				new int[] { 25, 27, 28, 29, 36, 23 }, TIPOdeTRIAL.TEST, 25, true, true, true));
-		// Muestra angulo y pares de rectas (un angulo agudo, uno recto y uno grave, y dos pares de rectas paralelas y unas q no.)
-		tutorial.jsonTrials.add(crearTrial("Angulos y rectas", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGet(Categorias.Grave), rsGet(Categorias.Rombo, Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Cuadrado,Categorias.Rotado) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
-		// Segundo test
-		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGetGrupo("Paralelismo7"), rsGetGrupo("Paralelismo1") }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true));
-		// Ultima presentacion, cuadrilateros
-		tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-				new int[] { rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Rombo,Categorias.Rotado), rsGet(Categorias.Cuadrado,Categorias.Rotado), rsGet(Categorias.Rombo,Categorias.SinRotar) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
-		// tercer test (por categorias 1) */
-		tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-				new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, rsGet(Categorias.Cuadrado,Categorias.Rotado), true, true, true));
-
-		tutorial.build(levelsPath);
-
-		/*
-		 *  Armamos el nivel de test inicial
-		 */
-
-		// Crea el nivel tutorial
-		JsonLevel Test1 = crearLevel();
-		Test1.levelTitle = "Test Inicial";
-		Test1.randomTrialSort=true;
-		Test1.show = true;
-
-
-		// Ahora vamos a ir creando los trials
-
-		// seis test de reconocer paralelismo con imagenes entre imagenes
-		int seleccion;
+		MakeTutorial();
+		MakeTest();
+		//MakeTestDificil(); // No tiene mucho sentido
+		MakeTrainingLines();
+		MakeTest();
+		createStructure();
+	}
+	
+	/**
+	 *  Este proceso crea un nivel de entrenamiento en paralelismo (usa los grupos impares (excepto el 5 que es justo especial) para poder medir diferencias respecto a los grupos entrenados y los no entrenados).	 *  Cada trial esta repetido dos veces.
+	 */
+	private static void MakeTrainingLines() {
+		int numeroDeParesDeTrialporGrupo = 5; 
+		
+		// Crea la estructura de datos
+		JsonLevel trainingLines = crearLevel();
+		trainingLines.levelTitle = "Entrenamiento";
+		trainingLines.randomTrialSort=true;
+		trainingLines.show = true;
+		
 		String grupo;
 		
-		grupo = "Paralelismo1";
-		seleccion = rsGetGrupo(grupo);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		seleccion = rsGetGrupo(grupo);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		grupo = "Paralelismo4"; 
-		seleccion = rsGetGrupo(grupo);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		seleccion = rsGetGrupo(grupo);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		grupo = "Paralelismo7";
-		seleccion = rsGetGrupo(grupo);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		seleccion = rsGetGrupo(grupo);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		grupo="Paralelismo1";
+		for (int i=0; i<numeroDeParesDeTrialporGrupo; i++) {
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					rsGetAllGrupo(grupo), TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+					new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+		}
+		grupo="Paralelismo3";
+		for (int i=0; i<numeroDeParesDeTrialporGrupo; i++) {
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					rsGetAllGrupo(grupo), TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+					new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+		}
+		grupo="Paralelismo7";
+		for (int i=0; i<numeroDeParesDeTrialporGrupo; i++) {
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					rsGetAllGrupo(grupo), TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+					new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+		}
+		grupo="Paralelismo9";
+		for (int i=0; i<numeroDeParesDeTrialporGrupo; i++) {
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+					rsGetAllGrupo(grupo), TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+			trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+					new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGetGrupo(grupo), true, true, true));
+		}
 		
-		// siete test de reconocer entre categoria paralela, no paralela (tres q si 4 q no)
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.Paralelas), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.Paralelas), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.Paralelas), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
+		trainingLines.build(levelsPath);
 		
-		// Creamos los test con angulos (6 de imagen (angulos todos random)  y siete de categorias, dos agudos, dos graves dos rectos rotados y uno rectos sin rotar
-		Categorias categoria;
-		categoria = Categorias.Angulo;
-		
-		seleccion = rsGet(categoria);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		seleccion = rsGet(categoria);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		seleccion = rsGet(categoria);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		seleccion = rsGet(categoria);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		seleccion = rsGet(categoria);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		seleccion = rsGet(categoria);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		seleccion = rsGet(categoria);
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		categoria = Categorias.Agudo;
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
-		
-		categoria = Categorias.Grave;
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
-		
-		categoria = Categorias.Recto;
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
-				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
-		
-		// TODO
-		// Test de cuadrilateros. Hay 6 por imagenes y 7 por categorias
-		
-		categoria = Categorias.Cuadrilatero;
-		seleccion = rsGet(categoria);
-		
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
-		
-		
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
-		Test1.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
-				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
-		
-		
-		Test1.build(levelsPath);
+	}
 
+	private static int[] rsGetAllGrupo(String agrupamientoPedido) {
+		int[] recursos = new int[] {0,0,0,0,0,0}; //Inicializa el vector con datos nulos, total solo puede tener 6 elementos
+		for (Agrupamientos agrupamiento : listadosGrupos) {
+			if (agrupamiento.nombre.equals(agrupamientoPedido)) {
+				if (agrupamiento.ids.size==6) {
+					for (int i=0; i<6; i++) {
+						recursos[i] = agrupamiento.ids.get(i); 
+					}
+					return recursos;
+				} 
+			}
+		}
+		System.out.println("Se ha solicitado un recurso del grupo "+agrupamientoPedido+" y no se ha podido encontrar dicho agrupamiento. Se devuelve un elemento nulo.");
+		return null;
+	}
+	
 
+	@SuppressWarnings("unused")
+	private static void MakeTestDificil() {
 		/*
 		 * 
 		 * Vamos a crear un nivel mas dificil
@@ -510,8 +396,232 @@ public class ResourcesBuilder {
 		Test1d.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
 				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, 738, false, true, false));
 		Test1d.build(levelsPath);
+		
+	}
 
-		createStructure();
+	private static void MakeTest() {
+		/*
+		 *  Armamos un nivel de test
+		 */
+
+		// Crea el nivel tutorial
+		JsonLevel test = crearLevel();
+		test.levelTitle = "Test";
+		test.randomTrialSort=true;
+		test.show = true;
+
+
+		// Ahora vamos a ir creando los trials
+
+		// seis test de reconocer paralelismo con imagenes entre imagenes
+		int seleccion;
+		String grupo;
+		
+		grupo = "Paralelismo1";
+		seleccion = rsGetGrupo(grupo);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGetGrupo(grupo);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		grupo = "Paralelismo4"; 
+		seleccion = rsGetGrupo(grupo);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGetGrupo(grupo);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		grupo = "Paralelismo7";
+		seleccion = rsGetGrupo(grupo);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGetGrupo(grupo);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGetGrupo(grupo,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		
+		// siete test de reconocer entre categoria paralela, no paralela (tres q si 4 q no)
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.Paralelas), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.Paralelas), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.Paralelas), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, rsGet(Categorias.NoParalelas), false, true, false));
+		
+		// Creamos los test con angulos (6 de imagen (angulos todos random)  y siete de categorias, dos agudos, dos graves dos rectos rotados y uno rectos sin rotar
+		Categorias categoria;
+		categoria = Categorias.Angulo;
+		
+		seleccion = rsGet(categoria);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGet(categoria);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGet(categoria);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGet(categoria);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGet(categoria);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGet(categoria);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		seleccion = rsGet(categoria);
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion, rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		
+		categoria = Categorias.Agudo;
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
+		
+		categoria = Categorias.Grave;
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria), false, true, false));
+		
+		categoria = Categorias.Recto;
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] {Categorias.Agudo.ID, Categorias.Grave.ID, Categorias.Recto.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
+		
+		// Test de cuadrilateros. Hay 6 por imagenes y 7 por categorias
+		
+		categoria = Categorias.Cuadrilatero;
+		seleccion = rsGet(categoria);
+		
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {seleccion,rsGet(categoria,seleccion)}, TIPOdeTRIAL.TEST, seleccion, true, true, false));
+		
+		
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.Rotado), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
+		test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
+				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
+		
+		
+		test.build(levelsPath);
+
+		
+	}
+
+	private static void MakeTutorial() {
+		/*
+		 * Arma el nivel Tutorial
+		 */
+
+		// Armado con la version 110 
+
+		// Crea el nivel tutorial
+		JsonLevel tutorial = crearLevel();
+		tutorial.levelTitle = "Tutorial";
+		tutorial.randomTrialSort=false;
+		tutorial.show = true;
+
+		// Ahora vamos a ir creando los trials
+
+		// Bienvenida
+		tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para completar la pantalla", DISTRIBUCIONESenPANTALLA.LINEALx1,
+				new int[] { Constants.Resources.Categorias.Siguiente.ID }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+		// Muestra rectas horizontales y verticales
+		tutorial.jsonTrials.add(crearTrial("Rectas horizontales y verticales", "Toque las imagenes y escuche todos los sonidos para continuar",
+				DISTRIBUCIONESenPANTALLA.BILINEALx6,
+				new int[] { 22, 26, 25, 27, 23, 28 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+		// Muestra rectas en diagonal
+		tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.LINEALx3,
+				new int[] { 29, 36, 41 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+		// Primer test sencillo
+		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+				new int[] { 25, 27, 28, 29, 36, 23 }, TIPOdeTRIAL.TEST, 25, true, true, true));
+		// Muestra angulo y pares de rectas (un angulo agudo, uno recto y uno grave, y dos pares de rectas paralelas y unas q no.)
+		tutorial.jsonTrials.add(crearTrial("Angulos y rectas", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
+				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGet(Categorias.Grave), rsGetGrupo("Paralelismo1",Categorias.Paralelas), rsGetGrupo("Paralelismo4",Categorias.NoParalelas), rsGetGrupo("Paralelismo9",Categorias.Paralelas) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+		// Segundo test
+		tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+				new int[] { rsGet(Categorias.Agudo), rsGet(Categorias.Recto,Categorias.SinRotar), rsGetGrupo("Paralelismo7"), rsGetGrupo("Paralelismo2") }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true));
+		// Ultima presentacion, cuadrilateros
+		tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+				new int[] { rsGet(Categorias.Cuadrado,Categorias.SinRotar), rsGet(Categorias.Rombo,Categorias.Rotado), rsGet(Categorias.Cuadrado,Categorias.Rotado), rsGet(Categorias.Rombo,Categorias.SinRotar) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true));
+		// tercer test (por categorias 1) */
+		tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
+				new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, rsGet(Categorias.Cuadrado,Categorias.Rotado), true, true, true));
+
+		tutorial.build(levelsPath);
+
+		
+	}
+
+	/**
+	 * 
+	 * @param agrupamientoPedido 
+	 *			Indica el nombre del agrupamiento del que se quiere extraer un elemento.
+	 * @param categoria
+	 * 			Indica la categoria a la que debe pertenecer dicho elemento.
+	 * 
+	 * @return
+	 * 			Devuelve el int con el id del elemento seleccionado o 0 si no se encuetra ninguno.
+	 */
+	private static int rsGetGrupo(String agrupamientoPedido, Categorias categoria) {
+		int recurso;
+		recurso=0;
+		for (Agrupamientos agrupamiento : listadosGrupos) {
+			if (agrupamiento.nombre.equals(agrupamientoPedido)) {
+				Array<Integer> listadoValido = new Array<Integer>();
+				for (int i=0;i<agrupamiento.ids.size;i++) {
+					int elemento = agrupamiento.ids.get(i);
+					// Carga la info de la metada 
+					String savedData = FileHelper.readFile(fullCurrentVersionPath + elemento + ".meta");
+					Json json = new Json();
+					JsonResourcesMetaData jsonMetaData =  json.fromJson(JsonResourcesMetaData.class, savedData);
+					// Lo agrega a la lista valida si corresponde 
+					if (jsonMetaData.categories.contains(categoria, false)) {
+						listadoValido.add(elemento);
+					}
+				}
+				if (listadoValido.size!=0) {
+					recurso = listadoValido.random();
+					return recurso;
+				}
+			}
+		}
+		System.out.println("Se ha solicitado un recurso del grupo "+agrupamientoPedido+" y no se ha podido encontrar dicho agrupamiento. Se devuelve un elemento nulo.");
+		return recurso;
 	}
 	
 	private static int rsGetGrupo(String agrupamientoPedido, int omitir) {
