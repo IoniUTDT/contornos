@@ -36,6 +36,7 @@ public class Trial {
 
 	// Variable que tiene que ver con el estado del trial
 	public boolean trialCompleted = false;
+	public boolean alreadySelected = false; // indica si ya se elecciono algo o no
 	
 	// Variables que llevan el registro
 	public TrialLog log;

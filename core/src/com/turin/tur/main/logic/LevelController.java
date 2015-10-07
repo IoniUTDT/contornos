@@ -20,6 +20,7 @@ import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.RunningSound;
 import com.turin.tur.main.diseno.Trial.TouchLog;
 import com.turin.tur.main.screens.MenuScreen;
+import com.turin.tur.main.screens.ResultsScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
@@ -136,7 +137,7 @@ public class LevelController implements InputProcessor {
 		this.session.user.save();
 		// Indica en el log del level que se completo
 		this.level.levelLog.levelCompleted = true;
-		this.backToMenu();
+		this.goToResults();
 	}
 
 	private boolean isLastTrial() {
@@ -159,13 +160,13 @@ public class LevelController implements InputProcessor {
 			// Indica en el log del level que se completo
 			this.level.levelLog.levelCompleted = false;
 			this.logExitTrial();
-			backToMenu();
+			goToResults();
 		}
 		return false;
 	}
 
 	
-	private void backToMenu() {
+	private void goToResults() {
 		// Registra que se sale al menu principal en los logs
 		this.level.levelLog.exitTrialId = trial.Id;
 		this.level.levelLog.exitTrialPosition = this.level.activeTrialPosition;
@@ -181,7 +182,9 @@ public class LevelController implements InputProcessor {
 		trial.runningSound.stopReason="exit";
 		trial.runningSound.stop();
 		
-		game.setScreen(new MenuScreen(game, this.session));
+		//Aca reemplazamos esta linea por ir al menu de resultados
+		game.setScreen(new ResultsScreen(game,this.session, this.level));
+		//game.setScreen(new MenuScreen(game, this.session));
 	}
 	
 	@Override
@@ -295,13 +298,21 @@ public class LevelController implements InputProcessor {
 		// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
 		if (trial.jsonTrial.modo == TIPOdeTRIAL.TEST) {
 			Boolean correcta = false;
-			if (trial.rtaCorrecta.resourceId.id == touchData.thisTouchBox.contenido.resourceId.id) {
+			if (trial.rtaCorrecta.resourceId.id == touchData.thisTouchBox.contenido.resourceId.id) { // Significa que se toco la respuesta igual a la correcta
 				correcta = true;
-			} // Significa que se toco la respuesta igual a la correcta
+				if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
+					this.level.aciertosPorImagenes++; //suma en uno los aciertos por imagen
+					this.level.aciertosTotales++; //suma en uno los aciertos totales
+				}
+			} 
 			if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
 				for (Categorias categoriaDelObjetoTocado : touchData.thisTouchBox.contenido.categorias) {
 					if (trial.rtaCorrecta.categorias.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
 						correcta = true;
+						if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
+							this.level.aciertosPorCategorias++; // Aumenta en uno los aciertos por categoria
+							this.level.aciertosTotales++; // Aumenta en uno los aciertos totales
+						}
 					}
 				}
 			}
@@ -316,7 +327,15 @@ public class LevelController implements InputProcessor {
 				}
 				this.nextTrialPending = true;
 			}
-				
+			if (!this.trial.alreadySelected) { // Marca como que ya se selecciono algo despues de haber contado las cosas correctas y demas
+				this.trial.alreadySelected=true;
+				this.level.aciertosMaximosPosibles++;
+				if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
+					this.level.aciertosMaximosPosiblesCategoria++;
+				} else {
+					this.level.aciertosMaximosPosiblesImagen++;
+				}
+			} // Marca como que ya se selecciono algo despues de haber contado las cosas correctas y demas
 		}
 
 	}

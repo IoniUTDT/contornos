@@ -25,6 +25,14 @@ public class Level {
 	public LevelLog levelLog;
 	public JsonLevel jsonLevel;
 
+	// Variables para registro de resultados
+	public int aciertosTotales; // Esto guarda el numero de aciertos totales. Deberia servir como info gneneral en todos los trials de test y de entrenamiento
+	public int aciertosPorCategorias; // Esto guarda el numero de aciertos en trials por categoria. Al generar el level hay que inlcuir un numero de aciertos que vuelve significativo el resultado y comparar con eso.
+	public int aciertosPorImagenes; // Esto guarda el numero de aciertos en trials por imagenes. Al generar el level hay que incluir el numero de aciertos que vuelve significativo el resultado
+	public int aciertosMaximosPosibles; //Se guarda todos los trials que son suceptibles de ser un acierto (para evitar que trial de entrenamiento se cuneten)
+	public int aciertosMaximosPosiblesImagen;
+	public int aciertosMaximosPosiblesCategoria;
+	
 	public Level(int level) {
 		this.activeTrialPosition = 0;
 		Gdx.app.debug(TAG, "Cargando informacion del nivel " + level);
