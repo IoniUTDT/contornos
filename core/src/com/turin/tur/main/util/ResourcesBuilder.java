@@ -40,6 +40,7 @@ import com.turin.tur.main.diseno.Trial.ResourceId;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
+import com.turin.tur.main.util.Constants.Resources;
 import com.turin.tur.main.util.SVGtoSound.SvgFileFilter;
 import com.turin.tur.main.util.SVGtoSound;
 
@@ -536,6 +537,34 @@ public class ResourcesBuilder {
 				new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, rsGet(categoria,Categorias.SinRotar), false, true, false));
 		
 		
+		// Calculamos el nivel de rtas correctas para una significancia del 0.05 a partir del numero de trials y el tipo para este nivel
+		// IMPORTANTE: se asume que todos los trials son de dos opciones en el caso de categorias y de 6 en el de imagen
+		
+		int numberTrialsCategorias=0;
+		int numberTrialsImagen=0;
+		for (JsonTrial trial:test.jsonTrials) {
+			boolean esCategoria=true;
+			for (int id: trial.elementosId) { // Se fija si es categoria o no viendo si hay un id mayor a los reservados
+				if (id>Resources.Reservados) {
+					esCategoria=false;
+					break;
+				}
+			}
+			if (esCategoria) { // agrega el contador donde corresponda
+				if (trial.elementosId.length!=2) {System.out.println("OJO! se encontre un trial por categoria con mas de dos opciones en el test y no es lo que se espera");}
+				numberTrialsCategorias++;
+			} else {
+				if (trial.elementosId.length!=6) {System.out.println("OJO! se encontre un trial por imagen con menos de seis opciones en el test y no es lo que se espera");}
+				numberTrialsImagen++;
+			}
+		}
+		// ahora hacemos la estadistica pra cada caso
+		Array<Float> distribucionBaseDos = new Array<Float>();
+		float p = 0.5f;
+		for (int i=1;i<=numberTrialsCategorias;i++) {
+			distribucionBaseDos.items[i-1] = (float) (Math.pow(p, i)*Math.pow((1-p), numberTrialsCategorias-i));
+		}
+		// TODO Me quede aca... tengo que chequear que efectivamente de una distribucion con sentido, normalizar y sumar 
 		test.build(levelsPath);
 
 		
@@ -581,7 +610,7 @@ public class ResourcesBuilder {
 		// tercer test (por categorias 1) */
 		tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 				new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, rsGet(Categorias.Cuadrado,Categorias.Rotado), true, true, true));
-
+		
 		tutorial.build(levelsPath);
 
 		
