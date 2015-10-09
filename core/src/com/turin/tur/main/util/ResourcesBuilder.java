@@ -43,6 +43,7 @@ import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 import com.turin.tur.main.util.Constants.Resources;
 import com.turin.tur.main.util.SVGtoSound.SvgFileFilter;
 import com.turin.tur.main.util.SVGtoSound;
+import com.turin.tur.main.util.Stadistics;
 
 public class ResourcesBuilder {
 
@@ -59,7 +60,7 @@ public class ResourcesBuilder {
 	static int height = 100;
 	static int width = 100;
 	
-	static final Boolean makeLevels = false;
+	static final Boolean makeLevels = true;
 	static final Boolean makeResources = false;
 	
 	public static final int ResourceVersion = 115;
@@ -540,6 +541,16 @@ public class ResourcesBuilder {
 		// Calculamos el nivel de rtas correctas para una significancia del 0.05 a partir del numero de trials y el tipo para este nivel
 		// IMPORTANTE: se asume que todos los trials son de dos opciones en el caso de categorias y de 6 en el de imagen
 		
+		Array<Integer> prueba = new Array<Integer>();
+		prueba.add(0);
+		prueba.add(20);
+		prueba.add(0);
+		prueba.add(0);
+		prueba.add(0);
+		prueba.add(20);
+		Stadistics.distribucion(prueba);
+		
+		
 		int numberTrialsCategorias=0;
 		int numberTrialsImagen=0;
 		for (JsonTrial trial:test.jsonTrials) {
@@ -558,7 +569,7 @@ public class ResourcesBuilder {
 				numberTrialsImagen++;
 			}
 		}
-		// ahora hacemos la estadistica pra cada caso
+		// ahora hacemos la estadistica para cada caso
 		Array<Float> distribucionBaseDos = new Array<Float>();
 		float p = 0.5f;
 		for (int i=1;i<=numberTrialsCategorias;i++) {
