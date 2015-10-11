@@ -15,7 +15,7 @@ public class Stadistics {
 	 * @return
 	 * 		Devuelve un array de datos donde el valor indica la probabilidad de encontrar ese numero de respuestas correctas asumiendo una sola opcion valida para cada trial y un criterio de respuesta totalmente aleatorio
 	 */
-	public static Array<Float> distribucion (Array<Integer> opciones){
+	public static Float[] distribucion (Array<Integer> opciones){
 		/*
 		 *  Para calcular la distribucion de probabiliedades se usa el siguiente mecanismo:
 		 *  
@@ -55,22 +55,27 @@ public class Stadistics {
 		 * la manera sencilla de hacerlo es primero combinar el primer y el segundo, y luego esa combinacion combinarla con el tercero, y asi sucesivamente hasta combinar todos
 		 */
 		
-		Array<Float> acumulado = new Array<Float>();
-		acumulado = probabilidades.get(0);
+		
+		Float[] acumulado = new Float[probabilidades.get(0).size];
+		for (int j=0; j<probabilidades.get(0).size; j++) {
+			acumulado[j]=probabilidades.get(0).get(j);
+		}
+		//Array<Float> acumulado = probabilidades.get(0);
 		for (int i=1; i<probabilidades.size; i++) {
-			Array<Float> aCombinar = new Array<Float>();
-			aCombinar = probabilidades.get(i);
-			Array<Float> combinado = new Array<Float>();
-			// Nota, esto se tiene que poder hacer mejor!
-			for (int j=0; j<(acumulado.size-1 + aCombinar.size-1);j++) { //Hace que el combinado tenga el tamaño correcto
-				combinado.add(0f);
+			Float[] aCombinar = new Float[probabilidades.get(i).size];
+			for (int j=0; j<probabilidades.get(i).size; j++) {
+				aCombinar[j] = probabilidades.get(i).get(j);
 			}
+			Float[] combinado = new Float[acumulado.length-1 + aCombinar.length-1 + 1];
+			for (int j=0; j<combinado.length; j++) {
+				combinado[j]=0f;
+			}
+			
 			//TODO Estoy trabado en un problema RE boludo de como asignar un valor a un lugar especifico de un array. Quizas deba cambiar todo a arrays de la forma float[] :(
-			float prueba = combinado.items[1];
-			prueba = 10f;
-			for (int i_1 = 0; i_1 < aCombinar.size; i_1++) {
-				for (int i_2 = 0; i_2 < acumulado.size; i_2++){
-					combinado.items[i_1+i_2] = combinado.items[i_1+i_2] + aCombinar.get(i_1) * acumulado.get(i_2);
+			for (int i_1 = 0; i_1 < aCombinar.length; i_1++) {
+				for (int i_2 = 0; i_2 < acumulado.length; i_2++){
+
+					combinado[i_1+i_2] = combinado[i_1+i_2] + aCombinar[i_1] * acumulado[i_2];
 				}
 			}
 			acumulado = combinado;

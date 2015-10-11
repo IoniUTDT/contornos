@@ -548,8 +548,8 @@ public class ResourcesBuilder {
 		prueba.add(0);
 		prueba.add(0);
 		prueba.add(20);
-		Stadistics.distribucion(prueba);
-		
+		Float[] Resultado = Stadistics.distribucion(prueba);
+		Resultado = Resultado;
 		
 		int numberTrialsCategorias=0;
 		int numberTrialsImagen=0;

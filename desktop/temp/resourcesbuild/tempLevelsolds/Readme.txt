@@ -1,0 +1,1 @@
+Esta carpeta contiene los leves que se fueron armando. Cada vez q se arma un set nuevo de leves, se guarda el viejo en esta carpeta numero con el una marca temporal que es el tiempo en unixtime en milisegundos.
