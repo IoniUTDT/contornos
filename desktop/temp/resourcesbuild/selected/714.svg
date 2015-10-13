@@ -1,8 +1,8 @@
-<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version 1.1. Este elementos es el numero 714 de la serie 115 -->
+<!-- Este archivo es creado automaticamente por el generador de contenido del programa contornos version 1.1. Este elementos es el numero 714 de la serie 116 -->
 <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100">
 <rect stroke-width="5" stroke="#ffffff" fill="#ffffff" height="100" width="100" y="0" x="0"/>
-<line x1="74.32416" y1="41.21475" x2="51.129047" y2="65.71205" stroke-width="2" stroke="black" />
-<line x1="51.147003" y1="65.70691" x2="18.494843" y2="57.22355" stroke-width="2" stroke="black" />
-<line x1="41.681244" y1="32.69589" x2="18.486137" y2="57.193195" stroke-width="2" stroke="black" />
-<line x1="74.31545" y1="41.184395" x2="41.663292" y2="32.701035" stroke-width="2" stroke="black" />
+<line x1="76.47366" y1="50.494762" x2="50.46838" y2="75.27144" stroke-width="2" stroke="black" />
+<line x1="50.50883" y1="75.27144" x2="24.503551" y2="50.494762" stroke-width="2" stroke="black" />
+<line x1="50.50883" y1="25.675701" x2="24.503551" y2="50.452377" stroke-width="2" stroke="black" />
+<line x1="76.47366" y1="50.45238" x2="50.46838" y2="25.675701" stroke-width="2" stroke="black" />
 </svg>

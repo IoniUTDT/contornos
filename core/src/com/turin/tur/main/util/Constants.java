@@ -175,6 +175,21 @@ public class Constants {
 				this.texto = texto;
 			}
 		}
+		
+		public static class Paths {
+			public static final int ResourceVersion = 116;
+			public static String tempPath = "/temp/resourcesbuild/";
+			public static String fullTempPath = "." + tempPath;
+			public static String currentVersionPath = tempPath + ResourceVersion + "/";
+			public static String fullCurrentVersionPath = "." + currentVersionPath;
+			public static String fullLevelsPath = fullTempPath + "tempLevels/";
+			public static String levelsPath = tempPath + "tempLevels/";
+			public static String fullUsedResources = fullTempPath + "selected/";
+			public static String finalPath = "../android/assets/experimentalsource/" + Constants.version() + "/";
+			public static int height = 100;
+			public static int width = 100;
+
+		}
 
 		public static final int Reservados = 20;
 	}

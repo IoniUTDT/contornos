@@ -9,8 +9,8 @@ import com.turin.tur.main.diseno.Trial.ResourceId;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ImagesAsset;
-import com.turin.tur.main.util.ResourcesBuilder.ExtremosLinea;
-import com.turin.tur.main.util.ResourcesBuilder.InfoLinea;
+import com.turin.tur.main.util.LevelBuilder.ExtremosLinea;
+import com.turin.tur.main.util.LevelBuilder.InfoLinea;
 
 
 public class ExperimentalObject {

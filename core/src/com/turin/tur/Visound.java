@@ -9,7 +9,7 @@ import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.screens.MenuScreen;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.ImagesAsset;
-import com.turin.tur.main.util.ResourcesBuilder;
+import com.turin.tur.main.util.LevelBuilder;
 
 public class Visound extends Game {
 
@@ -23,7 +23,7 @@ public class Visound extends Game {
 	public void create () {
 		
 		if ((buildResources) & (Gdx.app.getType() == ApplicationType.Desktop)) {
-			ResourcesBuilder.buildNewSVG();
+			LevelBuilder.build();
 		}
 		
 		// Set Libgdx log level
