@@ -2,6 +2,7 @@ package com.turin.tur.main.util.builder;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
+import com.turin.tur.main.diseno.Level.Significancia;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
@@ -288,7 +290,7 @@ public class LevelMaker {
 			
 			// Calculamos el nivel de rtas correctas para una significancia del 0.05 a partir del numero de trials y el tipo para este nivel
 			// IMPORTANTE: se asume que todos los trials son de dos opciones en el caso de categorias y de 6 en el de imagen
-			
+			/*
 			Array<Integer> prueba = new Array<Integer>();
 			prueba.add(0);
 			prueba.add(20);
@@ -296,8 +298,9 @@ public class LevelMaker {
 			prueba.add(0);
 			prueba.add(0);
 			prueba.add(20);
-			Float[] Resultado = Stadistics.distribucion(prueba);
-			Resultado = Resultado;
+			//Float[] Resultado = Stadistics.distribucion(prueba);
+			//Resultado = Resultado;
+			*/
 			
 			/*
 			int numberTrialsCategorias=0;
@@ -373,9 +376,70 @@ public class LevelMaker {
 			tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 					new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGet(Categorias.Cuadrado,Categorias.Rotado), true, true, true));
 			
+			//addSignificanciaImagen(tutorial);
+			//addSignificanciaCategorias(tutorial);
+			addSignificanciaTotal(tutorial);
+			
 			tutorial.build(Resources.Paths.levelsPath);
 
 			
+		}
+
+		/**
+		 * Agrega al json del level la entrada que corresponde al analisis de significancia considerando todo el nivel
+		 * @param level
+		 */
+		private static void addSignificanciaTotal(JsonLevel level) {
+			Significancia significancia = new Significancia();
+			significancia.title = "Evaluacion Global";
+			significancia.descripcion = "Informacion de la significancia total del nivel considerando al ciego como una respuesta random";
+			significancia.pValue=0.05f;
+			// Filtra los trials que son test para no procesar los que son "entrenamiento"
+			Array<Integer> listaIdsSoloTests = new Array<Integer>();
+			for (JsonTrial json:level.jsonTrials) {
+				if (json.modo == TIPOdeTRIAL.TEST) {
+					listaIdsSoloTests.add(json.Id);
+				}
+			}
+			// Nota, aca tengo el mismo problema de siempre de acceder a las listas! Estoy haciendo mucho codigo pero no se como solucionarlo
+			significancia.trialIncluidos = new Integer[listaIdsSoloTests.size];
+			for (int i=0; i<listaIdsSoloTests.size;i++) {
+				significancia.trialIncluidos[i]=listaIdsSoloTests.get(i);
+			}
+			significancia.histogramaTrials = trialHistograma(significancia.trialIncluidos,level);
+			significancia.distribucion = Stadistics.distribucion(significancia.histogramaTrials);
+			Float acumulado=0f;
+			for (int i=0; i<significancia.distribucion.length; i++) {
+				acumulado = acumulado + significancia.distribucion[i];
+				if (acumulado > 1-significancia.pValue) {
+					significancia.exitoMinimo=i;
+					break;
+				}
+			}
+			level.significancias.add(significancia);
+		}
+
+		private static int[] trialHistograma(Integer[] trialIncluidos, JsonLevel level) {
+			int[] histograma_t = new int[10]; // Nota, lo inicializamos en 10 porque asumimos que nunca va a haber ms de 10, despues se recorta
+			// Contamos cuantos trials de cada numero de opciones hay 
+			for (JsonTrial json:level.jsonTrials) {
+				int n = json.elementosId.length;
+				if (Arrays.asList(trialIncluidos).contains(json.Id)) {
+					histograma_t[n]++;
+				}
+			}
+			// Recortamos los resultados
+			int longitud = histograma_t.length;
+			while (true) {
+				if ((histograma_t[longitud-1]!=0) || (longitud==1)){
+					break;
+				} else { longitud--;}
+			}
+			int[] histograma = new int[longitud];
+			for (int i=0;i<longitud;i++) {
+				histograma[i]=histograma_t[i];
+			}
+			return histograma;
 		}
 	}
 	

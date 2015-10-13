@@ -25,6 +25,7 @@ public class Level {
 	public LevelLog levelLog;
 	public JsonLevel jsonLevel;
 
+	// TODO esto esta obsoleto, cuando termine la implementacion de significancias lo tengo que sacar
 	// Variables para registro de resultados
 	public int aciertosTotales; // Esto guarda el numero de aciertos totales. Deberia servir como info gneneral en todos los trials de test y de entrenamiento
 	public int aciertosPorCategorias; // Esto guarda el numero de aciertos en trials por categoria. Al generar el level hay que inlcuir un numero de aciertos que vuelve significativo el resultado y comparar con eso.
@@ -108,6 +109,7 @@ public class Level {
 		public int resourceVersion;
 		public boolean randomTrialSort;
 		public boolean show;
+		public Array<Significancia> significancias;
 		public int UmbralSigImagen=-1; // Nivel de rtas correctas para superar nivel de significancia calculado para el nivel en los test de imagen. Un -1 significa que no aplica
 		public int UmbralSigCategoria=-1; // Nivel de rtas correctas para superar el nivel de significancia calculado para el nivel en los test de categoria. Un -1 significa que no aplica
 		
@@ -154,5 +156,18 @@ public class Level {
 		public Array<Integer> sortOfTrials;
 		public Array<Integer> trialsVisited = new Array<Integer>();
 
+	}
+	
+	/*
+	 * Esta clase sirve para cargar info de analisis de significancias en la info de levels. La idea es que se cree la info complicada de calcular cuando se crea el nivel (y se puede hacer calculos largos y con instrucciones que no son LibGDX) y que luego se verifique el desempeño durante el juego
+	 */
+	public static class Significancia {
+		public String title; // Titulo
+		public String descripcion; // Descripcion de lo que se evalua
+		public Float[] distribucion; // Distribucion de probabilidad del conjunto seleccionado
+		public Integer[] trialIncluidos; // Trials que se consideraron para este test de significancia.
+		public float pValue; // Este valor se utiliza para hacer el calculo del exitoMinimo
+		public int exitoMinimo; // Numero de trials que deben ser bien respondidos 
+		public int[] histogramaTrials; //Histograma de numero de preguntas
 	}
 }

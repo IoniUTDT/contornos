@@ -10,12 +10,12 @@ public class Stadistics {
 
 	/**
 	 * 
-	 * @param opciones
+	 * @param histograma
 	 * 		Array de datos donde el indice indica el numero de opciones posibles y el valor la cantidad de trials con dicha cantidad de opciones
 	 * @return
 	 * 		Devuelve un array de datos donde el valor indica la probabilidad de encontrar ese numero de respuestas correctas asumiendo una sola opcion valida para cada trial y un criterio de respuesta totalmente aleatorio
 	 */
-	public static Float[] distribucion (Array<Integer> opciones){
+	public static Float[] distribucion (int[] histograma){
 		/*
 		 *  Para calcular la distribucion de probabiliedades se usa el siguiente mecanismo:
 		 *  
@@ -30,9 +30,9 @@ public class Stadistics {
 		
 		// Generamos los vectores para cada i
 		Array<Array<Float>> probabilidades = new Array<Array<Float>>();
-		for (int i=1; i<= opciones.size; i++) { // Itera sobre las opciones de i (numero de opciones entre las que elegir)
+		for (int i=1; i<= histograma.length; i++) { // Itera sobre las opciones de i (numero de opciones entre las que elegir)
 			int indice = i-1;
-			int m = opciones.get(indice);
+			int m = histograma[indice];
 			float i_f = i;
 			float p = 1/i_f;
 			Array<Float> probabilidades_i = new Array<Float>(); 
