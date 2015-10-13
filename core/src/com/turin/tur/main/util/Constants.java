@@ -2,6 +2,7 @@ package com.turin.tur.main.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.turin.tur.main.util.builder.Builder;
 
 public class Constants {
 
@@ -177,10 +178,9 @@ public class Constants {
 		}
 		
 		public static class Paths {
-			public static final int ResourceVersion = 116;
 			public static String tempPath = "/temp/resourcesbuild/";
 			public static String fullTempPath = "." + tempPath;
-			public static String currentVersionPath = tempPath + ResourceVersion + "/";
+			public static String currentVersionPath = tempPath + Builder.ResourceVersion + "/";
 			public static String fullCurrentVersionPath = "." + currentVersionPath;
 			public static String fullLevelsPath = fullTempPath + "tempLevels/";
 			public static String levelsPath = tempPath + "tempLevels/";

@@ -12,11 +12,11 @@ import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
+import com.turin.tur.main.util.builder.Builder;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Resources;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
-import com.turin.tur.main.util.LevelBuilder;
 
 public class Trial {
 
@@ -253,7 +253,7 @@ public class Trial {
 		public DISTRIBUCIONESenPANTALLA distribucionEnPantalla; // Distribucion en pantalla de los recursos
 		public TIPOdeTRIAL tipoDeTrial; // Tipo de trial (test, entrnamiento, etc)
 		public float version = Constants.VERSION; // Version del programa. Esto es super importante porque de version a version pueden cambiar los recursos (es decir que el mismo id lleve a otro recurso) y tambien otras cosas como la distribucion en pantalla, etc
-		public float resourcesVersion = Resources.Paths.ResourceVersion; // Version de los recursos generados
+		public float resourcesVersion = Builder.ResourceVersion; // Version de los recursos generados
 
 		// Informacion de lo que sucede durante la interaccion del usuario
 
