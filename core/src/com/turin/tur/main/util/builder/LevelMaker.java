@@ -381,7 +381,14 @@ public class LevelMaker {
 			Array<Integer> listaIds = new Array<Integer>();
 			for (JsonTrial json:level.jsonTrials) {
 				if (json.modo == TIPOdeTRIAL.TEST){
-					if (json.rtaCorrectaId > Constants.Resources.Reservados) { // Se fija si la rta correcta apunta a una categoria o no en funcion de que las categorias estan asociadas a IDs reservados
+					boolean categoria=true;
+					for (int id:json.elementosId) {
+						if (id > Constants.Resources.Reservados) { // Se fija si los elementos apuntan a una categoria o no en funcion de que las categorias estan asociadas a IDs reservados
+							categoria=false;
+							break;
+						}
+					}
+					if (!categoria) {
 						listaIds.add(json.Id);
 					}
 				}
@@ -405,7 +412,14 @@ public class LevelMaker {
 			Array<Integer> listaIds = new Array<Integer>();
 			for (JsonTrial json:level.jsonTrials) {
 				if (json.modo == TIPOdeTRIAL.TEST){
-					if (json.rtaCorrectaId <= Constants.Resources.Reservados) { // Se fija si la rta correcta apunta a una categoria o no en funcion de que las categorias estan asociadas a IDs reservados
+					boolean categoria=true;
+					for (int id:json.elementosId) {
+						if (id > Constants.Resources.Reservados) { // Se fija si los elementos apuntan a una categoria o no en funcion de que las categorias estan asociadas a IDs reservados
+							categoria=false;
+							break;
+						}
+					}
+					if (categoria) { 
 						listaIds.add(json.Id);
 					}
 				}

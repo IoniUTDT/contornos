@@ -18,7 +18,7 @@ public class Builder {
 	public static int width = Resources.Paths.width;
 	public static final int ResourceVersion = 118;
 	
-	static final Boolean makeLevels = true;
+	static final Boolean makeLevels = false;
 	static final Boolean makeResources = false;
 	
 	public static Array<JsonResourcesMetaData> listadoRecursos = new Array<JsonResourcesMetaData>();
