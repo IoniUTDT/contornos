@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Level.Significancia;
@@ -376,12 +377,12 @@ public class LevelMaker {
 			tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 					new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGet(Categorias.Cuadrado,Categorias.Rotado), true, true, true));
 			
-			//addSignificanciaImagen(tutorial);
-			//addSignificanciaCategorias(tutorial);
+			addSignificanciaImagen(tutorial);
+			addSignificanciaCategoria(tutorial);
 			addSignificanciaTotal(tutorial);
 			
 			tutorial.build(Resources.Paths.levelsPath);
-
+			
 			
 		}
 
@@ -406,9 +407,72 @@ public class LevelMaker {
 			for (int i=0; i<listaIdsSoloTests.size;i++) {
 				significancia.trialIncluidos[i]=listaIdsSoloTests.get(i);
 			}
+			addSignificancia (significancia, level);
+		}
+		
+		/**
+		 * Agrega al json del level la entrada que corresponde al analisis de significancia considerando los trials que son seleccion de imagen
+		 * @param level
+		 */
+		private static void addSignificanciaImagen(JsonLevel level) {
+			Significancia significancia = new Significancia();
+			significancia.title = "Evaluacion de selección de imagenes";
+			significancia.descripcion = "Informacion de la significancia total del nivel considerando al ciego como una respuesta random solo en los trials que se debe seleccionar entre imagenes";
+			significancia.pValue=0.05f;
+			// Filtra los trials que son test para no procesar los que son "entrenamiento"
+			Array<Integer> listaIds = new Array<Integer>();
+			for (JsonTrial json:level.jsonTrials) {
+				if (json.modo == TIPOdeTRIAL.TEST){
+					if (json.rtaCorrectaId > Constants.Resources.Reservados) { // Se fija si la rta correcta apunta a una categoria o no en funcion de que las categorias estan asociadas a IDs reservados
+						listaIds.add(json.Id);
+					}
+				}
+			}
+			// Nota, aca tengo el mismo problema de siempre de acceder a las listas! Estoy haciendo mucho codigo pero no se como solucionarlo
+			significancia.trialIncluidos = new Integer[listaIds.size];
+			for (int i=0; i<listaIds.size;i++) {
+				significancia.trialIncluidos[i]=listaIds.get(i);
+			}
+			addSignificancia (significancia, level);
+		}
+		
+		/**
+		 * Agrega al json del level la entrada que corresponde al analisis de significancia considerando los trials que son seleccion de imagen
+		 * @param level
+		 */
+		private static void addSignificanciaCategoria(JsonLevel level) {
+			Significancia significancia = new Significancia();
+			significancia.title = "Evaluacion de selección de imagenes";
+			significancia.descripcion = "Informacion de la significancia total del nivel considerando al ciego como una respuesta random solo en los trials que se debe seleccionar entre imagenes";
+			significancia.pValue=0.05f;
+			// Filtra los trials que son test para no procesar los que son "entrenamiento"
+			Array<Integer> listaIds = new Array<Integer>();
+			for (JsonTrial json:level.jsonTrials) {
+				if (json.modo == TIPOdeTRIAL.TEST){
+					if (json.rtaCorrectaId <= Constants.Resources.Reservados) { // Se fija si la rta correcta apunta a una categoria o no en funcion de que las categorias estan asociadas a IDs reservados
+						listaIds.add(json.Id);
+					}
+				}
+			}
+			// Nota, aca tengo el mismo problema de siempre de acceder a las listas! Estoy haciendo mucho codigo pero no se como solucionarlo
+			significancia.trialIncluidos = new Integer[listaIds.size];
+			for (int i=0; i<listaIds.size;i++) {
+				significancia.trialIncluidos[i]=listaIds.get(i);
+			}
+			addSignificancia (significancia, level);
+		}
+
+		/**
+		 *  Ultimo paso del calculo de significancias que es independiente del subconjunto de datos elegidos
+		 * @param significancia
+		 * @param level
+		 */
+		private static void addSignificancia (Significancia significancia, JsonLevel level) {
+			
 			significancia.histogramaTrials = trialHistograma(significancia.trialIncluidos,level);
 			significancia.distribucion = Stadistics.distribucion(significancia.histogramaTrials);
 			Float acumulado=0f;
+			significancia.exitoMinimo=0;
 			for (int i=0; i<significancia.distribucion.length; i++) {
 				acumulado = acumulado + significancia.distribucion[i];
 				if (acumulado > 1-significancia.pValue) {
@@ -418,7 +482,7 @@ public class LevelMaker {
 			}
 			level.significancias.add(significancia);
 		}
-
+		
 		private static int[] trialHistograma(Integer[] trialIncluidos, JsonLevel level) {
 			int[] histograma_t = new int[10]; // Nota, lo inicializamos en 10 porque asumimos que nunca va a haber ms de 10, despues se recorta
 			// Contamos cuantos trials de cada numero de opciones hay 

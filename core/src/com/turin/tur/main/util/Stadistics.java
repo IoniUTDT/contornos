@@ -30,9 +30,8 @@ public class Stadistics {
 		
 		// Generamos los vectores para cada i
 		Array<Array<Float>> probabilidades = new Array<Array<Float>>();
-		for (int i=1; i<= histograma.length; i++) { // Itera sobre las opciones de i (numero de opciones entre las que elegir)
-			int indice = i-1;
-			int m = histograma[indice];
+		for (int i=1; i< histograma.length; i++) { // Itera sobre las opciones de i (numero de opciones entre las que elegir). El cero se saltea.
+			int m = histograma[i];
 			float i_f = i;
 			float p = 1/i_f;
 			Array<Float> probabilidades_i = new Array<Float>(); 
@@ -55,6 +54,7 @@ public class Stadistics {
 		 * la manera sencilla de hacerlo es primero combinar el primer y el segundo, y luego esa combinacion combinarla con el tercero, y asi sucesivamente hasta combinar todos
 		 */
 		
+		//TODO SEGUIR verificando q ande bien!
 		
 		Float[] acumulado = new Float[probabilidades.get(0).size];
 		for (int j=0; j<probabilidades.get(0).size; j++) {
@@ -71,7 +71,6 @@ public class Stadistics {
 				combinado[j]=0f;
 			}
 			
-			//TODO Estoy trabado en un problema RE boludo de como asignar un valor a un lugar especifico de un array. Quizas deba cambiar todo a arrays de la forma float[] :(
 			for (int i_1 = 0; i_1 < aCombinar.length; i_1++) {
 				for (int i_2 = 0; i_2 < acumulado.length; i_2++){
 

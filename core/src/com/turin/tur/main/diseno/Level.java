@@ -109,7 +109,7 @@ public class Level {
 		public int resourceVersion;
 		public boolean randomTrialSort;
 		public boolean show;
-		public Array<Significancia> significancias;
+		public Array<Significancia> significancias = new Array<Significancia>();
 		public int UmbralSigImagen=-1; // Nivel de rtas correctas para superar nivel de significancia calculado para el nivel en los test de imagen. Un -1 significa que no aplica
 		public int UmbralSigCategoria=-1; // Nivel de rtas correctas para superar el nivel de significancia calculado para el nivel en los test de categoria. Un -1 significa que no aplica
 		
