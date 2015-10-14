@@ -55,12 +55,16 @@ public class Stadistics {
 		 */
 		
 		//TODO SEGUIR verificando q ande bien!
-		
-		Float[] acumulado = new Float[probabilidades.get(0).size];
-		for (int j=0; j<probabilidades.get(0).size; j++) {
-			acumulado[j]=probabilidades.get(0).get(j);
+		Float[] acumulado;
+		if (probabilidades.size != 0) {
+			acumulado = new Float[probabilidades.get(0).size];
+			for (int j=0; j<probabilidades.get(0).size; j++) {
+				acumulado[j]=probabilidades.get(0).get(j);
+			}
+		} else { // Pone probabilidad 1 de sacara un 0 
+			acumulado = new Float[1];
+			acumulado[0] = 1f;
 		}
-		//Array<Float> acumulado = probabilidades.get(0);
 		for (int i=1; i<probabilidades.size; i++) {
 			Float[] aCombinar = new Float[probabilidades.get(i).size];
 			for (int j=0; j<probabilidades.get(i).size; j++) {

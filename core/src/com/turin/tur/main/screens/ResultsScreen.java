@@ -13,7 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.turin.tur.main.diseno.Level;
+import com.turin.tur.main.diseno.Level.Significancia;
+import com.turin.tur.main.diseno.Level.TIPOdeSIGNIFICANCIA;
 import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.diseno.User;
 import com.turin.tur.main.util.Assets;
@@ -69,16 +72,76 @@ public class ResultsScreen extends AbstractGameScreen {
 		BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 		fpsFont.getData().setScale(Constants.factorEscala()/2);
 		fpsFont.draw(batch, "Ha completado el nivel.", x, y);
-		y = y + cameraGUI.viewportHeight/20;
-		fpsFont.draw(batch, "Ha respondido bien "+this.level.aciertosTotales+" de "+this.level.aciertosMaximosPosibles+" intentos posibles.", x, y);
-		y = y + cameraGUI.viewportHeight/20;
-		fpsFont.draw(batch, "Ha respondido bien "+this.level.aciertosPorCategorias+" de "+this.level.aciertosMaximosPosiblesCategoria+" intentos posibles en los test por categorias.", x, y);
-		y = y + cameraGUI.viewportHeight/20;
-		fpsFont.draw(batch, "Ha respondido bien "+this.level.aciertosPorImagenes+" de "+this.level.aciertosMaximosPosiblesImagen+" intentos posibles en los test por imagenes.", x, y);
-		y = y + cameraGUI.viewportHeight/20;
 		
+		boolean levelPass = true;
 		
+		for (Significancia significancia:level.jsonLevel.significancias) {
+			
+			if (significancia.tipo==TIPOdeSIGNIFICANCIA.COMPLETO) {
+				if (significancia.exitoMinimo<this.level.jsonLevel.aciertosTotales) {
+					fpsFont.setColor(0, 1, 0, 1); // green
+				} else {
+					fpsFont.setColor(1, 0, 0, 1); // red
+					levelPass = false;
+				}
+				if (level.jsonLevel.aciertosTotales==significancia.distribucion.length-1) {
+					levelPass=true;
+				}
+				
+				y = y + cameraGUI.viewportHeight/20;
+				fpsFont.draw(batch, "Ha respondido bien "+this.level.jsonLevel.aciertosTotales+" de "+(significancia.distribucion.length-1)+" intentos posibles.", x, y);
+				y = y + cameraGUI.viewportHeight/20;
+				fpsFont.draw(batch, "En el nivel jugado se considera que hay un acierto significativo con mas de "+significancia.exitoMinimo+" intentos correctos.", x, y);
+			}
+			if (significancia.tipo==TIPOdeSIGNIFICANCIA.IMAGEN) {
+				if (significancia.exitoMinimo<this.level.jsonLevel.aciertosPorImagenes) {
+					fpsFont.setColor(0, 1, 0, 1); // green
+				} else {
+					fpsFont.setColor(1, 0, 0, 1); // red
+					levelPass = false;
+				}
+				if (level.jsonLevel.aciertosPorImagenes==significancia.distribucion.length-1) {
+					levelPass=true;
+				}
+				
+				y = y + cameraGUI.viewportHeight/20;
+				fpsFont.draw(batch, "Ha respondido bien "+this.level.jsonLevel.aciertosPorImagenes+" de "+(significancia.distribucion.length-1)+" en los trials por imagen.", x, y);
+				y = y + cameraGUI.viewportHeight/20;
+				fpsFont.draw(batch, "En el nivel jugado se considera que hay un acierto significativo con mas de "+significancia.exitoMinimo+" intentos correctos.", x, y);
+			}
+			
+			if (significancia.tipo==TIPOdeSIGNIFICANCIA.CATEGORIA) {
+				if (significancia.exitoMinimo<this.level.jsonLevel.aciertosPorCategorias) {
+					fpsFont.setColor(0, 1, 0, 1); // green
+				} else {
+					fpsFont.setColor(1, 0, 0, 1); // red
+					levelPass=false;
+				}
+				if (level.jsonLevel.aciertosPorCategorias==significancia.distribucion.length-1) {
+					levelPass=true;
+				}
+				
+				y = y + cameraGUI.viewportHeight/20;
+				fpsFont.draw(batch, "Ha respondido bien "+this.level.jsonLevel.aciertosPorCategorias+" de "+(significancia.distribucion.length-1)+" en los trials por categoria.", x, y);
+				y = y + cameraGUI.viewportHeight/20;
+				fpsFont.draw(batch, "En el nivel jugado se considera que hay un acierto significativo con mas de "+significancia.exitoMinimo+" intentos correctos.", x, y);
+			}
+
+			fpsFont.setColor(1, 1, 1, 1); // white
+		}
 		
+		x = cameraGUI.viewportWidth/2 - cameraGUI.viewportWidth/8;
+		y = cameraGUI.viewportHeight- cameraGUI.viewportHeight/8;
+		if (levelPass) {
+			fpsFont.setColor(0, 1, 0, 1); // green
+			fpsFont.draw(batch, "Nivel superado", x, y);
+			
+		} else {
+			fpsFont.setColor(1, 0, 0, 1); // red
+			fpsFont.draw(batch, "Nivel no superado", x, y);
+		}
+		fpsFont.setColor(1, 1, 1, 1); // white	
+
 	}
 
 	private void guiRenderInit() {
@@ -119,6 +182,8 @@ public class ResultsScreen extends AbstractGameScreen {
 		button.getStyle().font.getData().setScale(Constants.factorEscala()*3,Constants.factorEscala()*3);
 		table.add(button).width(Gdx.graphics.getWidth()/2.5f).space(Gdx.graphics.getHeight()/10f);
 		table.row();
+		table.align(Align.bottom);
+		//table.row();
 
 
 		guiRenderInit();

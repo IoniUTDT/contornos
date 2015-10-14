@@ -12,6 +12,7 @@ import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Level.Significancia;
+import com.turin.tur.main.diseno.Level.TIPOdeSIGNIFICANCIA;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
@@ -147,6 +148,10 @@ public class LevelMaker {
 				trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
 						new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGetGrupo(grupo), true, true, true));
 			}
+			
+			addSignificanciaImagen(trainingLines);
+			addSignificanciaCategoria(trainingLines);
+			addSignificanciaTotal(trainingLines);
 			
 			trainingLines.build(Resources.Paths.levelsPath);
 			
@@ -288,49 +293,6 @@ public class LevelMaker {
 			test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
 					new int[] {Categorias.Cuadrado.ID, Categorias.Rombo.ID}, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGet(categoria,Categorias.SinRotar), false, true, false));
 			
-			
-			// Calculamos el nivel de rtas correctas para una significancia del 0.05 a partir del numero de trials y el tipo para este nivel
-			// IMPORTANTE: se asume que todos los trials son de dos opciones en el caso de categorias y de 6 en el de imagen
-			/*
-			Array<Integer> prueba = new Array<Integer>();
-			prueba.add(0);
-			prueba.add(20);
-			prueba.add(0);
-			prueba.add(0);
-			prueba.add(0);
-			prueba.add(20);
-			//Float[] Resultado = Stadistics.distribucion(prueba);
-			//Resultado = Resultado;
-			*/
-			
-			/*
-			int numberTrialsCategorias=0;
-			int numberTrialsImagen=0;
-			for (JsonTrial trial:test.jsonTrials) {
-				boolean esCategoria=true;
-				for (int id: trial.elementosId) { // Se fija si es categoria o no viendo si hay un id mayor a los reservados
-					if (id>Resources.Reservados) {
-						esCategoria=false;
-						break;
-					}
-				}
-				if (esCategoria) { // agrega el contador donde corresponda
-					if (trial.elementosId.length!=2) {System.out.println("OJO! se encontre un trial por categoria con mas de dos opciones en el test y no es lo que se espera");}
-					numberTrialsCategorias++;
-				} else {
-					if (trial.elementosId.length!=6) {System.out.println("OJO! se encontre un trial por imagen con menos de seis opciones en el test y no es lo que se espera");}
-					numberTrialsImagen++;
-				}
-			}
-			// ahora hacemos la estadistica para cada caso
-			Array<Float> distribucionBaseDos = new Array<Float>();
-			float p = 0.5f;
-			for (int i=1;i<=numberTrialsCategorias;i++) {
-				distribucionBaseDos.items[i-1] = (float) (Math.pow(p, i)*Math.pow((1-p), numberTrialsCategorias-i));
-			}
-			// TODO Me quede aca... tengo que chequear que efectivamente de una distribucion con sentido, normalizar y sumar
-			 *  
-			 */
 			test.build(Resources.Paths.levelsPath);
 
 			
@@ -392,9 +354,7 @@ public class LevelMaker {
 		 */
 		private static void addSignificanciaTotal(JsonLevel level) {
 			Significancia significancia = new Significancia();
-			significancia.title = "Evaluacion Global";
-			significancia.descripcion = "Informacion de la significancia total del nivel considerando al ciego como una respuesta random";
-			significancia.pValue=0.05f;
+			significancia.tipo=TIPOdeSIGNIFICANCIA.COMPLETO;
 			// Filtra los trials que son test para no procesar los que son "entrenamiento"
 			Array<Integer> listaIdsSoloTests = new Array<Integer>();
 			for (JsonTrial json:level.jsonTrials) {
@@ -416,9 +376,7 @@ public class LevelMaker {
 		 */
 		private static void addSignificanciaImagen(JsonLevel level) {
 			Significancia significancia = new Significancia();
-			significancia.title = "Evaluacion de selección de imagenes";
-			significancia.descripcion = "Informacion de la significancia total del nivel considerando al ciego como una respuesta random solo en los trials que se debe seleccionar entre imagenes";
-			significancia.pValue=0.05f;
+			significancia.tipo = TIPOdeSIGNIFICANCIA.IMAGEN;
 			// Filtra los trials que son test para no procesar los que son "entrenamiento"
 			Array<Integer> listaIds = new Array<Integer>();
 			for (JsonTrial json:level.jsonTrials) {
@@ -442,9 +400,7 @@ public class LevelMaker {
 		 */
 		private static void addSignificanciaCategoria(JsonLevel level) {
 			Significancia significancia = new Significancia();
-			significancia.title = "Evaluacion de selección de imagenes";
-			significancia.descripcion = "Informacion de la significancia total del nivel considerando al ciego como una respuesta random solo en los trials que se debe seleccionar entre imagenes";
-			significancia.pValue=0.05f;
+			significancia.tipo = TIPOdeSIGNIFICANCIA.CATEGORIA;
 			// Filtra los trials que son test para no procesar los que son "entrenamiento"
 			Array<Integer> listaIds = new Array<Integer>();
 			for (JsonTrial json:level.jsonTrials) {
@@ -475,7 +431,7 @@ public class LevelMaker {
 			significancia.exitoMinimo=0;
 			for (int i=0; i<significancia.distribucion.length; i++) {
 				acumulado = acumulado + significancia.distribucion[i];
-				if (acumulado > 1-significancia.pValue) {
+				if (acumulado > 1-significancia.tipo.pValue) {
 					significancia.exitoMinimo=i;
 					break;
 				}

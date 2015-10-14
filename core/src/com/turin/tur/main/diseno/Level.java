@@ -25,15 +25,6 @@ public class Level {
 	public LevelLog levelLog;
 	public JsonLevel jsonLevel;
 
-	// TODO esto esta obsoleto, cuando termine la implementacion de significancias lo tengo que sacar
-	// Variables para registro de resultados
-	public int aciertosTotales; // Esto guarda el numero de aciertos totales. Deberia servir como info gneneral en todos los trials de test y de entrenamiento
-	public int aciertosPorCategorias; // Esto guarda el numero de aciertos en trials por categoria. Al generar el level hay que inlcuir un numero de aciertos que vuelve significativo el resultado y comparar con eso.
-	public int aciertosPorImagenes; // Esto guarda el numero de aciertos en trials por imagenes. Al generar el level hay que incluir el numero de aciertos que vuelve significativo el resultado
-	public int aciertosMaximosPosibles; //Se guarda todos los trials que son suceptibles de ser un acierto (para evitar que trial de entrenamiento se cuneten)
-	public int aciertosMaximosPosiblesImagen;
-	public int aciertosMaximosPosiblesCategoria;
-	
 	public Level(int level) {
 		this.activeTrialPosition = 0;
 		Gdx.app.debug(TAG, "Cargando informacion del nivel " + level);
@@ -110,8 +101,10 @@ public class Level {
 		public boolean randomTrialSort;
 		public boolean show;
 		public Array<Significancia> significancias = new Array<Significancia>();
-		public int UmbralSigImagen=-1; // Nivel de rtas correctas para superar nivel de significancia calculado para el nivel en los test de imagen. Un -1 significa que no aplica
-		public int UmbralSigCategoria=-1; // Nivel de rtas correctas para superar el nivel de significancia calculado para el nivel en los test de categoria. Un -1 significa que no aplica
+		public int aciertosTotales; // Esto guarda el numero de aciertos totales. Deberia servir como info gneneral en todos los trials de test y de entrenamiento
+		public int aciertosPorCategorias; // Esto guarda el numero de aciertos en trials por categoria. Al generar el level hay que inlcuir un numero de aciertos que vuelve significativo el resultado y comparar con eso.
+		public int aciertosPorImagenes; // Esto guarda el numero de aciertos en trials por imagenes. Al generar el level hay que incluir el numero de aciertos que vuelve significativo el resultado
+		
 		
 		public static void CreateLevel(JsonLevel jsonLevel, String path) {
 			Json json = new Json();
@@ -162,12 +155,26 @@ public class Level {
 	 * Esta clase sirve para cargar info de analisis de significancias en la info de levels. La idea es que se cree la info complicada de calcular cuando se crea el nivel (y se puede hacer calculos largos y con instrucciones que no son LibGDX) y que luego se verifique el desempeño durante el juego
 	 */
 	public static class Significancia {
-		public String title; // Titulo
-		public String descripcion; // Descripcion de lo que se evalua
+		public TIPOdeSIGNIFICANCIA tipo; // Categoriza el tipo de significancia
 		public Float[] distribucion; // Distribucion de probabilidad del conjunto seleccionado
 		public Integer[] trialIncluidos; // Trials que se consideraron para este test de significancia.
-		public float pValue; // Este valor se utiliza para hacer el calculo del exitoMinimo
 		public int exitoMinimo; // Numero de trials que deben ser bien respondidos 
 		public int[] histogramaTrials; //Histograma de numero de preguntas
+	}
+	
+	public enum TIPOdeSIGNIFICANCIA {
+		COMPLETO("Evaluacion Global","Informacion de la significancia total del nivel considerando al ciego como una respuesta random",0.05f),
+		IMAGEN("Evaluacion de selección de imagenes","Informacion de la significancia total del nivel considerando al ciego como una respuesta random solo en los trials que se debe seleccionar entre imagenes",0.05f),
+		CATEGORIA("Evaluacion de selección de imagenes","Informacion de la significancia total del nivel considerando al ciego como una respuesta random solo en los trials que se debe seleccionar entre imagenes",0.05f);
+		
+		public String title;
+		public String description;
+		public float pValue;
+		
+		TIPOdeSIGNIFICANCIA(String title, String descripcion, float pValue) {
+			this.description=descripcion;
+			this.title=title;
+			this.pValue=pValue;
+		}
 	}
 }

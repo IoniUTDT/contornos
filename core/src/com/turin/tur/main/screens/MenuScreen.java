@@ -128,13 +128,19 @@ public class MenuScreen extends AbstractGameScreen {
 				button.addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						game.setScreen(new LevelScreen(game,levelIterator, session));
+						if ((session.user.levelsCompleted.contains(levelIterator-1, false)) || (levelIterator==1)) {
+							game.setScreen(new LevelScreen(game,levelIterator, session));
+						}
 					}
 				});
 				if (session.user.levelsCompleted.contains(levelIterator, false)) {
-					button.setColor(1, 0, 0, 1);
+					button.setColor(0, 1, 0, 1); // Green
 				} else {
-					button.setColor(0, 1, 0, 1);
+					if ((session.user.levelsCompleted.contains(levelIterator-1, false)) || (levelIterator==1)) {
+						button.setColor(1, 1, 0, 1); //Yellow
+					} else {
+						button.setColor(1, 0, 0, 1); //Red
+					}
 				}
 				levelButtons.add(button);
 				Gdx.app.debug(TAG, "agregado boton" + button.getText());

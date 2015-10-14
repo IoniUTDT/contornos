@@ -12,6 +12,8 @@ import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Level;
+import com.turin.tur.main.diseno.Level.Significancia;
+import com.turin.tur.main.diseno.Level.TIPOdeSIGNIFICANCIA;
 import com.turin.tur.main.diseno.LevelInterfaz;
 import com.turin.tur.main.diseno.Session;
 import com.turin.tur.main.diseno.TouchInfo;
@@ -133,7 +135,36 @@ public class LevelController implements InputProcessor {
 
 	private void completeLevel() {
 		// Indica y guarda en la info del usuario que completo este nivel
-		this.session.user.levelsCompleted.add(level.Id);
+		// Se fija si le fue bien
+		boolean pass = true;
+		for (Significancia significancia: level.jsonLevel.significancias) {
+			if (significancia.tipo == TIPOdeSIGNIFICANCIA.COMPLETO) {
+				if (!(significancia.exitoMinimo<level.jsonLevel.aciertosTotales))
+					if (level.jsonLevel.aciertosTotales!=significancia.distribucion.length-1) {
+						pass=false;
+						break;
+					}
+			}
+			if (significancia.tipo == TIPOdeSIGNIFICANCIA.CATEGORIA) {
+				if (!(significancia.exitoMinimo<level.jsonLevel.aciertosPorCategorias))
+					if (level.jsonLevel.aciertosPorCategorias!=significancia.distribucion.length-1) {
+						pass=false;
+						break;
+					}
+			}
+			if (significancia.tipo == TIPOdeSIGNIFICANCIA.IMAGEN) {
+				if (!(significancia.exitoMinimo<level.jsonLevel.aciertosPorImagenes))
+					if (level.jsonLevel.aciertosPorImagenes!=significancia.distribucion.length-1) {
+						pass=false;
+						break;
+					}
+			}
+		}
+		if (pass) {
+			this.session.user.levelsCompleted.add(level.Id);
+		}
+		
+		
 		this.session.user.save();
 		// Indica en el log del level que se completo
 		this.level.levelLog.levelCompleted = true;
@@ -301,8 +332,8 @@ public class LevelController implements InputProcessor {
 			if (trial.rtaCorrecta.resourceId.id == touchData.thisTouchBox.contenido.resourceId.id) { // Significa que se toco la respuesta igual a la correcta
 				correcta = true;
 				if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
-					this.level.aciertosPorImagenes++; //suma en uno los aciertos por imagen
-					this.level.aciertosTotales++; //suma en uno los aciertos totales
+					this.level.jsonLevel.aciertosPorImagenes++; //suma en uno los aciertos por imagen
+					this.level.jsonLevel.aciertosTotales++; //suma en uno los aciertos totales
 				}
 			} 
 			if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
@@ -310,8 +341,8 @@ public class LevelController implements InputProcessor {
 					if (trial.rtaCorrecta.categorias.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
 						correcta = true;
 						if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
-							this.level.aciertosPorCategorias++; // Aumenta en uno los aciertos por categoria
-							this.level.aciertosTotales++; // Aumenta en uno los aciertos totales
+							this.level.jsonLevel.aciertosPorCategorias++; // Aumenta en uno los aciertos por categoria
+							this.level.jsonLevel.aciertosTotales++; // Aumenta en uno los aciertos totales
 						}
 					}
 				}
@@ -329,13 +360,7 @@ public class LevelController implements InputProcessor {
 			}
 			if (!this.trial.alreadySelected) { // Marca como que ya se selecciono algo despues de haber contado las cosas correctas y demas
 				this.trial.alreadySelected=true;
-				this.level.aciertosMaximosPosibles++;
-				if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
-					this.level.aciertosMaximosPosiblesCategoria++;
-				} else {
-					this.level.aciertosMaximosPosiblesImagen++;
-				}
-			} // Marca como que ya se selecciono algo despues de haber contado las cosas correctas y demas
+			} 
 		}
 
 	}
