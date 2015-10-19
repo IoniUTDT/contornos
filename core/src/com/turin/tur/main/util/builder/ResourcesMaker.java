@@ -48,7 +48,7 @@ public class ResourcesMaker {
 			objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
 			objetos.addAll(secuenciaAngulos()); // Agrega los angulos
 			objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 50, false, true, false)); // Agrega cuadrados
-			objetos.addAll(secuenciaParalelismoDificiles()); // Agrega recursos de paralelas dificiles
+			objetos.addAll(secuenciaParalelismo()); // Agrega recursos de paralelas dificiles
 		}
 		// Crea los archivos correspondientes
 		for (Imagen im : objetos) {
@@ -392,64 +392,73 @@ public class ResourcesMaker {
 
 	}
 	
-	private static Array<Imagen> secuenciaParalelismoDificiles() {
+	private static Array<Imagen> secuenciaParalelismo() {
 		/*
 		 * Esta serie genera sets de 6 imagenes similares
-		 * 3 paralelas con separacion levemente variable y 3 no paralelas con inclinacion levemenete variable 
+		 * 3 paralelas con separacion levemente variable y 3 no paralelas con inclinacion levemenete variable
+		 * Va cambiando la dificultad 
 		 */
 		float largo=80; // Largo de las lineas
 		float angulo; // Angulo de inclinacion
 		int cantidad = 10;
 		float separacion = 15; // Separacion predeterminada
-		float limiteAngulo = 15; //grados (todo mi codigo trabaja en grados)
-		float limiteAnguloMinimo = 5; //grados
+		float limiteAnguloParametro = 30; // Establece un parametro para el maximo angulo que se puede desviar la recta del paralelismo (en grados)
+		float limiteAnguloMinimoParametro = 10; // Establece un parametro para el angulo minimo de separacion que tiene q haber en ambos rectas 
 		Array<Imagen> objetos = new Array<Imagen>();
 		
 		for (int i=0; i<cantidad; i++) {
 			angulo = 180/cantidad*i; // Define el angulo de la serie
 			// Calculamos los centros de manera que esten separados en funcion del angulo
-			// Para las tres que varia el angulo
+
 			float Xcenter1 = width/2 - separacion/2 * MathUtils.sin(MathUtils.degRad*angulo);
 			float Xcenter2 = width/2 + separacion/2 * MathUtils.sin(MathUtils.degRad*angulo);
 			float Ycenter1 = width/2 - separacion/2 * MathUtils.cos(MathUtils.degRad*angulo);
 			float Ycenter2 = width/2 + separacion/2 * MathUtils.cos(MathUtils.degRad*angulo);
-			
-			// Crea las 3 imagenes no paralelas
-			for (int j=1;j<4;j++) {
-				Imagen imagen = crearImagen();
-				float anguloVariacion1 = MathUtils.random(limiteAnguloMinimo, +limiteAngulo);
-				float anguloVariacion2;
-				if (MathUtils.randomBoolean()) {
-					anguloVariacion1 = anguloVariacion1 * -1;
+
+			for (int dificultad=1; dificultad<10; dificultad++) {
+				
+				// Crea las 3 imagenes no paralelas
+				for (int j=1;j<4;j++) {
+					Imagen imagen = crearImagen();
+					float limiteAngulo; // Establece el maximo angulo que se puede desviar la recta del paralelismo (en grados)
+					float limiteAnguloMinimo; // Establece el angulo minimo de separacion que tiene q haber en ambos rectas
+					limiteAngulo = limiteAnguloParametro / dificultad; // Establece un parametro que dependa del nivel de dificultad, a mas dificultad mas parecidas las rectas
+					limiteAnguloMinimo = limiteAnguloMinimoParametro / dificultad; // Establece un parametro que dependa del nivel de dificultad, a mas dificultad mas parecidas las rectas
+					float anguloVariacion1 = MathUtils.random(limiteAnguloMinimo, +limiteAngulo);
+					float anguloVariacion2;
+					if (MathUtils.randomBoolean()) {
+						anguloVariacion1 = anguloVariacion1 * -1;
+					}
+					if (anguloVariacion1>0) {
+						anguloVariacion2 = anguloVariacion1 + MathUtils.random(-limiteAnguloMinimo, -(limiteAngulo+anguloVariacion1));
+					} else {
+						anguloVariacion2 = anguloVariacion1 + MathUtils.random(+limiteAnguloMinimo, +(limiteAngulo-anguloVariacion1));
+					}
+					// agrega la primer linea
+					InfoLinea infoLinea = new InfoLinea();
+					infoLinea.angulo=angulo+anguloVariacion1;
+					infoLinea.largo=largo;
+					infoLinea.Xcenter = Xcenter1;
+					infoLinea.Ycenter = Ycenter1;
+					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+					imagen.infoLineas.add(infoLinea);
+					// Agrega la segunda linea
+					infoLinea = new InfoLinea();
+					infoLinea.angulo=angulo+anguloVariacion2;
+					infoLinea.largo=largo;
+					infoLinea.Xcenter = Xcenter2;
+					infoLinea.Ycenter = Ycenter2;
+					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+					imagen.infoLineas.add(infoLinea);
+					// Datos generales
+					imagen.comments = "Imagen generada por secuencia automatica 'secuenciaParalelismoDificiles'.";
+					imagen.name = "Imagen de rectas no paralelas generada automaticamente";
+					imagen.idVinculo = "Paralelismo"+i;
+					imagen.categories.add(Categorias.Lineax2);
+					imagen.categories.add(Categorias.NoParalelas);
+					imagen.nivelDificultad = dificultad;
+					objetos.add(imagen);
 				}
-				if (anguloVariacion1>0) {
-					anguloVariacion2 = anguloVariacion1 + MathUtils.random(-limiteAnguloMinimo, -(limiteAngulo+anguloVariacion1));
-				} else {
-					anguloVariacion2 = anguloVariacion1 + MathUtils.random(+limiteAnguloMinimo, +(limiteAngulo-anguloVariacion1));
-				}
-				// agrega la primer linea
-				InfoLinea infoLinea = new InfoLinea();
-				infoLinea.angulo=angulo+anguloVariacion1;
-				infoLinea.largo=largo;
-				infoLinea.Xcenter = Xcenter1;
-				infoLinea.Ycenter = Ycenter1;
-				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
-				imagen.infoLineas.add(infoLinea);
-				// Agrega la segunda linea
-				infoLinea = new InfoLinea();
-				infoLinea.angulo=angulo+anguloVariacion2;
-				infoLinea.largo=largo;
-				infoLinea.Xcenter = Xcenter2;
-				infoLinea.Ycenter = Ycenter2;
-				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
-				imagen.infoLineas.add(infoLinea);
-				// Datos generales
-				imagen.comments = "Imagen generada por secuencia automatica 'secuenciaParalelismoDificiles'.";
-				imagen.name = "Imagen de rectas no paralelas generada automaticamente";
-				imagen.idVinculo = "Paralelismo"+i;
-				imagen.categories.add(Categorias.Lineax2);
-				imagen.categories.add(Categorias.NoParalelas);
-				objetos.add(imagen);
 			}
 			// crea la 3 imagenes paralelas
 			for(int j=1; j<4; j++){
@@ -476,9 +485,9 @@ public class ResourcesMaker {
 				imagen.idVinculo = "Paralelismo"+i;
 				imagen.categories.add(Categorias.Lineax2);
 				imagen.categories.add(Categorias.Paralelas);
+				imagen.nivelDificultad = -1; // Significa que no califica de dificultad, o que es dificultad universal.
 				objetos.add(imagen);
 			}
-			
 		}
 		return objetos;
 	}
@@ -499,6 +508,7 @@ public class ResourcesMaker {
 		Array<ExtremosLinea> parametros = new Array<ExtremosLinea>();
 		Array<InfoLinea> infoLineas = new Array<InfoLinea>();
 		String idVinculo; // Sirve para identificar cuando varias imagenes pertenecen a un mismo subgrupo
+		int nivelDificultad = -1; // Define un nivel de dificultad, 1 es el mas facil. -1 implica que no esta catalogado por dificultad y que es compatible con cualquier dificultad
 	}
 	
 	public static class SVG {
@@ -558,6 +568,7 @@ public class ResourcesMaker {
 			jsonMetaData.idVinculo = imagen.idVinculo;
 			jsonMetaData.infoLineas = imagen.infoLineas;
 			jsonMetaData.parametros = imagen.parametros;
+			jsonMetaData.nivelDificultad = imagen.nivelDificultad;
 			ExperimentalObject.JsonResourcesMetaData.CreateJsonMetaData(jsonMetaData, Resources.Paths.currentVersionPath);
 
 		}
@@ -581,6 +592,7 @@ public class ResourcesMaker {
 			jsonMetaData.comments = text.comments;
 			jsonMetaData.categories = text.categories;
 			jsonMetaData.noSound = true;
+			jsonMetaData.nivelDificultad = text.nivelDificultad;
 			ExperimentalObject.JsonResourcesMetaData.CreateJsonMetaData(jsonMetaData, Resources.Paths.currentVersionPath);
 
 		}
@@ -591,6 +603,7 @@ public class ResourcesMaker {
 		String name;
 		String comments;
 		Array<Categorias> categories = new Array<Constants.Resources.Categorias>();
+		int nivelDificultad = -1;
 		String texto;
 	}
 

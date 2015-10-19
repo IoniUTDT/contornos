@@ -59,6 +59,7 @@ public class ExperimentalObject {
 		public String idVinculo;
 		public Array<ExtremosLinea> parametros;
 		public Array<InfoLinea> infoLineas;
+		public int nivelDificultad;
 		
 		public static void CreateJsonMetaData (JsonResourcesMetaData jsonMetaData, String path) {
 			Json json = new Json();
