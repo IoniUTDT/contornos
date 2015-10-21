@@ -266,6 +266,7 @@ public class Trial {
 		public Array<SoundLog> soundLog = new Array<SoundLog>(); // Secuencia de la info detallada de todos los sounds
 		public boolean trialExitRecorded; // registra que se guardo la informacion de salida del trial. 
 		public String trialTitle;
+		public JsonTrial jsonTrial; // Json con toda la info que viene del archivo con los datos del trial
 		
 		public TrialLog() {
 			this.trialInstance = TimeUtils.millis();
@@ -312,5 +313,6 @@ public class Trial {
 		}
 		this.log.distribucionEnPantalla = this.jsonTrial.distribucion;
 		this.log.tipoDeTrial = this.jsonTrial.modo;
+		this.log.jsonTrial = this.jsonTrial;
 	}
 }
