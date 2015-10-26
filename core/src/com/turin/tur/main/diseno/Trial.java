@@ -203,6 +203,7 @@ public class Trial {
 		public Array<Integer> soundIdSecuenceInTrial; // Ids de todos los sonidos que se reprodujeron en el trial
 		public long levelInstance; // Registra el level en el que se toco
 		public long sessionInstance; // Registra la session en que se toco
+		public Object jsonMetaData; // Guarda la info completa de la meta data del objeto tocado
 	}
 
 	public static class SoundLog {

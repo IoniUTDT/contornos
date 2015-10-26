@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Boxes.AnswerBox;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
+import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level;
 import com.turin.tur.main.diseno.Level.Significancia;
 import com.turin.tur.main.diseno.Level.TIPOdeSIGNIFICANCIA;
@@ -298,6 +299,7 @@ public class LevelController implements InputProcessor {
 		trial.log.resourcesIdSelected.add(touchData.thisTouchBox.contenido.resourceId);
 		// Agrega la info que corresponda al log creando un TouchLog nuevo
 		TouchLog touchLog = new TouchLog();
+		touchLog.jsonMetaData = JsonResourcesMetaData.Load(touchData.thisTouchBox.contenido.resourceId.id);
 		touchLog.touchInstance = TimeUtils.millis();
 		touchLog.trialInstance = trial.log.trialInstance;
 		touchLog.levelInstance = trial.log.levelInstance;
