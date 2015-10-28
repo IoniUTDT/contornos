@@ -70,6 +70,7 @@ public class ResourcesMaker {
 			recurso.categories.add(Categorias.Texto); // Marca que son textos
 			recurso.name = categoria.nombre;
 			recurso.texto = categoria.texto;
+			recurso.nivelDificultad = 0; // 0 indica que es compatible con cualquier categoria de dificultad 
 			recurso.resourceId.resourceVersion = Builder.ResourceVersion;
 			objetos.add(recurso);
 		}
@@ -93,6 +94,7 @@ public class ResourcesMaker {
 			imagen.categories.add(Constants.Resources.Categorias.Lineas);
 			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
 			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
+			imagen.nivelDificultad = 0; //indica que esta categorizado como compatible con cualquier dificultad
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -114,6 +116,7 @@ public class ResourcesMaker {
 		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 		imagen.categories.add(Constants.Resources.Categorias.Lineas);
 		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+		imagen.nivelDificultad = 0;
 		objetos.add(imagen);
 		// recta vertical incompleta superior
 		imagen = crearImagen();
@@ -123,6 +126,7 @@ public class ResourcesMaker {
 		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 		imagen.categories.add(Constants.Resources.Categorias.Lineas);
 		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+		imagen.nivelDificultad = 0;
 		objetos.add(imagen);
 		// recta vertical incompleta inferior
 		imagen = crearImagen();
@@ -132,6 +136,7 @@ public class ResourcesMaker {
 		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 		imagen.categories.add(Constants.Resources.Categorias.Lineas);
 		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
+		imagen.nivelDificultad = 0;
 		objetos.add(imagen);
 
 		return objetos;
@@ -152,6 +157,7 @@ public class ResourcesMaker {
 			imagen.categories.add(Constants.Resources.Categorias.Lineas);
 			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
 			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
+			imagen.nivelDificultad = 0;
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -485,7 +491,7 @@ public class ResourcesMaker {
 				imagen.idVinculo = "Paralelismo"+i;
 				imagen.categories.add(Categorias.Lineax2);
 				imagen.categories.add(Categorias.Paralelas);
-				imagen.nivelDificultad = -1; // Significa que no califica de dificultad, o que es dificultad universal.
+				imagen.nivelDificultad = 0; // Significa que es dificultad universal.
 				objetos.add(imagen);
 			}
 		}
@@ -508,7 +514,7 @@ public class ResourcesMaker {
 		Array<ExtremosLinea> parametros = new Array<ExtremosLinea>();
 		Array<InfoLinea> infoLineas = new Array<InfoLinea>();
 		String idVinculo; // Sirve para identificar cuando varias imagenes pertenecen a un mismo subgrupo
-		int nivelDificultad = -1; // Define un nivel de dificultad, 1 es el mas facil. -1 implica que no esta catalogado por dificultad y que es compatible con cualquier dificultad
+		int nivelDificultad = -1; // Define un nivel de dificultad, 1 es el mas facil. -1 implica que no esta catalogado por dificultad y 0 que es compatible con cualquier dificultad (en gral para usar en las referencias, por ej rectas paralelas con las que se compara)
 	}
 	
 	public static class SVG {

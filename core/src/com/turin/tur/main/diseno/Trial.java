@@ -10,11 +10,11 @@ import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.Enviables.STATUS;
+import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.builder.Builder;
 import com.turin.tur.main.util.FileHelper;
-import com.turin.tur.main.util.Constants.Resources;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
@@ -203,7 +203,7 @@ public class Trial {
 		public Array<Integer> soundIdSecuenceInTrial; // Ids de todos los sonidos que se reprodujeron en el trial
 		public long levelInstance; // Registra el level en el que se toco
 		public long sessionInstance; // Registra la session en que se toco
-		public Object jsonMetaData; // Guarda la info completa de la meta data del objeto tocado
+		public JsonResourcesMetaData jsonMetaData; // Guarda la info completa de la meta data del objeto tocado
 	}
 
 	public static class SoundLog {
@@ -247,6 +247,7 @@ public class Trial {
 		public ResourceId idRtaCorrecta; // id del recurso correspondiente a la rta correcta para este trial
 		public int indexOfTrialInLevel; // posicion de este trial dentro del nivel
 		public int trialsInLevel; // Cantidad total de trials en el nivel activo
+		public JsonResourcesMetaData jsonMetaDataRta; // Info de la metadata del estimulo  
 		
 		public long timeTrialStart; // Marca temporal absoluta de cuando se inicia el trial
 		public long timeExitTrial; // Marca temporal absoluta de cuando se sale del trial
@@ -315,5 +316,6 @@ public class Trial {
 		this.log.distribucionEnPantalla = this.jsonTrial.distribucion;
 		this.log.tipoDeTrial = this.jsonTrial.modo;
 		this.log.jsonTrial = this.jsonTrial;
+		this.log.jsonMetaDataRta = JsonResourcesMetaData.Load(this.rtaCorrecta.resourceId.id);
 	}
 }

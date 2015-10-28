@@ -24,6 +24,7 @@ public class ResourcesSelectors {
 	 * @return
 	 * 	Lista de ids de los elementos pertenecientes al agrupamiento pedido. 
 	 */
+	
 	public static int[] rsGetAllGrupo(String agrupamientoPedido, Dificultad dificultad) {
 		int[] recursos = new int[] {0,0,0,0,0,0}; //Inicializa el vector con datos nulos, total solo puede tener 6 elementos
 		for (Agrupamientos agrupamiento : listadosGrupos) {
@@ -36,7 +37,7 @@ public class ResourcesSelectors {
 						String savedData = FileHelper.readFile(Resources.Paths.fullCurrentVersionPath + agrupamiento.ids.get(i) + ".meta");
 						Json json = new Json();
 						JsonResourcesMetaData jsonMetaData =  json.fromJson(JsonResourcesMetaData.class, savedData);
-						if ((jsonMetaData.nivelDificultad == dificultad.dificultad) || (jsonMetaData.nivelDificultad==-1)){ // Lo incluye sea -1 o el pedido
+						if ((jsonMetaData.nivelDificultad == dificultad.dificultad) || (jsonMetaData.nivelDificultad==0)){ // Lo incluye sea 0 o el nivel de dificultad pedido
 							agrupamientoFiltroDificultad.ids.add(agrupamiento.ids.get(i));
 						}
 					}
@@ -58,6 +59,7 @@ public class ResourcesSelectors {
 		Dificultad dificultad = new Dificultad(-1);
 		return rsGetAllGrupo(agrupamientoPedido, dificultad);
 	}
+	
 
 	/**
 	 * Esta funcion devuelve un elemento random pertenezca a la categoria pedida, al agrupamiento pedido, que no este en la lista de elementos omitidos y que tenga el nivel de dificultad deseado
@@ -89,10 +91,10 @@ public class ResourcesSelectors {
 			if (json.idVinculo==null) { // Evita que haya un error de null
 				json.idVinculo = "sin dato";
 			}
-			if ((json.idVinculo.equals(agrupamientoPedido)) || (agrupamientoPedido=="SinAgrupamiento")) {
+			if ((json.idVinculo.equals(agrupamientoPedido)) || (agrupamientoPedido=="SinAgrupamiento")) { // Primero filtra por agrupamiento
 				int elemento = json.resourceId.id;
 				// Lo agrega a la lista valida si corresponde
-				if ((dificultad.dificultad==-1) || (json.nivelDificultad==dificultad.dificultad) || (json.nivelDificultad==-1)) {
+				if ((dificultad.dificultad==-1) || (json.nivelDificultad==dificultad.dificultad) || (json.nivelDificultad==0)) {
 					if (categorias.contains(Categorias.Nada, false)) {
 						listadoValido.add(elemento);
 					} else {

@@ -184,6 +184,7 @@ public class LevelMaker {
 			int recursoElegido; // indica cual ya se selecciono
 			String grupo; // Indica que grupo de imagenes se quiere seleccionar
 			
+			// Esto empieza en el 9
 			grupo = "Paralelismo1";
 			recursoElegido = ResourcesSelectors.rsGet(grupo,dificultad);
 			test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
@@ -206,6 +207,8 @@ public class LevelMaker {
 			test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
 					new int[] {recursoElegido, ResourcesSelectors.rsGet(grupo,recursoElegido,dificultad)}, TIPOdeTRIAL.TEST, recursoElegido, true, true, false));
 			
+			// Va por el 15
+			
 			// siete test de reconocer entre categoria paralela, no paralela (tres q si 4 q no)
 			test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
 					new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGet(Categorias.Paralelas,dificultad), false, true, false));
@@ -221,6 +224,8 @@ public class LevelMaker {
 					new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGet(Categorias.NoParalelas,dificultad), false, true, false));
 			test.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.LINEALx2,
 					new int[] {Categorias.Paralelas.ID, Categorias.NoParalelas.ID}, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGet(Categorias.NoParalelas,dificultad), false, true, false));
+			
+			// Va por el 23
 			
 			// Creamos los test con angulos (6 de imagen (angulos todos random)  y siete de categorias, dos agudos, dos graves dos rectos rotados y uno rectos sin rotar
 			Categorias categoria;
