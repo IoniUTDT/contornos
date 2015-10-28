@@ -299,7 +299,7 @@ public class LevelController implements InputProcessor {
 		trial.log.resourcesIdSelected.add(touchData.thisTouchBox.contenido.resourceId);
 		// Agrega la info que corresponda al log creando un TouchLog nuevo
 		TouchLog touchLog = new TouchLog();
-		touchLog.jsonMetaData = JsonResourcesMetaData.Load(touchData.thisTouchBox.contenido.resourceId.id);
+		touchLog.jsonMetaDataTouched = JsonResourcesMetaData.Load(touchData.thisTouchBox.contenido.resourceId.id);
 		touchLog.touchInstance = TimeUtils.millis();
 		touchLog.trialInstance = trial.log.trialInstance;
 		touchLog.levelInstance = trial.log.levelInstance;

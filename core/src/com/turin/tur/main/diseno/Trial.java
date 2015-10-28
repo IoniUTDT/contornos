@@ -203,7 +203,8 @@ public class Trial {
 		public Array<Integer> soundIdSecuenceInTrial; // Ids de todos los sonidos que se reprodujeron en el trial
 		public long levelInstance; // Registra el level en el que se toco
 		public long sessionInstance; // Registra la session en que se toco
-		public JsonResourcesMetaData jsonMetaData; // Guarda la info completa de la meta data del objeto tocado
+		public JsonResourcesMetaData jsonMetaDataTouched; // Guarda la info completa de la meta data del objeto tocado
+		public JsonResourcesMetaData jsonMetaDataEstimulo; // Guarda la info completa de la meta data del objeto estimulo
 	}
 
 	public static class SoundLog {
@@ -242,8 +243,7 @@ public class Trial {
 		public long userId; // Id del usuario activo
 		public String userName;
 		public Array<Categorias> categoriasElementos = new Array<Categorias>(); // Listado de categorias existentes en este trial
-		public Array<Categorias> categoriasEstimulo = new Array<Categorias>(); // Listado de categorias a las que pertenece el estimulo del trial si lo hay
-		public Array<Categorias> categoriasRta = new Array<Categorias>(); // Listado de categorias a las que pertenece la reta valida de este trial si la hay
+		public Array<Categorias> categoriasRta = new Array<Categorias>(); // Listado de categorias a las que pertenece la rta valida / estimulo de este trial si la hay
 		public ResourceId idRtaCorrecta; // id del recurso correspondiente a la rta correcta para este trial
 		public int indexOfTrialInLevel; // posicion de este trial dentro del nivel
 		public int trialsInLevel; // Cantidad total de trials en el nivel activo
@@ -288,18 +288,16 @@ public class Trial {
 		this.log.trialId = this.Id;
 		this.log.trialTitle = this.jsonTrial.title;
 		this.log.userId = session.sessionLog.userID;
-		// Agrega las categorias del estimulo
-		if (this.stimuliBox !=null) {
-			for (Categorias categoria: this.stimuliBox.contenido.categorias){
-				this.log.categoriasEstimulo.add(categoria);
-			}
-		}
-		// Agrega las categorias de la rta correcta
+		
+		// Agrega las categorias de la rta correcta o estimulo
 		if (this.rtaCorrecta!=null) {
 			for (Categorias categoria: this.rtaCorrecta.categorias) {
 				this.log.categoriasRta.add(categoria);
 			}
+			// Agrega el json de la rta correcta/estimulo
+			this.log.jsonMetaDataRta = JsonResourcesMetaData.Load(this.rtaCorrecta.resourceId.id);
 		}
+		
 		// Agrega las categorias de todas las cajas
 		for (Box box: this.allBox) {
 			for (Categorias categoria: box.contenido.categorias){
