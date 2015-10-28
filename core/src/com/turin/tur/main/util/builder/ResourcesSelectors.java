@@ -31,7 +31,7 @@ public class ResourcesSelectors {
 			if (agrupamiento.nombre.equals(agrupamientoPedido)) {
 				Agrupamientos agrupamientoFiltroDificultad = new Agrupamientos();
 				agrupamientoFiltroDificultad.nombre = agrupamiento.nombre;
-				if (dificultad.dificultad != -1) { // Filtra solo los de la dificultad indicada si no es -1;
+				if (dificultad.dificultad != -1) { // Filtra solo en caso de que haya una dificultad buscada;
 					for (int i=0; i<agrupamiento.ids.size;i++) {
 						// Carga la info de la metada 
 						String savedData = FileHelper.readFile(Resources.Paths.fullCurrentVersionPath + agrupamiento.ids.get(i) + ".meta");
@@ -93,7 +93,7 @@ public class ResourcesSelectors {
 			}
 			if ((json.idVinculo.equals(agrupamientoPedido)) || (agrupamientoPedido=="SinAgrupamiento")) { // Primero filtra por agrupamiento
 				int elemento = json.resourceId.id;
-				// Lo agrega a la lista valida si corresponde
+				// Lo agrega a la lista valida si corresponde segun la dificultad buscada. Si dificultad buscada es -1 agrega todos. 
 				if ((dificultad.dificultad==-1) || (json.nivelDificultad==dificultad.dificultad) || (json.nivelDificultad==0)) {
 					if (categorias.contains(Categorias.Nada, false)) {
 						listadoValido.add(elemento);

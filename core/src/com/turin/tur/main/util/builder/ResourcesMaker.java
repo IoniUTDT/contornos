@@ -70,7 +70,7 @@ public class ResourcesMaker {
 			recurso.categories.add(Categorias.Texto); // Marca que son textos
 			recurso.name = categoria.nombre;
 			recurso.texto = categoria.texto;
-			recurso.nivelDificultad = 0; // 0 indica que es compatible con cualquier categoria de dificultad 
+			recurso.nivelDificultad = -1; // -1 indica que no tiene sentido aplicar dificultad en este caso 
 			recurso.resourceId.resourceVersion = Builder.ResourceVersion;
 			objetos.add(recurso);
 		}
@@ -94,7 +94,7 @@ public class ResourcesMaker {
 			imagen.categories.add(Constants.Resources.Categorias.Lineas);
 			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
 			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
-			imagen.nivelDificultad = 0; //indica que esta categorizado como compatible con cualquier dificultad
+			imagen.nivelDificultad = -1; //indica que esta categorizado como compatible con cualquier dificultad
 			objetos.add(imagen);
 		}
 		return objetos;
@@ -116,7 +116,7 @@ public class ResourcesMaker {
 		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 		imagen.categories.add(Constants.Resources.Categorias.Lineas);
 		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-		imagen.nivelDificultad = 0;
+		imagen.nivelDificultad = -1;
 		objetos.add(imagen);
 		// recta vertical incompleta superior
 		imagen = crearImagen();
@@ -126,7 +126,7 @@ public class ResourcesMaker {
 		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 		imagen.categories.add(Constants.Resources.Categorias.Lineas);
 		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-		imagen.nivelDificultad = 0;
+		imagen.nivelDificultad = -1;
 		objetos.add(imagen);
 		// recta vertical incompleta inferior
 		imagen = crearImagen();
@@ -136,7 +136,7 @@ public class ResourcesMaker {
 		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
 		imagen.categories.add(Constants.Resources.Categorias.Lineas);
 		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-		imagen.nivelDificultad = 0;
+		imagen.nivelDificultad = -1;
 		objetos.add(imagen);
 
 		return objetos;
@@ -157,7 +157,7 @@ public class ResourcesMaker {
 			imagen.categories.add(Constants.Resources.Categorias.Lineas);
 			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
 			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
-			imagen.nivelDificultad = 0;
+			imagen.nivelDificultad = -1;
 			objetos.add(imagen);
 		}
 		return objetos;
