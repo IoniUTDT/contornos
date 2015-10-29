@@ -16,7 +16,7 @@ public class Builder {
 
 	public static int height = Resources.Paths.height;
 	public static int width = Resources.Paths.width;
-	public static final int ResourceVersion = 122;
+	public static final int ResourceVersion = 123;
 	
 	static final Boolean makeLevels = false;
 	static final Boolean makeResources = false;
@@ -29,11 +29,13 @@ public class Builder {
 
 		if (makeResources) {
 			ResourcesMaker.BuildResources();
+			System.exit(0);
 		}	
 		if (makeLevels) {
 			
 			LevelMaker.makeLevels();
 			LevelExport.createStructure();
+			System.exit(0);
 		}
 
 	}

@@ -14,6 +14,7 @@ import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.builder.Builder;
+import com.turin.tur.main.util.builder.LevelMaker.Dificultad;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
@@ -164,6 +165,7 @@ public class Trial {
 		public boolean feedback=false; // Sirve para configurar que en algunos test no haya feedback
 		public boolean randomSort;
 		public int resourceVersion;
+		public Dificultad dificultad; //= new Dificultad(-1);
 		
 		public static void CreateTrial(JsonTrial jsonTrial, String path) {
 			Json json = new Json();
@@ -247,7 +249,7 @@ public class Trial {
 		public ResourceId idRtaCorrecta; // id del recurso correspondiente a la rta correcta para este trial
 		public int indexOfTrialInLevel; // posicion de este trial dentro del nivel
 		public int trialsInLevel; // Cantidad total de trials en el nivel activo
-		public JsonResourcesMetaData jsonMetaDataRta; // Info de la metadata del estimulo  
+		public JsonResourcesMetaData jsonMetaDataRta; // Info de la metadata del estimulo/rta  
 		
 		public long timeTrialStart; // Marca temporal absoluta de cuando se inicia el trial
 		public long timeExitTrial; // Marca temporal absoluta de cuando se sale del trial

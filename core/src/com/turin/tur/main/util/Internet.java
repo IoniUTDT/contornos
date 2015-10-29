@@ -96,8 +96,9 @@ public class Internet {
 
 					Json json = new Json();
 					json.setOutputType(OutputType.json);
+				    json.setUsePrototypes(false);
 					String requestJson = json.toJson(objetoEnviado.contenido);
-
+					
 					Net.HttpRequest request = new Net.HttpRequest(HttpMethods.POST);
 					request.setContent(requestJson);
 

@@ -68,6 +68,7 @@ public class SessionLogHistory {
 		for (SessionLog sessionLog:this.historyPending) {
 			if ((sessionLog.status == STATUS.PENDIENTEDEENVIO) || (sessionLog.status == STATUS.ENVIOFALLIDO)) {
 				sessionLog.status = STATUS.ENVIANDO;
+				//TODO Aca hay algo muy mal! No se porque no se modifica ni se envia lo que esta en codeVersion. Asique use idEnvio y lo renombre
 				sessionLog.idEnvio = idEnvio;
 				sessionEnviable.contenido.add(sessionLog);
 				sessionEnviable.contenidoSession.add(sessionLog);

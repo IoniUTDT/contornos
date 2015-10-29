@@ -67,7 +67,9 @@ public class Session {
 		public long userID;
 		public long id;
 		public STATUS status=STATUS.CREADO;
+		public long codeVersion = Constants.CODEVERSION;
 		public long idEnvio;
+		
 
 		public SessionLog() {
 			this.id = TimeUtils.millis();
