@@ -11,7 +11,7 @@ public class Constants {
 	// al cambiar la version no se cargan los datos viejo ni las estructuras
 	// viejas
 	public static final float VERSION = 1.1f;
-	public static final int CODEVERSION = 3;
+	public static final int CODEVERSION = 4;
 
 	// Version of game for internal use
 	public static int version() {
@@ -72,7 +72,7 @@ public class Constants {
 		 * diferentes opciones, que pueden ser imagenes especificas o imagenes que representen una categoria
 		 */
 		public enum TIPOdeTRIAL {
-			ENTRENAMIENTO, TEST
+			EJEMPLOS, TEST
 		}
 
 		public enum DISTRIBUCIONESenPANTALLA {

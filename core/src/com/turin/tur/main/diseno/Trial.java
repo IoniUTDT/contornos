@@ -63,7 +63,7 @@ public class Trial {
 		}
 
 		// Crea las cajas segun corresponda a su tipo
-		if (this.jsonTrial.modo == Constants.Diseno.TIPOdeTRIAL.ENTRENAMIENTO) {
+		if (this.jsonTrial.modo == Constants.Diseno.TIPOdeTRIAL.EJEMPLOS) {
 			for (ExperimentalObject elemento : this.elementos) {
 				TrainingBox box = new TrainingBox(elemento);
 				box.SetPosition(jsonTrial.distribucion.X(orden.get(this.elementos.indexOf(elemento, true))),
@@ -129,7 +129,7 @@ public class Trial {
 	}
 
 	public boolean checkTrialCompleted() { // Se encarga de ver si ya se completo trial o no
-		if (this.jsonTrial.modo == TIPOdeTRIAL.ENTRENAMIENTO) {
+		if (this.jsonTrial.modo == TIPOdeTRIAL.EJEMPLOS) {
 			boolean allCheck = true;
 			for (TrainingBox box : trainigBoxes) {
 				if (box.alreadySelected == false) {

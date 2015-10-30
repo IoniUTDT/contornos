@@ -56,7 +56,7 @@ public class LevelMaker {
 		// Crea los niveles
 		Levels.MakeTutorial();
 		Levels.MakeTest(new Dificultad(1));
-		//Levels.MakeTrainingLines();
+		Levels.MakeTrainingLines(new Dificultad(1));
 		//Levels.MakeTest(new Dificultad(2));
 		//Levels.MakeTest(new Dificultad(3));
 		Levels.MakeTest(new Dificultad(4));
@@ -117,7 +117,7 @@ public class LevelMaker {
 		 *  Este proceso crea un nivel de entrenamiento en paralelismo (usa los grupos impares (excepto el 5 que es justo especial) para poder medir diferencias respecto a los grupos entrenados y los no entrenados).	 *  Cada trial esta repetido dos veces.
 		 */
 		// TODO revisar antes de volver a implementar porque hubo cambios con respecto a como funciona la dificultad
-		private static void MakeTrainingLines() {
+		private static void MakeTrainingLines(Dificultad dificultad) {
 			int numeroDeParesDeTrialporGrupo = 5; 
 			
 			// Crea la estructura de datos
@@ -127,8 +127,7 @@ public class LevelMaker {
 			trainingLines.show = true;
 			
 			String grupo;
-			Dificultad dificultad = new Dificultad(1);
-			
+						
 			grupo="Paralelismo1";
 			for (int i=0; i<numeroDeParesDeTrialporGrupo; i++) {
 				trainingLines.jsonTrials.add(crearTrial("", "Identifique la imagen o categoria del sonido", DISTRIBUCIONESenPANTALLA.BILINEALx6,
@@ -332,26 +331,26 @@ public class LevelMaker {
 			
 			// Bienvenida
 			tutorial.jsonTrials.add(crearTrial("Bienvenido al juego", "Toque el boton para completar la pantalla", DISTRIBUCIONESenPANTALLA.LINEALx1,
-					new int[] { Constants.Resources.Categorias.Siguiente.ID }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
+					new int[] { Constants.Resources.Categorias.Siguiente.ID }, TIPOdeTRIAL.EJEMPLOS, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
 			// Muestra rectas horizontales y verticales
 			tutorial.jsonTrials.add(crearTrial("Rectas horizontales y verticales", "Toque las imagenes y escuche todos los sonidos para continuar",
 					DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { 22, 26, 25, 27, 23, 28 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
+					new int[] { 22, 26, 25, 27, 23, 28 }, TIPOdeTRIAL.EJEMPLOS, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
 			// Muestra rectas en diagonal
 			tutorial.jsonTrials.add(crearTrial("Rectas diagonales", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.LINEALx3,
-					new int[] { 29, 36, 41 }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
+					new int[] { 29, 36, 41 }, TIPOdeTRIAL.EJEMPLOS, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
 			// Primer test sencillo
 			tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx6,
 					new int[] { 25, 27, 28, 29, 36, 23 }, TIPOdeTRIAL.TEST, 25, true, true, true, dificultad));
 			// Muestra angulo y pares de rectas (un angulo agudo, uno recto y uno grave, y dos pares de rectas paralelas y unas q no.)
 			tutorial.jsonTrials.add(crearTrial("Angulos y rectas", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx6,
-					new int[] { ResourcesSelectors.rsGet(Categorias.Agudo,dificultad), ResourcesSelectors.rsGet(Categorias.Recto,Categorias.SinRotar,dificultad), ResourcesSelectors.rsGet(Categorias.Grave,dificultad), ResourcesSelectors.rsGet("Paralelismo1",Categorias.Paralelas,dificultad), ResourcesSelectors.rsGet("Paralelismo4",Categorias.NoParalelas,dificultad), ResourcesSelectors.rsGet("Paralelismo9",Categorias.Paralelas,dificultad) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
+					new int[] { ResourcesSelectors.rsGet(Categorias.Agudo,dificultad), ResourcesSelectors.rsGet(Categorias.Recto,Categorias.SinRotar,dificultad), ResourcesSelectors.rsGet(Categorias.Grave,dificultad), ResourcesSelectors.rsGet("Paralelismo1",Categorias.Paralelas,dificultad), ResourcesSelectors.rsGet("Paralelismo4",Categorias.NoParalelas,dificultad), ResourcesSelectors.rsGet("Paralelismo9",Categorias.Paralelas,dificultad) }, TIPOdeTRIAL.EJEMPLOS, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
 			// Segundo test
 			tutorial.jsonTrials.add(crearTrial("Test por imagen", "Identifique cual imagen esta sonando", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 					new int[] { ResourcesSelectors.rsGet(Categorias.Agudo,dificultad), ResourcesSelectors.rsGet(Categorias.Recto,Categorias.SinRotar,dificultad), ResourcesSelectors.rsGet("Paralelismo7",dificultad), ResourcesSelectors.rsGet("Paralelismo2",dificultad) }, TIPOdeTRIAL.TEST, Constants.Resources.Categorias.Nada.ID, true, true, true, dificultad));
 			// Ultima presentacion, cuadrilateros
 			tutorial.jsonTrials.add(crearTrial("Cuadrilateros", "Toque las imagenes y escuche todos los sonidos para continuar", DISTRIBUCIONESenPANTALLA.BILINEALx4,
-					new int[] { ResourcesSelectors.rsGet(Categorias.Cuadrado,Categorias.SinRotar,dificultad), ResourcesSelectors.rsGet(Categorias.Rombo,Categorias.Rotado,dificultad), ResourcesSelectors.rsGet(Categorias.Cuadrado,Categorias.Rotado,dificultad), ResourcesSelectors.rsGet(Categorias.Rombo,Categorias.SinRotar,dificultad) }, TIPOdeTRIAL.ENTRENAMIENTO, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
+					new int[] { ResourcesSelectors.rsGet(Categorias.Cuadrado,Categorias.SinRotar,dificultad), ResourcesSelectors.rsGet(Categorias.Rombo,Categorias.Rotado,dificultad), ResourcesSelectors.rsGet(Categorias.Cuadrado,Categorias.Rotado,dificultad), ResourcesSelectors.rsGet(Categorias.Rombo,Categorias.SinRotar,dificultad) }, TIPOdeTRIAL.EJEMPLOS, Constants.Resources.Categorias.Nada.ID, false, true, true, dificultad));
 			// tercer test (por categorias 1) */
 			tutorial.jsonTrials.add(crearTrial("Test por categorias", "Identifique a que categoria pertenece la imagen que suena", DISTRIBUCIONESenPANTALLA.BILINEALx4,
 					new int[] { Constants.Resources.Categorias.Cuadrilatero.ID, Constants.Resources.Categorias.Lineax2.ID, Constants.Resources.Categorias.Rombo.ID, Constants.Resources.Categorias.Cuadrado.ID }, TIPOdeTRIAL.TEST, ResourcesSelectors.rsGet(Categorias.Cuadrado,Categorias.SinRotar,dificultad), true, true, true, dificultad));
