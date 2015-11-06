@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Internet;
+import com.turin.tur.main.util.builder.Builder;
 
 public class Session {
 
@@ -67,9 +68,10 @@ public class Session {
 		public long userID;
 		public long id;
 		public STATUS status=STATUS.CREADO;
-		public long codeVersion = Constants.CODEVERSION;
 		public long idEnvio;
-		
+		public long codeVersion = Constants.CODEVERSION;
+		public int levelVersion = Builder.levelVersion;
+		public int resourcesVersion = Builder.ResourceVersion;
 
 		public SessionLog() {
 			this.id = TimeUtils.millis();

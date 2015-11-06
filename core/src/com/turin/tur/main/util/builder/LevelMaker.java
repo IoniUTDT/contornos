@@ -35,7 +35,21 @@ public class LevelMaker {
 	static int contadorTrials = 0;
 	
 	public static void makeLevels () {
-
+		
+		// Verifica que no haya niveles ya numerados con la version marcada
+		File file = new File(Resources.Paths.fullLevelsPath + "level" + 1 + ".meta");
+		if (file.exists()) {
+			String savedData = FileHelper.readLocalFile(Resources.Paths.levelsPath + "level" + 1 + ".meta");
+			if (!savedData.isEmpty()) {
+				Json json = new Json();
+				JsonLevel jsonLevel = json.fromJson(JsonLevel.class, savedData);
+				if (jsonLevel.levelVersion >= Builder.levelVersion) {
+					System.out.println("Cambie la version de los niveles a crear para que sean mayor a la version actual: " + Builder.levelVersion);
+					System.exit(0);
+				}
+			}
+		} 
+		
 		// Se fija q exista el paquete de recursos de la version actual
 		if (!new File(Resources.Paths.fullCurrentVersionPath).exists()) {
 			System.out.println("Primero debe crear los recuros version:" + Builder.ResourceVersion);
@@ -519,6 +533,7 @@ public class LevelMaker {
 		JsonLevel jsonLevel = new JsonLevel();
 		jsonLevel.Id = contadorLevels;
 		jsonLevel.resourceVersion = Builder.ResourceVersion;
+		jsonLevel.levelVersion = Builder.levelVersion;
 		return jsonLevel;
 	}
 	

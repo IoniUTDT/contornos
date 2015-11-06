@@ -177,34 +177,158 @@ public class ResourcesMaker {
 						height / 2, i * shiftAngulo, (j + i) * shiftAngulo,
 						largo));
 				imagen.name = "Angulo";
-				imagen.comments = "Angulo generado automaticamente por secuenciaAngulos. Parametros: Angulo inicial: " + (i * shiftAngulo) + "; Angulo final: "
-						+ ((j + i) * shiftAngulo) + ";";
+				float anguloInicial = i * shiftAngulo;
+				float anguloFinal = (j + i) * shiftAngulo;
+				float anguloDiferencia = j * shiftAngulo;
+				imagen.comments = "Angulo generado automaticamente por secuenciaAngulos. Parametros: Angulo inicial: " + anguloInicial + "; Angulo final: "
+						+ anguloFinal + ";";
 				imagen.categories.add(Constants.Resources.Categorias.Angulo);
-				if ((j * shiftAngulo < 90) || (j * shiftAngulo > 270)) {
+				if ((anguloDiferencia < 90) || (anguloDiferencia > 270)) {
 					imagen.categories.add(Constants.Resources.Categorias.Agudo);
-				} else if ((j * shiftAngulo == 90)||(j * shiftAngulo == 270)) {
+					// Agregamos la dificultad
+					if (ladoSinRotar(anguloInicial, anguloFinal)) {
+						imagen.nivelDificultad = 1;
+					} else {
+						if (mismoCuadrante(anguloInicial, anguloFinal)) {
+							imagen.nivelDificultad = 1;
+						} else {
+							imagen.nivelDificultad = 1;
+							if (anguloDiferencia > 180) {
+								if (anguloDiferencia <= 310) {
+									imagen.nivelDificultad = 2;
+								}
+								if (anguloDiferencia <= 290) {
+									imagen.nivelDificultad = 3;
+								}
+								if (anguloDiferencia <= 280) {
+									imagen.nivelDificultad = 4;
+								}								
+							} else {
+								if (anguloDiferencia >= 50) {
+									imagen.nivelDificultad = 2;
+								}
+								if (anguloDiferencia >= 70) {
+									imagen.nivelDificultad = 3;
+								}
+								if (anguloDiferencia >= 80) {
+									imagen.nivelDificultad = 4;
+								}
+							}
+						}
+					}
+				} else if ((anguloDiferencia == 90)||(anguloDiferencia == 270)) {
 					imagen.categories.add(Constants.Resources.Categorias.Recto);
 					// Se fija si esta rotado
-					if (i * shiftAngulo == 0) {
+					if (anguloInicial == 0) {
 						imagen.categories.add(Categorias.SinRotar);
-					} else if (i * shiftAngulo == 90){
+						imagen.nivelDificultad = 1;
+					} else if (anguloInicial == 90){
 						imagen.categories.add(Categorias.SinRotar);
-					} else if (i * shiftAngulo == 180){
+						imagen.nivelDificultad = 1;
+					} else if (anguloInicial == 180){
 						imagen.categories.add(Categorias.SinRotar);
-					} else if (i * shiftAngulo == 270){
+						imagen.nivelDificultad = 1;
+					} else if (anguloInicial == 270){
 						imagen.categories.add(Categorias.SinRotar);
+						imagen.nivelDificultad = 1;
 					} else {
 						imagen.categories.add(Categorias.Rotado);
+						imagen.nivelDificultad = 4;
 					}
 				} else {
 					imagen.categories.add(Constants.Resources.Categorias.Grave);
+					// Agregamos la dificultad
+					if (ladoSinRotar(anguloInicial, anguloFinal)) {
+						imagen.nivelDificultad = 1;
+					} else {
+						if (cuadranteOpuesto(anguloInicial, anguloFinal)) {
+							imagen.nivelDificultad = 1;
+						} else {
+							imagen.nivelDificultad = 1;
+							if ((anguloDiferencia <= 130) || (anguloDiferencia >= 230)) {
+								imagen.nivelDificultad = 2;
+							}
+							if ((anguloDiferencia <= 110) || (anguloDiferencia >= 250)) {
+								imagen.nivelDificultad = 3;
+							}
+							if ((anguloDiferencia <= 100) || (anguloDiferencia >= 260)) {
+								imagen.nivelDificultad = 4;
+							}							
+						}
+					}
 				}
+				/*
+				 *  Categorizamos la dificultad en funcion de los siguientes criterios:
+				 *  
+				 *  - Si no es recto:
+					 *  - Si ambos angulos inicial y final estan en el mismo cuadrante, es facil : 1
+					 *  - Si ambos angulos inicial y final estan en cuadrantes opuestos, es facil : 1
+					 *  - Si algun lado no es vertical u horizontal (y no el otro) tiene dificultad 1
+					 *  - Si los cuadrantes son adyacentes, entonces, si difiere de 90º en 10º o menos es dificil : 4
+					 *  	- Si difiere en 20 o menos es medio dificil : 3
+					 *  	- Si difiere en 40 o menos es medio facil : 2
+					 *  	- Si difiere en mas de 40 es facil : 1
+				 *  - Si es recto y esta rotado tiene dificultad 4
+				 *  - Si es recto y no esta rotado tiene dificultad 1 porque es obvio q es recto
+				 *  
+				 *   Se asume que todos los angulos estan entre 0 y 360º
+				 */
+				
+				
+								
 				objetos.add(imagen);
 			}
 		}
 		return objetos;
 	}
 	
+	private static boolean ladoSinRotar(float angulo1, float angulo2) {
+		if ((angulo1==0)||(angulo2==0)) {
+			return true;
+		}
+		if ((angulo1==90)||(angulo2==90)) {
+			return true;
+		}
+		if ((angulo1==180)||(angulo2==180)) {
+			return true;
+		}
+		if ((angulo1==270)||(angulo2==270)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean cuadranteOpuesto (float angulo1,float angulo2){
+		if ( ((angulo1>=0) && (angulo1<90)) && ((angulo2>=180) && (angulo1<270)) ) {
+			return true;
+		}
+		if ( ((angulo1>=90) && (angulo1<180)) && ((angulo2>=270) && (angulo1<360)) ) {
+			return true;
+		}
+		if ( ((angulo1>=180) && (angulo1<270)) && ((angulo2>=0) && (angulo1<90)) ) {
+			return true;
+		}
+		if ( ((angulo1>=270) && (angulo1<360)) && ((angulo2>=90) && (angulo1<180)) ) {
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean mismoCuadrante (float angulo1,float angulo2){
+		if ( ((angulo1>=0) && (angulo1<90)) &&  ((angulo2>=0) && (angulo2<90)) ) {
+			return true;
+		}
+		if ( ((angulo1>=90) && (angulo1<180)) && ((angulo2>=90) && (angulo2<180)) ) {
+			return true;
+		}
+		if ( ((angulo1>=180) && (angulo1<270)) && ((angulo2>=180) && (angulo2<270)) ) {
+			return true;
+		}
+		if ( ((angulo1>=270) && (angulo1<360)) && ((angulo2>=270) && (angulo2<360)) ) {
+			return true;
+		}
+		return false;
+	}
 	private static Array<Imagen> secuenciaRombos(float ladoP, float excentricidadMaxima, float excentricidadMinima, float anguloP, int cantidad,
 			boolean centered, boolean rotados, boolean escalaFija) {
 		/*

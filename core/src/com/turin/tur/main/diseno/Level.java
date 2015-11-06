@@ -94,6 +94,7 @@ public class Level {
 
 	public static class JsonLevel {
 		public String levelTitle;
+		public int levelVersion;
 		public int Id; // Id q identifica al level
 		public Array<Integer> trials = new Array<Integer>(); // Lista de ids de los trial que incluye el nivel
 		public Array<JsonTrial> jsonTrials = new Array<JsonTrial>(); // Este se usa solamente en el proceso de creacion de niveles (pero por como esta dise�ado el codigo que graba y carga el json completo se guarda   

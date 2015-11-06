@@ -1,1 +1,1 @@
-{Id:1446494095435,comments:Usuario generado automaticamente,levelsCompleted:[1,2,3]}
+{Id:1446494095435,comments:Usuario generado automaticamente,levelsCompleted:[1,2,3,1]}
