@@ -206,7 +206,6 @@ public class Trial {
 		public long levelInstance; // Registra el level en el que se toco
 		public long sessionInstance; // Registra la session en que se toco
 		public JsonResourcesMetaData jsonMetaDataTouched; // Guarda la info completa de la meta data del objeto tocado
-		public JsonResourcesMetaData jsonMetaDataEstimulo; // Guarda la info completa de la meta data del objeto estimulo
 	}
 
 	public static class SoundLog {
@@ -243,7 +242,6 @@ public class Trial {
 		// Info del usuario y del trial
 		public int trialId; // Id del trial activo
 		public long userId; // Id del usuario activo
-		public String userName;
 		public Array<Categorias> categoriasElementos = new Array<Categorias>(); // Listado de categorias existentes en este trial
 		public Array<Categorias> categoriasRta = new Array<Categorias>(); // Listado de categorias a las que pertenece la rta valida / estimulo de este trial si la hay
 		public ResourceId idRtaCorrecta; // id del recurso correspondiente a la rta correcta para este trial
