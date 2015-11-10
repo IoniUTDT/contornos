@@ -43,12 +43,14 @@ public class ResourcesMaker {
 
 		boolean geometrias = true;
 		if (geometrias) {
-			objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
-			objetos.addAll(secuenciaLineasVerticales()); // Agrega un set de lineas verticales
-			objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
-			objetos.addAll(secuenciaAngulos()); // Agrega los angulos
-			objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 50, false, true, false)); // Agrega cuadrados
-			objetos.addAll(secuenciaParalelismo()); // Agrega recursos de paralelas dificiles
+			//objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
+			//objetos.addAll(secuenciaLineasVerticales()); // Agrega un set de lineas verticales
+			//objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
+			//objetos.addAll(secuenciaAngulos()); // Agrega los angulos
+			//objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 50, false, true, false)); // Agrega cuadrados
+			//objetos.addAll(secuenciaParalelismo()); // Agrega recursos de paralelas dificiles
+			
+			objetos.addAll(recursosParalelismoAnalisisUmbral());
 		}
 		// Crea los archivos correspondientes
 		for (Imagen im : objetos) {
@@ -76,6 +78,74 @@ public class ResourcesMaker {
 		}
 
 		return objetos;
+	}
+
+	
+	
+	private static Array<Imagen> recursosParalelismoAnalisisUmbral() {
+		// Vamos a trabajar todas las cuentas en radianes
+		int saltoTitaInt = 10;
+		float saltoTita = saltoTitaInt;
+		float anguloMinimo = 1;  
+		float anguloMaximo = 90;
+		float largo=80; // Largo de las lineas
+		float separacion = 15; // Separacion predeterminada
+		int cantidadReferencias = 180/saltoTitaInt;
+		int cantidadDeltas = 40; 
+		float anguloMinimoRad = (float) Math.toRadians(anguloMinimo);
+		float anguloMaximoRad = (float) Math.toRadians(anguloMaximo);
+		
+		
+		float anguloReferencia = 0;
+		float deltaTita = 0;
+		
+		Array<Imagen> objetos = new Array<Imagen>();
+		
+		for (int i=0; i<cantidadReferencias; i++) {
+			anguloReferencia = i * saltoTita;
+			// Calculamos los centros de manera que esten separados en funcion del angulo
+			float Xcenter1 = width/2 - separacion/2 * MathUtils.sinDeg(anguloReferencia);
+			float Xcenter2 = width/2 + separacion/2 * MathUtils.sinDeg(anguloReferencia);
+			float Ycenter1 = width/2 - separacion/2 * MathUtils.cosDeg(anguloReferencia);
+			float Ycenter2 = width/2 + separacion/2 * MathUtils.cosDeg(anguloReferencia);
+
+			// Creamos la imagen paralela
+			Imagen imagen = crearImagen();
+			
+			// agrega la primer linea
+			InfoLinea infoLinea = new InfoLinea();
+			infoLinea.angulo=anguloReferencia;
+			infoLinea.largo=largo;
+			infoLinea.Xcenter = Xcenter1;
+			infoLinea.Ycenter = Ycenter1;
+			imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+			imagen.infoLineas.add(infoLinea);
+			// Agrega la segunda linea
+			infoLinea = new InfoLinea();
+			infoLinea.angulo=anguloReferencia;
+			infoLinea.largo=largo;
+			infoLinea.Xcenter = Xcenter2;
+			infoLinea.Ycenter = Ycenter2;
+			imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+			imagen.infoLineas.add(infoLinea);
+			// Datos generales
+			imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
+			imagen.name = "Imagen de rectas no paralelas generada automaticamente";
+			imagen.idVinculo = "R"+i;
+			imagen.categories.add(Categorias.Lineax2);
+			imagen.categories.add(Categorias.Paralelas);
+			imagen.nivelDificultad = -1;
+			objetos.add(imagen);
+			
+			// Creamos las imagenes con deltas "positivos"
+			
+			
+		}
+		return objetos;
+	}
+	
+	private static float rad(float grados) {
+		return (float) ((float) grados/180*Math.PI);
 	}
 	
 	private static Array<Imagen> secuenciaLineasHorizontales() {

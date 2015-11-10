@@ -16,11 +16,11 @@ public class Builder {
 
 	public static int height = Resources.Paths.height;
 	public static int width = Resources.Paths.width;
-	public static final int ResourceVersion = 124;
+	public static final int ResourceVersion = 125;
 	public static final int levelVersion = 3;
 	
 	static final Boolean makeLevels = false;
-	static final Boolean makeResources = false;
+	static final Boolean makeResources = true;
 	
 	public static Array<JsonResourcesMetaData> listadoRecursos = new Array<JsonResourcesMetaData>();
 	public static Array<Array<Integer>> listadosId = new Array<Array<Integer>>();
