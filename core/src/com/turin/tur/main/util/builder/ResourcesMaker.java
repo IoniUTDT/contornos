@@ -84,559 +84,85 @@ public class ResourcesMaker {
 	
 	private static Array<Imagen> recursosParalelismoAnalisisUmbral() {
 		// Vamos a trabajar todas las cuentas en radianes
-		int saltoTitaInt = 10;
-		float saltoTita = saltoTitaInt;
+		int saltoTitaRefInt = 10;
+		float saltoTitaRef = saltoTitaRefInt;
 		float anguloMinimo = 1;  
-		float anguloMaximo = 90;
+		float anguloMaximo = 45;
 		float largo=80; // Largo de las lineas
-		float separacion = 15; // Separacion predeterminada
-		int cantidadReferencias = 180/saltoTitaInt;
-		int cantidadDeltas = 40; 
-		float anguloMinimoRad = (float) Math.toRadians(anguloMinimo);
-		float anguloMaximoRad = (float) Math.toRadians(anguloMaximo);
+		float separacionMinima = 15; // Separacion predeterminada
+		float separacionIncremento = 3;
+		int cantidadReferencias = 180/saltoTitaRefInt;
+		int cantidadSeparaciones = 3;
+		int cantidadDeltas = 20; // Para que al contar el 0 de uno.  
 		
+		/*
+		 * Queremos mapear una escala log en una lineal, es decir que parametro [pmin-->pmax] mapee angulos que van de anguloMin --> angluloMax de manera que p = 1/A*log(1/B*angulo)
+		 * ==> angulo = B * e ^ (A * parametro)
+		 * Porque la idea es que haya mas densidad de angulos en los angulos chicos que grandes
+		 * Si pmin = 0 y pmax=cantidadDeltas-1, queda que  
+		 * 0 = 1/ A log (1/B * anguloMin) ==> B=angMin
+		 * Pmax = 1/A *log (1/AngMin * AngMax) ==> A = log(AngMax/AngMin)/Pmax 
+		 */
+		float parametroB = anguloMinimo;
+		float parametroA = (float) ((Math.log(anguloMaximo/anguloMinimo))/(cantidadDeltas-1));
 		
 		float anguloReferencia = 0;
-		float deltaTita = 0;
 		
 		Array<Imagen> objetos = new Array<Imagen>();
 		
-		for (int i=0; i<cantidadReferencias; i++) {
-			anguloReferencia = i * saltoTita;
-			// Calculamos los centros de manera que esten separados en funcion del angulo
-			float Xcenter1 = width/2 - separacion/2 * MathUtils.sinDeg(anguloReferencia);
-			float Xcenter2 = width/2 + separacion/2 * MathUtils.sinDeg(anguloReferencia);
-			float Ycenter1 = width/2 - separacion/2 * MathUtils.cosDeg(anguloReferencia);
-			float Ycenter2 = width/2 + separacion/2 * MathUtils.cosDeg(anguloReferencia);
-
-			// Creamos la imagen paralela
-			Imagen imagen = crearImagen();
+		for (int j=0; j<=cantidadSeparaciones ; j++) {
 			
-			// agrega la primer linea
-			InfoLinea infoLinea = new InfoLinea();
-			infoLinea.angulo=anguloReferencia;
-			infoLinea.largo=largo;
-			infoLinea.Xcenter = Xcenter1;
-			infoLinea.Ycenter = Ycenter1;
-			imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
-			imagen.infoLineas.add(infoLinea);
-			// Agrega la segunda linea
-			infoLinea = new InfoLinea();
-			infoLinea.angulo=anguloReferencia;
-			infoLinea.largo=largo;
-			infoLinea.Xcenter = Xcenter2;
-			infoLinea.Ycenter = Ycenter2;
-			imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
-			imagen.infoLineas.add(infoLinea);
-			// Datos generales
-			imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
-			imagen.name = "Imagen de rectas no paralelas generada automaticamente";
-			imagen.idVinculo = "R"+i;
-			imagen.categories.add(Categorias.Lineax2);
-			imagen.categories.add(Categorias.Paralelas);
-			imagen.nivelDificultad = -1;
-			objetos.add(imagen);
-			
-			// Creamos las imagenes con deltas "positivos"
-			
-			
-		}
-		return objetos;
-	}
+			float separacion = separacionMinima + j * separacionIncremento; // Itera para separaciones cada vez mayores 
+			float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
+			for (int i=0; i<cantidadReferencias; i++) {
+				
+				anguloReferencia = i * saltoTitaRef;
+				// Calculamos los centros de manera que esten separados en funcion del angulo
+				float Xcenter1 = width/2 - separacion/2 * MathUtils.sinDeg(anguloReferencia);
+				float Xcenter2 = width/2 + separacion/2 * MathUtils.sinDeg(anguloReferencia);
+				float Ycenter1 = width/2 - separacion/2 * MathUtils.cosDeg(anguloReferencia);
+				float Ycenter2 = width/2 + separacion/2 * MathUtils.cosDeg(anguloReferencia);
 	
-	private static float rad(float grados) {
-		return (float) ((float) grados/180*Math.PI);
-	}
-	
-	private static Array<Imagen> secuenciaLineasHorizontales() {
-		float largo = 90;
-		float angulo = 0;
-		int cantidad = 5;
-		float yCenter = height / cantidad;
-
-		Array<Imagen> objetos = new Array<Imagen>();
-		for (int i = 1; i < cantidad + 1; i++) {
-			Imagen imagen = crearImagen();
-			imagen.parametros.addAll(ExtremosLinea.Linea(width / 2, yCenter * i
-					- yCenter / 2, angulo, largo));
-			imagen.name = "Linea " + i;
-			imagen.comments = "Linea generada por secuenciaLineasHorizontales para tutorial. Parametros: Altura:" + (yCenter * i - yCenter / 2);
-			imagen.categories.add(Constants.Resources.Categorias.Lineas);
-			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
-			imagen.nivelDificultad = -1; //indica que esta categorizado como compatible con cualquier dificultad
-			objetos.add(imagen);
-		}
-		return objetos;
-	}
-	
-	/**
-	 * Crea un set de lineas verticales para el tutorial. En este caso se crean a mano las lineas utiles
-	 * 
-	 * @return
-	 */
-	private static Array<Imagen> secuenciaLineasVerticales() {
-		Array<Imagen> objetos = new Array<Imagen>();
-		Imagen imagen;
-		// recta vertical completa centrada
-		imagen = crearImagen();
-		imagen.parametros.addAll(ExtremosLinea.Linea(height / 2, width / 2, 90, 90));
-		imagen.name = "Linea vertical centrada completa";
-		imagen.comments = "Imagen generada por sucuenciaLineasVerticuales";
-		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
-		imagen.categories.add(Constants.Resources.Categorias.Lineas);
-		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-		imagen.nivelDificultad = -1;
-		objetos.add(imagen);
-		// recta vertical incompleta superior
-		imagen = crearImagen();
-		imagen.parametros.addAll(ExtremosLinea.Linea(height / 6, width / 4, 90, height / 3));
-		imagen.name = "Linea vertical superior";
-		imagen.comments = "Imagen generada por sucuenciaLineasVerticuales";
-		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
-		imagen.categories.add(Constants.Resources.Categorias.Lineas);
-		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-		imagen.nivelDificultad = -1;
-		objetos.add(imagen);
-		// recta vertical incompleta inferior
-		imagen = crearImagen();
-		imagen.parametros.addAll(ExtremosLinea.Linea(height / 6 * 5, width / 4 * 3, 90, height / 3));
-		imagen.name = "Linea vertical superior";
-		imagen.comments = "Imagen generada por sucuenciaLineasVerticuales";
-		imagen.categories.add(Constants.Resources.Categorias.Tutorial);
-		imagen.categories.add(Constants.Resources.Categorias.Lineas);
-		imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-		imagen.nivelDificultad = -1;
-		objetos.add(imagen);
-
-		return objetos;
-	}
-	
-	private static Array<Imagen> secuenciaLineasConAngulo() {
-		float largo = 90;
-		int cantidad = 18;
-		float angulo = 180 / cantidad;
-
-		Array<Imagen> objetos = new Array<Imagen>();
-		for (int i = 1; i < cantidad + 1; i++) {
-			Imagen imagen = crearImagen();
-			imagen.parametros.add(ExtremosLinea.Linea(width / 2, height / 2,
-					angulo * i, largo));
-			imagen.name = "Linea " + i;
-			imagen.comments = "Linea generada por secuenciaLineasConAngulo para tutorial. Parametros: Posicion: centrada; Angulo: " + (angulo * i) + ";";
-			imagen.categories.add(Constants.Resources.Categorias.Lineas);
-			imagen.categories.add(Constants.Resources.Categorias.Lineax1);
-			imagen.categories.add(Constants.Resources.Categorias.Tutorial);
-			imagen.nivelDificultad = -1;
-			objetos.add(imagen);
-		}
-		return objetos;
-	}
-	
-	private static Array<Imagen> secuenciaAngulos() {
-		float largo = 50;
-		int cantidad = 36; // Nota: si no se pone una cantidad que sea correcta pueden no quedar angulos rectos!
-		float shiftAngulo = 360 / cantidad;
-
-		Array<Imagen> objetos = new Array<Imagen>();
-
-		for (int i = 0; i < cantidad; i++) {
-			for (int j = 1; j + i < cantidad; j++) {
+				// Creamos la imagen paralela
 				Imagen imagen = crearImagen();
-				imagen.parametros.addAll(ExtremosLinea.Angulo(width / 2,
-						height / 2, i * shiftAngulo, (j + i) * shiftAngulo,
-						largo));
-				imagen.name = "Angulo";
-				float anguloInicial = i * shiftAngulo;
-				float anguloFinal = (j + i) * shiftAngulo;
-				float anguloDiferencia = j * shiftAngulo;
-				imagen.comments = "Angulo generado automaticamente por secuenciaAngulos. Parametros: Angulo inicial: " + anguloInicial + "; Angulo final: "
-						+ anguloFinal + ";";
-				imagen.categories.add(Constants.Resources.Categorias.Angulo);
-				if ((anguloDiferencia < 90) || (anguloDiferencia > 270)) {
-					imagen.categories.add(Constants.Resources.Categorias.Agudo);
-					// Agregamos la dificultad
-					if (ladoSinRotar(anguloInicial, anguloFinal)) {
-						imagen.nivelDificultad = 1;
-					} else {
-						if (mismoCuadrante(anguloInicial, anguloFinal)) {
-							imagen.nivelDificultad = 1;
-						} else {
-							imagen.nivelDificultad = 1;
-							if (anguloDiferencia > 180) {
-								if (anguloDiferencia <= 310) {
-									imagen.nivelDificultad = 2;
-								}
-								if (anguloDiferencia <= 290) {
-									imagen.nivelDificultad = 3;
-								}
-								if (anguloDiferencia <= 280) {
-									imagen.nivelDificultad = 4;
-								}								
-							} else {
-								if (anguloDiferencia >= 50) {
-									imagen.nivelDificultad = 2;
-								}
-								if (anguloDiferencia >= 70) {
-									imagen.nivelDificultad = 3;
-								}
-								if (anguloDiferencia >= 80) {
-									imagen.nivelDificultad = 4;
-								}
-							}
-						}
-					}
-				} else if ((anguloDiferencia == 90)||(anguloDiferencia == 270)) {
-					imagen.categories.add(Constants.Resources.Categorias.Recto);
-					// Se fija si esta rotado
-					if (anguloInicial == 0) {
-						imagen.categories.add(Categorias.SinRotar);
-						imagen.nivelDificultad = 1;
-					} else if (anguloInicial == 90){
-						imagen.categories.add(Categorias.SinRotar);
-						imagen.nivelDificultad = 1;
-					} else if (anguloInicial == 180){
-						imagen.categories.add(Categorias.SinRotar);
-						imagen.nivelDificultad = 1;
-					} else if (anguloInicial == 270){
-						imagen.categories.add(Categorias.SinRotar);
-						imagen.nivelDificultad = 1;
-					} else {
-						imagen.categories.add(Categorias.Rotado);
-						imagen.nivelDificultad = 4;
-					}
-				} else {
-					imagen.categories.add(Constants.Resources.Categorias.Grave);
-					// Agregamos la dificultad
-					if (ladoSinRotar(anguloInicial, anguloFinal)) {
-						imagen.nivelDificultad = 1;
-					} else {
-						if (cuadranteOpuesto(anguloInicial, anguloFinal)) {
-							imagen.nivelDificultad = 1;
-						} else {
-							imagen.nivelDificultad = 1;
-							if ((anguloDiferencia <= 130) || (anguloDiferencia >= 230)) {
-								imagen.nivelDificultad = 2;
-							}
-							if ((anguloDiferencia <= 110) || (anguloDiferencia >= 250)) {
-								imagen.nivelDificultad = 3;
-							}
-							if ((anguloDiferencia <= 100) || (anguloDiferencia >= 260)) {
-								imagen.nivelDificultad = 4;
-							}							
-						}
-					}
-				}
-				/*
-				 *  Categorizamos la dificultad en funcion de los siguientes criterios:
-				 *  
-				 *  - Si no es recto:
-					 *  - Si ambos angulos inicial y final estan en el mismo cuadrante, es facil : 1
-					 *  - Si ambos angulos inicial y final estan en cuadrantes opuestos, es facil : 1
-					 *  - Si algun lado no es vertical u horizontal (y no el otro) tiene dificultad 1
-					 *  - Si los cuadrantes son adyacentes, entonces, si difiere de 90º en 10º o menos es dificil : 4
-					 *  	- Si difiere en 20 o menos es medio dificil : 3
-					 *  	- Si difiere en 40 o menos es medio facil : 2
-					 *  	- Si difiere en mas de 40 es facil : 1
-				 *  - Si es recto y esta rotado tiene dificultad 4
-				 *  - Si es recto y no esta rotado tiene dificultad 1 porque es obvio q es recto
-				 *  
-				 *   Se asume que todos los angulos estan entre 0 y 360º
-				 */
 				
-				
-								
+				// agrega la primer linea
+				InfoLinea infoLinea = new InfoLinea();
+				infoLinea.angulo=anguloReferencia;
+				infoLinea.largo=largo;
+				infoLinea.Xcenter = Xcenter1;
+				infoLinea.Ycenter = Ycenter1;
+				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+				imagen.infoLineas.add(infoLinea);
+				// Agrega la segunda linea
+				infoLinea = new InfoLinea();
+				infoLinea.angulo=anguloReferencia;
+				infoLinea.largo=largo;
+				infoLinea.Xcenter = Xcenter2;
+				infoLinea.Ycenter = Ycenter2;
+				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+				imagen.infoLineas.add(infoLinea);
+				// Datos generales
+				imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
+				imagen.name = "Imagen de rectas no paralelas generada automaticamente";
+				imagen.idVinculo = "R"+i+"S"+j;
+				imagen.categories.add(Categorias.Lineax2);
+				imagen.categories.add(Categorias.Paralelas);
+				imagen.nivelDificultad = -1;
 				objetos.add(imagen);
-			}
-		}
-		return objetos;
-	}
-	
-	private static boolean ladoSinRotar(float angulo1, float angulo2) {
-		if ((angulo1==0)||(angulo2==0)) {
-			return true;
-		}
-		if ((angulo1==90)||(angulo2==90)) {
-			return true;
-		}
-		if ((angulo1==180)||(angulo2==180)) {
-			return true;
-		}
-		if ((angulo1==270)||(angulo2==270)) {
-			return true;
-		}
-		return false;
-	}
-	
-	private static boolean cuadranteOpuesto (float angulo1,float angulo2){
-		if ( ((angulo1>=0) && (angulo1<90)) && ((angulo2>=180) && (angulo1<270)) ) {
-			return true;
-		}
-		if ( ((angulo1>=90) && (angulo1<180)) && ((angulo2>=270) && (angulo1<360)) ) {
-			return true;
-		}
-		if ( ((angulo1>=180) && (angulo1<270)) && ((angulo2>=0) && (angulo1<90)) ) {
-			return true;
-		}
-		if ( ((angulo1>=270) && (angulo1<360)) && ((angulo2>=90) && (angulo1<180)) ) {
-			return true;
-		}
-		return false;
-	}
-
-	private static boolean mismoCuadrante (float angulo1,float angulo2){
-		if ( ((angulo1>=0) && (angulo1<90)) &&  ((angulo2>=0) && (angulo2<90)) ) {
-			return true;
-		}
-		if ( ((angulo1>=90) && (angulo1<180)) && ((angulo2>=90) && (angulo2<180)) ) {
-			return true;
-		}
-		if ( ((angulo1>=180) && (angulo1<270)) && ((angulo2>=180) && (angulo2<270)) ) {
-			return true;
-		}
-		if ( ((angulo1>=270) && (angulo1<360)) && ((angulo2>=270) && (angulo2<360)) ) {
-			return true;
-		}
-		return false;
-	}
-	private static Array<Imagen> secuenciaRombos(float ladoP, float excentricidadMaxima, float excentricidadMinima, float anguloP, int cantidad,
-			boolean centered, boolean rotados, boolean escalaFija) {
-		/*
-		 * Esta rutina devuelve una secuencia de rombos que se contruyen a partir de los siguientes parametros:
-		 * 
-		 * lado: longitud del lado del cuadrilatero angulo: inclinacion del rombo, un angulo de 0� significa que la diagonal menor esta horizontal. Un angulo de
-		 * 45� para un cuadrado significa que los lados estan horizontales y verticales excentricidad: relacion entre la diagonal menor y la mayor. Si la
-		 * excentricidad es mayor que uno calcula la inversa de manera que siempre la diagonal mayor se asuma vertical (previamente a la rotacion dada por
-		 * angulo) una excentricidad igual a 1 da un cuadrado. Si son diferentes la minima y la maxima hace random entre ellas, sino usa la maxima.
-		 * 
-		 * cantidad determina la cantidad de figuras que se generan centered determina si estan centradas o si se las posiciona al azar. rotados determina si se
-		 * agraga una rotacion random al angulo o no. escala determina si se modifica (para menos) el tama�o o no.
-		 * 
-		 * Se asume que todos los parametros son positivos!
-		 */
-
-		float margen = 20; // Esta variable determina cuanto espacio se debe dejar de margen para que la figura no este muy pegada al borde.
-
-		// Parametros de la figura que se calculan durante la generacion
-		float ancho;
-		float alto;
-		float diagMayor;
-		float diagMenor;
-
-		// Constantes con los que se pueden modificar los parametros si se lo indica
-		float escalaMinima = 0.5f;
-
-		// parametros generales
-		float angulo;
-		float lado;
-		float excentricidad;
-		float xCenter;
-		float yCenter;
-
-		Vector2 nodo1;
-		Vector2 nodo2;
-		Vector2 nodo3;
-		Vector2 nodo4;
-		float angulo1;
-		float angulo2;
-		float angulo3;
-		float angulo4;
-
-		// El array de salida
-		Array<Imagen> objetos = new Array<Imagen>();
-
-		int errores = 0;
-
-		for (int creados = 0; creados < cantidad;) {
-			// Verifica que no haya muchas figuras invalidas (por ej por no entrar)
-			if (errores > cantidad) {
-				Gdx.app.error(TAG, "Demasiadas figuras no pudieron ser creadas en la rutina que crea cuadrilateros. Considere revisar los parametros");
-				break;
-			}
-
-			// Generamos los parametros para cada cuadrilatero especifico si depende de factores random.
-			if (MathUtils.randomBoolean()) {
-				excentricidad = excentricidadMaxima - MathUtils.random(excentricidadMaxima - excentricidadMinima);
-			} else { // Genera que la mitad sean cuadrados
-				excentricidad = 1;
-			}
-
-			if (rotados) {
-				if (MathUtils.randomBoolean(0.6f)) {
-					angulo = anguloP + MathUtils.random(180);
-				} else {
-					angulo = anguloP + 45;
-				}
-			} else {
-				angulo = anguloP + 45;
-			}
-			// Endereza los rombos
-			if (excentricidad!=1) {
-				if (angulo == 45) {
-					angulo=angulo-45;
-				}
-			}
-			
-			float anguloRad = (float) (angulo / 180 * Math.PI);
-
-			if (escalaFija) {
-				lado = ladoP;
-			} else {
-				lado = ladoP * MathUtils.random(escalaMinima, 1);
-			}
-
-			// Primero calculamos las diagonales a partir de la medida del lado y la excentricidad
-
-			/*
-			 * De plantear que con d=semidiagonal mayor: d^2 + (d*e)^2 = l^2 sale que
-			 */
-
-			diagMayor = (float) (2 * Math.sqrt(lado * lado / (1 + excentricidad * excentricidad)));
-			diagMenor = diagMayor * excentricidad;
-
-			// una vez que calcula las diagonales, sabiendo la inclinacion puede calcular el alto y el ancho
-			float anchoDiagMayor = (float) (diagMayor * Math.sin(anguloRad));
-			float altoDiagMayor = (float) (diagMayor * Math.cos(anguloRad));
-			float anchoDiagMenor = (float) (diagMenor * Math.cos(anguloRad));
-			float altoDiagMenor = (float) (diagMenor * Math.sin(anguloRad));
-			ancho = Math.max(anchoDiagMayor, anchoDiagMenor);
-			alto = Math.max(altoDiagMayor, altoDiagMenor);
-
-			// Verifica que la figura entre en la imagen
-
-			if ((alto + margen * 2 >= height) || (ancho + margen * 2 >= width)) {
-				errores++;
-				Gdx.app.log(TAG, "El cuadrilatero calculado ha sido descartado por no entrar en la figura");
-
-			} else { // Si la figura entra sigue
-				creados++;
-
-				// setea el centro
-				if (centered) {
-					xCenter = width / 2;
-					yCenter = height / 2;
-				} else { //ERROR!
-					xCenter = MathUtils.random(margen + ancho / 2, (width - margen - ancho / 2));
-					yCenter = MathUtils.random(margen + alto / 2, (height - margen - alto / 2));
-				}
-
-				// encuentra el centro de los lados (nodos, que se numeran del primer al cuarto cuadrante en la orientacion original) 
-				nodo1 = new Vector2();
-				nodo1.x = diagMayor / 4;
-				nodo1.y = diagMenor / 4;
-				nodo2 = new Vector2();
-				nodo2.x = -diagMayor / 4;
-				nodo2.y = diagMenor / 4;
-				nodo3 = new Vector2();
-				nodo3.x = -diagMayor / 4;
-				nodo3.y = -diagMenor / 4;
-				nodo4 = new Vector2();
-				nodo4.x = +diagMayor / 4;
-				nodo4.y = -diagMenor / 4;
-				// Los rota lo que corresponda segun el angulo del cuadrilatero
-				nodo1.rotate(-angulo);
-				nodo2.rotate(-angulo);
-				nodo3.rotate(-angulo);
-				nodo4.rotate(-angulo);
-				Vector2 center = new Vector2();
-				center.x = xCenter;
-				center.y = yCenter;
-				nodo1.add(center);
-				nodo2.add(center);
-				nodo3.add(center);
-				nodo4.add(center);
-				// Calcula los angulos con que esta orientado cada lado.
-				float anguloInclinacionLadoRad = MathUtils.atan2(diagMenor, diagMayor);
-				float anguloInclinacionLadoDeg = anguloInclinacionLadoRad * 180 / MathUtils.PI;
-				// Nota!! Aca hice un lio con eltema de como se miden las coordenadas (creo que se miden de la esq superio izq). Los signos los saque a prueba y error!
-				angulo2 = -anguloInclinacionLadoDeg + angulo;
-				angulo4 = -anguloInclinacionLadoDeg + angulo;
-				angulo1 = +anguloInclinacionLadoDeg + angulo;
-				angulo3 = +anguloInclinacionLadoDeg + angulo;
-
-				// Llegado este punto esta la informacion de los cuadro segmentos que forman la figura dados por sus centro y sus inclinaciones.
-				// Ahora vamos a crear los datos como en todas las demas figuras.
-
-				Imagen imagen = crearImagen();
-				imagen.parametros.add(ExtremosLinea.Linea(nodo1.x, nodo1.y, angulo1, lado));
-				imagen.parametros.add(ExtremosLinea.Linea(nodo2.x, nodo2.y, angulo2, lado));
-				imagen.parametros.add(ExtremosLinea.Linea(nodo3.x, nodo3.y, angulo3, lado));
-				imagen.parametros.add(ExtremosLinea.Linea(nodo4.x, nodo4.y, angulo4, lado));
-				imagen.name = "Cuadrilatero";
-				imagen.comments = "Imagen generada automaticamente con el generador de cuadrilateros. Parametros: Excentricidad: " + excentricidad + "; Lado: "
-						+ lado + "; Angulo: " + angulo + ";";
-				imagen.categories.add(Categorias.Cuadrilatero);
-				if (excentricidad == 1) {
-					imagen.categories.add(Categorias.Cuadrado);
-					if ((angulo==45)||(angulo==135)||(angulo==225)||(angulo==315)) {
-						imagen.categories.add(Categorias.SinRotar);
-					} else {
-						imagen.categories.add(Categorias.Rotado);
-					}
-				} else {
-					imagen.categories.add(Categorias.Rombo);
-					if ((angulo==0)||(angulo==90)||(angulo==180)||(angulo==270)) {
-						imagen.categories.add(Categorias.SinRotar);
-					} else {
-						imagen.categories.add(Categorias.Rotado);
-					}
-					
-				}
-					
-				objetos.add(imagen);
-			}
-
-		}
-		Gdx.app.log(TAG, "Figuras fallidas: " + errores);
-		return objetos;
-
-	}
-	
-	private static Array<Imagen> secuenciaParalelismo() {
-		/*
-		 * Esta serie genera sets de 6 imagenes similares
-		 * 3 paralelas con separacion levemente variable y 3 no paralelas con inclinacion levemenete variable
-		 * Va cambiando la dificultad 
-		 */
-		float largo=80; // Largo de las lineas
-		float angulo; // Angulo de inclinacion
-		int cantidad = 10;
-		float separacion = 15; // Separacion predeterminada
-		float limiteAnguloParametro = 30; // Establece un parametro para el maximo angulo que se puede desviar la recta del paralelismo (en grados)
-		float limiteAnguloMinimoParametro = 10; // Establece un parametro para el angulo minimo de separacion que tiene q haber en ambos rectas 
-		Array<Imagen> objetos = new Array<Imagen>();
-		
-		for (int i=0; i<cantidad; i++) {
-			angulo = 180/cantidad*i; // Define el angulo de la serie
-			// Calculamos los centros de manera que esten separados en funcion del angulo
-
-			float Xcenter1 = width/2 - separacion/2 * MathUtils.sin(MathUtils.degRad*angulo);
-			float Xcenter2 = width/2 + separacion/2 * MathUtils.sin(MathUtils.degRad*angulo);
-			float Ycenter1 = width/2 - separacion/2 * MathUtils.cos(MathUtils.degRad*angulo);
-			float Ycenter2 = width/2 + separacion/2 * MathUtils.cos(MathUtils.degRad*angulo);
-
-			for (int dificultad=1; dificultad<10; dificultad++) {
 				
-				// Crea las 3 imagenes no paralelas
-				for (int j=1;j<4;j++) {
-					Imagen imagen = crearImagen();
-					float limiteAngulo; // Establece el maximo angulo que se puede desviar la recta del paralelismo (en grados)
-					float limiteAnguloMinimo; // Establece el angulo minimo de separacion que tiene q haber en ambos rectas
-					limiteAngulo = limiteAnguloParametro / dificultad; // Establece un parametro que dependa del nivel de dificultad, a mas dificultad mas parecidas las rectas
-					limiteAnguloMinimo = limiteAnguloMinimoParametro / dificultad; // Establece un parametro que dependa del nivel de dificultad, a mas dificultad mas parecidas las rectas
-					float anguloVariacion1 = MathUtils.random(limiteAnguloMinimo, +limiteAngulo);
-					float anguloVariacion2;
-					if (MathUtils.randomBoolean()) {
-						anguloVariacion1 = anguloVariacion1 * -1;
-					}
-					if (anguloVariacion1>0) {
-						anguloVariacion2 = anguloVariacion1 + MathUtils.random(-limiteAnguloMinimo, -(limiteAngulo+anguloVariacion1));
-					} else {
-						anguloVariacion2 = anguloVariacion1 + MathUtils.random(+limiteAnguloMinimo, +(limiteAngulo-anguloVariacion1));
-					}
+				// Creamos las imagenes con deltas
+				for (int k=0; k<cantidadDeltas; k++) {
+					float anguloDelta = (float) (parametroB * Math.exp(parametroA*k));
+					float anguloDeltaPos = anguloDelta/2;
+					float anguloDeltaNeg = -anguloDelta/2;
+					
+					// Creamos la imagen con delta "positivo"
+					imagen = crearImagen();
+					
 					// agrega la primer linea
-					InfoLinea infoLinea = new InfoLinea();
-					infoLinea.angulo=angulo+anguloVariacion1;
+					infoLinea = new InfoLinea();
+					infoLinea.angulo=anguloReferencia+anguloDeltaPos;
 					infoLinea.largo=largo;
 					infoLinea.Xcenter = Xcenter1;
 					infoLinea.Ycenter = Ycenter1;
@@ -644,54 +170,56 @@ public class ResourcesMaker {
 					imagen.infoLineas.add(infoLinea);
 					// Agrega la segunda linea
 					infoLinea = new InfoLinea();
-					infoLinea.angulo=angulo+anguloVariacion2;
+					infoLinea.angulo=anguloReferencia+anguloDeltaNeg;
 					infoLinea.largo=largo;
 					infoLinea.Xcenter = Xcenter2;
 					infoLinea.Ycenter = Ycenter2;
 					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
 					imagen.infoLineas.add(infoLinea);
 					// Datos generales
-					imagen.comments = "Imagen generada por secuencia automatica 'secuenciaParalelismoDificiles'.";
+					imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 					imagen.name = "Imagen de rectas no paralelas generada automaticamente";
-					imagen.idVinculo = "Paralelismo"+i;
+					imagen.idVinculo = "R"+i+"S"+j+"D"+k+"+";
 					imagen.categories.add(Categorias.Lineax2);
 					imagen.categories.add(Categorias.NoParalelas);
-					imagen.nivelDificultad = dificultad;
+					imagen.nivelDificultad = -1;
 					objetos.add(imagen);
+					
+					// Creamos la imagen con delta "positivo"
+					imagen = crearImagen();
+					
+					// agrega la primer linea
+					infoLinea = new InfoLinea();
+					infoLinea.angulo=anguloReferencia-anguloDeltaPos;
+					infoLinea.largo=largo;
+					infoLinea.Xcenter = Xcenter1;
+					infoLinea.Ycenter = Ycenter1;
+					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+					imagen.infoLineas.add(infoLinea);
+					// Agrega la segunda linea
+					infoLinea = new InfoLinea();
+					infoLinea.angulo=anguloReferencia-anguloDeltaNeg;
+					infoLinea.largo=largo;
+					infoLinea.Xcenter = Xcenter2;
+					infoLinea.Ycenter = Ycenter2;
+					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
+					imagen.infoLineas.add(infoLinea);
+					// Datos generales
+					imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
+					imagen.name = "Imagen de rectas no paralelas generada automaticamente";
+					imagen.idVinculo = "R"+i+"S"+j+"D"+k+"-";
+					imagen.categories.add(Categorias.Lineax2);
+					imagen.categories.add(Categorias.NoParalelas);
+					imagen.nivelDificultad = -1;
+					objetos.add(imagen);
+
 				}
-			}
-			// crea la 3 imagenes paralelas
-			for(int j=1; j<4; j++){
-				Imagen imagen = crearImagen();
-				InfoLinea infoLinea = new InfoLinea();
-				// Arma la primer linea
-				infoLinea.angulo=angulo;
-				infoLinea.largo=largo;
-				infoLinea.Xcenter = Xcenter1 - separacion/5 * j * MathUtils.sin(MathUtils.degRad*angulo);
-				infoLinea.Ycenter = Ycenter1 - separacion/5 * j * MathUtils.cos(MathUtils.degRad*angulo);
-				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
-				imagen.infoLineas.add(infoLinea);
-				// Arma la segunda
-				infoLinea = new InfoLinea();
-				infoLinea.angulo=angulo;
-				infoLinea.largo=largo;
-				infoLinea.Xcenter = Xcenter2 + separacion/5 * j * MathUtils.sin(MathUtils.degRad*angulo);
-				infoLinea.Ycenter = Ycenter2 + separacion/5 * j * MathUtils.cos(MathUtils.degRad*angulo);
-				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
-				imagen.infoLineas.add(infoLinea);
-				// Datos generales
-				imagen.comments = "Imagen generada por secuencia automatica 'secuenciaParalelismoDificiles'.";
-				imagen.name = "Imagen de rectas paralelas generada automaticamente";
-				imagen.idVinculo = "Paralelismo"+i;
-				imagen.categories.add(Categorias.Lineax2);
-				imagen.categories.add(Categorias.Paralelas);
-				imagen.nivelDificultad = 0; // Significa que es dificultad universal.
-				objetos.add(imagen);
 			}
 		}
 		return objetos;
 	}
 	
+		
 	private static Imagen crearImagen() {
 		contadorDeRecursos += 1;
 		Imagen imagen = new Imagen();
