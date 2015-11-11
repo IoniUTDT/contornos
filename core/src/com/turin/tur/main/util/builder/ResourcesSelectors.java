@@ -15,6 +15,18 @@ public class ResourcesSelectors {
 	static Array<Array<Integer>> listadosId = Builder.listadosId;
 	static Array<Agrupamientos> listadosGrupos = Builder.listadosGrupos;
 	
+	
+	static int findResourceByTag (String tag) {
+		for (Agrupamientos agrupamiento : listadosGrupos) {
+			if (agrupamiento.nombre.equals(tag)) {
+				return agrupamiento.ids.first();
+			}
+		}
+		System.out.println("No se ha encontrado el rescurso buscado: "+tag);
+		return 0;
+	}
+	
+	
 	/**
 	 * Esta funcion selecciona el grupo de 6 elementos que pertenecen al agrupamiento pedido. Si no encuentra un grupo de 6 elementos devuelve un objeto vacio y manda un mensaje de error.
 	 * Los elementos se filtran por el nivel de dificultad seteado en la variable global de la clase, un -1 significa sin dificultad asignada y es compatible con cualquier dificultad.

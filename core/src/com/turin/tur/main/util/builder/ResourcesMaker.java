@@ -2,10 +2,10 @@ package com.turin.tur.main.util.builder;
 
 import java.io.File;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Trial.ResourceId;
@@ -43,13 +43,6 @@ public class ResourcesMaker {
 
 		boolean geometrias = true;
 		if (geometrias) {
-			//objetos.addAll(secuenciaLineasHorizontales()); // Agrega las lineas
-			//objetos.addAll(secuenciaLineasVerticales()); // Agrega un set de lineas verticales
-			//objetos.addAll(secuenciaLineasConAngulo()); // Agrega las lineas con angulo
-			//objetos.addAll(secuenciaAngulos()); // Agrega los angulos
-			//objetos.addAll(secuenciaRombos(40, 1f, 0.1f, 0, 50, false, true, false)); // Agrega cuadrados
-			//objetos.addAll(secuenciaParalelismo()); // Agrega recursos de paralelas dificiles
-			
 			objetos.addAll(recursosParalelismoAnalisisUmbral());
 		}
 		// Crea los archivos correspondientes
@@ -80,20 +73,36 @@ public class ResourcesMaker {
 		return objetos;
 	}
 
-	
+	/*
+	 * Esta es una clase para manejar el setup experimental del diseño de experimento donde se quiere medir la sensibilidad al detectar el delta tita
+	 */
+	public static class JsonSetupExpV1 {
+		// Vamos a trabajar todas las cuentas en radianes
+		int saltoTitaRefInt; // Salto del tita de referencia 
+		float saltoTitaRef; //Salto del tita pero en formato float
+		float anguloMinimo; //Angulo minimo del delta
+		float anguloMaximo; //Angulo maximo del delta
+		float largo; //Largo de los segmentos
+		float separacionMinima; // Separacion minima de los segmentos
+		float separacionIncremento; // Incremento de la separacion de los segmentos
+		int cantidadReferencias; // Cantidad de angulos tita (referencia)
+		int cantidadSeparaciones; // Cantidad de saltos en la separacion de las rectas
+		int cantidadDeltas; // Cantidad de delta titas que se generan en cada condicion de angulo de referencia y de separacion	
+	}
 	
 	private static Array<Imagen> recursosParalelismoAnalisisUmbral() {
+		JsonSetupExpV1 setup = new JsonSetupExpV1();
 		// Vamos a trabajar todas las cuentas en radianes
-		int saltoTitaRefInt = 10;
-		float saltoTitaRef = saltoTitaRefInt;
-		float anguloMinimo = 1;  
-		float anguloMaximo = 45;
-		float largo=80; // Largo de las lineas
-		float separacionMinima = 15; // Separacion predeterminada
-		float separacionIncremento = 3;
-		int cantidadReferencias = 180/saltoTitaRefInt;
-		int cantidadSeparaciones = 3;
-		int cantidadDeltas = 20; // Para que al contar el 0 de uno.  
+		setup.saltoTitaRefInt = 10;
+		setup.saltoTitaRef = setup.saltoTitaRefInt;
+		setup.anguloMinimo = 1;  
+		setup.anguloMaximo = 45;
+		setup.largo=80; // Largo de las lineas
+		setup.separacionMinima = 15; // Separacion predeterminada
+		setup.separacionIncremento = 3;
+		setup.cantidadReferencias = 180/setup.saltoTitaRefInt;
+		setup.cantidadSeparaciones = 5;
+		setup.cantidadDeltas = 30; // Para que al contar el 0 de uno.  
 		
 		/*
 		 * Queremos mapear una escala log en una lineal, es decir que parametro [pmin-->pmax] mapee angulos que van de anguloMin --> angluloMax de manera que p = 1/A*log(1/B*angulo)
@@ -103,20 +112,21 @@ public class ResourcesMaker {
 		 * 0 = 1/ A log (1/B * anguloMin) ==> B=angMin
 		 * Pmax = 1/A *log (1/AngMin * AngMax) ==> A = log(AngMax/AngMin)/Pmax 
 		 */
-		float parametroB = anguloMinimo;
-		float parametroA = (float) ((Math.log(anguloMaximo/anguloMinimo))/(cantidadDeltas-1));
+		float parametroB = setup.anguloMinimo;
+		float parametroA = (float) ((Math.log(setup.anguloMaximo/setup.anguloMinimo))/(setup.cantidadDeltas-1));
 		
 		float anguloReferencia = 0;
 		
 		Array<Imagen> objetos = new Array<Imagen>();
 		
-		for (int j=0; j<=cantidadSeparaciones ; j++) {
+		for (int j=0; j<=setup.cantidadSeparaciones ; j++) {
 			
-			float separacion = separacionMinima + j * separacionIncremento; // Itera para separaciones cada vez mayores 
-			float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
-			for (int i=0; i<cantidadReferencias; i++) {
+			float separacion = setup.separacionMinima + j * setup.separacionIncremento; // Itera para separaciones cada vez mayores
+			// Esto no lo estoy usando!
+			float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/setup.largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
+			for (int i=0; i<setup.cantidadReferencias; i++) {
 				
-				anguloReferencia = i * saltoTitaRef;
+				anguloReferencia = i * setup.saltoTitaRef;
 				// Calculamos los centros de manera que esten separados en funcion del angulo
 				float Xcenter1 = width/2 - separacion/2 * MathUtils.sinDeg(anguloReferencia);
 				float Xcenter2 = width/2 + separacion/2 * MathUtils.sinDeg(anguloReferencia);
@@ -129,7 +139,7 @@ public class ResourcesMaker {
 				// agrega la primer linea
 				InfoLinea infoLinea = new InfoLinea();
 				infoLinea.angulo=anguloReferencia;
-				infoLinea.largo=largo;
+				infoLinea.largo=setup.largo;
 				infoLinea.Xcenter = Xcenter1;
 				infoLinea.Ycenter = Ycenter1;
 				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
@@ -137,7 +147,7 @@ public class ResourcesMaker {
 				// Agrega la segunda linea
 				infoLinea = new InfoLinea();
 				infoLinea.angulo=anguloReferencia;
-				infoLinea.largo=largo;
+				infoLinea.largo=setup.largo;
 				infoLinea.Xcenter = Xcenter2;
 				infoLinea.Ycenter = Ycenter2;
 				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
@@ -152,8 +162,8 @@ public class ResourcesMaker {
 				objetos.add(imagen);
 				
 				// Creamos las imagenes con deltas
-				for (int k=0; k<cantidadDeltas; k++) {
-					float anguloDelta = (float) (parametroB * Math.exp(parametroA*k));
+				for (int k=1; k<=setup.cantidadDeltas; k++) {
+					float anguloDelta = (float) (parametroB * Math.exp(parametroA*(k-1)));
 					float anguloDeltaPos = anguloDelta/2;
 					float anguloDeltaNeg = -anguloDelta/2;
 					
@@ -163,7 +173,7 @@ public class ResourcesMaker {
 					// agrega la primer linea
 					infoLinea = new InfoLinea();
 					infoLinea.angulo=anguloReferencia+anguloDeltaPos;
-					infoLinea.largo=largo;
+					infoLinea.largo=setup.largo;
 					infoLinea.Xcenter = Xcenter1;
 					infoLinea.Ycenter = Ycenter1;
 					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
@@ -171,7 +181,7 @@ public class ResourcesMaker {
 					// Agrega la segunda linea
 					infoLinea = new InfoLinea();
 					infoLinea.angulo=anguloReferencia+anguloDeltaNeg;
-					infoLinea.largo=largo;
+					infoLinea.largo=setup.largo;
 					infoLinea.Xcenter = Xcenter2;
 					infoLinea.Ycenter = Ycenter2;
 					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
@@ -191,7 +201,7 @@ public class ResourcesMaker {
 					// agrega la primer linea
 					infoLinea = new InfoLinea();
 					infoLinea.angulo=anguloReferencia-anguloDeltaPos;
-					infoLinea.largo=largo;
+					infoLinea.largo=setup.largo;
 					infoLinea.Xcenter = Xcenter1;
 					infoLinea.Ycenter = Ycenter1;
 					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
@@ -199,7 +209,7 @@ public class ResourcesMaker {
 					// Agrega la segunda linea
 					infoLinea = new InfoLinea();
 					infoLinea.angulo=anguloReferencia-anguloDeltaNeg;
-					infoLinea.largo=largo;
+					infoLinea.largo=setup.largo;
 					infoLinea.Xcenter = Xcenter2;
 					infoLinea.Ycenter = Ycenter2;
 					imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
@@ -216,9 +226,15 @@ public class ResourcesMaker {
 				}
 			}
 		}
+		saveSetup(setup);
 		return objetos;
 	}
 	
+	private static void saveSetup(JsonSetupExpV1 jsonSetup) {
+		String path = Resources.Paths.currentVersionPath+"/extras/jsonSetup.meta";
+		Json json = new Json();
+		FileHelper.writeFile(path, json.toJson(jsonSetup));
+	}
 		
 	private static Imagen crearImagen() {
 		contadorDeRecursos += 1;

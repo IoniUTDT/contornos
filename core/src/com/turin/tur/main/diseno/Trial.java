@@ -14,7 +14,6 @@ import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 import com.turin.tur.main.util.builder.Builder;
-import com.turin.tur.main.util.builder.LevelMaker.Dificultad;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
@@ -151,6 +150,13 @@ public class Trial {
 
 	// devuelve la info de la metadata
 
+	public static class ParametrosSetup {
+		public int R;
+		public int S;
+		public int D;
+		public int signo;
+	}
+	
 	public static class JsonTrial {
 		public String caption; // Texto que se muestra debajo
 		public int Id; // Id q identifica al trial
@@ -165,7 +171,8 @@ public class Trial {
 		public boolean feedback=false; // Sirve para configurar que en algunos test no haya feedback
 		public boolean randomSort;
 		public int resourceVersion;
-		public Dificultad dificultad; //= new Dificultad(-1);
+		public String identificador;
+		public ParametrosSetup parametros;
 		
 		public static void CreateTrial(JsonTrial jsonTrial, String path) {
 			Json json = new Json();

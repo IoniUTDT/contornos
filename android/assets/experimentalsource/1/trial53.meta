@@ -1,1 +1,1 @@
-{caption:Identifique la imagen o categoria del sonido,Id:53,title:"",modo:TEST,elementosId:[759,757,785,786,784,758],rtaCorrectaId:758,rtaRandom:true,distribucion:BILINEALx6,feedback:true,randomSort:true,resourceVersion:124,dificultad:{dificultad:1}}
+{caption:"",Id:53,title:Seleccione si es paralelo o no,modo:TEST,elementosId:[8,9],rtaCorrectaId:2265,distribucion:LINEALx2,randomSort:true,resourceVersion:125,parametros:{S:2,D:24}}

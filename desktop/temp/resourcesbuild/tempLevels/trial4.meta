@@ -1,1 +1,1 @@
-{caption:Identifique cual imagen esta sonando,Id:4,title:Test por imagen,modo:TEST,elementosId:[25,27,28,29,36,23],rtaCorrectaId:25,rtaRandom:true,distribucion:BILINEALx6,feedback:true,randomSort:true,resourceVersion:124,dificultad:{dificultad:-1}}
+{caption:"",Id:4,title:Seleccione si es paralelo o no,modo:TEST,elementosId:[8,9],rtaCorrectaId:3315,distribucion:LINEALx2,randomSort:true,resourceVersion:125,parametros:{S:3}}

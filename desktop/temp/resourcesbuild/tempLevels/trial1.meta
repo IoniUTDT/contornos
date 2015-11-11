@@ -1,1 +1,1 @@
-{caption:Toque el boton para completar la pantalla,Id:1,title:Bienvenido al juego,modo:EJEMPLOS,elementosId:[4],distribucion:LINEALx1,feedback:true,randomSort:true,resourceVersion:124,dificultad:{dificultad:-1}}
+{caption:"",Id:1,title:Seleccione si es paralelo o no,modo:TEST,elementosId:[8,9],rtaCorrectaId:21,distribucion:LINEALx2,randomSort:true,resourceVersion:125,parametros:{}}
