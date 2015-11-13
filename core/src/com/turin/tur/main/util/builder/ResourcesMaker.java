@@ -253,6 +253,15 @@ public class ResourcesMaker {
 		Array<InfoLinea> infoLineas = new Array<InfoLinea>();
 		String idVinculo; // Sirve para identificar cuando varias imagenes pertenecen a un mismo subgrupo
 		int nivelDificultad = -1; // Define un nivel de dificultad, 1 es el mas facil. -1 implica que no esta catalogado por dificultad y 0 que es compatible con cualquier dificultad (en gral para usar en las referencias, por ej rectas paralelas con las que se compara)
+		InfoConcelptualExp1 infoConceptual;
+	}
+	
+	public static class InfoConcelptualExp1 {
+		public float direccionAnguloReferencia;
+		public float deltaAngulo;
+		public float deltaAnguloLinealizado;
+		public boolean seJuntan;
+		public String DescripcionDeParametros = "AnguloReferencia: direccion media entre las dos rectas; deltaAngulo: diferencia entre los angulos de ambas rectas, siempre en modulo; deltaAnguloLinealizado: el mismo parametro pero transformado de manera que una escala linea tenga mas densidad en angulos chicos; seJuntan: diferencia si las rectas se van juntando en la direccion de referencia o se van separando"; 
 	}
 	
 	public static class SVG {

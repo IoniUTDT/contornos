@@ -132,6 +132,8 @@ public class LevelMaker {
 			level.levelTitle = "Analisis de sensibilidad";
 			level.randomTrialSort=false;
 			level.show = true;
+			level.trueRate = 0.9f;
+			
 			int R = indiceReferencia;
 			// Agregamos los niveles sin estimulo
 			for (int S=0; S<setup.cantidadSeparaciones; S++) {

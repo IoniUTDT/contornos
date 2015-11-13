@@ -13,6 +13,7 @@ import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level;
+import com.turin.tur.main.diseno.Level.DetectionObject;
 import com.turin.tur.main.diseno.Level.Significancia;
 import com.turin.tur.main.diseno.Level.TIPOdeSIGNIFICANCIA;
 import com.turin.tur.main.diseno.LevelInterfaz;
@@ -48,7 +49,7 @@ public class LevelController implements InputProcessor {
 	public float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
 	boolean elementoSeleccionado = false; // Sin seleccion
 	public Session session;
-	
+		
 	public LevelController(Game game, int levelNumber, int trialNumber, Session session) {
 		// Inicia los logs
 		
@@ -122,11 +123,20 @@ public class LevelController implements InputProcessor {
 			if (!wait) {
 				this.nextTrialPending = false;
 				this.logExitTrial();
-				if (isLastTrial()) {
-					completeLevel();
+				
+				
+				if (this.level.jsonLevel.ModoDeteccionUmbral) {
+					DetectionObject deteccion = new DetectionObject(); // Creamos el objeto que almacena la info relevante para ver el umbral de deteccion
+					deteccion.answerTrue = this.trial.log.touchLog.peek().isTrue;
+					deteccion.estimuloFisico = this.trial.log.touchLog.peek().jsonMetaDataTouched.estimuloFisico
+					deteccion.parameterLevel = this.trial.log.touchLog.peek().jsonMetaDataTouched
 				} else {
-					this.level.activeTrialPosition += 1;
-					this.initTrial();
+					if (isLastTrial()) {
+						completeLevel();
+					} else {
+						this.level.activeTrialPosition += 1;
+						this.initTrial();
+					}
 				}
 			}
 		}

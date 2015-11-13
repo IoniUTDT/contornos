@@ -92,6 +92,13 @@ public class Level {
 		return null;
 	}
 
+	public static class DetectionObject {
+		public boolean answerTrue;
+		public boolean positiveDireccion;
+		public int parameterLevel;
+		public float estimuloFisico;
+	}
+	
 	public static class JsonLevel {
 		public String levelTitle;
 		public int levelVersion;
@@ -105,7 +112,10 @@ public class Level {
 		public int aciertosTotales; // Esto guarda el numero de aciertos totales. Deberia servir como info gneneral en todos los trials de test y de entrenamiento
 		public int aciertosPorCategorias; // Esto guarda el numero de aciertos en trials por categoria. Al generar el level hay que inlcuir un numero de aciertos que vuelve significativo el resultado y comparar con eso.
 		public int aciertosPorImagenes; // Esto guarda el numero de aciertos en trials por imagenes. Al generar el level hay que incluir el numero de aciertos que vuelve significativo el resultado
-		
+		public float trueRate; // Nivel de aciertos de deteccion de señal que se quiere medir. Sirve para el setup experimental V1
+		//Variables que tienen que ver con la regulacion de dificultad y el algoritmo de seleccion de trials
+		public Array<DetectionObject> historialAciertos = new Array<DetectionObject>();
+		public boolean ModoDeteccionUmbral = true;
 		
 		public static void CreateLevel(JsonLevel jsonLevel, String path) {
 			Json json = new Json();
