@@ -101,7 +101,7 @@ public class ResourcesMaker {
 		setup.separacionMinima = 15; // Separacion predeterminada
 		setup.separacionIncremento = 3;
 		setup.cantidadReferencias = 180/setup.saltoTitaRefInt;
-		setup.cantidadSeparaciones = 5;
+		setup.cantidadSeparaciones = 1;
 		setup.cantidadDeltas = 30; // Para que al contar el 0 de uno.  
 		
 		/*
@@ -126,15 +126,16 @@ public class ResourcesMaker {
 			float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/setup.largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
 			for (int i=0; i<setup.cantidadReferencias; i++) {
 				
+				// Creamos la imagen paralela
+				Imagen imagen = crearImagen();
+				
 				anguloReferencia = i * setup.saltoTitaRef;
 				// Calculamos los centros de manera que esten separados en funcion del angulo
 				float Xcenter1 = width/2 - separacion/2 * MathUtils.sinDeg(anguloReferencia);
 				float Xcenter2 = width/2 + separacion/2 * MathUtils.sinDeg(anguloReferencia);
 				float Ycenter1 = width/2 - separacion/2 * MathUtils.cosDeg(anguloReferencia);
 				float Ycenter2 = width/2 + separacion/2 * MathUtils.cosDeg(anguloReferencia);
-	
-				// Creamos la imagen paralela
-				Imagen imagen = crearImagen();
+				imagen.infoConceptual.direccionAnguloReferencia = anguloReferencia;
 				
 				// agrega la primer linea
 				InfoLinea infoLinea = new InfoLinea();
@@ -153,6 +154,10 @@ public class ResourcesMaker {
 				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
 				imagen.infoLineas.add(infoLinea);
 				// Datos generales
+				// Nota, aca no tiene sentido poner ni parametro linelizado ni si se juntan!
+				imagen.infoConceptual.deltaAngulo=0;
+				imagen.infoConceptual.separacion=separacion;
+				
 				imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 				imagen.name = "Imagen de rectas no paralelas generada automaticamente";
 				imagen.idVinculo = "R"+i+"S"+j;
@@ -169,6 +174,13 @@ public class ResourcesMaker {
 					
 					// Creamos la imagen con delta "positivo"
 					imagen = crearImagen();
+					
+					// Almacenamos la data de la info de la geometria que queremos estudiar.
+					imagen.infoConceptual.deltaAngulo = anguloDelta;
+					imagen.infoConceptual.deltaAnguloLinealizado = k;
+					imagen.infoConceptual.direccionAnguloReferencia = anguloReferencia;
+					imagen.infoConceptual.seJuntan = true;
+					imagen.infoConceptual.separacion = separacion;
 					
 					// agrega la primer linea
 					infoLinea = new InfoLinea();
@@ -197,6 +209,13 @@ public class ResourcesMaker {
 					
 					// Creamos la imagen con delta "positivo"
 					imagen = crearImagen();
+					
+					// Almacenamos la data de la info de la geometria que queremos estudiar.
+					imagen.infoConceptual.deltaAngulo = anguloDelta;
+					imagen.infoConceptual.deltaAnguloLinealizado = k;
+					imagen.infoConceptual.direccionAnguloReferencia = anguloReferencia;
+					imagen.infoConceptual.seJuntan = false;
+					imagen.infoConceptual.separacion = separacion;
 					
 					// agrega la primer linea
 					infoLinea = new InfoLinea();
@@ -261,7 +280,8 @@ public class ResourcesMaker {
 		public float deltaAngulo;
 		public float deltaAnguloLinealizado;
 		public boolean seJuntan;
-		public String DescripcionDeParametros = "AnguloReferencia: direccion media entre las dos rectas; deltaAngulo: diferencia entre los angulos de ambas rectas, siempre en modulo; deltaAnguloLinealizado: el mismo parametro pero transformado de manera que una escala linea tenga mas densidad en angulos chicos; seJuntan: diferencia si las rectas se van juntando en la direccion de referencia o se van separando"; 
+		public float separacion; 
+		public String DescripcionDeParametros = "AnguloReferencia: direccion media entre las dos rectas; deltaAngulo: diferencia entre los angulos de ambas rectas, siempre en modulo; deltaAnguloLinealizado: el mismo parametro pero transformado de manera que una escala linea tenga mas densidad en angulos chicos; seJuntan: diferencia si las rectas se van juntando en la direccion de referencia o se van separando; separacion: deparacion en el punto medio"; 
 	}
 	
 	public static class SVG {
@@ -322,6 +342,7 @@ public class ResourcesMaker {
 			jsonMetaData.infoLineas = imagen.infoLineas;
 			jsonMetaData.parametros = imagen.parametros;
 			jsonMetaData.nivelDificultad = imagen.nivelDificultad;
+			jsonMetaData.infoConceptual = imagen.infoConceptual;
 			ExperimentalObject.JsonResourcesMetaData.CreateJsonMetaData(jsonMetaData, Resources.Paths.currentVersionPath);
 
 		}

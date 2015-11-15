@@ -49,6 +49,8 @@ public class LevelController implements InputProcessor {
 	public float timeInTrial = 0; // Tiempo desde que se inicalizo el ultimo trial.
 	boolean elementoSeleccionado = false; // Sin seleccion
 	public Session session;
+
+	// Variable que sirve para ver si 
 		
 	public LevelController(Game game, int levelNumber, int trialNumber, Session session) {
 		// Inicia los logs
@@ -128,8 +130,11 @@ public class LevelController implements InputProcessor {
 				if (this.level.jsonLevel.ModoDeteccionUmbral) {
 					DetectionObject deteccion = new DetectionObject(); // Creamos el objeto que almacena la info relevante para ver el umbral de deteccion
 					deteccion.answerTrue = this.trial.log.touchLog.peek().isTrue;
-					deteccion.estimuloFisico = this.trial.log.touchLog.peek().jsonMetaDataTouched.estimuloFisico
-					deteccion.parameterLevel = this.trial.log.touchLog.peek().jsonMetaDataTouched
+					deteccion.infoConceptual = this.trial.log.touchLog.peek().jsonMetaDataTouched.infoConceptual;
+					
+					
+					
+					
 				} else {
 					if (isLastTrial()) {
 						completeLevel();

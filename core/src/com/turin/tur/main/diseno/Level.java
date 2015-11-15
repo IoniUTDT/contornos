@@ -8,6 +8,7 @@ import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
+import com.turin.tur.main.util.builder.ResourcesMaker.InfoConcelptualExp1;
 
 
 public class Level {
@@ -94,9 +95,7 @@ public class Level {
 
 	public static class DetectionObject {
 		public boolean answerTrue;
-		public boolean positiveDireccion;
-		public int parameterLevel;
-		public float estimuloFisico;
+		public InfoConcelptualExp1 infoConceptual;
 	}
 	
 	public static class JsonLevel {

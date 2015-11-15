@@ -10,6 +10,7 @@ import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.FileHelper;
 import com.turin.tur.main.util.ImagesAsset;
 import com.turin.tur.main.util.builder.ResourcesMaker.ExtremosLinea;
+import com.turin.tur.main.util.builder.ResourcesMaker.InfoConcelptualExp1;
 import com.turin.tur.main.util.builder.ResourcesMaker.InfoLinea;
 
 
@@ -60,7 +61,7 @@ public class ExperimentalObject {
 		public Array<ExtremosLinea> parametros;
 		public Array<InfoLinea> infoLineas;
 		public int nivelDificultad; //obsoleto!
-		public int 
+		public InfoConcelptualExp1 infoConceptual;
 		
 		public static void CreateJsonMetaData (JsonResourcesMetaData jsonMetaData, String path) {
 			Json json = new Json();
