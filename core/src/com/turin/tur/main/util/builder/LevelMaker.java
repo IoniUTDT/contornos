@@ -23,7 +23,7 @@ import com.turin.tur.main.util.Constants.Resources;
 import com.turin.tur.main.util.Constants.Diseno.DISTRIBUCIONESenPANTALLA;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
-import com.turin.tur.main.util.builder.ResourcesMaker.JsonSetupExpV1;
+import com.turin.tur.main.util.builder.ResourcesMaker.JsonSetupExpSensibilidad;
 import com.turin.tur.main.util.builder.ResourcesSelectors.Agrupamientos;
 
 public class LevelMaker {
@@ -71,7 +71,7 @@ public class LevelMaker {
 
 
 		// Crea los niveles
-		Levels.MakeLevelParalelismo(0);
+		Levels.MakeLevelParalelismoUmbral(0);
 	}
 	
 	
@@ -125,66 +125,55 @@ public class LevelMaker {
 
 
 		
-		private static void MakeLevelParalelismo (int indiceReferencia) {
-			JsonSetupExpV1 setup = loadSetup();
+		private static void MakeLevelParalelismoUmbral (int indiceAnguloReferencia) {
+			JsonSetupExpSensibilidad setup = loadSetup();
 			// Creamos el nivel
 			JsonLevel level = crearLevel();
 			level.levelTitle = "Analisis de sensibilidad";
 			level.randomTrialSort=false;
 			level.show = true;
-			level.trueRate = 0.9f;
+			level.analisisUmbral.indiceAnguloRefrencia = indiceAnguloReferencia;
+			level.analisisUmbral.anguloReferencia = setup.saltoTitaRef*indiceAnguloReferencia;
+			level.analisisUmbral.trueRate = 0.5f;
+			level.analisisUmbral.cantidadDeNivelesDeDificultad=setup.cantidadDeltas;
+			level.analisisUmbral.saltoCurvaSuperior=setup.cantidadDeltas/10;
+			level.analisisUmbral.saltoCurvaInferior=setup.cantidadDeltas/10;
+			level.analisisUmbral.proximoNivelCurvaInferior = 1;
+			level.analisisUmbral.proximoNivelCurvaSuperior = setup.cantidadDeltas;
 			
-			int R = indiceReferencia;
-			// Agregamos los niveles sin estimulo
-			for (int S=0; S<setup.cantidadSeparaciones; S++) {
-				String tag = "R"+R+"S"+S;
-				JsonTrial trial = crearTrial("Seleccione si es paralelo o no", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
-						new int[] {Constants.Resources.Categorias.Paralelas.ID,Constants.Resources.Categorias.NoParalelas.ID }, TIPOdeTRIAL.TEST, ResourcesSelectors.findResourceByTag(tag) , false, true, false);
-				trial.parametros.D=0;
-				trial.parametros.R=R;
-				trial.parametros.S=S;
-				level.jsonTrials.add(trial);
-			}
-			// Agregamos dos niveles por cada delta 
-			for (int D=1; D<=setup.cantidadDeltas; D++) {
-				int S = MathUtils.random(0, setup.cantidadSeparaciones-1);
-				String tag = "R"+R+"S"+S+"D"+D;
-				if (MathUtils.randomBoolean()) {
-					tag = tag+"+";
-				} else {
-					tag = tag+"-";
-				}
-				JsonTrial trial = crearTrial("Seleccione si es paralelo o no", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
-						new int[] {Constants.Resources.Categorias.Paralelas.ID,Constants.Resources.Categorias.NoParalelas.ID }, TIPOdeTRIAL.TEST, ResourcesSelectors.findResourceByTag(tag) , false, true, false);
-				trial.parametros.D=D;
-				trial.parametros.R=R;
-				trial.parametros.S=S;
-				level.jsonTrials.add(trial);
-				// Otro
-				S = MathUtils.random(0, setup.cantidadSeparaciones-1);
-				tag = "R"+R+"S"+S+"D"+D;
-				if (MathUtils.randomBoolean()) {
-					tag = tag+"+";
-				} else {
-					tag = tag+"-";
-				}
-				trial = crearTrial("Seleccione si es paralelo o no", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
-						new int[] {Constants.Resources.Categorias.Paralelas.ID,Constants.Resources.Categorias.NoParalelas.ID }, TIPOdeTRIAL.TEST, ResourcesSelectors.findResourceByTag(tag) , false, true, false);
-				trial.parametros.D=D;
-				trial.parametros.R=R;
-				trial.parametros.S=S;
-				level.jsonTrials.add(trial);
+			/*
+			 * Queremos crear una lista de trials que incluya dos trials por dificultad
+			 */
+			
+			int R = indiceAnguloReferencia;
+			
+			for (int D=0; D<=setup.cantidadDeltas; D++) {
+				String tag = "R"+R+"D"+D;
+				String tagReferencePos = "R"+R+"D"+setup.cantidadDeltas+"+";
+				String tagReferenceNeg = "R"+R+"D"+setup.cantidadDeltas+"-";
+				
+				JsonTrial trial1 = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
+						new int[] {ResourcesSelectors.findResourceByTag(tagReferencePos).first(),ResourcesSelectors.findResourceByTag(tagReferenceNeg).first()}, TIPOdeTRIAL.TEST, ResourcesSelectors.findResourceByTag(tag).random() , false, true, false);
+				trial1.parametros.D=D;
+				trial1.parametros.R=R;
+				level.jsonTrials.add(trial1);
+
+				JsonTrial trial2 = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
+						new int[] {ResourcesSelectors.findResourceByTag(tagReferencePos).first(),ResourcesSelectors.findResourceByTag(tagReferenceNeg).first()}, TIPOdeTRIAL.TEST, ResourcesSelectors.findResourceByTag(tag).random() , false, true, false);
+				trial2.parametros.D=D;
+				trial2.parametros.R=R;
+				level.jsonTrials.add(trial2);
 			}
 			
 			
 			level.build(Resources.Paths.levelsPath);
 		}
 		
-		private static JsonSetupExpV1 loadSetup() {
+		private static JsonSetupExpSensibilidad loadSetup() {
 			String path = Resources.Paths.currentVersionPath+"extras/jsonSetup.meta";
 			String savedData = FileHelper.readLocalFile(path);
 			Json json = new Json();
-			return json.fromJson(JsonSetupExpV1.class, savedData);
+			return json.fromJson(JsonSetupExpSensibilidad.class, savedData);
 		}
 		
 		

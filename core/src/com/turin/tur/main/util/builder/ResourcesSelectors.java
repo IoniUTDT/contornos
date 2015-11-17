@@ -16,14 +16,14 @@ public class ResourcesSelectors {
 	static Array<Agrupamientos> listadosGrupos = Builder.listadosGrupos;
 	
 	
-	static int findResourceByTag (String tag) {
+	static Array<Integer> findResourceByTag (String tag) {
 		for (Agrupamientos agrupamiento : listadosGrupos) {
 			if (agrupamiento.nombre.equals(tag)) {
-				return agrupamiento.ids.first();
+				return agrupamiento.ids;
 			}
 		}
 		System.out.println("No se ha encontrado el rescurso buscado: "+tag);
-		return 0;
+		return null;
 	}
 	
 	

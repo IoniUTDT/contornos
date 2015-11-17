@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -13,7 +14,8 @@ import com.turin.tur.main.diseno.Boxes.StimuliBox;
 import com.turin.tur.main.diseno.Boxes.TrainingBox;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level;
-import com.turin.tur.main.diseno.Level.DetectionObject;
+import com.turin.tur.main.diseno.Level.AnalisisUmbral;
+import com.turin.tur.main.diseno.Level.AnalisisUmbral.DetectionObject;
 import com.turin.tur.main.diseno.Level.Significancia;
 import com.turin.tur.main.diseno.Level.TIPOdeSIGNIFICANCIA;
 import com.turin.tur.main.diseno.LevelInterfaz;
@@ -22,11 +24,13 @@ import com.turin.tur.main.diseno.TouchInfo;
 import com.turin.tur.main.diseno.Trial;
 import com.turin.tur.main.diseno.Boxes.Box;
 import com.turin.tur.main.diseno.RunningSound;
+import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.diseno.Trial.TouchLog;
 import com.turin.tur.main.screens.ResultsScreen;
 import com.turin.tur.main.util.CameraHelper;
 import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
+import com.turin.tur.main.util.Constants.Diseno.TIPOdeLEVEL;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 
 public class LevelController implements InputProcessor {
@@ -81,7 +85,6 @@ public class LevelController implements InputProcessor {
 
 		// Registra el evento de la creacion del trial
 		this.level.levelLog.trialsVisited.add(trial.Id);
-
 	}
 
 	private void initCamera() {
@@ -127,13 +130,81 @@ public class LevelController implements InputProcessor {
 				this.logExitTrial();
 				
 				
-				if (this.level.jsonLevel.ModoDeteccionUmbral) {
-					DetectionObject deteccion = new DetectionObject(); // Creamos el objeto que almacena la info relevante para ver el umbral de deteccion
-					deteccion.answerTrue = this.trial.log.touchLog.peek().isTrue;
-					deteccion.infoConceptual = this.trial.log.touchLog.peek().jsonMetaDataTouched.infoConceptual;
+				if (this.level.jsonLevel.tipoDeLevel == TIPOdeLEVEL.UMBRAL) {
+					
+					AnalisisUmbral analisis = this.level.jsonLevel.analisisUmbral;
+					
+					// Creamos la info del objeto analizado
+					DetectionObject detected = new DetectionObject();
+					detected.answerTrue = this.trial.log.touchLog.peek().isTrue;
+					detected.infoConceptual = this.trial.log.touchLog.peek().jsonMetaDataTouched.infoConceptual;
 					
 					
+					// Primero nos fijamos que curva estamos analizando:
+					if (analisis.curvaSuperiorActiva) {
+						// Se fija en comparacion al ultimo intento para ver si hubo un "rebote o no" y en funcion de eso disminuir el salto
+						if (analisis.historialAciertosCurvaSuperior.size>0) { // Si hay historia previa
+							if (detected.answerTrue != analisis.historialAciertosCurvaSuperior.peek().answerTrue) { // Si hay rebote hay que disminuir el salto
+								if (analisis.saltoCurvaSuperior!=1) {
+									analisis.saltoCurvaSuperior=analisis.saltoCurvaSuperior-1;
+								}
+							}
+						}
+						// Modifica el nivel de señal del estimulo						
+						if (detected.answerTrue) { // Si se detecto el estimulo bien hay que disminuir la señal de estimulo
+							analisis.proximoNivelCurvaSuperior = analisis.proximoNivelCurvaSuperior - analisis.saltoCurvaSuperior; 
+						} else { // Si no se detecto el estimulo hay que aumentar la señal de estimulo
+							analisis.proximoNivelCurvaSuperior = analisis.proximoNivelCurvaSuperior + analisis.saltoCurvaSuperior;
+						}
+						// Limita el valor del proximo nivel entre los valores maximos y minimos.
+						if (analisis.proximoNivelCurvaSuperior>analisis.cantidadDeNivelesDeDificultad) {
+							analisis.proximoNivelCurvaSuperior=analisis.cantidadDeNivelesDeDificultad;
+						}
+						if (analisis.proximoNivelCurvaSuperior<1) {
+							analisis.proximoNivelCurvaSuperior=1;
+						}
+						// Agrega el ultimo paso al historial.
+						analisis.historialAciertosCurvaSuperior.add(detected);
+					} else {
+						// Se fija si hubo rebote para corregir el nivel del salto
+						if (analisis.historialAciertosCurvaInferior.size>0) {
+							if (detected.answerTrue != analisis.historialAciertosCurvaInferior.peek().answerTrue) {
+								if (analisis.saltoCurvaInferior!=1) {
+									analisis.saltoCurvaInferior = analisis.saltoCurvaInferior - 1;
+								}
+							}
+						}
+						if (!detected.answerTrue) {// si no detecta el estimulo hay que aumentar la señal
+							analisis.proximoNivelCurvaInferior = analisis.proximoNivelCurvaInferior + analisis.saltoCurvaInferior;
+						} else {
+							analisis.proximoNivelCurvaInferior = analisis.proximoNivelCurvaInferior - analisis.saltoCurvaInferior;
+						}
+						// Limita el valor del proximo nivel entre los valores maximos y minimos.
+						if (analisis.proximoNivelCurvaInferior>analisis.cantidadDeNivelesDeDificultad) {
+							analisis.proximoNivelCurvaInferior=analisis.cantidadDeNivelesDeDificultad;
+						}
+						if (analisis.proximoNivelCurvaInferior<1) {
+							analisis.proximoNivelCurvaInferior=1;
+						}
+						// Agrega el ultimo paso al historial.
+						analisis.historialAciertosCurvaInferior.add(detected);
+					}
 					
+					if (analisis.historialAciertosCurvaInferior.size + analisis.historialAciertosCurvaSuperior.size >=40) {
+						completeLevel();
+					}
+
+					// Determina al azar si el proximo trial es de la curva superior o inferior
+					analisis.curvaSuperiorActiva = MathUtils.randomBoolean();
+
+					int nextTrialPosition;
+					if (analisis.curvaSuperiorActiva) {
+						nextTrialPosition = findTrialId (analisis.indiceAnguloRefrencia, analisis.proximoNivelCurvaSuperior);
+					} else {
+						nextTrialPosition = findTrialId (analisis.indiceAnguloRefrencia, analisis.proximoNivelCurvaInferior);
+					}
+					this.level.activeTrialPosition = nextTrialPosition;
+					this.initTrial();
 					
 				} else {
 					if (isLastTrial()) {
@@ -146,6 +217,24 @@ public class LevelController implements InputProcessor {
 			}
 		}
 
+	}
+	
+	private int findTrialId(int anguloReferencia, int nivelDificultad) {
+		Array<Integer> listaDeTrialPosibles = new Array<Integer>();
+		for (int idTrialaMirar : this.level.secuenciaTrailsId) {
+			JsonTrial jsonTrial = Trial.JsonTrial.LoadTrial(idTrialaMirar);
+			if ((jsonTrial.parametros.R == anguloReferencia) && (jsonTrial.parametros.D == nivelDificultad)) {
+				listaDeTrialPosibles.add(idTrialaMirar);
+			}
+		}
+		if (listaDeTrialPosibles.size == 0) {
+			System.out.println("Error se esta buscando un trial con refrencia " + anguloReferencia + " y nivel de dificultad "+ nivelDificultad + " y no se ha encontrado");
+			return 0;
+		} else {
+			int id = listaDeTrialPosibles.random();			
+			return this.level.secuenciaTrailsId.indexOf(id, false);
+		}
+		
 	}
 
 	private void completeLevel() {
@@ -342,43 +431,54 @@ public class LevelController implements InputProcessor {
 	}
 
 	private void verifyAnswer(TouchInfo touchData) {
-		// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
-		if (trial.jsonTrial.modo == TIPOdeTRIAL.TEST) {
-			Boolean correcta = false;
-			if (trial.rtaCorrecta.resourceId.id == touchData.thisTouchBox.contenido.resourceId.id) { // Significa que se toco la respuesta igual a la correcta
+		Boolean correcta = false;
+		if (this.level.jsonLevel.tipoDeLevel == TIPOdeLEVEL.UMBRAL) {
+			
+			// Verfica si se toco la opcion correcta o no.
+			JsonResourcesMetaData JsonEstimulo = JsonResourcesMetaData.Load(trial.jsonTrial.rtaCorrectaId);
+			JsonResourcesMetaData JsonSeleccion = JsonResourcesMetaData.Load(touchData.experimentalObjectTouch.resourceId.id);
+			if (JsonEstimulo.infoConceptual.seJuntan == JsonSeleccion.infoConceptual.seJuntan) {
 				correcta = true;
-				if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
-					this.level.jsonLevel.aciertosPorImagenes++; //suma en uno los aciertos por imagen
-					this.level.jsonLevel.aciertosTotales++; //suma en uno los aciertos totales
-				}
-			} 
-			if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
-				for (Categorias categoriaDelObjetoTocado : touchData.thisTouchBox.contenido.categorias) {
-					if (trial.rtaCorrecta.categorias.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
-						correcta = true;
-						if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
-							this.level.jsonLevel.aciertosPorCategorias++; // Aumenta en uno los aciertos por categoria
-							this.level.jsonLevel.aciertosTotales++; // Aumenta en uno los aciertos totales
+			}
+			
+		} else {
+	
+			// revisa si se acerto a la respuesta o no en caso de ser un test trial. 
+			if (trial.jsonTrial.modo == TIPOdeTRIAL.TEST) {
+				if (trial.rtaCorrecta.resourceId.id == touchData.thisTouchBox.contenido.resourceId.id) { // Significa que se toco la respuesta igual a la correcta
+					correcta = true;
+					if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
+						this.level.jsonLevel.aciertosPorImagenes++; //suma en uno los aciertos por imagen
+						this.level.jsonLevel.aciertosTotales++; //suma en uno los aciertos totales
+					}
+				} 
+				if (touchData.thisTouchBox.contenido.categorias.contains(Categorias.Texto, true)) { // Significa q se selecciono un texto
+					for (Categorias categoriaDelObjetoTocado : touchData.thisTouchBox.contenido.categorias) {
+						if (trial.rtaCorrecta.categorias.contains(categoriaDelObjetoTocado, true)) { // Significa que la respuesta correcta incluye alguna categoria del boton tocado. Se supone que los botones tocados solo tienen categorias texto y la que corresponda
+							correcta = true;
+							if (!this.trial.alreadySelected) { // Evita que se cuenten las segundas selecciones en trials con feedback
+								this.level.jsonLevel.aciertosPorCategorias++; // Aumenta en uno los aciertos por categoria
+								this.level.jsonLevel.aciertosTotales++; // Aumenta en uno los aciertos totales
+							}
 						}
 					}
 				}
 			}
-			if (this.trial.jsonTrial.feedback) { // Evita que se pase de nivel si esta activado el feedback
-				if (correcta) { // Significa q se selecciono la opcion correcta
-					touchData.thisTouchBox.answer = true;
-					this.nextTrialPending = true;
-				}
-			} else {
-				if (correcta) { // Significa q se selecciono la opcion correcta
-					touchData.thisTouchBox.answer = true;
-				}
+		}
+		if (this.trial.jsonTrial.feedback) { // Evita que se pase de nivel si esta activado el feedback
+			if (correcta) { // Significa q se selecciono la opcion correcta
+				touchData.thisTouchBox.answer = true;
 				this.nextTrialPending = true;
 			}
-			if (!this.trial.alreadySelected) { // Marca como que ya se selecciono algo despues de haber contado las cosas correctas y demas
-				this.trial.alreadySelected=true;
-			} 
+		} else {
+			if (correcta) { // Significa q se selecciono la opcion correcta
+				touchData.thisTouchBox.answer = true;
+			}
+			this.nextTrialPending = true;
 		}
-
+		if (!this.trial.alreadySelected) { // Marca como que ya se selecciono algo despues de haber contado las cosas correctas y demas
+			this.trial.alreadySelected=true;		
+		}
 	}
 
 	private void logExitTrial() {

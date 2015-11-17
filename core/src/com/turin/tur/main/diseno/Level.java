@@ -7,8 +7,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Enviables.STATUS;
 import com.turin.tur.main.diseno.Trial.JsonTrial;
 import com.turin.tur.main.util.Constants;
+import com.turin.tur.main.util.Constants.Diseno.TIPOdeLEVEL;
 import com.turin.tur.main.util.FileHelper;
-import com.turin.tur.main.util.builder.ResourcesMaker.InfoConcelptualExp1;
+import com.turin.tur.main.util.builder.ResourcesMaker.InfoConcelptualExpSensibilidad;
 
 
 public class Level {
@@ -93,11 +94,7 @@ public class Level {
 		return null;
 	}
 
-	public static class DetectionObject {
-		public boolean answerTrue;
-		public InfoConcelptualExp1 infoConceptual;
-	}
-	
+
 	public static class JsonLevel {
 		public String levelTitle;
 		public int levelVersion;
@@ -111,10 +108,10 @@ public class Level {
 		public int aciertosTotales; // Esto guarda el numero de aciertos totales. Deberia servir como info gneneral en todos los trials de test y de entrenamiento
 		public int aciertosPorCategorias; // Esto guarda el numero de aciertos en trials por categoria. Al generar el level hay que inlcuir un numero de aciertos que vuelve significativo el resultado y comparar con eso.
 		public int aciertosPorImagenes; // Esto guarda el numero de aciertos en trials por imagenes. Al generar el level hay que incluir el numero de aciertos que vuelve significativo el resultado
-		public float trueRate; // Nivel de aciertos de deteccion de señal que se quiere medir. Sirve para el setup experimental V1
-		//Variables que tienen que ver con la regulacion de dificultad y el algoritmo de seleccion de trials
-		public Array<DetectionObject> historialAciertos = new Array<DetectionObject>();
-		public boolean ModoDeteccionUmbral = true;
+		// Informacion relacionada al procesamiento en tiempo real.
+		public TIPOdeLEVEL tipoDeLevel = TIPOdeLEVEL.UMBRAL;
+		public AnalisisUmbral analisisUmbral = new AnalisisUmbral();
+		
 		
 		public static void CreateLevel(JsonLevel jsonLevel, String path) {
 			Json json = new Json();
@@ -186,5 +183,25 @@ public class Level {
 			this.title=title;
 			this.pValue=pValue;
 		}
+	}
+	
+	public static class AnalisisUmbral {
+		public static class DetectionObject {
+			public boolean answerTrue;
+			public InfoConcelptualExpSensibilidad infoConceptual;
+		}
+		
+		public boolean curvaSuperiorActiva = true; // Indica que curva se esta analizando, si la superior o la inferior
+		public float anguloReferencia;
+		public int indiceAnguloRefrencia;
+		public int cantidadDeNivelesDeDificultad;
+		public float trueRate; // Nivel de aciertos de deteccion de señal que se quiere medir. Sirve para el setup experimental de umbral
+		public Array<DetectionObject> historialAciertosCurvaSuperior = new Array<DetectionObject>();
+		public Array<DetectionObject> historialAciertosCurvaInferior = new Array<DetectionObject>();
+		public int saltoCurvaSuperior;
+		public int saltoCurvaInferior;
+		public int proximoNivelCurvaSuperior;
+		public int proximoNivelCurvaInferior;
+		public Array<Integer> convergencia = new Array<Integer>(); //va midiendo la diferencia entre ambas curvas.  
 	}
 }

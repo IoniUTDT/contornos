@@ -152,9 +152,7 @@ public class Trial {
 
 	public static class ParametrosSetup {
 		public int R;
-		public int S;
 		public int D;
-		public int signo;
 	}
 	
 	public static class JsonTrial {
@@ -179,7 +177,7 @@ public class Trial {
 			FileHelper.writeFile(path + "trial" + jsonTrial.Id + ".meta", json.toJson(jsonTrial));
 		}
 
-		private static JsonTrial LoadTrial(int Id) {
+		public static JsonTrial LoadTrial(int Id) {
 			String savedData = FileHelper.readFile("experimentalsource/" + Constants.version() + "/trial" + Id + ".meta");
 
 			if (!savedData.isEmpty()) {

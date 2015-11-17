@@ -75,6 +75,10 @@ public class Constants {
 			EJEMPLOS, TEST
 		}
 
+		public enum TIPOdeLEVEL {
+			UMBRAL
+		}
+		
 		public enum DISTRIBUCIONESenPANTALLA {
 			LINEALx3(new float[][] { { -1.5f, 0 }, { 0, 0 }, { +1.5f, 0 } }),
 			LINEALx2(new float[][] { { -1.5f, 0 }, { +1.5f, 0 } }),
