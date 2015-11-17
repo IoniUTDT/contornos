@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -139,7 +138,7 @@ public class LevelController implements InputProcessor {
 					detected.answerTrue = this.trial.log.touchLog.peek().isTrue;
 					detected.infoConceptual = this.trial.log.touchLog.peek().jsonMetaDataTouched.infoConceptual;
 					
-					
+
 					// Primero nos fijamos que curva estamos analizando:
 					if (analisis.curvaSuperiorActiva) {
 						// Se fija en comparacion al ultimo intento para ver si hubo un "rebote o no" y en funcion de eso disminuir el salto
@@ -195,7 +194,7 @@ public class LevelController implements InputProcessor {
 					}
 
 					// Determina al azar si el proximo trial es de la curva superior o inferior
-					analisis.curvaSuperiorActiva = MathUtils.randomBoolean();
+					// analisis.curvaSuperiorActiva = MathUtils.randomBoolean();
 
 					int nextTrialPosition;
 					if (analisis.curvaSuperiorActiva) {
