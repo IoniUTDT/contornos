@@ -174,6 +174,7 @@ public class Trial {
 		
 		public static void CreateTrial(JsonTrial jsonTrial, String path) {
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			FileHelper.writeFile(path + "trial" + jsonTrial.Id + ".meta", json.toJson(jsonTrial));
 		}
 
@@ -182,6 +183,7 @@ public class Trial {
 
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
+				json.setUsePrototypes(false);
 				return json.fromJson(JsonTrial.class, savedData);
 			}
 			Gdx.app.error(TAG, "No se a podido encontrar la info del objeto experimental " + Id);

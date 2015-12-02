@@ -88,6 +88,7 @@ public class Level {
 		String savedData = FileHelper.readFile("experimentalsource/" + Constants.version() + "/level" + level + ".meta");
 		if (!savedData.isEmpty()) {
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			return json.fromJson(JsonLevel.class, savedData);
 		}
 		Gdx.app.error(TAG, "No se a podido encontrar la info del nivel " + level);
@@ -116,6 +117,7 @@ public class Level {
 		
 		public static void CreateLevel(JsonLevel jsonLevel, String path) {
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			FileHelper.writeFile(path + "level" + jsonLevel.Id + ".meta", json.toJson(jsonLevel));
 		}
 
@@ -134,6 +136,7 @@ public class Level {
 		jsonLevel.trials = secuenciaTrials;
 		jsonLevel.levelTitle = levelTitle;
 		Json json = new Json();
+		json.setUsePrototypes(false);
 		FileHelper.writeFile("experimentalsource/" + Constants.version() + "/level" + level + ".meta", json.toJson(jsonLevel));
 	}
 

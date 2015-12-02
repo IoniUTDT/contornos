@@ -43,6 +43,7 @@ public class LevelMaker {
 			String savedData = FileHelper.readLocalFile(Resources.Paths.levelsPath + "level" + 1 + ".meta");
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
+				json.setUsePrototypes(false);
 				JsonLevel jsonLevel = json.fromJson(JsonLevel.class, savedData);
 				if (jsonLevel.levelVersion >= Builder.levelVersion) {
 					System.out.println("Cambie la version de los niveles a crear para que sean mayor a la version actual: " + Builder.levelVersion);
@@ -69,18 +70,9 @@ public class LevelMaker {
 
 
 		// Crea los niveles
-		if (Builder.AppVersion == "90") {
-			Levels.MakeLevelParalelismoUmbral(1);
+		if (Builder.AppVersion == "UmbralCompleto") {
+			Levels.MakeLevelParalelismoUmbral();
 		}
-		/*
-		Levels.MakeLevelParalelismoUmbral(11);
-		Levels.MakeLevelParalelismoUmbral(12);
-		Levels.MakeLevelParalelismoUmbral(13);
-		Levels.MakeLevelParalelismoUmbral(14);
-		Levels.MakeLevelParalelismoUmbral(15);
-		Levels.MakeLevelParalelismoUmbral(16);
-		Levels.MakeLevelParalelismoUmbral(17);
-		*/
 	}
 	
 	
@@ -100,6 +92,7 @@ public class LevelMaker {
 			String savedData = FileHelper.readFile(archivo.getPath());
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
+				json.setUsePrototypes(false);
 				listadoRecursos.add(json.fromJson(JsonResourcesMetaData.class, savedData));
 			} else { Gdx.app.error(TAG,"Error leyendo el archivo de metadatos"); }
 		}
@@ -134,50 +127,62 @@ public class LevelMaker {
 
 
 		
-		private static void MakeLevelParalelismoUmbral (int indiceAnguloReferencia) {
-			JsonSetupExpSensibilidad setup = loadSetup();
-			// Creamos el nivel
-			JsonLevel level = crearLevel();
-			level.levelTitle = "Analisis de sensibilidad, "+setup.saltoTitaRef*indiceAnguloReferencia+" grados";
-			level.randomTrialSort=false;
-			level.show = true;
-			level.analisisUmbral.indiceAnguloRefrencia = indiceAnguloReferencia;
-			level.analisisUmbral.anguloReferencia = setup.saltoTitaRef*indiceAnguloReferencia;
-			level.analisisUmbral.trueRate = 0.5f;
-			level.analisisUmbral.cantidadDeNivelesDeDificultad=setup.cantidadDeltas;
-			level.analisisUmbral.saltoCurvaSuperior=setup.cantidadDeltas/10;
-			level.analisisUmbral.proximoNivelCurvaSuperior = setup.cantidadDeltas;
+		private static void MakeLevelParalelismoUmbral () {
 			
-			/*
-			 * Queremos crear una lista de trials que incluya dos trials por dificultad
-			 */
+			int nSetup = 0;
+			// Se fija si encuentra el setup experimental correspondiente
 			
-			int R = indiceAnguloReferencia;
-			
-			for (int D=0; D<=setup.cantidadDeltas; D++) {
-				String tag = "R"+R+"D"+D;
-				String tagReferencePos = "R"+R+"D"+setup.cantidadDeltas/1+"+";
-				String tagReferenceNeg = "R"+R+"D"+setup.cantidadDeltas/1+"-";
-
-				Array<Integer> recursos = ResourcesSelectors.findResourceByTag(tag);
-				
-				for (int id: recursos) {
-					JsonTrial trial = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
-							new int[] {ResourcesSelectors.findResourceByTag(tagReferencePos).first(),ResourcesSelectors.findResourceByTag(tagReferenceNeg).first()}, TIPOdeTRIAL.TEST, id , false, true, false);
-					trial.parametros.D=D;
-					trial.parametros.R=R;
-					level.jsonTrials.add(trial);
+			int indiceReferenciaAcumulado = 0;
+			String path = Resources.Paths.currentVersionPath+"extras/jsonSetup"+nSetup+".meta";
+			File file = new File(path);
+			while (file.exists()) { // Se hace para cada setup q exista
+				// Cargamos el setup
+				JsonSetupExpSensibilidad setup = loadSetup(nSetup);
+				// Hacemos un loop para cada referencia dentro del nivel
+				for (int n=1; n<setup.cantidadReferencias; n++) {
+					// Creamos el nivel
+					JsonLevel level = crearLevel();
+					level.levelTitle = setup.tag + n + "R:"+(setup.saltoTitaRef*n)+setup.titaRefInicial+"º";
+					level.randomTrialSort=false;
+					level.show = true;
+					level.analisisUmbral.indiceAnguloRefrencia = n;
+					level.analisisUmbral.anguloReferencia = setup.saltoTitaRef*n;
+					level.analisisUmbral.trueRate = 0.5f;
+					level.analisisUmbral.cantidadDeNivelesDeDificultad=setup.cantidadDeltas;
+					level.analisisUmbral.saltoCurvaSuperior=setup.cantidadDeltas/10;
+					level.analisisUmbral.proximoNivelCurvaSuperior = setup.cantidadDeltas;
+					
+					/*
+					 * Queremos crear una lista de trials que incluya dos trials por dificultad
+					 */
+					int R = n + indiceReferenciaAcumulado;
+					System.out.println(R);
+					
+					for (int D=0; D<=setup.cantidadDeltas; D++) {
+						String tag = "R"+R+"D"+D;
+						
+						Array<Integer> recursos = ResourcesSelectors.findResourceByTag(tag);
+						
+						for (int id: recursos) {
+							JsonTrial trial = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
+									new int[] {ResourcesSelectors.findResourceByTag(setup.tagRefPos).first(),ResourcesSelectors.findResourceByTag(setup.tagRefNeg).first()}, TIPOdeTRIAL.TEST, id , false, true, false);
+							trial.parametros.D=D;
+							trial.parametros.R=R;
+							level.jsonTrials.add(trial);
+						}
+					}
+					level.build(Resources.Paths.levelsPath);
 				}
+				indiceReferenciaAcumulado = indiceReferenciaAcumulado + setup.cantidadReferencias; 
 			}
 			
-			
-			level.build(Resources.Paths.levelsPath);
 		}
 		
-		private static JsonSetupExpSensibilidad loadSetup() {
-			String path = Resources.Paths.currentVersionPath+"extras/jsonSetup.meta";
+		private static JsonSetupExpSensibilidad loadSetup(int nSetup) {
+			String path = Resources.Paths.currentVersionPath+"extras/jsonSetup"+nSetup+".meta";
 			String savedData = FileHelper.readLocalFile(path);
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			return json.fromJson(JsonSetupExpSensibilidad.class, savedData);
 		}
 		

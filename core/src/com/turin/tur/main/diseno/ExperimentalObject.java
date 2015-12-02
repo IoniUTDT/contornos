@@ -65,11 +65,13 @@ public class ExperimentalObject {
 		
 		public static void CreateJsonMetaData (JsonResourcesMetaData jsonMetaData, String path) {
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			FileHelper.writeFile(path + jsonMetaData.resourceId.id + ".meta", json.toJson(jsonMetaData));			
 		} 
 		
 		public void save() {
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			FileHelper.writeFile("experimentalsource/" + Constants.version() + "/" + resourceId.id + ".meta", json.toJson(this));
 		}
 		
@@ -77,6 +79,7 @@ public class ExperimentalObject {
 			String savedData = FileHelper.readFile("experimentalsource/" + Constants.version() + "/" + Id + ".meta");
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
+				json.setUsePrototypes(false);
 				return json.fromJson(JsonResourcesMetaData.class, savedData);
 			} else { Gdx.app.error(TAG,"No se a podido encontrar la info del recurso experimental" + Id); }
 			return null;

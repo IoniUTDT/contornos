@@ -48,6 +48,7 @@ public class ResourcesSelectors {
 						// Carga la info de la metada 
 						String savedData = FileHelper.readFile(Resources.Paths.fullCurrentVersionPath + agrupamiento.ids.get(i) + ".meta");
 						Json json = new Json();
+						json.setUsePrototypes(false);
 						JsonResourcesMetaData jsonMetaData =  json.fromJson(JsonResourcesMetaData.class, savedData);
 						if ((jsonMetaData.nivelDificultad == dificultad.dificultad) || (jsonMetaData.nivelDificultad==0)){ // Lo incluye sea 0 o el nivel de dificultad pedido
 							agrupamientoFiltroDificultad.ids.add(agrupamiento.ids.get(i));

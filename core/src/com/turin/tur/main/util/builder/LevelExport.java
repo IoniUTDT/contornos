@@ -62,6 +62,7 @@ public class LevelExport {
 				String savedData = FileHelper.readLocalFile(Resources.Paths.levelsPath + "level" + i + ".meta");
 				if (!savedData.isEmpty()) {
 					Json json = new Json();
+					json.setUsePrototypes(false);
 					JsonLevel jsonLevel = json.fromJson(JsonLevel.class, savedData);
 					for (JsonTrial trial : jsonLevel.jsonTrials) { // busca en cada trial del nivel
 						for (int id : trial.elementosId) { // busca dentro de cada trial en la lista de elementos

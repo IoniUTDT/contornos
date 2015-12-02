@@ -61,6 +61,7 @@ public class LevelLogHistory {
 	
 	public void save() {
 		Json json = new Json();
+		json.setUsePrototypes(false);
 		FileHelper.writeFile(path, json.toJson(this.historyPending)); // Guarda lo que no se envio
 		FileHelper.writeFile(pathUploaded, json.toJson(this.historySended)); // Guarda lo que si se envio
 	}
@@ -70,6 +71,7 @@ public class LevelLogHistory {
 		String savedData = FileHelper.readLocalFile(path);
 		if (!savedData.isEmpty()) {
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			this.historyPending = json.fromJson(this.historyPending.getClass(),savedData);
 		} else {
 			this.historyPending = new Array<LevelLog>();
@@ -78,6 +80,7 @@ public class LevelLogHistory {
 		savedData = FileHelper.readLocalFile(pathUploaded);
 		if (!savedData.isEmpty()) {
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			this.historySended = json.fromJson(this.historySended.getClass(),savedData);
 		} else {
 			this.historySended = new Array<LevelLog>();

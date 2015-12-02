@@ -71,6 +71,7 @@ public class User {
 		
 		public void save(){
 			Json json = new Json();
+			json.setUsePrototypes(false);
 			FileHelper.writeFile(Constants.USERFILE, json.toJson(this));
 		}
 		
@@ -78,6 +79,7 @@ public class User {
 			String savedData = FileHelper.readLocalFile(Constants.USERFILE);
 			if (!savedData.isEmpty()) {
 				Json json = new Json();
+				json.setUsePrototypes(false);
 				return json.fromJson(JsonUser.class, savedData);
 			} else { Gdx.app.error(TAG,"No se a podido encontrar la info del usuario"); }
 			return null;

@@ -21,6 +21,7 @@ public class ResourcesMaker {
 	public static int height = Resources.Paths.height;
 	public static int width = Resources.Paths.width;
 	public static int contadorDeRecursos = Constants.Resources.Reservados;
+	public static int contadorDeReferenciasUmbral = 0;
 	
 	
 	public static void BuildResources() {
@@ -43,8 +44,76 @@ public class ResourcesMaker {
 
 		boolean geometrias = true;
 		if (geometrias) {
-			if (Builder.AppVersion == "90") {
-				objetos.addAll(recursosParalelismoAnalisisUmbral());
+			if (Builder.AppVersion == "UmbralCompleto") {
+				JsonSetupExpSensibilidad setup = new JsonSetupExpSensibilidad();
+
+				// Creamos los recursos de -6 a 6 con saltos de 3
+				// Vamos a trabajar todas las cuentas en radianes
+				setup.nombre = "Eje horizontal";
+				setup.tag = "H";
+				setup.titaRefInicial = -6;
+				setup.saltoTitaRefInt = 3;
+				setup.saltoTitaRef = setup.saltoTitaRefInt;
+				setup.anguloMinimo = 0.5f;  
+				setup.anguloMaximo = 30;
+				setup.largo=80; // Largo de las lineas
+				setup.separacionMinima = 15; // Separacion predeterminada
+				setup.separacionIncremento = 10;
+				setup.cantidadReferencias = 5;
+				setup.cantidadSeparaciones = 2;
+				setup.cantidadDeltas = 50;   
+				objetos.addAll(recursosParalelismoAnalisisUmbral(setup));
+				
+				// Creamos los recursos de 10 a 80 con saltos de 10
+				// Vamos a trabajar todas las cuentas en radianes
+				setup.nombre = "Primer cuadrante";
+				setup.tag = "1C";
+				setup.titaRefInicial = 10;
+				setup.saltoTitaRefInt = 10;
+				setup.saltoTitaRef = setup.saltoTitaRefInt;
+				setup.anguloMinimo = 1f;  
+				setup.anguloMaximo = 30;
+				setup.largo=80; // Largo de las lineas
+				setup.separacionMinima = 15; // Separacion predeterminada
+				setup.separacionIncremento = 10;
+				setup.cantidadReferencias = 8;
+				setup.cantidadSeparaciones = 2;
+				setup.cantidadDeltas = 50;   
+				objetos.addAll(recursosParalelismoAnalisisUmbral(setup));
+				
+				// Creamos los recursos verticales
+				// Vamos a trabajar todas las cuentas en radianes
+				setup.nombre = "eje vertical";
+				setup.tag = "V";
+				setup.titaRefInicial = 86;
+				setup.saltoTitaRefInt = 2;
+				setup.saltoTitaRef = setup.saltoTitaRefInt;
+				setup.anguloMinimo = 0.02f;  
+				setup.anguloMaximo = 10;
+				setup.largo=80; // Largo de las lineas
+				setup.separacionMinima = 15; // Separacion predeterminada
+				setup.separacionIncremento = 10;
+				setup.cantidadReferencias = 5;
+				setup.cantidadSeparaciones = 2;
+				setup.cantidadDeltas = 50;   
+				objetos.addAll(recursosParalelismoAnalisisUmbral(setup));
+
+				// Creamos los recursos de 100 a 170 con saltos de 10
+				// Vamos a trabajar todas las cuentas en radianes
+				setup.nombre = "Segundo cuadrante";
+				setup.tag = "2C";
+				setup.titaRefInicial = 100;
+				setup.saltoTitaRefInt = 10;
+				setup.saltoTitaRef = setup.saltoTitaRefInt;
+				setup.anguloMinimo = 1f;  
+				setup.anguloMaximo = 30;
+				setup.largo=80; // Largo de las lineas
+				setup.separacionMinima = 15; // Separacion predeterminada
+				setup.separacionIncremento = 10;
+				setup.cantidadReferencias = 8;
+				setup.cantidadSeparaciones = 2;
+				setup.cantidadDeltas = 50;   
+				objetos.addAll(recursosParalelismoAnalisisUmbral(setup));
 			}
 		}
 		// Crea los archivos correspondientes
@@ -79,7 +148,10 @@ public class ResourcesMaker {
 	 * Esta es una clase para manejar el setup experimental del diseño de experimento donde se quiere medir la sensibilidad al detectar el delta tita
 	 */
 	public static class JsonSetupExpSensibilidad {
+		public String tag;
 		// Vamos a trabajar todas las cuentas en radianes
+		String nombre; // Nombre del setup
+		float titaRefInicial; // Angulo de referencia inicial
 		int saltoTitaRefInt; // Salto del tita de referencia 
 		float saltoTitaRef; //Salto del tita pero en formato float
 		float anguloMinimo; //Angulo minimo del delta
@@ -90,21 +162,11 @@ public class ResourcesMaker {
 		int cantidadReferencias; // Cantidad de angulos tita (referencia)
 		int cantidadSeparaciones; // Cantidad de saltos en la separacion de las rectas
 		int cantidadDeltas; // Cantidad de delta titas que se generan en cada condicion de angulo de referencia y de separacion	
+		public String tagRefPos="+"; // Guarda el tag de la ref positiva
+		public String tagRefNeg="-"; // Guarda el tag de la ref negativa
 	}
 	
-	private static Array<Imagen> recursosParalelismoAnalisisUmbral() {
-		JsonSetupExpSensibilidad setup = new JsonSetupExpSensibilidad();
-		// Vamos a trabajar todas las cuentas en radianes
-		setup.saltoTitaRefInt = 90;
-		setup.saltoTitaRef = setup.saltoTitaRefInt;
-		setup.anguloMinimo = 0.02f;  
-		setup.anguloMaximo = 30;
-		setup.largo=80; // Largo de las lineas
-		setup.separacionMinima = 15; // Separacion predeterminada
-		setup.separacionIncremento = 10;
-		setup.cantidadReferencias = 180/setup.saltoTitaRefInt;
-		setup.cantidadSeparaciones = 2;
-		setup.cantidadDeltas = 100;   
+	private static Array<Imagen> recursosParalelismoAnalisisUmbral(JsonSetupExpSensibilidad setup) {
 		
 		/*
 		 * Queremos mapear una escala log en una lineal, es decir que parametro [pmin-->pmax] mapee angulos que van de anguloMin --> angluloMax de manera que p = 1/A*log(1/B*angulo)
@@ -120,17 +182,22 @@ public class ResourcesMaker {
 		
 		Array<Imagen> objetos = new Array<Imagen>();
 		
-		for (int j=0; j<setup.cantidadSeparaciones ; j++) {
-			
-			float separacion = setup.separacionMinima + j * setup.separacionIncremento; // Itera para separaciones cada vez mayores
+		
+		for (int i=0; i<setup.cantidadReferencias; i++) {
+		
+			for (int j=0; j<setup.cantidadSeparaciones ; j++) {
+				
+				boolean recursoPosCreado = false;
+				boolean recursoNegCreado = false;
+				
+				float separacion = setup.separacionMinima + j * setup.separacionIncremento; // Itera para separaciones cada vez mayores
 			// Esto no lo estoy usando!
-			float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/setup.largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
-			for (int i=0; i<setup.cantidadReferencias; i++) {
+			// float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/setup.largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
 				
 				// Creamos la imagen paralela
 				Imagen imagen = crearImagen();
 				
-				float anguloReferencia = i * setup.saltoTitaRef;
+				float anguloReferencia = setup.titaRefInicial + i * setup.saltoTitaRef;
 				// Calculamos los centros de manera que esten separados en funcion del angulo
 				float Xcenter1 = width/2 - separacion/2 * MathUtils.sinDeg(anguloReferencia);
 				float Xcenter2 = width/2 + separacion/2 * MathUtils.sinDeg(anguloReferencia);
@@ -162,7 +229,7 @@ public class ResourcesMaker {
 				
 				imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 				imagen.name = "Imagen de rectas no paralelas generada automaticamente";
-				imagen.idVinculo = "R"+i+"D0";
+				imagen.idVinculo = "R"+(contadorDeReferenciasUmbral+i)+"D0";
 				imagen.categories.add(Categorias.Lineax2);
 				imagen.categories.add(Categorias.Paralelas);
 				imagen.nivelDificultad = -1;
@@ -203,13 +270,17 @@ public class ResourcesMaker {
 					// Datos generales
 					imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 					imagen.name = "Imagen de rectas no paralelas generada automaticamente";
-					imagen.idVinculo = "R"+i+"D"+k;
+					imagen.idVinculo = "R"+(contadorDeReferenciasUmbral+i)+"D"+k;
 					imagen.categories.add(Categorias.Lineax2);
 					imagen.categories.add(Categorias.NoParalelas);
 					imagen.nivelDificultad = -1;
 					
-					if ((k==setup.cantidadDeltas/1)&&(j==setup.cantidadSeparaciones-1)) {
+					if ((recursoNegCreado==false) & (anguloDelta>9) & (j==setup.cantidadSeparaciones-1)){
+						recursoNegCreado = true;
 						Imagen imagenRefNeg = crearImagen();
+						
+						System.out.println(imagenRefNeg.resourceId.id);
+						
 						// Almacenamos la data de la info de la geometria que queremos estudiar.
 						imagenRefNeg.infoConceptual.deltaAngulo = anguloDelta;
 						imagenRefNeg.infoConceptual.deltaAnguloLinealizado = k;
@@ -236,7 +307,7 @@ public class ResourcesMaker {
 						// Datos generales
 						imagenRefNeg.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 						imagenRefNeg.name = "Imagen de rectas no paralelas generada automaticamente";
-						imagenRefNeg.idVinculo = "R"+i+"D"+k+"-";
+						imagenRefNeg.idVinculo = setup.tagRefNeg;
 						imagenRefNeg.categories.add(Categorias.Lineax2);
 						imagenRefNeg.categories.add(Categorias.NoParalelas);
 						imagenRefNeg.nivelDificultad = -1;
@@ -274,15 +345,17 @@ public class ResourcesMaker {
 					// Datos generales
 					imagen.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 					imagen.name = "Imagen de rectas no paralelas generada automaticamente";
-					imagen.idVinculo = "R"+i+"D"+k;
+					imagen.idVinculo = "R"+(contadorDeReferenciasUmbral+i)+"D"+k;
 					imagen.categories.add(Categorias.Lineax2);
 					imagen.categories.add(Categorias.NoParalelas);
 					imagen.nivelDificultad = -1;
 					
-					
-					if ((k==setup.cantidadDeltas/1)&&(j==setup.cantidadSeparaciones-1)) {
+					if ((recursoPosCreado==false) & (anguloDelta>9) & (j==setup.cantidadSeparaciones-1)){
+						recursoPosCreado = true;
+						
 						// Creamos la imagen con delta "positivo"
 						Imagen imagenPos = crearImagen();
+						System.out.println(imagenPos.resourceId.id);
 						
 						// Almacenamos la data de la info de la geometria que queremos estudiar.
 						imagenPos.infoConceptual.deltaAngulo = anguloDelta;
@@ -310,7 +383,7 @@ public class ResourcesMaker {
 						// Datos generales
 						imagenPos.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 						imagenPos.name = "Imagen de rectas no paralelas generada automaticamente";
-						imagenPos.idVinculo = "R"+i+"D"+k+"+";
+						imagenPos.idVinculo = setup.tagRefPos;
 						imagenPos.categories.add(Categorias.Lineax2);
 						imagenPos.categories.add(Categorias.NoParalelas);
 						imagenPos.nivelDificultad = -1;
@@ -318,17 +391,25 @@ public class ResourcesMaker {
 					}
 					
 					objetos.add(imagen);
-
+				} // Termina el loop en separacion
+				if (recursoPosCreado == false) {
+					System.out.println("Warning! : No se creo el recurso positivo de referencia!");
 				}
-			}
-		}
+		
+				if (recursoNegCreado == false) {
+					System.out.println("Warning! : No se creo el recurso negativo de referencia!");
+				}
+			} // Termina el loop en referencias
+		} // Termina el setup
 		saveSetup(setup);
+		contadorDeReferenciasUmbral = contadorDeReferenciasUmbral + setup.cantidadReferencias;
 		return objetos;
 	}
 	
 	private static void saveSetup(JsonSetupExpSensibilidad jsonSetup) {
-		String path = Resources.Paths.currentVersionPath+"/extras/jsonSetup.meta";
+		String path = Resources.Paths.currentVersionPath+"/extras/jsonSetup"+contadorDeReferenciasUmbral+".meta";
 		Json json = new Json();
+		json.setUsePrototypes(false);
 		FileHelper.writeFile(path, json.toJson(jsonSetup));
 	}
 		
