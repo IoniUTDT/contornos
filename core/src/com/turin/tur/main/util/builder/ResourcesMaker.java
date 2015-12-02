@@ -185,14 +185,15 @@ public class ResourcesMaker {
 		
 		for (int i=0; i<setup.cantidadReferencias; i++) {
 		
+			boolean recursoPosCreado = false;
+			boolean recursoNegCreado = false;
+			
 			for (int j=0; j<setup.cantidadSeparaciones ; j++) {
 				
-				boolean recursoPosCreado = false;
-				boolean recursoNegCreado = false;
 				
 				float separacion = setup.separacionMinima + j * setup.separacionIncremento; // Itera para separaciones cada vez mayores
-			// Esto no lo estoy usando!
-			// float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/setup.largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
+				// Esto no lo estoy usando!
+				// float anguloMaximoNoInterseccion = (float) Math.toDegrees(Math.asin(separacion/setup.largo)); // Calcula el maximo angulo permitido de manera que no corten las dos rectas.
 				
 				// Creamos la imagen paralela
 				Imagen imagen = crearImagen();
@@ -391,16 +392,16 @@ public class ResourcesMaker {
 					}
 					
 					objetos.add(imagen);
-				} // Termina el loop en separacion
-				if (recursoPosCreado == false) {
-					System.out.println("Warning! : No se creo el recurso positivo de referencia!");
-				}
-		
-				if (recursoNegCreado == false) {
-					System.out.println("Warning! : No se creo el recurso negativo de referencia!");
-				}
-			} // Termina el loop en referencias
-		} // Termina el setup
+				} // Termina el loop en deltasTita
+			} // Termina el loop de separaciones
+			if (recursoPosCreado == false) {
+				System.out.println("Warning! : No se creo el recurso positivo de referencia!");
+			}
+	
+			if (recursoNegCreado == false) {
+				System.out.println("Warning! : No se creo el recurso negativo de referencia!");
+			}
+		} // Termina el loop de referencias
 		saveSetup(setup);
 		contadorDeReferenciasUmbral = contadorDeReferenciasUmbral + setup.cantidadReferencias;
 		return objetos;
