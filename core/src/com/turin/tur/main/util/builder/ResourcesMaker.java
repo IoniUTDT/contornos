@@ -43,7 +43,9 @@ public class ResourcesMaker {
 
 		boolean geometrias = true;
 		if (geometrias) {
-			objetos.addAll(recursosParalelismoAnalisisUmbral());
+			if (Builder.AppVersion == "90") {
+				objetos.addAll(recursosParalelismoAnalisisUmbral());
+			}
 		}
 		// Crea los archivos correspondientes
 		for (Imagen im : objetos) {
@@ -93,16 +95,16 @@ public class ResourcesMaker {
 	private static Array<Imagen> recursosParalelismoAnalisisUmbral() {
 		JsonSetupExpSensibilidad setup = new JsonSetupExpSensibilidad();
 		// Vamos a trabajar todas las cuentas en radianes
-		setup.saltoTitaRefInt = 10;
+		setup.saltoTitaRefInt = 90;
 		setup.saltoTitaRef = setup.saltoTitaRefInt;
-		setup.anguloMinimo = 1;  
-		setup.anguloMaximo = 45;
+		setup.anguloMinimo = 0.02f;  
+		setup.anguloMaximo = 30;
 		setup.largo=80; // Largo de las lineas
 		setup.separacionMinima = 15; // Separacion predeterminada
 		setup.separacionIncremento = 10;
 		setup.cantidadReferencias = 180/setup.saltoTitaRefInt;
 		setup.cantidadSeparaciones = 2;
-		setup.cantidadDeltas = 50;   
+		setup.cantidadDeltas = 100;   
 		
 		/*
 		 * Queremos mapear una escala log en una lineal, es decir que parametro [pmin-->pmax] mapee angulos que van de anguloMin --> angluloMax de manera que p = 1/A*log(1/B*angulo)
@@ -206,7 +208,7 @@ public class ResourcesMaker {
 					imagen.categories.add(Categorias.NoParalelas);
 					imagen.nivelDificultad = -1;
 					
-					if ((k==setup.cantidadDeltas)&&(j==setup.cantidadSeparaciones-1)) {
+					if ((k==setup.cantidadDeltas/1)&&(j==setup.cantidadSeparaciones-1)) {
 						Imagen imagenRefNeg = crearImagen();
 						// Almacenamos la data de la info de la geometria que queremos estudiar.
 						imagenRefNeg.infoConceptual.deltaAngulo = anguloDelta;
@@ -278,7 +280,7 @@ public class ResourcesMaker {
 					imagen.nivelDificultad = -1;
 					
 					
-					if ((k==setup.cantidadDeltas)&&(j==setup.cantidadSeparaciones-1)) {
+					if ((k==setup.cantidadDeltas/1)&&(j==setup.cantidadSeparaciones-1)) {
 						// Creamos la imagen con delta "positivo"
 						Imagen imagenPos = crearImagen();
 						

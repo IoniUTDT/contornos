@@ -11,7 +11,7 @@ public class Constants {
 	// al cambiar la version no se cargan los datos viejo ni las estructuras
 	// viejas
 	public static final float VERSION = 1.1f;
-	public static final int CODEVERSION = 10;
+	public static final int CODEVERSION = 11;
 
 	// Version of game for internal use
 	public static int version() {
@@ -31,7 +31,7 @@ public class Constants {
 		// Escala de referencia
 		float anchoDefault = 600;
 		float altoDefault = 300;
-		factorEscala = Gdx.graphics.getWidth()/anchoDefault*1/2;
+		factorEscala = Gdx.graphics.getWidth()/anchoDefault*1/3;
 		return factorEscala;
 	}
 	

@@ -67,6 +67,7 @@ public class Session {
 	public static class SessionLog { //Nota: tiene que ser static porque sino colapsa el JsonLoad al quere crear instancias
 		public long userID;
 		public long id;
+		public String appVersion = Builder.AppVersion;
 		public STATUS status=STATUS.CREADO;
 		public long idEnvio;
 		public long codeVersion = Constants.CODEVERSION;

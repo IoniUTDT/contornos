@@ -1,0 +1,1207 @@
+[33mcommit 2a16b71b933c7ef9588d4f05aa0ad27eabfcfd58[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Nov 17 19:28:42 2015 -0300
+
+    Anda el experimento para medir el umbral!
+
+[33mcommit 3c00cd5045f4b33afd6512f0a5e9494c35762a2a[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Nov 17 16:56:11 2015 -0300
+
+    Primer version de prueba de umbral, parece andar pero necesito debuguear
+
+[33mcommit 2a712faf20c3fb562400714fda2a5c0762d4a65d[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Sun Nov 15 18:32:15 2015 -0300
+
+    Voy a intentar hacer un checkout a un tag viejo, espero no perder todo
+    lo nuevo :(
+
+[33mcommit 78b4a3cacb350e9b426b9d3d6443d0dbc50c7ebb[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Fri Nov 13 15:37:09 2015 -0300
+
+    Estoy revisando el tema de la generacion de recursos en la linea de
+    distinguir qsi se juntan o no.
+
+[33mcommit a5003d2534963c066a3f2d97eda5fa147e6ecd0f[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Nov 11 20:00:36 2015 -0300
+
+    Terminede hacer el hacedor de recursos para el setup experimental nuevo
+    y el hacedor de niveles. Ahora tengo que revisar el tema de al dinamica
+    del juego para que eleija el trial en funcion de la dificultad y el
+    desempeño
+
+[33mcommit f5d0be630b8044155f9a2bfdd5ec9314a2dcb4aa[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Nov 11 16:51:07 2015 -0300
+
+    Hice el generador de recursos.
+
+[33mcommit 9ffeb24fa639b162e690a7b82fe51257a3b5e007[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Nov 10 19:38:45 2015 -0300
+
+    Proceso inicial de crear los recursos nuevos
+
+[33mcommit 712e9b7cf71675d2757f2c04a4ed4b25077308ba[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Nov 10 18:35:37 2015 -0300
+
+    Prueba
+
+[33mcommit 9e736d0fd1acd7b66b53c672e5c27c79039a54be[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Fri Nov 6 19:11:05 2015 -0300
+
+    Creo que despues de varias hora de debug logre hacer el codigo que
+    categorice bien la dificultad de los angulos!
+
+[33mcommit 5a1e7b09d7f77a5b7cdc6c0209313d3774da7cf1[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Fri Nov 6 16:24:16 2015 -0300
+
+    Voy a implementar un registro del levelVersion
+
+[33mcommit 095841bb2383afeb7397857519a83a6b3fb784e6[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Fri Oct 30 19:26:50 2015 -0300
+
+    Upload diario
+
+[33mcommit c990367ac6068a6b4388975f3bfbabd299b383f2[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 28 22:14:33 2015 -0300
+
+    Subo el update del fin del dia, incluye varios commit
+
+[33mcommit 7bbd36b019875e03b970b54acf492fce531f7c6c[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 28 21:02:17 2015 -0300
+
+    Entre varios cambios hice q el jsonTrial guarde el nivel de dificultad
+    supuesto. Digo supuesto porque puede haber recursos con otra dificultad
+    dentro, pero lo necesitaba para poder identificar la dificultad cuando
+    el estimulo es un recurso de dificultad neutra o generica.
+
+[33mcommit 75249e77ac3bdb8f4643b79616233d89ab4dbf52[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 28 16:52:00 2015 -0300
+
+    Acabo de hacer algunos cambios en los registro. Agregue que se guarde el
+    json del recurso estilo ademas del tocado, y me di cuenta que en
+    realidad estimulo y rta es lo mismo, asique borre donde se guardaban
+    cosas del estimulo
+
+[33mcommit 1d69b14826aaa3eb669ce3e3dec1197e3749238c[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 28 16:39:20 2015 -0300
+
+    correccion menor al commit anterior
+
+[33mcommit c10e93a6c5390c33b93440880decaccea767ccb0[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 28 16:36:44 2015 -0300
+
+    Modifique el codigo para que ahora haya dos niveles de doficultad
+    especiales. El 0 significa que esta incluido en cualquier nivel de
+    dificultad, y el -1 indica que no esta catalogado. Esto es importante
+    porque por ej las lineas paralelas son la referencia de cualquier
+    dificultad, y por lo tanto tienen que estar consideradas cuando se hace
+    cualquier busqueda. Es diferente el caso de cosas que no tienen una
+    nocion de dificultad asociada, como los textos, las cosas de los
+    tutoriales, o simplemente los recurosos para los que todavia no hice un
+    criterio de dificultad
+
+[33mcommit 6686ebe6a9d344a9fb291dd3003dc66e4ef9d4c8[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Mon Oct 26 16:37:59 2015 -0300
+
+    Acabo de cambiar la estructura de datos que se envia para que en cada
+    touch envie la info completa de la metadata del objeto tocado
+
+[33mcommit 8c15f6520779bf7ff8c7cbe2efb57276a4ea63a4[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 21 15:17:20 2015 -0300
+
+    En el log de los trials estaba un toque desctualizado la info de los ids
+    que se cargan, eso porque no estaba guardando el json de datos que
+    vienen del levelmaker sino porque crea una estructura nueva y nunca lo
+    habia actualizado. Lo que hice fue agregar una entrada q sea que cada
+    log de un trial guarde el json de ese trial.
+
+[33mcommit c2c37d07d989caf1ab00ec1f650d400f32ab4582[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Mon Oct 19 19:53:42 2015 -0300
+
+    Hice cambios generales en lo que es la busqueda de recursos para armar
+    los trials. Inclui un filtro por dificultad. Y unifique todas las
+    busquedas en un buscador que tiene 4 filtros, grupo, categorias,
+    excluidos y dificultad.
+    
+    Todo parece funcionar bien excepto que probando los niveles creados
+    algunos trials no se crean bien y no logre descubrir porque! Pero queda
+    para otro dia.
+
+[33mcommit f2b418916d5f734b8f548c6408a713b739223b82[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 14 18:32:07 2015 -0300
+
+    Solucionado el problema de deteccion de categorias. Al menos en el tema
+    de la estadistica.
+
+[33mcommit 4d9a5049ebf9b5ba12a9c15f116a5cfd89fe1aef[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 14 18:13:02 2015 -0300
+
+    Tengo que corregir un error al detectar las categorias, en el tutorial
+    me estaba dando bien de casualidad!
+
+[33mcommit 035fdaae4993803123655d28c21ce6dfbd6ce46d[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 14 15:14:57 2015 -0300
+
+    Ya cree el nuevo sistema de significancias a nivel levelmaker. Ahora voy
+    a desmontar el viejo sistema e implementar el nuevo a nivel dinamico (en
+    el juego)
+
+[33mcommit e79d3c7b983ef6ebd42a966d55dd1961aa7319bd[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Oct 13 18:32:39 2015 -0300
+
+    update antes de salir
+
+[33mcommit 0152acdf34e728c1d17940d6a822764572387439[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Oct 13 16:43:36 2015 -0300
+
+    Limpieza del builder finalizada
+
+[33mcommit 3dac3aa08b9e57a04f294727cc521b2f2b610bc4[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Oct 13 15:08:09 2015 -0300
+
+    Primera fase de limpiar codigo del buildLevel superada
+
+[33mcommit 87328929bff6572c5347d957a11b8a732c6a245d[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Sat Oct 10 22:31:10 2015 -0300
+
+    Si no me equivoco ya solucione el problema de formato en el codigo que
+    genera la estadistica y ademas lo testie y estaria dando cosas
+    razonables!
+
+[33mcommit 192d3e5e880e386344a1a097e8113c367391bc34[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Fri Oct 9 20:00:44 2015 -0300
+
+    Tengo casi terminado el tema de encontrar las curvas de probabilidad
+    cuando los trials son arbitrarios. Tengo un problema nabo con el tipo de
+    datos array, y me falto poder verificar que este todo bien en el ultimo
+    paso, pero por ahora parece funcionar, en particular el tema de generar
+    las curvas para cada subconjunto de datos.
+
+[33mcommit 0acadd49b9e0d0d17f9db2ecbf90eb22198aa3ad[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 7 18:48:58 2015 -0300
+
+    Me quede a medio hacer pero me tengo q ir. Estoy escribiendo el codigo
+    que genera el numero de respuestas significativas con 0,05 en el level
+    test. Despues habria que repetirlo para el entrenamiento. Falta
+    terminarlo.
+
+[33mcommit 0eb7ee42481405c55403f31f4bd8cf1210f0a548[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Oct 7 18:19:15 2015 -0300
+
+    Arme el sistema que reporta resultados al finalizar un nivel. Todavia no
+    analiza significancia, eso lo voy a hacer ahora.
+
+[33mcommit f1e04c905d882d71b6ca8444a4f2347888eda910[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Mon Oct 5 19:24:05 2015 -0300
+
+    Estuve trabajando en el levelmaker
+    
+    Automatice un par de cosas, pase a rutinas los hacedores de niveles y
+    cree un hacedor de entrenamiento para paralelismo.
+
+[33mcommit c00e94f657f0842341f2be732651ef069288ccab[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Sat Oct 3 11:45:37 2015 -0300
+
+    cambio menor
+
+[33mcommit 3c5c1446888aaa69eb45b4e5cce98cae7702d7ba[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Sat Oct 3 11:38:06 2015 -0300
+
+    Update de rutina
+
+[33mcommit 9d0220b51acba3ca3e7e028f8dbf608956c650a1[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Sep 30 13:11:17 2015 -0300
+
+    Tutorial completamente pasado a generador de niveles por categorias!! :)
+    
+    Todo va encaminado, ahora tengo que rahacer el test mas automatizado y
+    el entrenamiento.
+
+[33mcommit 27d4a1eadd2a11aea1fac40c3e61d591443a2e19[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Sep 29 19:25:41 2015 -0300
+
+    Repito xq no se envio bien antes.
+    
+    Hoy hice:
+    
+    - Mejoras en diseño: botones mas grandes y separados; Que aclare que son
+    angulos agudos y graves; que diga q hay que tocar las imagenes para
+    escucharlas
+    
+    - Que categorice los cuadrilateros y los angulos rectos segun que esten
+    rotados o no
+    - Que se pueda seleccionar figuras genericas segun categoria o segun una
+    combinacion de dos categorias.
+    - Que cuando rearma los niveles guarde los viejos en una carpeta temp.
+
+[33mcommit 7ea566a4ce9fca579a67b082d19354b936e53162[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Fri Sep 18 20:26:58 2015 -0300
+
+    Upddate diario. Agregue que banque a estar por enciema de 40 fps para
+    aceptar toques y estuve modificando el generador de pares de rectas para
+    que sean mas linas y razonables (obligue a que haya una inclinacion
+    minima en las no paralelas para que no se parezcan demaciado a las
+    paraleleas). Tambien hice que registre los recursos en una tabla de
+    entrada por categorias y por grupos. Lo que me falto hacer fue que use
+    eso para generar niveles automaticamente.
+
+[33mcommit 530e5fbe6d5e1d766e56147d6bf137cdabae79e8[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Sep 15 17:15:34 2015 -0300
+
+    Cambios en el sonido implementados! Borre muchas cosas para ver como era
+    buscar versiones viejas
+
+[33mcommit 0bbedba9f38c32f2acd9e10f884b5b6e7f030313[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Sep 15 15:30:02 2015 -0300
+
+    Agregue un generador de recursos de lineas que tiene mas sentido que los
+    anteriores, porque genera pares de lineas comparables entre si. Ahora
+    voy a ver de eliminar el tema de los pulsos de frecuencia, porque se
+    escuchan muy diferente. En lugar de eso voy a hacer rampas incluso
+    forzandolas cuando el angulo no de.
+
+[33mcommit 6914755f9c8beaf2fa2d7af82b35f05591adcc5b[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Mon Sep 14 16:29:34 2015 -0300
+
+    Despues de muchas vueltas creo que encontre el problema que habia en el
+    log de los level. Tambien limpie un poco varias cosas menores.
+
+[33mcommit 20b6a9b977ce902cd5a4668f4a2f03d9b077abe4[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Fri Sep 11 20:17:05 2015 -0300
+
+    Hice cambios sustanciales en como envia los datos. Ahora se evita que
+    envie datos por duplicado. Pero por alguna razon en los logs de los
+    levels esta habiendo un problema. Estuve peleando un buen rato y no
+    logro identificarlo.
+
+[33mcommit 5f9502585adf029c661c1f5a85428d334084010f[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Sep 9 19:31:30 2015 -0300
+
+    Tambien agregue que se registre el level y la session en los soundLog
+
+[33mcommit 3b8135611102b27c8b18fcf3330371365dc1647c[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Sep 9 19:28:58 2015 -0300
+
+    Agregue que registre el level y la session en cada touch
+
+[33mcommit e856f6e7a0477d05aaeb0ee618a1931adabbc78c[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Sep 9 19:11:28 2015 -0300
+
+    Agregue que el log imcluya el titulo a los levels y trials
+
+[33mcommit 15ef77807ab1a70922c2357ce1c7e5bbcf48accc[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Sep 8 18:48:50 2015 -0300
+
+    Version final dia de hoy
+
+[33mcommit eca6b2e631b819baf2816672ce186687e1e45f44[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Tue Sep 8 17:32:19 2015 -0300
+
+    Agregue que se pueda setear un nivel para que aparezca en el menu o no y
+    estoy armando mas niveles.
+
+[33mcommit ae5af9579db14d111007dcf12fef43f238697f8c[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Mon Sep 7 17:00:44 2015 -0300
+
+    No se si fueron muy efectivos los cambios pero algunas cosas estan
+    mejor.
+
+[33mcommit 54b5582da3708307b73964de7244119b987c7b1e[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Mon Sep 7 14:56:33 2015 -0300
+
+    Esta medio feo y hay algunos problemas en el codigo q pasa mal de nivel.
+    Voy a intehntar repensar el diseño del controller q creo que quedo medio
+    entevezado.
+
+[33mcommit 9bcfdbe068e12bb1d3566f7f1fc2e5d2dbd9802d[m
+Merge: 53540f4 747b74c
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Sep 2 16:06:02 2015 -0300
+
+    Merge branch 'master' of https://github.com/IoniUTDT/contornos.git
+
+[33mcommit 53540f442b7f7363e5aef823a603b6388870e1f3[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Sep 2 15:10:05 2015 -0300
+
+    Cambiados algunas cuestiones de como se registran los datos. Agregue
+    marcas absolutas ademas de las relativas respecto al tiempo de entrada y
+    salida del trial y una marca para indicar que se guardaron bien los
+    datos de salida.
+
+[33mcommit 747b74cc65be31bc10c477de9c3df28e2b2b1e27[m
+Author: TurinUTDT <ionatan@gmail.com>
+Date:   Wed Sep 2 15:10:05 2015 -0300
+
+    Cambiados algunas cuestiones de como se registran los datos. Agregue
+    marcas absolutas ademas de las relativas respecto al tiempo de entrada y
+    salida del trial y una marca para indicar que se guardaron bien los
+    datos de salida.
+
+[33mcommit c3e520a61e50811f9ade7939bf0557586b8ea12b[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Fri Aug 21 19:46:31 2015 -0300
+
+    Corregidas algunas cosas menores, incluyendo q se ajuste el tamaño de
+    letra a la pantalla en los trials.
+
+[33mcommit a15baac759ff632af9e2f38f41db119c6a9718ed[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Aug 19 22:37:11 2015 -0300
+
+    Despues de varias pruebas corregi el tema de la nivelacion de sonido.
+    Tambien arme de nuevo el tutorial pero mas corto y representativo.
+    Tambien hice que el tema del random en la eleccion de la respuesta solo
+    se pueda activar si la rta maracda esta entre las que se dan a elegir y
+    por otro lado que si la rta marcada es nada entonces siempre elija una
+    random. Son dos chequeos a prueba de boludos.
+
+[33mcommit 3e1ddcd22cb5e337e7e586d1288d61e5c9e49aaa[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Aug 19 19:10:41 2015 -0300
+
+    Corregidos dos problemas. Por un lado habia un cast (int) que no estaba
+    afectando toda la cuenta y hacia que en el calculo de donde empezaban
+    las rampas hiciera la cuenta mal.
+    
+    Por otro lado, nunca se verificaba que las lineas estuvieran dentro del
+    rango correcto de valores al pasarlas a sonido, por lo que las lineas
+    que se iban de escala generaban problemas. Ahora las trunca en el borde
+    de la pantalla.
+
+[33mcommit c4da513d3e25b785c67587049627230d1c4bffd9[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 18 22:26:40 2015 -0300
+
+    Salvo el tema del sonido q algunas cosas se generan mal, parece estar
+    todo andando!!! Con un generador de recursos completo e inteligente (que
+    solo copia lo minimo necesario!)
+
+[33mcommit efc2d7b413682502b1fb78cfdcb8eceb80a7ca7c[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 18 21:47:19 2015 -0300
+
+    Incluye wav to mp3
+
+[33mcommit 8be09bb77aa99874fac5136a49da8508766c905f[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 18 21:15:05 2015 -0300
+
+    Probando resulta que el SVG to sunud tiene algunos problemas! Tengo q
+    revisar donde estan los errores! Algunas lineas no las crea y otras las
+    crea a destiempo
+
+[33mcommit 3c907b4d04d14414aae4b7672868fe84d197ac83[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 18 20:10:34 2015 -0300
+
+    Incluyo el modulo de sonido, que hasta ahora venia programando aparte.
+
+[33mcommit 3a13f8790d87fb1e0e163f24ea5e2ea93323548b[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 18 17:55:39 2015 -0300
+
+    Hice que trandforme los SVTG en el propio codigo
+
+[33mcommit c7e15f53e2c3a9d981dcf23138980d712f4af7df[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Fri Aug 14 22:15:26 2015 -0300
+
+    Por un rato colapso el proyecto dentro de eclipse. Pero logre hacerlo
+    andar de nuevo.
+    
+    Creo que todo deberia estar ok. Excepto la version web q por alguna
+    razon no me deja correr, pero no es un problema del codigo, es un
+    problema general de eclipse q no reconoce bien las cosas.
+
+[33mcommit d536f3b9aa640eadb2edad7f82a92e944831d7e9[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Aug 13 12:27:45 2015 -0300
+
+    Chequeado q se ve mas o menos bien en diferentes celulares
+
+[33mcommit ae3feb7d67476be7e474bacfb1f35786a7860254[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Aug 13 12:05:38 2015 -0300
+
+    Logre medio feo pero que se vea mas grande segun la resolucion de la
+    pantalla.
+
+[33mcommit e1cda5ffb68629fee818d7477cf9344eebad4d21[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Aug 5 16:11:59 2015 -0300
+
+    Cambios en el registro de datos de cosas que no estaba bien hechas.
+
+[33mcommit 9113502f8091364753cac6746ff34eb9ac75c040[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Aug 5 15:24:25 2015 -0300
+
+    Log de touch sonido y trials implementado. En el futuro deberia chequear
+    q ande bien con pruebas reales.
+
+[33mcommit 969c06b084eb0838a3777a6f489e4733ba762c36[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 4 19:17:16 2015 -0300
+
+    Esta andando bien. Hay que ver de que suba el log de los trials y que
+    registre los sound y los touch que no esta terminado
+
+[33mcommit ba9d936d2362b10f5a0cd48ce52bfd86f2b7d9d7[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 4 18:33:47 2015 -0300
+
+    Muchas mejoras de limpieza implementadas!
+
+[33mcommit 18f8ac5e186e2178b3cf297e0bc1ddda8e9bff9a[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Aug 4 17:58:02 2015 -0300
+
+    Hice muchos cambios. Implemente parcialmente el registro de toques, y
+    cambie para que el sonido se maneje completamente desde una sub clase
+    especial en el Controller.
+    
+    Ahora hay un error que deselecciona el sonido cuando no corresponde,
+    pero tambien hay un momento de cosas obsoletas (especialmente el tema
+    del touch original). Voy a hacer una limpieza.
+
+[33mcommit e4e98d85fe7d5d92e2a8518cb0efc13e20142824[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Aug 3 19:29:30 2015 -0300
+
+    Hay un error con alguna cuenta en la generacion de cuadrilateros q hace
+    q algunos se vayan de la pnatalla, pero no se bien donde esta y asi
+    funciona mas o menos bien. Dado que esto es para uso interno no tiene
+    sentido ahora seguis dedicandole tiempo a eso.
+
+[33mcommit bd5dc5af69b6da36663a7d1199e4fd9ddca84fc1[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Aug 3 18:46:06 2015 -0300
+
+    ver
+
+[33mcommit b9d7d88f2a6d9ae10b8d7065ccec7a2a98be809a[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Aug 3 18:18:43 2015 -0300
+
+    algo esta mal con los margenes
+
+[33mcommit 9d4e15f5d514e57556fb018aadb38d29678df3e5[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Aug 3 16:18:36 2015 -0300
+
+    error de memoria
+
+[33mcommit 7fb582f8d37d3dba912635a4e298187754b56ce9[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Aug 3 15:40:23 2015 -0300
+
+    Se supone que termien de armar la rutina q crea cuadrilateros! Todavia
+    no la probe
+
+[33mcommit c7f5e32930650723f03aba6a8ef06d7c80d0a585[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 30 20:32:22 2015 -0300
+
+    Esta a medio hacer la generacion de cuadrilateros.
+
+[33mcommit b8490f2178cf6ff32ab882de19eb237a500ae1ba[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 30 14:41:56 2015 -0300
+
+    Acabo de mejorar mi servidor y ahora funcion en cualquier lado (puerto
+    80) bajo el dominio www.turitur.dynu.com
+
+[33mcommit d7ae5bbb9d5707a30a507b12d46c43f28c37c25b[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jul 29 20:54:17 2015 -0300
+
+    Estuve creando los logs. Me falta terminar de implementar el registro
+    del log del trial y todos su sub elementos, pero quiero verificar con
+    Ceci que tenga sentido la estructura de datos armada.
+
+[33mcommit e7997478207a54cc100c7a605d97a6141087c395[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jul 29 17:59:23 2015 -0300
+
+    Upload despues de frustrarme parta hacer algo generico con eltema de los
+    logs
+
+[33mcommit d1df8f0fafd0e59c531b9677ea7b80fd584ff2b2[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jul 29 17:39:16 2015 -0300
+
+    Ahora esta andando.
+    
+    Tratando de implementar un enviable generico segundo intento.
+
+[33mcommit 344df4431905dde9638b9ebcb90bfb4e596ef62b[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jul 29 17:12:19 2015 -0300
+
+    Estoy modificando el tema de los enviables y tengo un lio hago un
+    conmmit antes de hacer mas lio
+
+[33mcommit ee9e1fb47f77913ae58eeee0a034d22b19117f33[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 28 19:13:11 2015 -0300
+
+    Implementado la respuesta x categoria
+
+[33mcommit 5cf3a2821ace3135b6414f65f73a80816c08f8cb[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 28 17:22:11 2015 -0300
+
+    Recreados algunos recursos
+
+[33mcommit 7ff7870039432e990b72416c949021d997c9b147[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 28 17:04:47 2015 -0300
+
+    acabo de rediseñar un toque la enumeracion de categorias
+
+[33mcommit ce39bb0abbf6c7b71a57a16c276337bc6baf02fe[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 21:37:12 2015 -0300
+
+    Update v1.2.1
+
+[33mcommit 64fb294868b5447c1118305234846e96e7336a94[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 21:26:13 2015 -0300
+
+    Implementado el modo random sort (que pone las boxes en lugares al azar)
+    y cambiada la info del trial para que guarde directo las cosas que van
+    en el Json en el Json.
+
+[33mcommit fcda25fc54a6a6ec0199ca55f873db61aaa8ae2e[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 20:23:32 2015 -0300
+
+    cambio a version 1.3
+
+[33mcommit 429e33362bf7f7928a8fcc0d57a8027734b44baf[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 20:11:05 2015 -0300
+
+    Implementado que pruebe en el servidor de casa y en el localhost para
+    uplodear datos de session, y hecho que los uplodee y que separe lo que
+    ya subio
+
+[33mcommit 635e80a4361cfba9bf141692b6e69cdc88471788[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 15:27:13 2015 -0300
+
+    Limpio de cosas de prueba y empeizo a trabajar hoy
+
+[33mcommit 2efac24ea5e34a0cb0e6c48718c220056d0f4063[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 15:09:44 2015 -0300
+
+    Prueba3
+
+[33mcommit d44401cdf682664c3377a01ea7f76175baa0cc35[m
+Merge: 92afa89 0e57c4f
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 15:08:34 2015 -0300
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit 92afa8983030aac716245dbb17a976e773dafa11[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 27 15:06:50 2015 -0300
+
+    prueba 2 utdt
+
+[33mcommit 0e57c4fc760ed01c868c4f46f9cddbfcd145488f[m
+Author: Ionatan Perez <ionatan@gmail.com>
+Date:   Sun Jul 26 18:15:13 2015 -0300
+
+    5
+
+[33mcommit 9965eb390fa1b3d2cd96ad43ae1ecd5da2117ab6[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Sun Jul 26 18:14:16 2015 -0300
+
+    4
+
+[33mcommit 5253e416c2d4831d09539ce4dcb87abbf1746517[m
+Author: Ionatan Perez <ionatan@gmail.com>
+Date:   Sun Jul 26 18:00:42 2015 -0300
+
+    ... para subir en utdt
+
+[33mcommit 40daecb9d6e704d97cdd0db8352126950c6d2ccc[m
+Author: Ionatan Perez <ionatan@gmail.com>
+Date:   Sun Jul 26 16:58:15 2015 -0300
+
+    Prueba
+
+[33mcommit 274fd6b6fa8ff1afb1320b1242c9424740ff02b7[m
+Author: Ionatan Perez <ionatan@gmail.com>
+Date:   Sun Jul 26 16:50:23 2015 -0300
+
+    123
+
+[33mcommit 4b5a06a32374acc5c0c74d3c427bcaed71fd18c7[m
+Author: Ionatan Perez <ionatan@gmail.com>
+Date:   Sun Jul 26 16:49:38 2015 -0300
+
+    123 probando
+
+[33mcommit d5ff75e8b2a26466bf13552dd45a8c5db3f6faa3[m
+Author: Ionatan Perez <ionatan@gmail.com>
+Date:   Sun Jul 26 16:48:27 2015 -0300
+
+    cambios
+
+[33mcommit d1628d7564ffa57976613037c6c3ad811be7ebc6[m
+Author: Ionatan Perez <ionatan@gmail.com>
+Date:   Sun Jul 26 15:26:13 2015 -0300
+
+    Probando
+
+[33mcommit e715a39f4a337dd2c168627571f5493b3f2cf295[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Sat Jul 25 23:46:32 2015 -0300
+
+    Sync completa?
+
+[33mcommit 457fed0357ab7abecc9318e35eddf1c31422d5f4[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Fri Jul 24 19:09:31 2015 -0300
+
+    Implementado:
+    
+    La clase session
+    Que muestre todos los niveles y cuales se jugaron y cuales no.
+
+[33mcommit 339b1ed2673ae3d3f195d793ef7cf6d87f2cf3ac[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Fri Jul 24 17:26:44 2015 -0300
+
+    Pre empezar. Plan de hoy: revisar tema server, que se puedan volver a
+    jugar niveles y hacer nivel nuevos...
+
+[33mcommit 70d0e8c69bc19f32fd40885fa4648f7ab26de76f[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 23 19:05:37 2015 -0300
+
+    Quise hacer el tema de las sessiones pero sin exito. Me hice lio
+    queriando extender la clase game para que sea medio automatico. Tengo
+    que ver bien como resolverlo.
+
+[33mcommit 35f3b8a7f0f730295d00346227faccd7426e6144[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 23 16:18:31 2015 -0300
+
+    actr
+
+[33mcommit 3d999b10f595093f87487278931613a9eac63687[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 23 15:41:07 2015 -0300
+
+    Actualizacion menor
+
+[33mcommit 97ae92dd52490ac82e8e67f7691a694ea4a66c0d[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 21 21:10:57 2015 -0300
+
+    Tareas pendientes: revisar q onda el http y el json, crear clase session
+    que maneje el juego en gral (probablemente tenga sentido transpasarle el
+    user q ahora esta en el levelController) y hacer que el menu muestre en
+    funcion de lo que el usuario jugo y puede jugar.
+    
+    Tambien habria que implementar el tema de las categorias para que se
+    usen y ver que la respuesta correcta o incorrecta pueda ser en funcion
+    de categorias.
+
+[33mcommit c650d014321b6c2b2ef17935f4aa8a2c65e0d628[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 21 20:27:43 2015 -0300
+
+    Por algun aextraña razon el programa empezo a mostrar mal las imagenes
+    cuando saque el ImageAsset (que se supone q NO se estaba usando) por lo
+    que volvi a implementarlo
+
+[33mcommit 4c502ea8b9fd2251ea21d94462eafa463d874bdf[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 21 18:02:43 2015 -0300
+
+    Update de archivos
+
+[33mcommit 7a5664a09cc320066cd5b3f96e24953261e09db6[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 21 14:39:29 2015 -0300
+
+    Actualizacion....
+
+[33mcommit 141003e350f5b563edf121c415f462775f450e04[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 21 13:18:03 2015 -0300
+
+    Inicio dia de hoy. Plan: terminar de armar bien el tutorial y los
+    generadores de las figuras geometricas
+
+[33mcommit 40a1e0f2a8361d699ac7177ee14619844630bbfa[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 20 21:29:02 2015 -0300
+
+    Estoy terminando de editar el tutorial. Me falta armar algunos creadores
+    de recursos. Los qu ehacen dos lineas paralelas y no paralelas, y para
+    mas adelante las que hagan cuadrados y rombos
+
+[33mcommit f42b05ac68aedc39f202e4e77fdd56577d028a8e[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 16 17:13:13 2015 -0300
+
+    Con detaller para corregir, pero anda!
+
+[33mcommit bfb2a7e38c33bc4a9791209ce55954fcd1076097[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 16 16:08:25 2015 -0300
+
+    Cree los dos primeros trials del tutorial. Ahora voy a reemplazar los
+    objetos viejos de prueba por estos. Antes hago un backup :)
+
+[33mcommit cca2c8115e00002de21dbdef0597e21915d11000[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jul 15 22:20:15 2015 -0300
+
+    Hoy estuve trabajando en el generador de recursos. Hice que genere
+    rectas, rectas inclinadas y angulos. Falta hacer que genere rectangulos
+    y rombos
+
+[33mcommit 18c0799ecd0ebf20bba039f4dfafdb94e3778271[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 20:49:01 2015 -0300
+
+    Fin del dia. Creo que esta mas o menos cerrado todo excepto como
+    recuperar los archivos de log de los dispositivos.
+
+[33mcommit fafe72582774d68dd85f0a4f5a3ef345aebd5547[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 17:30:30 2015 -0300
+
+    Cambie con exito para que separe los box segun de que tipo son en listas
+    diferentes.
+
+[33mcommit 56be003010b3d6de85e0abb5e14667678b03ab9e[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 17:14:01 2015 -0300
+
+    Voy a separar las box en dos listas y un estimulo y agrupar todas en una
+    lista allbox
+
+[33mcommit 3c452ecc880c00336b115adc5ad0edd920cb4cee[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 15:59:51 2015 -0300
+
+    No cambie nada... no se bien como implementarlo
+
+[33mcommit 5ea1055b0762bdd181703f86a02d24fbe0cb07ed[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 15:52:15 2015 -0300
+
+    Voy a tratar de mejorar el codigo en lo siguiente:
+    
+    Que cada clase que guarda info tenga una sub clase con los Ids y que
+    directamente el Json guarde esas cosas
+
+[33mcommit 0379d3fcf13b7f88529eb9582a66cfb13bb8adae[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 15:36:22 2015 -0300
+
+    implementado el tema crear y guardar usuario
+
+[33mcommit b6470834625bd027b0be9d3d7b001620ee6b3e31[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 14:42:03 2015 -0300
+
+    Paso cosas de diseño a un nuevo paquete logic, para que en diseño esten
+    las clases de objetos y en diseño la logica del programa
+
+[33mcommit 71ec6b76697f5a2e91cd5f8aee64bee8ef0b9360[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 14:38:37 2015 -0300
+
+    Limpieza menor
+
+[33mcommit eb2004ae7ae8c155f26feccd92f94fc54f01099c[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 14:36:18 2015 -0300
+
+    Mejora en manejo de clase ExperimentalObject implementada
+
+[33mcommit 7916561ba40526081b90627484d152c49fd392fd[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 14 13:53:37 2015 -0300
+
+    Estoy mejorando la programacion de load de los objetos experimentales
+
+[33mcommit 9c888d4d9d9bbe4a5ff007c9114859c2989d4e13[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 13 22:07:48 2015 -0300
+
+    Estoy trabajando sobre el tema del usuario y su info. No esta terminado,
+    pero se me hizo tarde.
+
+[33mcommit 7e2d95ec10c3f352cdaedd40e88783e0575303c1[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 13 19:30:30 2015 -0300
+
+    Creo que ya solucione el problema de sincronizacion...
+
+[33mcommit 69d1e634ec9e0a9e105a1523da2b99814ecfaf3a[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 13 19:16:59 2015 -0300
+
+    Prueba
+
+[33mcommit 825aac94d0a7a2d5c793bc4b2f0403f6e25ac984[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 13 19:15:01 2015 -0300
+
+    actualiza? Tuve problemas y no soncronizo nada un monton de tiempo :(
+
+[33mcommit 3b917a14fcf287051dd08e6034ac20896ce31046[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Fri Jul 10 18:37:55 2015 -0300
+
+    Termine los cambios en la clase boxes y en los enum. Medio que quedo
+    igual q antes y hice mucho cambio para nada.
+
+[33mcommit 3819827242d00e10784c88a09be700f4c98aa3df[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Fri Jul 10 16:11:34 2015 -0300
+
+    Deberia haber hecho un commit antes. Empece retocando los enumerate y
+    termine repensando un poco la clase Box. Ahora no esta funcional.
+
+[33mcommit 2694aba07c4b8315872ce2a48388b3fec9f732bb[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jul 9 17:35:48 2015 -0300
+
+    Implemente el paso de trials. Falta q haga algo especial cuando llega al
+    ultimo. Hay q ver el tema de diseño xq en celu no se ve el mismo borde
+    en el PC.
+
+[33mcommit ad1fde2b96bbdd06ea1673214aa44f052c3fb510[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jul 8 22:01:24 2015 -0300
+
+    Hoy no avance mucho. Por alguna razon no esta implementando bien el tema
+    de los botones para pasar de nievl en el sentido q no detecta bien que
+    niveles estan permitidos y cuales no. Debe ser una boludez pero me tengo
+    que ir :( Queda pendiente
+
+[33mcommit 4c318fea8af997a9cf2c9c81f57a0140b8b382af[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Tue Jul 7 21:11:26 2015 -0300
+
+    No se como hacer q ande el boton de usuario!
+
+[33mcommit 5e8d34c582239e6ea01a1bdb760482056d4a7476[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 6 18:54:17 2015 -0300
+
+    Estoy editando el menu para que cargue info de usuario
+
+[33mcommit 6d5fd27f98916c3ea4803f1048a2637c425e52fd[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 6 17:45:59 2015 -0300
+
+    Limpieza y orden
+
+[33mcommit 3fe70b4bfb3af5f3a37e816fbd8fe549446394dc[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 6 17:39:00 2015 -0300
+
+    Voy a hacer limpieza de boxes
+
+[33mcommit 319f1194dd84a03fd9b6f8a288985f31f0a2acb4[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 6 17:29:12 2015 -0300
+
+    Todo joya! Creo que sin bugas. Falta hacer algo cuando se marca las
+    respuestas en el trial con respuesta. Pero antes voy a hacer el diseño
+    de usurios
+
+[33mcommit 7793f866f9bafa1d40cd51219aeb73d274e83150[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 6 17:02:21 2015 -0300
+
+    Los cambios funcionan. Voy a hacer limpieza
+
+[33mcommit 198a87016b50af11c71994140eb3779fd64a4f1f[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jul 6 16:27:59 2015 -0300
+
+    Estoy a punto de hacer lio! Esta version tiene errores. Estoy tratando
+    de ordenar el tema de los niveles, los trials y donde manejar q cosa
+
+[33mcommit cdf09445c3311572d6f14b69ce23cd317bc313d3[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Fri Jul 3 16:57:07 2015 -0300
+
+    Revision de cosas varias. Basicamente bugs y limpieza
+
+[33mcommit b8ed4b548b54712df3f3c87a4e1e8d490b4b6920[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 25 19:19:04 2015 -0300
+
+    Termino x hoy (25/6) falta corregir el tema de instancias de los boxes
+    para que no se confunda el estimulo con las respuesta correcta y detener
+    todos los sonidos cuando se hace hide a la pantalla.
+
+[33mcommit 08d1e6cd9dcda52ace2b1b2e37b8925b655d2664[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 25 19:14:49 2015 -0300
+
+    Termine de crear la clase Box y de implemtarla. Hay un solo detalle, al
+    ser la misma instancia la que esta en el Box de la serie y en el Box del
+    estimulo, hay cosas q hacen lio (en el select y unselect) habria que
+    generar diferentes instancias del contenido de esas box para evitarlo.
+    Hay que revisar en donde se crean, en donde se fija si es correcta (y
+    creo que en un lugar mas).
+
+[33mcommit e74269505c7e78f6bfb45fff06c1e7576d864384[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 25 17:11:07 2015 -0300
+
+    Version Trial termina, junto con una variante de wolrdRender y
+    wolrdController que pasaron a llamarse trialRender y TrialController.
+    Todavia esta la version anterior funcional. Falta terminar de completar
+    las funciones en la clase Box que ahora vendria a reemplazar las
+    diferentes versiones de los Containers.
+
+[33mcommit 149b51c77894ddbb52a139caf28a25e60a74320f[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jun 24 22:47:18 2015 -0300
+
+    Me quede a medio hacer... estoy terminando de editar la clase trial. Me
+    quede en que coloque en las posiciones correctas los boxes cuando los
+    crea. La idea es resumir todas las container que habia antes en la clase
+    boxes y listo. Y que se adapte a el tipo de box q es. Y no tocar lo que
+    esta andando hasta que vea q el nuevo trial funciona en un boton aparte.
+
+[33mcommit 809e32b0eb6d83d63ce503bfc05cfb30c1efc8c3[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 22 21:40:05 2015 -0300
+
+    Casi terminado la clase Trial, falta implementarla en el resto del
+    programa
+
+[33mcommit b681d2684ae3d42ce608776d3d94e11ffe7872ff[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 22 20:18:50 2015 -0300
+
+    Implementada la clase experimental object
+
+[33mcommit ffae1a6510ababa051c03342df9c65a564d7b076[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 22 20:09:25 2015 -0300
+
+    Anda el tema de guardar y cargar la meta data de los objetos
+    experimentales! :)
+
+[33mcommit abc699ac86a90651a86de98ff0488c52003934fe[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 22 17:39:46 2015 -0300
+
+    anda el ImageAssets falta probar el Json que carga y guarda los
+    metadados
+
+[33mcommit 97e5b45be1a0d8c3f0c5a41f1a6c8d56497110d6[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 22 15:27:06 2015 -0300
+
+    Estrcutura de levels y trails armada. Voy a implementar que cargue el
+    trial de un archivo y reemplazar la estructura vieja.
+
+[33mcommit 95f3ddd04b866a9dd7676a285b120f5f9d19e987[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 18 18:25:58 2015 -0300
+
+    Menu inicial terminado (version prueba). Save previo a implementar
+    clases para guardar la info de: Usuario, Trial, Nivel
+
+[33mcommit 73823297c1ec6fa7a53ccd7263a0011f16a38882[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 18 17:02:44 2015 -0300
+
+    Version con botones fea pero q anda
+
+[33mcommit 2949d89b830c1dbab00ef6e983f50c58fc9fce91[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 18 14:27:46 2015 -0300
+
+    No entendi q paso en el anterior. Update inicio diario 18/6.
+    
+    Ayer implemente una logica de pantalla de bienvenida. Lo que me queda es
+    probar hacer la bienvenida y aprender a usar las UI para hoy.
+
+[33mcommit 58bb16f32b1027efaa0c6f30922604e8014004a4[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 18 14:26:53 2015 -0300
+
+    Update diario 18/6.
+
+[33mcommit 3c1b9b2d8e5b0b1c455304c91cbc5b70bef03507[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jun 17 20:59:19 2015 -0300
+
+    Cambie un toque la esctructuras paquetes y voy a probar implementar la
+    logica de pantallas que viene con libgdx
+
+[33mcommit e77879183d9e5d2da7ce8ff8cf7966f20ad9db87[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 15 18:59:03 2015 -0300
+
+    tema sonido pendiente....
+
+[33mcommit 5e24d9870f1426c5985cf627fd3876e2a3e7da17[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 15 18:27:04 2015 -0300
+
+    Parece q el Sound no anda bien en android. Voy a probar de cambiarlo por
+    el music
+
+[33mcommit c6bfcf2cdb612c55d781e6c932b83245774e06d9[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 15 17:37:34 2015 -0300
+
+    Mejoras hechas en sistema de boxes y del touch. ahora guarda mucho mas
+    info en la secuencia de touchs y desaparecio el indicador numerico de la
+    caja seleccionada (trabaja todo con los objetos
+
+[33mcommit c4867f49b1067c32d7a6846ac096aafef37fde01[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 15 14:35:12 2015 -0300
+
+    Cambios de estructura de las box realizado. Ahora hay que agregar un
+    selectableBox
+
+[33mcommit 850c773c3eb8d95bc16ebc1a52237d0d9deda4f9[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 15 14:05:47 2015 -0300
+
+    Voy a rediseñar los box container para distribuir las cosas segun el
+    tipo de container q sean
+
+[33mcommit b296399b3809db83b2b5ec3a2b3fc9d569c2a18b[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 11 22:32:06 2015 -0300
+
+    Agregue modo respuesta. Esta a medio hacer el tema de procesar el click
+    cuando hay una respuesta para ver si es correcta o no. Tengo que revisar
+    conceptualmente como hacer para intercambiar datos entre los
+    BoxConteiners para que sepan cual es el estimulo o como hacer para
+    acceder a la info. Probablemente convenga pasar todo al Controller y que
+    decida ahi...
+
+[33mcommit 9c7df6cb1b448aa1ad391e9fb87e7c0bae6fbb45[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jun 10 21:31:44 2015 -0300
+
+    Limpio
+
+[33mcommit a19fa8de7b894df4b7860de99943b7370b634a2b[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jun 10 21:29:14 2015 -0300
+
+    Codigo mejorado con lo viejo comentado
+
+[33mcommit 4053eeb0469d6d63f97b57bf26678e2cc3637e75[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jun 10 20:53:54 2015 -0300
+
+    BackUp Pre mejorar toda la estructura de cajas!
+
+[33mcommit d23bdf449408c9ad2985b54fd6c397dabbd2fd3c[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jun 10 20:24:58 2015 -0300
+
+    Mejora de la clase de objetos. Diagrame una clase nueva para los box.
+    Por ahora las de audio
+
+[33mcommit 93200cf223f4110d4a8f0df820942de5fcc12070[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Wed Jun 10 16:48:27 2015 -0300
+
+    Agregado de titulos y fps
+
+[33mcommit ae745e80e24c7d345f3d8efd7d3632658c844d3b[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 8 16:40:05 2015 -0300
+
+    Actualizacion pre seguir con el tutorial de juegos
+
+[33mcommit 86ba952cb968ab0d5657df488a241bdc2c661762[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Mon Jun 8 16:03:24 2015 -0300
+
+    creando clase usuario y abstract juego
+
+[33mcommit bf9aa32f7909ac2c85a17324a72a21da5b772669[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 4 18:46:05 2015 -0300
+
+    Update 04/06/15
+    
+    Hoy:
+    
+    - revise todo el codigo limpiando cosas obsoletas.
+    - cambie el dict de touchevent por una clase
+    - revise el tema de la seleccion y permiti que no haya nada seleccionado
+    - Mejore el tema del acceso a la camera para hacer el unproyect
+
+[33mcommit 5bb5f42b0081983b4abe2298d8f81c0101a2f012[m
+Author: IoniUTDT <ionatanlist@gmail.com>
+Date:   Thu Jun 4 17:14:00 2015 -0300
+
+    initial commit

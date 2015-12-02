@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -68,6 +69,12 @@ public class LevelController implements InputProcessor {
 		this.level.levelLog.sessionId = this.session.sessionLog.id;
 		this.level.levelLog.idUser = this.session.user.id;
 		this.initCamera();
+		// Inicia en el trial de maxima señal si esta en modo umbral
+		if (this.level.jsonLevel.tipoDeLevel == TIPOdeLEVEL.UMBRAL) {
+			AnalisisUmbral analisis = this.level.jsonLevel.analisisUmbral;
+			int nextTrialPosition = findTrialId (analisis.indiceAnguloRefrencia, analisis.proximoNivelCurvaSuperior);
+			this.level.activeTrialPosition = nextTrialPosition;
+		}
 		this.initTrial();
 	}
 
@@ -138,58 +145,38 @@ public class LevelController implements InputProcessor {
 					detected.answerTrue = this.trial.log.touchLog.peek().isTrue;
 					detected.infoConceptual = this.trial.log.touchLog.peek().jsonMetaDataTouched.infoConceptual;
 					
-
-					// Primero nos fijamos que curva estamos analizando:
-					if (analisis.curvaSuperiorActiva) {
-						// Se fija en comparacion al ultimo intento para ver si hubo un "rebote o no" y en funcion de eso disminuir el salto
-						if (analisis.historialAciertosCurvaSuperior.size>0) { // Si hay historia previa
-							if (detected.answerTrue != analisis.historialAciertosCurvaSuperior.peek().answerTrue) { // Si hay rebote hay que disminuir el salto
-								if (analisis.saltoCurvaSuperior!=1) {
-									analisis.saltoCurvaSuperior=analisis.saltoCurvaSuperior-1;
-								}
+					// Se fija en comparacion al ultimo intento para ver si hubo un "rebote o no" y en funcion de eso disminuir el salto
+					if (analisis.historialAciertosCurvaSuperior.size>0) { // Si hay historia previa
+						if (detected.answerTrue != analisis.historialAciertosCurvaSuperior.peek().answerTrue) { // Si hay rebote hay que disminuir el salto
+							if (analisis.saltoCurvaSuperior!=1) {
+								analisis.saltoCurvaSuperior=analisis.saltoCurvaSuperior-1;
 							}
 						}
-						// Modifica el nivel de señal del estimulo						
-						if (detected.answerTrue) { // Si se detecto el estimulo bien hay que disminuir la señal de estimulo
-							analisis.proximoNivelCurvaSuperior = analisis.proximoNivelCurvaSuperior - analisis.saltoCurvaSuperior; 
-						} else { // Si no se detecto el estimulo hay que aumentar la señal de estimulo
-							analisis.proximoNivelCurvaSuperior = analisis.proximoNivelCurvaSuperior + analisis.saltoCurvaSuperior;
-						}
-						// Limita el valor del proximo nivel entre los valores maximos y minimos.
-						if (analisis.proximoNivelCurvaSuperior>analisis.cantidadDeNivelesDeDificultad) {
-							analisis.proximoNivelCurvaSuperior=analisis.cantidadDeNivelesDeDificultad;
-						}
-						if (analisis.proximoNivelCurvaSuperior<1) {
-							analisis.proximoNivelCurvaSuperior=1;
-						}
-						// Agrega el ultimo paso al historial.
-						analisis.historialAciertosCurvaSuperior.add(detected);
-					} else {
-						// Se fija si hubo rebote para corregir el nivel del salto
-						if (analisis.historialAciertosCurvaInferior.size>0) {
-							if (detected.answerTrue != analisis.historialAciertosCurvaInferior.peek().answerTrue) {
-								if (analisis.saltoCurvaInferior!=1) {
-									analisis.saltoCurvaInferior = analisis.saltoCurvaInferior - 1;
-								}
-							}
-						}
-						if (!detected.answerTrue) {// si no detecta el estimulo hay que aumentar la señal
-							analisis.proximoNivelCurvaInferior = analisis.proximoNivelCurvaInferior + analisis.saltoCurvaInferior;
-						} else {
-							analisis.proximoNivelCurvaInferior = analisis.proximoNivelCurvaInferior - analisis.saltoCurvaInferior;
-						}
-						// Limita el valor del proximo nivel entre los valores maximos y minimos.
-						if (analisis.proximoNivelCurvaInferior>analisis.cantidadDeNivelesDeDificultad) {
-							analisis.proximoNivelCurvaInferior=analisis.cantidadDeNivelesDeDificultad;
-						}
-						if (analisis.proximoNivelCurvaInferior<1) {
-							analisis.proximoNivelCurvaInferior=1;
-						}
-						// Agrega el ultimo paso al historial.
-						analisis.historialAciertosCurvaInferior.add(detected);
 					}
+					// Modifica el nivel de señal del estimulo						
+					if (detected.answerTrue) { // Si se detecto el estimulo bien hay que disminuir la señal de estimulo
+						// Si se llego al estacionario solo lo hacemos la mitad de la veces para que haya una tendencia a no quedarse en random walk
+						if (analisis.saltoCurvaSuperior!=1) {
+							analisis.proximoNivelCurvaSuperior = analisis.proximoNivelCurvaSuperior - analisis.saltoCurvaSuperior;
+						} else {
+							if (analisis.historialAciertosCurvaSuperior.peek().answerTrue) {
+								analisis.proximoNivelCurvaSuperior = analisis.proximoNivelCurvaSuperior - analisis.saltoCurvaSuperior;
+							}
+						}
+					} else { // Si no se detecto el estimulo hay que aumentar la señal de estimulo
+						analisis.proximoNivelCurvaSuperior = analisis.proximoNivelCurvaSuperior + analisis.saltoCurvaSuperior;
+					}
+					// Limita el valor del proximo nivel entre los valores maximos y minimos.
+					if (analisis.proximoNivelCurvaSuperior>analisis.cantidadDeNivelesDeDificultad) {
+						analisis.proximoNivelCurvaSuperior=analisis.cantidadDeNivelesDeDificultad;
+					}
+					if (analisis.proximoNivelCurvaSuperior<1) {
+						analisis.proximoNivelCurvaSuperior=1;
+					}
+					// Agrega el ultimo paso al historial.
+					analisis.historialAciertosCurvaSuperior.add(detected);
 					
-					if (analisis.historialAciertosCurvaInferior.size + analisis.historialAciertosCurvaSuperior.size >=40) {
+					if (analisis.historialAciertosCurvaSuperior.size >=40) {
 						completeLevel();
 					}
 
@@ -197,11 +184,7 @@ public class LevelController implements InputProcessor {
 					// analisis.curvaSuperiorActiva = MathUtils.randomBoolean();
 
 					int nextTrialPosition;
-					if (analisis.curvaSuperiorActiva) {
-						nextTrialPosition = findTrialId (analisis.indiceAnguloRefrencia, analisis.proximoNivelCurvaSuperior);
-					} else {
-						nextTrialPosition = findTrialId (analisis.indiceAnguloRefrencia, analisis.proximoNivelCurvaInferior);
-					}
+					nextTrialPosition = findTrialId (analisis.indiceAnguloRefrencia, analisis.proximoNivelCurvaSuperior);
 					this.level.activeTrialPosition = nextTrialPosition;
 					this.initTrial();
 					

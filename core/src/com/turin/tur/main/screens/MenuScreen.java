@@ -154,7 +154,7 @@ public class MenuScreen extends AbstractGameScreen {
 		//table.row();
 		for (TextButton button : levelButtons) {
 			button.getStyle().font.getData().setScale(Constants.factorEscala()*3,Constants.factorEscala()*3);
-			table.add(button).width(Gdx.graphics.getWidth()/2.5f).space(Gdx.graphics.getHeight()/10f);
+			table.add(button).width(Gdx.graphics.getWidth()/2.5f).space(Gdx.graphics.getHeight()/30f);
 			table.row();
 		}
 

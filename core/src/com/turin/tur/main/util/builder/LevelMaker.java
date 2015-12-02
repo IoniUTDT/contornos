@@ -5,11 +5,9 @@ import java.io.FileFilter;
 import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.turin.tur.main.diseno.ExperimentalObject;
 import com.turin.tur.main.diseno.ExperimentalObject.JsonResourcesMetaData;
 import com.turin.tur.main.diseno.Level.JsonLevel;
 import com.turin.tur.main.diseno.Level.Significancia;
@@ -71,7 +69,18 @@ public class LevelMaker {
 
 
 		// Crea los niveles
-		Levels.MakeLevelParalelismoUmbral(0);
+		if (Builder.AppVersion == "90") {
+			Levels.MakeLevelParalelismoUmbral(1);
+		}
+		/*
+		Levels.MakeLevelParalelismoUmbral(11);
+		Levels.MakeLevelParalelismoUmbral(12);
+		Levels.MakeLevelParalelismoUmbral(13);
+		Levels.MakeLevelParalelismoUmbral(14);
+		Levels.MakeLevelParalelismoUmbral(15);
+		Levels.MakeLevelParalelismoUmbral(16);
+		Levels.MakeLevelParalelismoUmbral(17);
+		*/
 	}
 	
 	
@@ -129,7 +138,7 @@ public class LevelMaker {
 			JsonSetupExpSensibilidad setup = loadSetup();
 			// Creamos el nivel
 			JsonLevel level = crearLevel();
-			level.levelTitle = "Analisis de sensibilidad";
+			level.levelTitle = "Analisis de sensibilidad, "+setup.saltoTitaRef*indiceAnguloReferencia+" grados";
 			level.randomTrialSort=false;
 			level.show = true;
 			level.analisisUmbral.indiceAnguloRefrencia = indiceAnguloReferencia;
@@ -137,8 +146,6 @@ public class LevelMaker {
 			level.analisisUmbral.trueRate = 0.5f;
 			level.analisisUmbral.cantidadDeNivelesDeDificultad=setup.cantidadDeltas;
 			level.analisisUmbral.saltoCurvaSuperior=setup.cantidadDeltas/10;
-			level.analisisUmbral.saltoCurvaInferior=setup.cantidadDeltas/10;
-			level.analisisUmbral.proximoNivelCurvaInferior = 1;
 			level.analisisUmbral.proximoNivelCurvaSuperior = setup.cantidadDeltas;
 			
 			/*
@@ -149,20 +156,18 @@ public class LevelMaker {
 			
 			for (int D=0; D<=setup.cantidadDeltas; D++) {
 				String tag = "R"+R+"D"+D;
-				String tagReferencePos = "R"+R+"D"+setup.cantidadDeltas+"+";
-				String tagReferenceNeg = "R"+R+"D"+setup.cantidadDeltas+"-";
-				
-				JsonTrial trial1 = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
-						new int[] {ResourcesSelectors.findResourceByTag(tagReferencePos).first(),ResourcesSelectors.findResourceByTag(tagReferenceNeg).first()}, TIPOdeTRIAL.TEST, ResourcesSelectors.findResourceByTag(tag).random() , false, true, false);
-				trial1.parametros.D=D;
-				trial1.parametros.R=R;
-				level.jsonTrials.add(trial1);
+				String tagReferencePos = "R"+R+"D"+setup.cantidadDeltas/1+"+";
+				String tagReferenceNeg = "R"+R+"D"+setup.cantidadDeltas/1+"-";
 
-				JsonTrial trial2 = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
-						new int[] {ResourcesSelectors.findResourceByTag(tagReferencePos).first(),ResourcesSelectors.findResourceByTag(tagReferenceNeg).first()}, TIPOdeTRIAL.TEST, ResourcesSelectors.findResourceByTag(tag).random() , false, true, false);
-				trial2.parametros.D=D;
-				trial2.parametros.R=R;
-				level.jsonTrials.add(trial2);
+				Array<Integer> recursos = ResourcesSelectors.findResourceByTag(tag);
+				
+				for (int id: recursos) {
+					JsonTrial trial = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
+							new int[] {ResourcesSelectors.findResourceByTag(tagReferencePos).first(),ResourcesSelectors.findResourceByTag(tagReferenceNeg).first()}, TIPOdeTRIAL.TEST, id , false, true, false);
+					trial.parametros.D=D;
+					trial.parametros.R=R;
+					level.jsonTrials.add(trial);
+				}
 			}
 			
 			
@@ -330,6 +335,7 @@ public class LevelMaker {
 		// Crea un JsonLevel y aumenta en 1 el contador de niveles
 		contadorLevels += 1;
 		JsonLevel jsonLevel = new JsonLevel();
+		jsonLevel.appVersion = Builder.AppVersion;
 		jsonLevel.Id = contadorLevels;
 		jsonLevel.resourceVersion = Builder.ResourceVersion;
 		jsonLevel.levelVersion = Builder.levelVersion;

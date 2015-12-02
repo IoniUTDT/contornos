@@ -198,8 +198,8 @@ public class SVGtoSound {
 				double[] secuence = new double[N];
 
 				for (Linea linea : archivo.lineas) {
-					
-					if ((linea.xf-linea.xi)<0.1) { // En caso de que sea una recta vertical o casi verticial crea un rampa ficticia en bajada muy rapida
+					// TODO
+					if ((linea.xf-linea.xi)<0.01) { // En caso de que sea una recta vertical o casi verticial crea un rampa ficticia en bajada muy rapida
 						if (linea.freci>linea.frecf) {
 							linea.tf = linea.ti + 0.01; 
 						} else {

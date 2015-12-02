@@ -16,8 +16,9 @@ public class Builder {
 
 	public static int height = Resources.Paths.height;
 	public static int width = Resources.Paths.width;
-	public static final int ResourceVersion = 126;
-	public static final int levelVersion = 13;
+	public static final int ResourceVersion = 128;
+	public static final int levelVersion = 21;
+	public static final String AppVersion = "90"; 
 	
 	static final Boolean makeLevels = false;
 	static final Boolean makeResources = false;

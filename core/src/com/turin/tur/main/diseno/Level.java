@@ -96,6 +96,7 @@ public class Level {
 
 
 	public static class JsonLevel {
+		public String appVersion; // Identifica que version de la aplicacion se esta construyendo.
 		public String levelTitle;
 		public int levelVersion;
 		public int Id; // Id q identifica al level
@@ -191,17 +192,12 @@ public class Level {
 			public InfoConcelptualExpSensibilidad infoConceptual;
 		}
 		
-		public boolean curvaSuperiorActiva = true; // Indica que curva se esta analizando, si la superior o la inferior
 		public float anguloReferencia;
 		public int indiceAnguloRefrencia;
 		public int cantidadDeNivelesDeDificultad;
 		public float trueRate; // Nivel de aciertos de deteccion de señal que se quiere medir. Sirve para el setup experimental de umbral
 		public Array<DetectionObject> historialAciertosCurvaSuperior = new Array<DetectionObject>();
-		public Array<DetectionObject> historialAciertosCurvaInferior = new Array<DetectionObject>();
 		public int saltoCurvaSuperior;
-		public int saltoCurvaInferior;
-		public int proximoNivelCurvaSuperior;
-		public int proximoNivelCurvaInferior;
-		public Array<Integer> convergencia = new Array<Integer>(); //va midiendo la diferencia entre ambas curvas.  
+		public int proximoNivelCurvaSuperior;  
 	}
 }
