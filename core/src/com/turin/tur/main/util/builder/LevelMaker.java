@@ -136,7 +136,7 @@ public class LevelMaker {
 			String path = Resources.Paths.currentVersionPath+"extras/jsonSetup"+nSetup+".meta";
 			File file = new File(path);
 			while (file.exists()) { // Se hace para cada setup q exista
-				// Cargamos el setup
+				// Cargamos el setup 
 				JsonSetupExpSensibilidad setup = loadSetup(nSetup);
 				// Hacemos un loop para cada referencia dentro del nivel
 				for (int n=1; n<setup.cantidadReferencias; n++) {
