@@ -132,20 +132,22 @@ public class LevelMaker {
 			int nSetup = 0;
 			// Se fija si encuentra el setup experimental correspondiente
 			
-			int indiceReferenciaAcumulado = 0;
-			String path = Resources.Paths.currentVersionPath+"extras/jsonSetup"+nSetup+".meta";
+			String path = Resources.Paths.fullCurrentVersionPath+"extras/jsonSetup"+nSetup+".meta";
 			File file = new File(path);
+			System.out.println("intentando:"+file.getAbsolutePath());
 			while (file.exists()) { // Se hace para cada setup q exista
 				// Cargamos el setup 
 				JsonSetupExpSensibilidad setup = loadSetup(nSetup);
 				// Hacemos un loop para cada referencia dentro del nivel
-				for (int n=1; n<setup.cantidadReferencias; n++) {
+				for (int n=0; n<setup.cantidadReferencias; n++) {
+					int R = n + nSetup; // Indice angulo de referencia
+					System.out.println("Creando nivel:"+R);
 					// Creamos el nivel
 					JsonLevel level = crearLevel();
-					level.levelTitle = setup.tag + n + "R:"+(setup.saltoTitaRef*n)+setup.titaRefInicial+"º";
+					level.levelTitle = setup.tag + n + "R:"+(setup.saltoTitaRef*n+setup.titaRefInicial)+"º";
 					level.randomTrialSort=false;
 					level.show = true;
-					level.analisisUmbral.indiceAnguloRefrencia = n;
+					level.analisisUmbral.indiceAnguloRefrencia = R;
 					level.analisisUmbral.anguloReferencia = setup.saltoTitaRef*n;
 					level.analisisUmbral.trueRate = 0.5f;
 					level.analisisUmbral.cantidadDeNivelesDeDificultad=setup.cantidadDeltas;
@@ -153,10 +155,8 @@ public class LevelMaker {
 					level.analisisUmbral.proximoNivelCurvaSuperior = setup.cantidadDeltas;
 					
 					/*
-					 * Queremos crear una lista de trials que incluya dos trials por dificultad
+					 * Queremos crear una lista de trials que incluya todos los trials por dificultad
 					 */
-					int R = n + indiceReferenciaAcumulado;
-					System.out.println(R);
 					
 					for (int D=0; D<=setup.cantidadDeltas; D++) {
 						String tag = "R"+R+"D"+D;
@@ -165,7 +165,7 @@ public class LevelMaker {
 						
 						for (int id: recursos) {
 							JsonTrial trial = crearTrial("Seleccione a que se parece mas", "", DISTRIBUCIONESenPANTALLA.LINEALx2,
-									new int[] {ResourcesSelectors.findResourceByTag(setup.tagRefPos).first(),ResourcesSelectors.findResourceByTag(setup.tagRefNeg).first()}, TIPOdeTRIAL.TEST, id , false, true, false);
+									new int[] {ResourcesSelectors.findResourceByTag("R"+R+setup.tagRefPos).first(),ResourcesSelectors.findResourceByTag("R"+R+setup.tagRefNeg).first()}, TIPOdeTRIAL.TEST, id , false, true, false);
 							trial.parametros.D=D;
 							trial.parametros.R=R;
 							level.jsonTrials.add(trial);
@@ -173,7 +173,9 @@ public class LevelMaker {
 					}
 					level.build(Resources.Paths.levelsPath);
 				}
-				indiceReferenciaAcumulado = indiceReferenciaAcumulado + setup.cantidadReferencias; 
+				nSetup = nSetup + setup.cantidadReferencias; 
+				path = Resources.Paths.fullCurrentVersionPath+"extras/jsonSetup"+nSetup+".meta";
+				file = new File(path);
 			}
 			
 		}

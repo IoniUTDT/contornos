@@ -308,7 +308,7 @@ public class ResourcesMaker {
 						// Datos generales
 						imagenRefNeg.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 						imagenRefNeg.name = "Imagen de rectas no paralelas generada automaticamente";
-						imagenRefNeg.idVinculo = setup.tagRefNeg;
+						imagenRefNeg.idVinculo = "R"+(contadorDeReferenciasUmbral+i)+setup.tagRefNeg;
 						imagenRefNeg.categories.add(Categorias.Lineax2);
 						imagenRefNeg.categories.add(Categorias.NoParalelas);
 						imagenRefNeg.nivelDificultad = -1;
@@ -384,7 +384,7 @@ public class ResourcesMaker {
 						// Datos generales
 						imagenPos.comments = "Imagen generada por secuencia automatica 'recursosParalelismoAnalisisUmbral'.";
 						imagenPos.name = "Imagen de rectas no paralelas generada automaticamente";
-						imagenPos.idVinculo = setup.tagRefPos;
+						imagenPos.idVinculo = "R"+(contadorDeReferenciasUmbral+i)+setup.tagRefPos;
 						imagenPos.categories.add(Categorias.Lineax2);
 						imagenPos.categories.add(Categorias.NoParalelas);
 						imagenPos.nivelDificultad = -1;

@@ -128,9 +128,12 @@ public class MenuScreen extends AbstractGameScreen {
 				button.addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
+						/*
 						if ((session.user.levelsCompleted.contains(levelIterator-1, false)) || (levelIterator==1)) {
 							game.setScreen(new LevelScreen(game,levelIterator, session));
 						}
+						*/
+						game.setScreen(new LevelScreen(game,levelIterator, session));
 					}
 				});
 				if (session.user.levelsCompleted.contains(levelIterator, false)) {
@@ -152,10 +155,14 @@ public class MenuScreen extends AbstractGameScreen {
 		// Arma el menu
 		//table.add(buttonUserName);
 		//table.row();
+		int n=0;
 		for (TextButton button : levelButtons) {
 			button.getStyle().font.getData().setScale(Constants.factorEscala()*3,Constants.factorEscala()*3);
-			table.add(button).width(Gdx.graphics.getWidth()/2.5f).space(Gdx.graphics.getHeight()/30f);
-			table.row();
+			table.add(button).width(Gdx.graphics.getWidth()/5f).space(Gdx.graphics.getHeight()/30f);
+			n=n+1;
+			if (n%3 == 0) {
+				table.row();
+			}
 		}
 
 		Gdx.app.debug(TAG, "Menu cargado");
