@@ -223,7 +223,7 @@ public class ResourcesMaker {
 				imagen.parametros.addAll(ExtremosLinea.Linea(infoLinea));
 				imagen.infoLineas.add(infoLinea);
 				// Datos generales
-				// Nota, aca no tiene sentido poner ni parametro linelizado ni si se juntan!
+				// Nota, aca no tiene sentido poner ni parametro linelizado ni si se juntan! ...
 				imagen.infoConceptual.deltaAnguloLinealizado=0;
 				imagen.infoConceptual.deltaAngulo=0;
 				imagen.infoConceptual.separacion=separacion;
