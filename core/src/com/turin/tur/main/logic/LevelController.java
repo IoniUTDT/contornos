@@ -126,8 +126,8 @@ public class LevelController implements InputProcessor {
 					wait = true;
 				}
 			}
-			for (TrainingBox box : trial.trainigBoxes) {
-				if (box.runningSound) {
+			if (trial.trainigBoxes.size != 0) {
+				if (trial.runningSound.running) {
 					wait = true;
 				}
 			}

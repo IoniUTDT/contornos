@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.turin.tur.main.diseno.RunningSound.NEXT;
 import com.turin.tur.main.util.Assets;
 import com.turin.tur.main.util.Constants;
 
@@ -31,7 +32,7 @@ public abstract class Boxes {
 		// Variables especificas de cada tipo pero que estan en la clase general porque se llaman desde afuera
 		public boolean answer=false; // Resultado de la respuesta
 		
-		public void render(SpriteBatch batch) {
+		public void render(SpriteBatch batch, Trial trial) {
 			// Render the main content of the box
 			float x;
 			float y;
@@ -41,10 +42,10 @@ public abstract class Boxes {
 			y = posicionCenter.y - Constants.Box.TAMANO / 2;
 			spr.setPosition(x, y);
 			spr.draw(batch);
-			specificRender(batch);
+			specificRender(batch, trial);
 		}
 			
-		protected abstract void specificRender (SpriteBatch batch);
+		protected abstract void specificRender (SpriteBatch batch, Trial trial);
 		protected abstract void update(float deltaTime, Trial trial);
 		public abstract void select(TouchInfo touchData, Trial trial);
 		public abstract void unSelect(Trial trial);
@@ -59,8 +60,8 @@ public abstract class Boxes {
 	public static class TrainingBox extends Box {
 	
 		// Variables utiles para las cajas que son reproducibles
-		public boolean runningSound; // Determina si se esta reproduciendo un sonido (para activar o no la animacion correspondiente)
-		private float soundAvanceReproduccion; //Avance la reproduccion
+		// public boolean runningSound; // Determina si se esta reproduciendo un sonido (para activar o no la animacion correspondiente)
+		// private float soundAvanceReproduccion; //Avance la reproduccion
 		private float soundDuracionReproduccion; //Tiempo total establecido para el sonido (ojo que no es necesariamente el tiempo total del sonido, pero se trabaja con sonidos a priori de longitud fija 
 		private Sprite soundAnimationSpr; // imagen para mostrar la animacion de reproduccion del sonido 
 		public boolean alreadySelected;
@@ -74,8 +75,6 @@ public abstract class Boxes {
 			
 			
 			// inicializa las variables que manejan la reproduccion del sonido
-			this.runningSound = false;
-			this.soundAvanceReproduccion = 0;
 			this.soundDuracionReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA;	
 			this.createSoundAnimationResources();
 			
@@ -91,13 +90,13 @@ public abstract class Boxes {
 
 	
 		@Override
-		protected void specificRender(SpriteBatch batch) {
+		protected void specificRender (SpriteBatch batch, Trial trial) {
 			// Render the animation of the box
-			if (runningSound) {
+			if (trial.runningSound.running) {
 				soundAnimationSpr.setSize(Constants.Box.TAMANO_CONTORNO_X,Constants.Box.TAMANO_CONTORNO_Y);
 				float x = posicionCenter.x - Constants.Box.TAMANO/2 - Constants.Box.TAMANO_CONTORNO_X /2;
 				float y = posicionCenter.y - Constants.Box.TAMANO/2 - Constants.Box.TAMANO_CONTORNO_Y;
-				float xShift = Constants.Box.TAMANO * soundAvanceReproduccion / soundDuracionReproduccion;
+				float xShift = Constants.Box.TAMANO * trial.runningSound.playTime / soundDuracionReproduccion;
 				soundAnimationSpr.setPosition(x + xShift, y);
 				soundAnimationSpr.draw(batch);
 			}
@@ -105,9 +104,8 @@ public abstract class Boxes {
 
 		@Override
 		public void update(float deltaTime, Trial trial) {
-			if (runningSound) {
-				this.soundAvanceReproduccion += deltaTime;
-				if (this.soundAvanceReproduccion > this.soundDuracionReproduccion) {
+			if (trial.runningSound.running) {
+				if (trial.runningSound.playTime > this.soundDuracionReproduccion) {
 					trial.runningSound.stopReason = "end";
 					this.unSelect(trial);
 				}
@@ -119,9 +117,7 @@ public abstract class Boxes {
 		public void unSelect(Trial trial) {
 //			Gdx.app.debug(TAG, "Ha deseleccionado la imagen " + this.contenido.resourceId.id);
 			if (!this.contenido.noSound) {
-				this.runningSound = false;
 				trial.runningSound.stop();
-				soundAvanceReproduccion = 0; //reset the advance point of sound animation
 			}
 		}
 		
@@ -130,9 +126,9 @@ public abstract class Boxes {
 //			Gdx.app.debug(TAG, "Ha seleccionado la imagen " + this.contenido.resourceId.id);
 			this.alreadySelected = true;
 			if (!this.contenido.noSound) {
-				this.runningSound = true;
-				this.soundAvanceReproduccion = 0;
-				trial.runningSound.play(this.contenido);
+				// trial.runningSound.play(this.contenido);
+				trial.runningSound.action = NEXT.PLAY;
+				trial.runningSound.nextContenido = this.contenido;
 			}
 		}
 	}
@@ -204,7 +200,7 @@ public abstract class Boxes {
 		}
 		
 		@Override
-		protected void specificRender(SpriteBatch batch) {
+		protected void specificRender(SpriteBatch batch, Trial trial) {
 			if (this.answerActive) {this.contourRender(batch);}
 		}
 		
@@ -277,33 +273,28 @@ public abstract class Boxes {
 	
 	public static class StimuliBox extends Box {
 		
-		private float stimuliAvanceReproduccion; // Avance en la reproduccion del estimulo (incluye el tiempo entre loops)
-		private float stimuliDuracionReproduccion; // Tiempo total que se supone que dura el sonido
+		private float delayAutoreproducir = Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR;
+		// private float stimuliAvanceReproduccion; // Avance en la reproduccion del estimulo (incluye el tiempo entre loops)
+		// private float stimuliDuracionReproduccion; // Tiempo total que se supone que dura el sonido
 		private Sprite stimuliAnimationSpr; // Sprite para la animacion del sonido 
-		private boolean drawStimuli; // Variable que determina si se debe dibujar o no (cuando llega al fin del sonido deba de dibujar)
+		// private boolean drawStimuli; // Variable que determina si se debe dibujar o no (cuando llega al fin del sonido deba de dibujar)
 
 		public StimuliBox (ExperimentalObject contenido) {
 			
 			this.contenido = contenido;
 			this.posicionCenter = new Vector2(0, 0);
 			this.spr = new Sprite (Assets.instance.imagenes.stimuliLogo);
-	
-		
-			// inicializa el tiempo de modo q se resetee apenas empieza
-			this.stimuliAvanceReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR;
-			this.stimuliDuracionReproduccion = Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA;	
-			
 			this.createSoundAnimationResources();
 		}
 
 		
 		@Override
-		protected void specificRender(SpriteBatch batch) {
-			if (this.drawStimuli) {
+		protected void specificRender(SpriteBatch batch, Trial trial) {
+			if (trial.runningSound.running) {
 				stimuliAnimationSpr.setSize(Constants.Box.TAMANO_CONTORNO_X,Constants.Box.TAMANO_CONTORNO_Y);
 				float x = posicionCenter.x - Constants.Box.TAMANO/2 - Constants.Box.TAMANO_CONTORNO_X /2;
 				float y = posicionCenter.y - Constants.Box.TAMANO/2 - Constants.Box.TAMANO_CONTORNO_Y;
-				float xShift = Constants.Box.TAMANO * stimuliAvanceReproduccion / stimuliDuracionReproduccion;
+				float xShift = Constants.Box.TAMANO * trial.runningSound.playTime / Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA;
 				stimuliAnimationSpr.setPosition(x + xShift, y);
 				stimuliAnimationSpr.draw(batch);
 			}
@@ -313,16 +304,13 @@ public abstract class Boxes {
 		@Override
 		protected void update(float deltaTime, Trial trial) {
 			if (!this.contenido.noSound) {
-				stimuliAvanceReproduccion = stimuliAvanceReproduccion + deltaTime;
-				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion) {
-					this.drawStimuli=false;
-					trial.runningSound.stopReason = "end";
-					trial.runningSound.stop();
+				if (!trial.runningSound.running) {
+					this.delayAutoreproducir = this.delayAutoreproducir + deltaTime;
 				}
-				if (stimuliAvanceReproduccion > stimuliDuracionReproduccion + Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
-					this.drawStimuli=true;
-					stimuliAvanceReproduccion = 0; //reset the advance point of sound
-					trial.runningSound.play(this.contenido);
+				if (this.delayAutoreproducir > Constants.Box.DELAY_ESTIMULO_MODO_SELECCIONAR) {
+					trial.runningSound.action = NEXT.PLAY;
+					trial.runningSound.nextContenido = this.contenido;
+					this.delayAutoreproducir = 0;
 				}
 			}
 		}

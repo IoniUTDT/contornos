@@ -36,6 +36,7 @@ public class LevelScreen extends AbstractGameScreen  {
 			// Update game world by the time that has passed
 			// since last rendered frame.
 			levelController.update(deltaTime);
+			levelController.trial.runningSound.update(deltaTime);
 		}
 		// Sets the clear screen color to: Cornflower Blue
 		Gdx.gl.glClearColor(0x64 / 255.0f, 0x95 / 255.0f,0xed /

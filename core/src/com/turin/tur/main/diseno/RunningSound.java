@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.turin.tur.main.diseno.Trial.SoundLog;
+import com.turin.tur.main.util.Constants;
 import com.turin.tur.main.util.Constants.Diseno.TIPOdeTRIAL;
 import com.turin.tur.main.util.Constants.Resources.Categorias;
 
@@ -24,9 +25,31 @@ public class RunningSound {
 	public SoundLog soundLog = new SoundLog();
 	public String stopReason = "";
 	private Trial trial;
+	
+	// Info para el update
+	public NEXT action = NEXT.NADA;
+	public float playTime; 
+	public ExperimentalObject nextContenido;
+	
 
 	public RunningSound (Trial trial) {
 		this.trial = trial;
+	}
+	
+	public void update(float deltaTime) {
+		if (this.running) {
+			this.playTime = this.playTime + deltaTime;
+		}
+		if (this.playTime > Constants.Box.DURACION_REPRODUCCION_PREDETERMINADA) {
+			this.stop();
+		}
+		if (this.action == NEXT.PLAY) {
+			if (Gdx.graphics.getFramesPerSecond()>40) {
+				this.play(nextContenido);
+				this.playTime =0;
+				this.action = NEXT.NADA;
+			}
+		}
 	}
 	
 	public void play(ExperimentalObject contenidoP) {
@@ -35,6 +58,7 @@ public class RunningSound {
 			stop();
 			stopReason ="inicio";
 		}
+		this.running = false;
 		// Crea un log nuevo
 		soundLog = new SoundLog();
 		
@@ -91,6 +115,7 @@ public class RunningSound {
 				;
 		}
 		sound.play();
+		this.running = true;
 	}
 
 	
@@ -111,5 +136,9 @@ public class RunningSound {
 			sound.stop();
 			running = false;
 		}
+	}
+	
+	public enum NEXT {
+		PLAY,STOP,NADA;
 	}
 }

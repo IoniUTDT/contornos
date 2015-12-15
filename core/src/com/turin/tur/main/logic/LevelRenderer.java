@@ -56,7 +56,7 @@ public class LevelRenderer implements Disposable {
 		batch.begin();
 		
 		for (Box box : levelController.trial.allBox) {
-			box.render(batch);
+			box.render(batch, levelController.trial);
 		}
 		
 		renderInterfaz(batch);
